@@ -1,12 +1,14 @@
 #pragma once
-
 #include "raylib.h"
 
 namespace Global
 {
     // The window size
-    const int WINDOW_WIDTH = 1600;
-    const int WINDOW_HEIGHT = 900;
+    const int ORIGINAL_WIDTH = 256;
+    const int ORIGINAL_HEIGHT = 240;
+    const int SCALE_FACTOR = 3;
+    const int WINDOW_WIDTH = ORIGINAL_WIDTH * SCALE_FACTOR;
+    const int WINDOW_HEIGHT = ORIGINAL_HEIGHT * SCALE_FACTOR;
 
     // Global Font
     // extern Font mainFont;
