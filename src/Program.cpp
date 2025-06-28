@@ -9,7 +9,7 @@ Program::Program() {
     SetConfigFlags(FLAG_MSAA_4X_HINT);  
     InitWindow(Global::WINDOW_WIDTH, Global::WINDOW_HEIGHT, "Super Mario Bros.");
     InitAudioDevice();
-    SetTargetFPS(60);
+    SetTargetFPS(120);
 
     // // Using custom fonts
     // Global::mainFont = LoadFontEx("../assets/fonts/Montserrat-Regular.ttf", 100, 0, 0); 

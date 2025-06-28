@@ -14,3 +14,8 @@ namespace Global
     // extern Font mainFont;
     // extern Font consolas;
 }
+
+namespace MenuScreen {
+    const Vector2 CursorPos1 = {72, 144};
+    const Vector2 CursorPos2 = {72, 160};
+}
