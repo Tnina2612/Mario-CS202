@@ -17,11 +17,10 @@ class Block {
 protected:
     Vector2 position;
     std::shared_ptr<BlockFlyweight> flyweight;
-
 public:
     Block(Vector2 position, std::shared_ptr<BlockFlyweight> flyweight);
     virtual ~Block() = default;
-    void Draw();
+    virtual void Draw();
 };
 
 class BlockFlyweightFactory {

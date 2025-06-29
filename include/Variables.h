@@ -26,7 +26,7 @@ namespace LevelVar {
         Underwater
     };
     static int ThemeID = 0;
-    static Color SkyColor = {92, 148, 252, 255};
+    static Color SkyColor = {80, 128, 255, 255};
 };
 
 namespace MenuScreen {
