@@ -1,5 +1,6 @@
 #pragma once
 #include "raylib.h"
+#include <string>
 
 namespace Global
 {
@@ -14,6 +15,19 @@ namespace Global
     // extern Font mainFont;
     // extern Font consolas;
 }
+
+namespace LevelVar {
+    enum type {
+        Overworld,
+        Underground,
+        Castle,
+        Mushrooms,
+        Snow,
+        Underwater
+    };
+    static int ThemeID = 0;
+    static Color SkyColor = {80, 128, 255, 255};
+};
 
 namespace MenuScreen {
     const Vector2 CursorPos1 = {72, 144};

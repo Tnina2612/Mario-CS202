@@ -1,16 +1,12 @@
 #pragma once
-#include "level/TileMap.hpp"
-#include <raylib.h>
+#include<level/TileMap.hpp>
+#include<raylib.h>
+#include<iostream>
 
 class Level {
-    public:
-        virtual void draw(void) = 0;
-};
-
-class Level_1_1_Ground : public Level {
     private:
-        TileMap map;
+        std::shared_ptr<TileMap> tileMap;
     public:
-        Level_1_1_Ground(void);
-        void draw(void) override;
+        Level(void);
+        void draw(void);
 };

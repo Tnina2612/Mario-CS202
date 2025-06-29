@@ -1,32 +1,35 @@
 #include "level/TileMap.hpp"
 
-TileMap::TileMap(int height, int width) : height(height), width(width) {
-    // tiles.resize(height);
-    // for (int i = 0; i < height; ++i) {
-    //     tiles[i].resize(width);
-    // }
-}
+TileMap::TileMap(std::string filename) {
+    std::ifstream inp(filename);
 
-void TileMap::loadFromText(std::string dir) {
-    std::ifstream inp(dir);
+    inp >> height >> width;
+
+    tiles.resize(height);
+    for(int i = 0; i < height; i++) tiles[i].resize(width);
+
     for(int i = 0; i < height; i++) {
         for(int j = 0; j < width; j++) {
+            int posX = BLOCKSIDE * j;
+            int posY = BLOCKSIDE * i;
             std::string type;
             inp >> type;
-            if(type == "G1") {
-                // Load G1 block
+            
+            if(type != "A") {
+                tiles[i][j] = std::make_shared<Block>(Vector2{(float)posX, (float)posY}, blockFlyweightFactory.getBlockFlyweight(type));
             }
         }
     }
+
     inp.close();
 }
 
 void TileMap::draw(void) {
-    // for(int i = 0; i < height; i++) {
-    //     for(int j = 0; j < width; j++) {
-    //         if(tiles[i][j] != nullptr) {
-    //             tiles[i][j]->draw();
-    //         }
-    //     }
-    // }
+    for(int i = 0; i < height; i++) {
+        for(int j = 0; j < width; j++) {
+            if(tiles[i][j] != nullptr) {
+                tiles[i][j]->Draw();
+            }
+        }
+    }
 }
