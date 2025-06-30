@@ -10,7 +10,8 @@ class TileMap {
     private:
         const static int BLOCKSIDE = 16;
         int height, width;
-        std::vector<std::vector<std::shared_ptr<Block>>> tiles;
+        std::vector<std::vector<std::shared_ptr<Block>>> backgroundTiles;
+        std::vector<std::vector<std::shared_ptr<Block>>> objectTiles;
         BlockFlyweightFactory blockFlyweightFactory;
     public:
         TileMap(std::string filename);
