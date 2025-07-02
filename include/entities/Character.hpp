@@ -1,5 +1,8 @@
 #pragma once
 #include "GameObject.hpp"
+#include "raylib.h"
+#include "../Variables.h"
+#include <cstring>
 
 class GameObject;
 
@@ -11,7 +14,9 @@ class IState {
 
 class Character {
 private:
+    Vector2 pos;
     IState* state;
+    Texture2D sprite;
     float invincibilityTime; // Time in seconds
     int lives; // Number of lives
     int score;
@@ -19,6 +24,7 @@ private:
     float veclocityY;
 public:
     Character();
+    Character(const string& spritePath);
     void setState(IState* state);
     void moveLeft();
     void moveRight();
