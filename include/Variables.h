@@ -1,6 +1,7 @@
 #pragma once
 #include "raylib.h"
 #include <string>
+using namespace std;
 
 namespace Global
 {
@@ -32,4 +33,10 @@ namespace LevelVar {
 namespace MenuScreen {
     const Vector2 CursorPos1 = {72, 144};
     const Vector2 CursorPos2 = {72, 160};
+}
+
+namespace CharacterVar {
+    const Vector2 position = {10.0f, 100.0f};
+    const string MarioSpritePath = "assets/images/mario.png";
+    const string LuigiSpritePath = "assets/images/luigi.png";
 }
