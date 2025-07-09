@@ -1,5 +1,8 @@
 #pragma once
 #include"raylib.h"
+#include<vector>
+
+using namespace std;
 
 namespace Character {
     namespace Small {
@@ -20,6 +23,21 @@ namespace Character {
             const Rectangle Run3 = {241, 0, 14, 15};
             const Rectangle Idle = {211, 0, 13, 16};
         };
+        const vector<Rectangle> frames = {
+            Duck, 
+            Left::Jump, 
+            Left::Brake, 
+            Left::Run1, 
+            Left::Run2, 
+            Left::Run3, 
+            Left::Idle,
+            Right::Jump, 
+            Right::Brake, 
+            Right::Run1, 
+            Right::Run2, 
+            Right::Run3, 
+            Right::Idle
+        };
     };
     namespace Super {
         namespace Left {
@@ -39,6 +57,22 @@ namespace Character {
             const Rectangle Run2 = {270, 52, 14, 31};
             const Rectangle Run3 = {239, 52, 16, 32};
             const Rectangle Idle = {209, 52, 16, 32};
+        };
+        const vector<Rectangle> frames = {
+            Left::Duck, 
+            Left::Jump, 
+            Left::Brake, 
+            Left::Run1, 
+            Left::Run2, 
+            Left::Run3, 
+            Left::Idle,
+            Right::Duck, 
+            Right::Jump, 
+            Right::Brake, 
+            Right::Run1, 
+            Right::Run2, 
+            Right::Run3, 
+            Right::Idle
         };
     };
     namespace Fire {
@@ -61,6 +95,24 @@ namespace Character {
             const Rectangle Run2 = {263, 122, 14, 31};
             const Rectangle Run3 = {237, 122, 16, 32};
             const Rectangle Idle = {209, 122, 16, 32};
+        };
+        const vector<Rectangle> frames = {
+            Left::Duck, 
+            Left::Jump, 
+            Left::Brake, 
+            Left::Throw, 
+            Left::Run1, 
+            Left::Run2, 
+            Left::Run3, 
+            Left::Idle,
+            Right::Duck, 
+            Right::Jump, 
+            Right::Brake, 
+            Right::Throw, 
+            Right::Run1, 
+            Right::Run2, 
+            Right::Run3, 
+            Right::Idle
         };
     };
 };
