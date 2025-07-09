@@ -7,6 +7,6 @@ class Level {
     private:
         std::shared_ptr<TileMap> tileMap;
     public:
-        Level(void);
+        Level(const std::string& fileName);
         void draw(void);
 };

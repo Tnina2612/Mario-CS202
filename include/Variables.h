@@ -8,7 +8,7 @@ namespace Global
     // The window size
     const int ORIGINAL_WIDTH = 256;
     const int ORIGINAL_HEIGHT = 240;
-    const int SCALE_FACTOR = 3;
+    const int SCALE_FACTOR = 4;
     const int WINDOW_WIDTH = ORIGINAL_WIDTH * SCALE_FACTOR;
     const int WINDOW_HEIGHT = ORIGINAL_HEIGHT * SCALE_FACTOR;
 
@@ -16,6 +16,14 @@ namespace Global
     // extern Font mainFont;
     // extern Font consolas;
 }
+
+enum class EventType {
+    ADDSCORE,
+    COLLECT_COINS,
+    ADDLIVES,
+    MARIO_DIED,
+    RESET_TIMER
+};
 
 namespace LevelVar {
     enum type {
