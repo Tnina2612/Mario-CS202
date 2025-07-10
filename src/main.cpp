@@ -1,9 +1,9 @@
 #include <iostream>
 #include "raylib.h"
-#include "Program.h"
+#include "core/Program.h"
 
 int main() {
-    Program program;
-    program.run();
+    Program::getInstance().run();
+
     return 0;
 }
