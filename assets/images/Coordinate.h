@@ -4,7 +4,7 @@
 
 using namespace std;
 
-namespace Character {
+namespace CharacterSprite {
     namespace Small {
         const Rectangle Duck = {0, 16, 15, 14};
         namespace Left {
@@ -118,7 +118,7 @@ namespace Character {
 };
 
 
-namespace Enemy {
+namespace EnemySprite {
     namespace KoopaTroopa {
         namespace Map1 {
             namespace Left {
@@ -236,7 +236,7 @@ namespace Enemy {
     };
 };
 
-namespace Item
+namespace ItemSprite
 {
     //Line 1
     const Rectangle BLOCK_QUESTION =          {4, 4, 16, 16};

@@ -2,9 +2,7 @@
 
 Character::Character() : state(nullptr), pos(CharacterVar::position), 
     invincibilityTime(0.0f), lives(3), score(0), veclocityX(0.0f), veclocityY(0.0f), orientation(RIGHT),
-    isMove(false), isJump(false), isBrake(false), isDuck(false), isThrow(false), isInvincible(false), isDead(false) {
-
-    }
+    isMove(false), isJump(false), isBrake(false), isDuck(false), isThrow(false), isInvincible(false), isDead(false) {}
 
 Character::Character(const vector<Rectangle>& frames, const Texture2D& sprite)
     : Animation(frames, sprite), state(nullptr), pos(CharacterVar::position), 
