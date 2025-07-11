@@ -48,3 +48,13 @@ namespace CharacterVar {
     const string MarioSpritePath = "assets/images/mario.png";
     const string LuigiSpritePath = "assets/images/luigi.png";
 }
+
+enum CharacterType {
+    MARIO,
+    LUIGI
+};
+
+enum Orientation {
+    LEFT,
+    RIGHT
+};

@@ -116,3 +116,122 @@ namespace Character {
         };
     };
 };
+
+
+namespace Enemy {
+    namespace KoopaTroopa {
+        namespace Map1 {
+            namespace Left {
+                const Rectangle Walk1 = {150, 0, 16, 24};
+                const Rectangle Walk2 = {180, 0, 16, 23};
+            };
+            namespace Right {
+                const Rectangle Walk1 = {240, 0, 16, 24};
+                const Rectangle Walk2 = {210, 0, 16, 23};
+            };
+            namespace Dead {
+                const Rectangle Move = {330, 4, 16, 15};
+                const Rectangle Idle = {360, 5, 16, 14};
+            };
+        };
+        namespace Map2 {
+            namespace Left {
+                const Rectangle Walk1 = {150, 60, 16, 24};
+                const Rectangle Walk2 = {180, 60, 16, 23};
+            };
+            namespace Right {
+                const Rectangle Walk1 = {240, 60, 16, 24};
+                const Rectangle Walk2 = {210, 60, 16, 23};
+            };
+            namespace Dead {
+                const Rectangle Move = {330, 64, 16, 15};
+                const Rectangle Idle = {360, 65, 16, 14};
+            };
+        };
+        namespace Map3 {
+            namespace Left {
+                const Rectangle Walk1 = {150, 30, 16, 24};
+                const Rectangle Walk2 = {180, 30, 16, 23};
+            };
+            namespace Right {
+                const Rectangle Walk1 = {240, 30, 16, 24};
+                const Rectangle Walk2 = {210, 30, 16, 23};
+            };
+            namespace Dead {
+                const Rectangle Move = {330, 34, 16, 15};
+                const Rectangle Idle = {360, 35, 16, 14};
+            };
+        };
+    };
+    namespace Goomba {
+        namespace Map1 {
+            const Rectangle Leftfoot = {0, 4, 16, 16};
+            const Rectangle Rightfoot = {30, 4, 16, 16};
+            const Rectangle Dead = {60, 8, 16, 8};
+        };
+        namespace Map2 {
+            const Rectangle Leftfoot = {0, 34, 16, 16};
+            const Rectangle Rightfoot = {30, 34, 16, 16};
+            const Rectangle Dead = {60, 38, 16, 8};
+        };
+        namespace Map3 {
+            const Rectangle Leftfoot = {0, 4, 16, 16};
+            const Rectangle Rightfoot = {30, 4, 16, 16};
+            const Rectangle Dead = {60, 8, 16, 8};
+        };
+    };
+    namespace ParaTroopa {
+        namespace Map1 {
+            namespace Left {
+                const Rectangle Walk1 = {90, 0, 16, 24};
+                const Rectangle Walk2 = {120, 0, 16, 23};
+            };
+            namespace Right {
+                const Rectangle Walk1 = {300, 0, 16, 24};
+                const Rectangle Walk2 = {270, 0, 16, 23};
+            };
+            namespace Dead {
+                const Rectangle Move = {330, 4, 16, 15};
+                const Rectangle Idle = {360, 5, 16, 14};
+            };
+        };
+        namespace Map2 {
+            namespace Left {
+                const Rectangle Walk1 = {90, 60, 16, 24};
+                const Rectangle Walk2 = {120, 60, 16, 23};
+            };
+            namespace Right {
+                const Rectangle Walk1 = {300, 60, 16, 24};
+                const Rectangle Walk2 = {270, 60, 16, 23};
+            };
+            namespace Dead {
+                const Rectangle Move = {330, 64, 16, 15};
+                const Rectangle Idle = {360, 65, 16, 14};
+            };
+        };
+        namespace Map3 {
+            namespace Left {
+                const Rectangle Walk1 = {90, 30, 16, 24};
+                const Rectangle Walk2 = {120, 30, 16, 23};
+            };
+            namespace Right {
+                const Rectangle Walk1 = {300, 30, 16, 24};
+                const Rectangle Walk2 = {270, 30, 16, 23};
+            };
+            namespace Dead {
+                const Rectangle Move = {330, 34, 16, 15};
+                const Rectangle Idle = {360, 35, 16, 14};
+            };
+        };
+    };
+    namespace PiranhaPlant {
+        namespace Map2 {
+            const Rectangle Close = {390, 60, 16, 24};
+            const Rectangle Open = {420, 60, 16, 23};
+        };
+        namespace Map3 {
+            const Rectangle Close = {390, 30, 16, 24};
+            const Rectangle Open = {420, 30, 16, 23};            
+        };
+    };
+};

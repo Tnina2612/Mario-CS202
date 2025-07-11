@@ -1,11 +1,15 @@
 #include"../../include/entities/Character.hpp"
 
-Character::Character() : state(nullptr), pos(CharacterVar::position), invincibilityTime(0.0f), lives(3), score(0), veclocityX(0.0f), veclocityY(0.0f) {}
+Character::Character() : state(nullptr), pos(CharacterVar::position), 
+    invincibilityTime(0.0f), lives(3), score(0), veclocityX(0.0f), veclocityY(0.0f), orientation(RIGHT),
+    isMove(false), isJump(false), isBrake(false), isDuck(false), isThrow(false), isInvincible(false), isDead(false) {
 
-Character::Character(const string& spritePath) : Character() {
-    // load sprite of character
-    sprite = LoadTexture(spritePath.c_str());
-}
+    }
+
+Character::Character(const vector<Rectangle>& frames, const Texture2D& sprite)
+    : Animation(frames, sprite), state(nullptr), pos(CharacterVar::position), 
+    invincibilityTime(0.0f), lives(3), score(0), veclocityX(0.0f), veclocityY(0.0f), orientation(RIGHT),
+    isMove(false), isJump(false), isBrake(false), isDuck(false), isThrow(false), isInvincible(false), isDead(false) {}
 
 void Character::setState(IState* newState) {
     if(state) {
@@ -15,16 +19,16 @@ void Character::setState(IState* newState) {
 }
 
 void Character::moveLeft() {
-    pos.x -= veclocityX * GetFrameTime();
+    veclocityX = -maxVeclocityX; // Set velocity to move left
+
 }
 
 void Character::moveRight() {
-    pos.x += veclocityX * GetFrameTime();
+    veclocityX = maxVeclocityX; // Set velocity to move right
 }
 
 Character::~Character() {
     if(state) {
         delete state;
     }
-    UnloadTexture(sprite);
 }
