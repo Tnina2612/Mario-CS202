@@ -39,8 +39,9 @@ void Character::update() {
         }
         else isJump = false;
         isMove = true;
+        moveRight();
     }
-    if(IsKeyDown(KEY_LEFT)) {
+    else if(IsKeyDown(KEY_LEFT)) {
         if(IsKeyDown(KEY_UP)) {
             isMove = false;
             isJump = true;
@@ -48,6 +49,10 @@ void Character::update() {
         }
         else isJump = false;
         isMove = true;
+        moveLeft();
+    }
+    else {
+        veclocityX = 0.0f;
     }
     if(isMove) {
         if (orientation == RIGHT) {
@@ -81,6 +86,8 @@ void Character::update() {
             Animation::update(GetFrameTime(), 2, 1);
         }
     }
+    pos.x = pos.x + veclocityX * GetFrameTime();
+    pos.y = pos.y + veclocityY * GetFrameTime();
 }
 
 void Character::draw() {
