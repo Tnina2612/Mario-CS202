@@ -24,6 +24,7 @@ private:
     float veclocityX;
     float veclocityY;
     Orientation orientation;
+    CharacterState characterState;
     const float friction = 100.0;
     const float gravity = 200.0f;
     const float maxVeclocityX = 200.f;

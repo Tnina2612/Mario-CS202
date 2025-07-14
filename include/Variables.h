@@ -58,3 +58,9 @@ enum Orientation {
     LEFT,
     RIGHT
 };
+
+enum CharacterState {
+    SMALL,
+    SUPER,
+    FIRE
+};

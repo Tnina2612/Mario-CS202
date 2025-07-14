@@ -31,6 +31,7 @@ namespace CharacterSprite {
             Left::Run2, 
             Left::Run3, 
             Left::Idle,
+            Duck,
             Right::Jump, 
             Right::Brake, 
             Right::Run1, 
@@ -100,7 +101,6 @@ namespace CharacterSprite {
             Left::Duck, 
             Left::Jump, 
             Left::Brake, 
-            Left::Throw, 
             Left::Run1, 
             Left::Run2, 
             Left::Run3, 
@@ -108,11 +108,12 @@ namespace CharacterSprite {
             Right::Duck, 
             Right::Jump, 
             Right::Brake, 
-            Right::Throw, 
             Right::Run1, 
             Right::Run2, 
             Right::Run3, 
-            Right::Idle
+            Right::Idle,
+            Left::Throw, 
+            Right::Throw
         };
     };
 };
