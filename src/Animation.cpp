@@ -1,6 +1,12 @@
 #include"../include/entities/Animation.hpp"
+#include<iostream>
 
-Animation::Animation() : currentFrame(0), frameTime(0.0f) {}
+Animation::Animation() : currentFrame(0), frameTime(0.0f), scale(1.0f) {}
+
+Animation::Animation(const vector<Rectangle>& frames) : Animation() {
+    this->frames = frames;
+}
+
 Animation::Animation(const vector<Rectangle>& frames, const Texture2D& sprite, float frameTime, float scale)
     : frames(frames), currentFrame(0), sprite(sprite), frameTime(frameTime), scale(scale) {}
 
@@ -14,13 +20,14 @@ void Animation::update(float deltaTime, int startFrame, int size) {
     if (size <= -1 || size > frames.size()) {
         size = frames.size();
     }
-    if (startFrame < 0 || startFrame >= size) {
+    if (startFrame < 0 || startFrame >= frames.size()) {
         startFrame = 0; // Ensure startFrame is within bounds
     }
     frameTime -= deltaTime;
     if(frameTime <= 0.0f) {
+        cout << currentFrame << endl;
         currentFrame++;
-        if(currentFrame >= startFrame + size) {
+        if(currentFrame >= startFrame + size || currentFrame < startFrame) {
             currentFrame = startFrame; // Loop back to the start frame
         }
         frameTime = defaultFrameTime; // Reset frame time

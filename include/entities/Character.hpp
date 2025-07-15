@@ -27,7 +27,7 @@ private:
     CharacterState characterState;
     const float friction = 100.0;
     const float gravity = 200.0f;
-    const float maxVeclocityX = 200.f;
+    const float maxVeclocityX = 100.f;
     enum Behavior {
         MOVE,
         JUMP,

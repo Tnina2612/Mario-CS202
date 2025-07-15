@@ -1,6 +1,6 @@
 #include"../../include/entities/Character.hpp"
 
-Character::Character() : state(nullptr), pos(CharacterVar::position), 
+Character::Character() : Animation(CharacterSprite::Small::frames), state(nullptr), pos(CharacterVar::position), 
     invincibilityTime(0.0f), lives(3), score(0), veclocityX(0.0f), veclocityY(0.0f), orientation(RIGHT), characterState(SMALL),
     isInvincible(false), isDead(false), behavior(IDLE) {}
 
@@ -34,17 +34,17 @@ void Character::update() {
     if(IsKeyDown(KEY_RIGHT)) {
         if(IsKeyDown(KEY_UP)) {
             behavior = JUMP;
-            orientation = RIGHT;
         }
         else behavior = MOVE;
+        orientation = RIGHT;
         moveRight();
     }
     else if(IsKeyDown(KEY_LEFT)) {
         if(IsKeyDown(KEY_UP)) {
             behavior = JUMP;
-            orientation = LEFT;
         }
         else behavior = MOVE;
+        orientation = LEFT;
         moveLeft();
     }
     else {
