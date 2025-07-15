@@ -15,6 +15,7 @@ private:
     Font font;
     GameSession session;
     HUD hud{&session};
+    Image icon;
 
 public:
     Program();

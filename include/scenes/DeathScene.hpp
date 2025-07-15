@@ -2,6 +2,12 @@
 #include "core/Scene.hpp"
 
 class DeathScene : public Scene {
+private:
+    Texture2D marioIcon;
+    float waitTimer;
+    float waitDuration;
+    bool hasTriggeredTransition;
+    
 public:
     void init() override;
     void handleInput() override;
