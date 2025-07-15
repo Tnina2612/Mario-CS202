@@ -2,12 +2,12 @@
 
 Character::Character() : state(nullptr), pos(CharacterVar::position), 
     invincibilityTime(0.0f), lives(3), score(0), veclocityX(0.0f), veclocityY(0.0f), orientation(RIGHT), characterState(SMALL),
-    isMove(false), isJump(false), isBrake(false), isDuck(false), isThrow(false), isInvincible(false), isDead(false) {}
+    isInvincible(false), isDead(false), behavior(IDLE) {}
 
 Character::Character(const vector<Rectangle>& frames, const Texture2D& sprite)
     : Animation(frames, sprite), state(nullptr), pos(CharacterVar::position), 
     invincibilityTime(0.0f), lives(3), score(0), veclocityX(0.0f), veclocityY(0.0f), orientation(RIGHT), characterState(SMALL),
-    isMove(false), isJump(false), isBrake(false), isDuck(false), isThrow(false), isInvincible(false), isDead(false) {}
+    isInvincible(false), isDead(false),behavior(IDLE) {}
 
 void Character::setState(IState* newState) {
     if(state) {
@@ -33,58 +33,70 @@ Character::~Character() {
 void Character::update() {
     if(IsKeyDown(KEY_RIGHT)) {
         if(IsKeyDown(KEY_UP)) {
-            isMove = false;
-            isJump = true;
+            behavior = JUMP;
             orientation = RIGHT;
         }
-        else isJump = false;
-        isMove = true;
+        else behavior = MOVE;
         moveRight();
     }
     else if(IsKeyDown(KEY_LEFT)) {
         if(IsKeyDown(KEY_UP)) {
-            isMove = false;
-            isJump = true;
+            behavior = JUMP;
             orientation = LEFT;
         }
-        else isJump = false;
-        isMove = true;
+        else behavior = MOVE;
         moveLeft();
     }
     else {
+        behavior = IDLE;
         veclocityX = 0.0f;
     }
-    if(isMove) {
-        if (orientation == RIGHT) {
-            Animation::update(GetFrameTime(), 10, 3);
-        }
-        else if (orientation == LEFT) {
-            Animation::update(GetFrameTime(), 3, 3);
-        }
-    }
-    else if (isJump) {
-        if(orientation == RIGHT) {
-            Animation::update(GetFrameTime(), 8, 1);
-        }
-        else if (orientation == LEFT) {
-            Animation::update(GetFrameTime(), 1, 1);
-        }
-    }
-    else if(isDead || isDuck) {
-        if(orientation ==  LEFT) {
-            Animation::update(GetFrameTime(), 0, 1);
-        }
-        else if (orientation == RIGHT) {
-            Animation::update(GetFrameTime(), 7, 1);
-        }
-    }
-    else if(isBrake) {
-        if(orientation == RIGHT) {
-            Animation::update(GetFrameTime(), 9, 1);
-        }
-        else if (orientation == LEFT) {
-            Animation::update(GetFrameTime(), 2, 1);
-        }
+    switch (behavior) {
+        case MOVE:
+            if (orientation == RIGHT) {
+                Animation::update(GetFrameTime(), 10, 3);
+            } 
+            else if (orientation == LEFT) {
+                Animation::update(GetFrameTime(), 3, 3);
+            }
+            break;
+        case JUMP:
+            if (orientation == RIGHT) {
+                Animation::update(GetFrameTime(), 8, 1);
+            } 
+            else if (orientation == LEFT) {
+                Animation::update(GetFrameTime(), 1, 1);
+            }
+            break;
+        case DUCK:
+            if (orientation == LEFT) {
+                Animation::update(GetFrameTime(), 0, 1);
+            } 
+            else if (orientation == RIGHT) {
+                Animation::update(GetFrameTime(), 7, 1);
+            }           
+            break;
+        case IDLE:
+            if (orientation == LEFT) {
+                Animation::update(GetFrameTime(), 6, 1);
+            } 
+            else if (orientation == RIGHT) {
+                Animation::update(GetFrameTime(), 13, 1);
+            }
+            break;
+        case BRAKE:
+            if (orientation == RIGHT) {
+                Animation::update(GetFrameTime(), 9, 1);
+            } 
+            else if (orientation == LEFT) {
+                Animation::update(GetFrameTime(), 2, 1);
+            }
+            break;
+        case THROW:
+            // Handle THROW behavior here
+            break;
+        default:
+            break;
     }
     pos.x = pos.x + veclocityX * GetFrameTime();
     pos.y = pos.y + veclocityY * GetFrameTime();
