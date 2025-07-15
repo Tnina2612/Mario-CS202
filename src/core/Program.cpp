@@ -59,10 +59,7 @@ void Program::run() { // Game loop
             ClearBackground(RAYWHITE);
             currentScene->render();
             EndDrawing();
-        }
-
-        /*Phát: test the level drawing, erase these lines of code if you want*/
-        // Moved to TitleScene
+        }   
     }
 }
 

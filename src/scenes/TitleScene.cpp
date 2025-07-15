@@ -5,7 +5,8 @@
 #include "raylib.h"
 
 void TitleScene::init() {
-    background = new Level("titleScene.txt");
+    // background = new Level("titleScene.txt"); // TESTING
+    background = new Level("1-1-ground.txt"); // REMOVE
 
     renderTexture = LoadRenderTexture(Global::ORIGINAL_WIDTH, Global::ORIGINAL_HEIGHT);
     logo = LoadTexture("assets/images/title-scene/logo.png");
@@ -29,7 +30,11 @@ void TitleScene::handleInput() {
 }
 
 void TitleScene::update() {
-
+    // REMOVE ALL
+    BeginTextureMode(renderTexture);
+        ClearBackground(LevelVar::SkyColor);
+        background->draw();
+    EndTextureMode();
 }
 
 void TitleScene::render() {
@@ -38,28 +43,27 @@ void TitleScene::render() {
         Rectangle{0, 0, Global::WINDOW_WIDTH, Global::WINDOW_HEIGHT},
         Vector2{0, 0}, 0, WHITE);
 
-    // Draw game session
-    Font font = Program::getInstance().getFont();
+    // {// Draw game session
+    // Font font = Program::getInstance().getFont();
 
-    DrawTextEx(font, "MARIO", { 80, 14 }, 34, 1, WHITE);
-    DrawTextEx(font, "COINS", { 360, 14 }, 34, 1, WHITE);
-    DrawTextEx(font, "WORLD", { 600, 14 }, 34, 1, WHITE);
-    DrawTextEx(font, "TIME",  { 830, 14 }, 34, 1, WHITE);
+    // DrawTextEx(font, "MARIO", { 80, 14 }, 34, 1, WHITE);
+    // DrawTextEx(font, "COINS", { 360, 14 }, 34, 1, WHITE);
+    // DrawTextEx(font, "WORLD", { 600, 14 }, 34, 1, WHITE);
+    // DrawTextEx(font, "TIME",  { 830, 14 }, 34, 1, WHITE);
 
-    DrawTextEx(font, "000400", { 80, 45 }, 34, 1, WHITE);
-    DrawText("x", 360, 43, 40, WHITE);
-    DrawTextEx(font, "02", { 385, 45 }, 34, 1, WHITE);
-    DrawTextEx(font, "1-1", { 630, 45 }, 34, 1, WHITE);
+    // DrawTextEx(font, "000400", { 80, 45 }, 34, 1, WHITE);
+    // DrawText("x", 360, 43, 40, WHITE);
+    // DrawTextEx(font, "02", { 385, 45 }, 34, 1, WHITE);
+    // DrawTextEx(font, "1-1", { 630, 45 }, 34, 1, WHITE);
     
-    DrawTextureEx(logo, {150, 80}, 0.0f, 0.5f, WHITE);
-    DrawTextureEx(copyright, {445, 441}, 0.0f, 1.0f, WHITE);
-    DrawTextEx(font, "1985 NINTENDO", {478, 440}, 34, 1, {255, 206, 180, 255});
+    // DrawTextureEx(logo, {150, 80}, 0.0f, 0.5f, WHITE);
+    // DrawTextureEx(copyright, {445, 441}, 0.0f, 1.0f, WHITE);
+    // DrawTextEx(font, "1985 NINTENDO", {478, 440}, 34, 1, {255, 206, 180, 255});
     
-    DrawTextureEx(cursor, {280, (float)cursorPos[curMode]}, 0.0f, 4.0f, WHITE);
-    DrawTextEx(font, "1 PLAYER GAME", {360, 580}, 34, 1, WHITE);
-    DrawTextEx(font, "2 PLAYER GAME", {360, 640}, 34, 1, WHITE);
-    DrawTextEx(font, "TOP- 000000", {384, 720}, 34, 1, WHITE);
-
+    // DrawTextureEx(cursor, {280, (float)cursorPos[curMode]}, 0.0f, 4.0f, WHITE);
+    // DrawTextEx(font, "1 PLAYER GAME", {360, 580}, 34, 1, WHITE);
+    // DrawTextEx(font, "2 PLAYER GAME", {360, 640}, 34, 1, WHITE);
+    // DrawTextEx(font, "TOP- 000000", {384, 720}, 34, 1, WHITE);} TESTING
 }
 
 void TitleScene::cleanup() {
