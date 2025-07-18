@@ -44,7 +44,7 @@ namespace MenuScreen {
 }
 
 namespace CharacterVar {
-    const Vector2 position = {10.0f, Global::ORIGINAL_HEIGHT - 48.0f};
+    const Vector2 position = {10.0f, 100.0f};
     const string MarioSpritePath = "./assets/images/sprite sheets/mario.png";
     const string LuigiSpritePath = "./assets/images/sprite sheets/luigi.png";
 }
