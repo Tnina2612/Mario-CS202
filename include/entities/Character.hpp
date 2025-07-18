@@ -24,15 +24,19 @@ private:
     float veclocityX;
     float veclocityY;
     Orientation orientation;
+    CharacterState characterState;
     const float friction = 100.0;
     const float gravity = 200.0f;
-    const float maxVeclocityX = 200.f;
-
-    bool isMove;
-    bool isJump;
-    bool isBrake;
-    bool isDuck;
-    bool isThrow;
+    const float maxVeclocityX = 100.f;
+    enum Behavior {
+        MOVE,
+        JUMP,
+        BRAKE,
+        DUCK,
+        THROW,
+        IDLE
+    };
+    Behavior behavior;
     bool isInvincible;
     bool isDead;
     
@@ -50,4 +54,6 @@ public:
     void addScore(int points);
     virtual ~Character();
     virtual CharacterType getType() const = 0; // Pure virtual function to get character type
+
+
 };
