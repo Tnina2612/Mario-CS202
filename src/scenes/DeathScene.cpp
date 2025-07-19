@@ -54,10 +54,6 @@ void DeathScene::render() {
     Program::getInstance().getHUD().draw();
 }
 
-void DeathScene::cleanup() {
-
-}
-
 DeathScene::~DeathScene() {
-    cleanup();
+    UnloadTexture(marioIcon);
 }

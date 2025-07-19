@@ -1,7 +1,8 @@
-#include"../include/entities/Animation.hpp"
-#include<iostream>
+#include "../include/entities/Animation.hpp"
+#include "core/Variables.hpp"
+#include <iostream>
 
-Animation::Animation() : currentFrame(0), frameTime(0.0f), scale(1.0f) {}
+Animation::Animation() : currentFrame(0), frameTime(0.0f), scale(Global::SCALE_FACTOR) {}
 
 Animation::Animation(const vector<Rectangle>& frames) : Animation() {
     this->frames = frames;

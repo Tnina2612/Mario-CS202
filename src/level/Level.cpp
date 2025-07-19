@@ -7,6 +7,21 @@ Level::Level(const std::string& fileName) {
 
 void Level::draw(void) {
     tileMap->draw();
+    // character->draw();
+}
+
+void Level::update() {
     character->update();
-    character->draw();
+}
+
+float Level::getWidth() {
+    return tileMap->getWidth() * Global::TILE_SIZE * Global::SCALE_FACTOR;
+}
+
+float Level::getHeight() {
+    return tileMap->getWidth() * Global::TILE_SIZE * Global::SCALE_FACTOR;
+}
+
+std::shared_ptr<Character> Level::getCharacter() {
+    return character;
 }

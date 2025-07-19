@@ -21,7 +21,7 @@ void TitleScene::init() {
 
 void TitleScene::handleInput() {
     if (IsKeyPressed(KEY_ENTER)) {
-        // Program::getInstance().changeScene(new PlayScene());
+        Program::getInstance().changeScene(new PlayScene());
     } else if (IsKeyPressed(KEY_DOWN)) {
         curMode = (curMode + 1) % 2;
     } else if (IsKeyPressed(KEY_UP)) {
@@ -60,10 +60,6 @@ void TitleScene::render() {
     DrawTextEx(font, "1 PLAYER GAME", {360, 580}, 34, 1, WHITE);
     DrawTextEx(font, "2 PLAYER GAME", {360, 640}, 34, 1, WHITE);
     DrawTextEx(font, "TOP- 000000", {384, 720}, 34, 1, WHITE);
-}
-
-void TitleScene::cleanup() {
-
 }
 
 TitleScene::~TitleScene() {

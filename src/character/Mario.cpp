@@ -12,3 +12,7 @@ Mario::~Mario() {
 CharacterType Mario::getType()const {
     return MARIO;
 }
+
+Vector2 Character::getPos() const {
+    return pos;
+}

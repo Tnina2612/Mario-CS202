@@ -16,4 +16,7 @@ class TileMap {
     public:
         TileMap(std::string filename);
         void draw(void);
+
+        float getWidth();
+        float getHeight();
 };

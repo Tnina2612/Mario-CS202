@@ -55,5 +55,5 @@ public:
     virtual ~Character();
     virtual CharacterType getType() const = 0; // Pure virtual function to get character type
 
-
+    Vector2 getPos() const;
 };

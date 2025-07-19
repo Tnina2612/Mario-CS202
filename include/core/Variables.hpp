@@ -11,6 +11,7 @@ namespace Global
     const int SCALE_FACTOR = 4;
     const int WINDOW_WIDTH = ORIGINAL_WIDTH * SCALE_FACTOR;
     const int WINDOW_HEIGHT = ORIGINAL_HEIGHT * SCALE_FACTOR;
+    const int TILE_SIZE = 16;
 
     // Global Font
     // extern Font mainFont;
@@ -44,7 +45,7 @@ namespace MenuScreen {
 }
 
 namespace CharacterVar {
-    const Vector2 position = {10.0f, 100.0f};
+    const Vector2 position = {10.0f, Global::WINDOW_HEIGHT - 128 - 64};
     const string MarioSpritePath = "./assets/images/sprite-sheets/mario.png";
     const string LuigiSpritePath = "./assets/images/sprite-sheets/luigi.png";
 }

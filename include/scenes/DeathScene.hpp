@@ -13,6 +13,5 @@ public:
     void handleInput() override;
     void update() override;
     void render() override;
-    void cleanup() override;
     ~DeathScene();
 };
