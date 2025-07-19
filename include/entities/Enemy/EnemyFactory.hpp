@@ -8,12 +8,18 @@
 #include"EnemyMove.hpp"
 
 class EnemyFactory {
-public:
-    static std::shared_ptr<EnemyType> getEnemy(const std::string& name);
 private:
-    static std::unordered_map<std::string, std::shared_ptr<EnemyType>> s_enemies;
-    static std::shared_ptr<DirectionMove> directionMove;
-    static std::shared_ptr<JumpMove> jumpMove;
+    std::unordered_map<std::string, std::shared_ptr<EnemyType>> enemyTypes;
+    std::shared_ptr<DirectionMove> directionMove;
+    std::shared_ptr<JumpMove> jumpMove;
 
-    static void init();
+    //ObjectPool<Enemy> ....
+
+public:
+    //EnemyFactory();
+    std::shared_ptr<EnemyType> getEnemyType(const std::string& name);
+    //void loadEnemyTypes();
+    //void releaseEnemy();          //< object pool
+
+
 };

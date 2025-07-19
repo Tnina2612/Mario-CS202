@@ -9,7 +9,7 @@
 
 
 class EnemyType {
-private:
+protected:
 
 // enum EnemyType {
 //     Goomba,
@@ -24,14 +24,14 @@ private:
     // Vector2 _velocity;
     // Vector2 _direction;
 
-    const std::string name;  //< Enemy name 
+    std::string name;  //< Enemy name 
 
     Texture2D _sprite;
     Rectangle _hitBox;
 
     // const int _maxHp;
-    const float _baseSpeed;
-    const float _gravity;
+    float _baseSpeed;
+    float _gravity;
 
     // int _curhp;              //<
     // bool _getHit;
@@ -43,15 +43,18 @@ private:
     bool _isStompable;
     bool _isActive;
 
-    std::unique_ptr<IEnemyStrategy> movementStrategy;
+    std::shared_ptr<IEnemyStrategy> _movementStrategy;
     //std::queue<IEnemyCommand*> _commands; //<for bosses
 public:
-    EnemyType();
-    EnemyType(const std::string& filepath);
-    
-    void setMovementStrategy(std::unique_ptr<IEnemyStrategy> strategy);
+    //EnemyType();
+    //EnemyType(const std::string& filepath);
+    EnemyType(Texture2D tex, std::shared_ptr<IEnemyStrategy> move)
+        : _sprite(tex), _movementStrategy(move) {}
+    void setMovementStrategy(std::shared_ptr<IEnemyStrategy> strategy);
     //void addCommand(std::unique_ptr<IEnemyCommand> command); //<for bosses
     void draw();
 
+    float getGravity();
+    std::shared_ptr<IEnemyStrategy> getMovementStrategy();
     virtual ~EnemyType();
 };
