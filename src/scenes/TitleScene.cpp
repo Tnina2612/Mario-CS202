@@ -1,4 +1,4 @@
-#include "core/Program.h"
+#include "core/Program.hpp"
 #include "scenes/TitleScene.hpp"
 #include "scenes/PlayScene.hpp"
 #include "block/Block.h"

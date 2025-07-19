@@ -1,5 +1,5 @@
-#include "core/Program.h"
-#include "Variables.h"
+#include "core/Program.hpp"
+#include "core/Variables.hpp"
 #include "scenes/TitleScene.hpp"
 #include "scenes/PlayScene.hpp"
 

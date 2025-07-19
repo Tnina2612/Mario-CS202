@@ -1,5 +1,5 @@
 #include "ui/HUD.hpp"
-#include "core/Program.h"
+#include "core/Program.hpp"
 #include <string>
 #include <cstdio>
 
