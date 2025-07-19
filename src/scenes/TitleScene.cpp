@@ -5,9 +5,10 @@
 #include "raylib.h"
 
 void TitleScene::init() {
-    background = new Level("titleScene.txt");
+    background = new TileMap("titleScene.txt");
 
     renderTexture = LoadRenderTexture(Global::ORIGINAL_WIDTH, Global::ORIGINAL_HEIGHT);
+    coin = LoadTexture("assets/images/title-scene/coin.png");
     logo = LoadTexture("assets/images/title-scene/logo.png");
     copyright = LoadTexture("assets/images/title-scene/copyright.png");
     cursor = LoadTexture("assets/images/title-scene/MenuCursor_transparent.png");
@@ -46,8 +47,9 @@ void TitleScene::render() {
     DrawTextEx(font, "TIME",  { 830, 14 }, 34, 1, WHITE);
 
     DrawTextEx(font, "000400", { 80, 45 }, 34, 1, WHITE);
-    DrawText("x", 360, 43, 40, WHITE);
-    DrawTextEx(font, "02", { 385, 45 }, 34, 1, WHITE);
+    DrawTextureEx(coin, {360, 49}, 0.0f, 3.5f, WHITE);
+    DrawText("x", 380, 43, 40, WHITE);
+    DrawTextEx(font, "02", { 405, 45 }, 34, 1, WHITE);;
     DrawTextEx(font, "1-1", { 630, 45 }, 34, 1, WHITE);
     
     DrawTextureEx(logo, {150, 80}, 0.0f, 0.5f, WHITE);
@@ -71,5 +73,8 @@ TitleScene::~TitleScene() {
     }
 
     UnloadRenderTexture(renderTexture);
+    UnloadTexture(coin);
     UnloadTexture(logo);
+    UnloadTexture(copyright);
+    UnloadTexture(cursor);
 }

@@ -12,6 +12,7 @@ Program::Program() : running(true), currentScene(nullptr), nextScene(nullptr) {
     InitAudioDevice();
     SetTargetFPS(120);
     font = LoadFont("assets/fonts/super-mario-bros-nes.otf");
+    hud = new HUD(&session);
 }
 
 Program::~Program() {
@@ -23,6 +24,10 @@ Program::~Program() {
     if (nextScene) {
         delete nextScene;
         nextScene = nullptr;
+    }
+    if (hud) {
+        delete hud;
+        hud = nullptr;
     }
     
     UnloadFont(font);
@@ -75,5 +80,5 @@ GameSession& Program::getSession() {
 }
 
 HUD& Program::getHUD() {
-    return hud;
+    return *hud;
 }
