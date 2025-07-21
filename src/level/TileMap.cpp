@@ -63,3 +63,11 @@ void TileMap::draw(void) {
         }
     }
 }
+
+float TileMap::getWidth() {
+    return width;
+}
+
+float TileMap::getHeight() {
+    return height;
+}
