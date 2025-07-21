@@ -1,30 +1,22 @@
 #pragma once
 
 #include<memory>
+#include<string>
 #include"raylib.h"
 
 #include"EnemyType.hpp"
-#include"IEnemyStrategy.hpp"
+#include"EnemyData.hpp"
 
 class Enemy {
 private:
-    std::shared_ptr<EnemyType> _type;
-    
-    Vector2 _pos;
-    Vector2 _velocity;
-
+    EnemyData m_data;
     //int _direction; // 1 right, -1 left
-    bool _isActive;
-    bool _isOnGround;
-
-    int _curHp;
+    
 public:
-    //Enemy();
-    Enemy(std::shared_ptr<EnemyType> type)
-        : _type(type) {}
-    Enemy(std::shared_ptr<EnemyType> type, Vector2 pos)
-        : _type(type), _pos(pos) {}
-    void init(EnemyType* newType, Vector2 startPosition);
-    void draw(); 
-    void update(float dt);
+    Enemy(EnemyData data) : m_data(data) {}
+    std::shared_ptr<EnemyType> getEnemyType();
+    Vector2 getBaseSpeed();
+    void init(std::shared_ptr<EnemyType> newType, Vector2 startPosition);
+    virtual void draw(); 
+    virtual void update(float dt);
 };

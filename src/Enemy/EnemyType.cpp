@@ -17,7 +17,3 @@ std::shared_ptr<IEnemyStrategy> EnemyType::getMovementStrategy() {
 void EnemyType::draw() {
 
 }
-
-float EnemyType::getGravity() {
-    return _gravity;
-}

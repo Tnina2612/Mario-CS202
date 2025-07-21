@@ -5,21 +5,15 @@
 
 class DirectionMove : public IEnemyStrategy {
 private:
-    //float length; 
+    Vector2 direction;
 public:
-    // DirectionMove(float len)
-    //     : length(len) {}
-    void Execute(Enemy& enemy, float dt, Vector2 direction) override;
+    DirectionMove(Vector2 dir) : direction(dir) {}
+    void Execute(Enemy& enemy, float dt) override;
 };
 
 class JumpMove : public IEnemyStrategy {
-private:
-    float height;
-    float gravity;
 public:
-    JumpMove(float h, float g) 
-        : height(h), gravity(g) {}
-    void Execute(Enemy& enemy, float dt, Vector2 direction) override;
+    void Execute(Enemy& enemy, float dt) override;
 };
 
 

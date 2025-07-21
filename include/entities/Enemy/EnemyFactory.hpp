@@ -9,15 +9,16 @@
 
 class EnemyFactory {
 private:
-    std::unordered_map<std::string, std::shared_ptr<EnemyType>> enemyTypes;
-    std::shared_ptr<DirectionMove> directionMove;
-    std::shared_ptr<JumpMove> jumpMove;
+    static std::unordered_map<std::string, std::shared_ptr<EnemyType>> s_enemyTypes;
+    static std::shared_ptr<DirectionMove> s_directionMove;
+    static std::shared_ptr<JumpMove> s_jumpMove;
 
     //ObjectPool<Enemy> ....
-
 public:
-    //EnemyFactory();
-    std::shared_ptr<EnemyType> getEnemyType(const std::string& name);
+    static std::shared_ptr<EnemyType> getEnemyType(const std::string& name);
+    static std::shared_ptr<DirectionMove> getDirectionMove();
+    static std::shared_ptr<JumpMove> getJumpMove();
+    
     //void loadEnemyTypes();
     //void releaseEnemy();          //< object pool
 

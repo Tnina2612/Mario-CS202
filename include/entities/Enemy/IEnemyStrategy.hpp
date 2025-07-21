@@ -7,5 +7,5 @@ class Enemy;
 class IEnemyStrategy {
 public:
     virtual ~IEnemyStrategy() = default;
-    virtual void Execute(Enemy& enemy, float dt, Vector2 direction) = 0;
+    virtual void Execute(Enemy& enemy, float dt) = 0;
 };

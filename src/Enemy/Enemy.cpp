@@ -1,33 +1,45 @@
+#include<memory>
+#include<string>
+
 #include"raylib.h"
 
 #include"../include/entities/Enemy/Enemy.hpp"
 #include"../include/entities/Enemy/EnemyType.hpp"
 
-void Enemy::init(EnemyType* newType, Vector2 startPos) {
-    this->_type = newType;
-    this->_pos = startPos;
+
+std::shared_ptr<EnemyType> Enemy::getEnemyType() {
+    return m_data._type;
+}
+
+Vector2 Enemy::getBaseSpeed() {
+    return m_data._baseSpeed;
+}
+
+void Enemy::init(std::shared_ptr<EnemyType> newType, Vector2 startPos) {
+    this->m_data._type = newType;
+    this->m_data._pos = startPos;
     
-    this->_isOnGround = true;
-    this->_isActive = false;
+    this->m_data._isOnGround = true;
+    this->m_data._isActive = false;
 }
 
 void Enemy::draw() {
-    if(!_isActive) {
+    if(!m_data._isActive) {
         return;
     }
-    _type->draw();
+    m_data._type->draw();
 }
 
 void Enemy::update(float dt) {
-    if(!_isActive) {
+    if(!m_data._isActive) {
         return;
     }
 
-    _velocity.y += _type->getGravity();
+    m_data._velocity.y += m_data._gravity;
 
-    if(_type->getMovementStrategy()) {
-        Vector2 dir = {-1,0};
-        _type->getMovementStrategy()->Execute(*this, dt, dir);
+    if(m_data._type->getMovementStrategy()) {
+        //Vector2 dir = {-1,0};
+        m_data._type->getMovementStrategy()->Execute(*this, dt);
     }
 
 }
