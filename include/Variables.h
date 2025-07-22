@@ -1,6 +1,7 @@
 #pragma once
 #include "raylib.h"
 #include <string>
+#include "core/InputManager.hpp"
 using namespace std;
 
 namespace Global
@@ -64,3 +65,14 @@ enum CharacterState {
     SUPER,
     FIRE
 };
+
+enum Behavior {
+    MOVE,
+    JUMP,
+    BRAKE,
+    DUCK,
+    THROW,
+    IDLE
+};
+
+extern InputManager& INPUT_MANAGER;
