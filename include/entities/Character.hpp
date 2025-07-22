@@ -30,14 +30,14 @@ private:
     float accelerationY;
     Orientation orientation;
     CharacterState characterState;
-    const float gravity = 1300.0f;
-    const float maxVeclocityX = 100.f;
+    const float gravity = 3900.0f;
+    const float maxVeclocityX = 300.f;
     Behavior behavior;
     bool isInvincible;
     bool isDead;
     bool onGround;
-    const float jumpVeclocity = 400.0f; // Initial jump velocity
-    const float brakeAcceleration = 200.0f; // Deceleration when braking
+    const float jumpVeclocity = 1550.0f; // Initial jump velocity
+    const float brakeAcceleration = 600.0f; // Deceleration when braking
     InputManager& inputManager;
     
 public:

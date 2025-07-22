@@ -40,12 +40,11 @@ void Character::moveRight() {
 
 void Character::brakeLeft() {
     accelerationX = brakeAcceleration; // Apply left brake acceleration
-    if(abs(veclocityX) <= 1) {
+    if(abs(veclocityX) <= 5) {
         behavior = IDLE;
         veclocityX = 0.0f; // Stop moving left
         accelerationX = 0.0f; // Reset acceleration
         if(IsKeyDown(KEY_RIGHT)) {
-            cout << "BRAKE LEFT" << endl;
             behavior = MOVE; // If right key is pressed, switch to MOVE
             orientation = RIGHT; // Change orientation to RIGHT
         }
@@ -54,12 +53,11 @@ void Character::brakeLeft() {
 
 void Character::brakeRight() {
     accelerationX = -brakeAcceleration;
-    if(abs(veclocityX) <= 1) {
+    if(abs(veclocityX) <= 5) {
         behavior = IDLE;
         veclocityX = 0.0f; // Stop moving right
         accelerationX = 0.0f; // Reset acceleration
         if(IsKeyDown(KEY_LEFT)) {
-            cout << "BRAKE RIGHT" << endl;
             behavior = MOVE; // If left key is pressed, switch to MOVE
             orientation = LEFT; // Change orientation to LEFT
         }
@@ -123,22 +121,28 @@ void Character::update() {
         if(behavior == IDLE) {
             behavior = MOVE; orientation = RIGHT; // Change orientation to RIGHT when moving right
         }
-        moveRight();
+        if(IsKeyReleased(KEY_LEFT) && behavior != BRAKE) {
+            orientation = RIGHT; // Change orientation to RIGHT when moving right
+        }
+        if (orientation == RIGHT) moveRight();
     }
     if(IsKeyDown(KEY_LEFT)) {
         if(behavior == IDLE) {
             behavior = MOVE; orientation = LEFT; // Change orientation to LEFT when moving left
         }
-        moveLeft();
+        if(IsKeyReleased(KEY_RIGHT) && behavior != BRAKE) {
+            orientation = LEFT; // Change orientation to LEFT when moving left
+        }
+        if(orientation == LEFT) moveLeft();
     }
     switch (behavior) {
         case MOVE:
             if (orientation == RIGHT) {
-                moveRight();
+                //moveRight();
                 Animation::update(GetFrameTime(), 10, 3);
             } 
             else if (orientation == LEFT) {
-                moveLeft();
+                //moveLeft();
                 Animation::update(GetFrameTime(), 3, 3);
             }
             break;
