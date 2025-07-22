@@ -12,4 +12,8 @@ class Level {
     public:
         Level(const std::string& fileName);
         void draw(void);
+        void update();
+        float getWidth();
+        float getHeight();
+        std::shared_ptr<Character> getCharacter();
 };

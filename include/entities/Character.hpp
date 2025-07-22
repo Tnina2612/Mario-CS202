@@ -1,7 +1,7 @@
 #pragma once
 #include "GameObject.hpp"
 #include "raylib.h"
-#include "../Variables.h"
+#include "../core/Variables.hpp"
 #include <cstring>
 #include"Animation.hpp"
 #include <vector>
@@ -60,4 +60,6 @@ public:
     virtual ~Character();
     virtual CharacterType getType() const = 0; // Pure virtual function to get character type
     void onkey(KeyboardKey key, bool active)override;
+
+    Vector2 getPos() const;
 };

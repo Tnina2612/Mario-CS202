@@ -2,12 +2,13 @@
 #include "core/Scene.hpp"
 #include "raylib.h"
 
-class Level;
+class TileMap;
 
 class TitleScene : public Scene {
 private:
     RenderTexture2D renderTexture;
-    Level* background;
+    TileMap* background;
+    Texture2D coin;
     Texture2D logo;
     Texture2D copyright;
     Texture2D cursor;
@@ -19,6 +20,5 @@ public:
     void handleInput() override;
     void update() override;
     void render() override;
-    void cleanup() override;
     ~TitleScene();
 };
