@@ -6,6 +6,7 @@
 
 #include"EnemyType.hpp"
 
+
 struct EnemyData {
     std::shared_ptr<EnemyType> _type;
 
@@ -25,30 +26,37 @@ struct EnemyData {
     bool _isActive;
     bool _isOnGround;
 
+    int _currentFrame = 0;
+    float _elapsedTime = 0.0f;
+
+    int _dir;  // 1 facing right, -1 left
+
     EnemyData(
         std::string name,
-        Texture2D tex,
+        std::shared_ptr<EnemyType> type,
         Rectangle hitBox,
-        std::shared_ptr<IEnemyStrategy> move, 
-        Vector2 baseSpeed,
-        Vector2 pos,
-        Vector2 vel,
         float gra,
         bool imuneFire,
         bool isStompable,
-        int hp
+        int hp,
+
+        Vector2 baseSpeed,
+        Vector2 pos,
+        Vector2 vel,
+
+        int dir
+
     ):  _name(name),
-        //_sprite(tex),
         _hitBox(hitBox),
-        //_movementStrategy(move),
         _baseSpeed(baseSpeed),
         _pos(pos),
         _velocity(vel),
         _gravity(gra),
         _isImuneFire(imuneFire),
         _isStompable(isStompable),
-        _type(&EnemyType(tex, move)),
+        _type(type),
         _hp(hp),
-        _isActive(false)
+        _isActive(false),
+        _dir(dir)
     {}
 };
