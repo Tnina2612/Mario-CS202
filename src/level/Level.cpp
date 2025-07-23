@@ -2,16 +2,18 @@
 
 Level::Level(const std::string& fileName) {
     tileMap = std::make_shared<TileMap>(fileName);
-    character = std::make_shared<Mario>();
+    player = std::make_shared<Mario>();
 }
 
 void Level::draw(void) {
     tileMap->draw();
-    // character->draw();
+    // player->draw();
+    
 }
 
 void Level::update() {
-    character->update();
+    player->update();
+    tileMap->update(player);
 }
 
 float Level::getWidth() {
@@ -23,5 +25,5 @@ float Level::getHeight() {
 }
 
 std::shared_ptr<Character> Level::getCharacter() {
-    return character;
+    return player;
 }
