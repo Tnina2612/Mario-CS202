@@ -10,13 +10,8 @@
 
 
 EnemyType::EnemyType(const std::string& path)   
-    :  _movementStrategy(nullptr)
 {
     sprite = LoadTexture(path.c_str());
-}
-
-void EnemyType::setMovementStrategy(std::shared_ptr<IEnemyStrategy> strategy) {
-    _movementStrategy = strategy;
 }
 
 // void EnemyType::draw(Vector2 pos) {
@@ -33,7 +28,7 @@ EnemyType::~EnemyType() {
     UnloadTexture(sprite);
 }
 
-void EnemyType::update(float dt, Vector2& pos) {
-    if(_movementStrategy)
-        _movementStrategy->Execute(pos, dt);
-}
+// void EnemyType::update(float dt, Vector2& pos) {
+//     if(_movementStrategy)
+//         _movementStrategy->Execute(pos, dt);
+// }

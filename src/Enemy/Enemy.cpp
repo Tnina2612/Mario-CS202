@@ -36,7 +36,7 @@ void Enemy::setType(std::shared_ptr<EnemyType> type) {
 
 void Enemy::setMovementStrategy(std::shared_ptr<IEnemyStrategy> strategy) {
     if(m_data._type)
-        m_data._type->setMovementStrategy(strategy);
+        m_data._movementStrategy = strategy;
 }
 
 bool Enemy::isAlive() {
@@ -79,19 +79,12 @@ bool Enemy::beHitByFireball() {
     return true;
 }
 
-// void Enemy::init(std::shared_ptr<EnemyType> newType, Vector2 startPos) {
-//     this->m_data._type = newType;
-//     this->m_data._pos = startPos;
-    
-//     this->m_data._isOnGround = true;
-//     this->m_data._isActive = false;
-// }
 
 void Enemy::draw() {
     if(!m_data._isActive) {
         return;
     }
-    std::cerr << "OKE3" << std::endl;
+
     m_animation.draw(m_data._pos);
 }
 
@@ -104,5 +97,7 @@ void Enemy::update(float dt) {
     // if() {
 
     // }
-    m_data._type->update(dt, m_data._pos);
+    m_animation.update(dt);
+    if(m_data._movementStrategy)
+        m_data._movementStrategy->Execute(m_data._pos, dt);
 }

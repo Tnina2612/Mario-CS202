@@ -9,6 +9,7 @@
 
 struct EnemyData {
     std::shared_ptr<EnemyType> _type;
+    std::shared_ptr<IEnemyStrategy> _movementStrategy;
     std::string _name;  //< Enemy name 
 
     Rectangle _hitBox;
@@ -60,7 +61,7 @@ struct EnemyData {
         _dir(dir)
     {}
 
-    EnemyData(): _isActive(false), _type() {}
+    EnemyData(): _isActive(false), _type(), _movementStrategy(nullptr) {}
     EnemyData(
         Rectangle hitBox,
         float gra,

@@ -241,11 +241,20 @@ namespace EnemySprite {
         namespace Map2 {
             const Rectangle Close = {390, 60, 16, 24};
             const Rectangle Open = {420, 60, 16, 23};
+            const vector<Rectangle> Frames = {
+                Close,
+                Open
+            };
         };
         namespace Map3 {
             const Rectangle Close = {390, 30, 16, 24};
             const Rectangle Open = {420, 30, 16, 23};            
+            const vector<Rectangle> Frames = {
+                Close,
+                Open
+            };
         };
+
     };
 };
 

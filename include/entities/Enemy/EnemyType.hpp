@@ -9,30 +9,13 @@
 #include"IEnemyStrategy.hpp"
 
 class EnemyType {
-protected:
-
-// enum EnemyType {
-//     Goomba,
-//     KoopaTroopa,
-//     KoopaParatroopa,
-//     BuzzyBeetle,
-//     Spiny,
-//     PiranhaPlant
-// };
-    //std::queue<IEnemyCommand*> _commands; //<for bosses
-    
-    //Animation m_animation;
-    std::shared_ptr<IEnemyStrategy> _movementStrategy;
-    
+// protected:
+//     std::shared_ptr<IEnemyStrategy> _movementStrategy;
 public:
     Texture2D sprite;
     EnemyType(const std::string& path = "./assets/images/sprite-sheets/enemies.png");
-
-    void setMovementStrategy(std::shared_ptr<IEnemyStrategy> strategy);
-    
-    //void addCommand(std::unique_ptr<IEnemyCommand> command); //<for bosses
-    //void draw(Vector2 pos);
-    void update(float dt, Vector2& pos);
+    //void setMovementStrategy(std::shared_ptr<IEnemyStrategy> strategy);
+    //void update(float dt, Vector2& pos);
     
     virtual ~EnemyType();
 };
