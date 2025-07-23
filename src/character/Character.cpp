@@ -1,6 +1,6 @@
 #include"../../include/entities/Character.hpp"
 
-Character::Character() : Animation(CharacterSprite::Small::frames), state(nullptr), pos(CharacterVar::position), 
+Character::Character() : Animation(CharacterSprite::Fire::frames), state(nullptr), pos(CharacterVar::position), 
     invincibilityTime(0.0f), lives(3), score(0), veclocityX(0.0f), veclocityY(0.0f), orientation(RIGHT), characterState(SMALL),
     isInvincible(false), isDead(false), behavior(IDLE), onGround(true), inputManager(INPUT_MANAGER) {
         inputManager.addListener(this);
@@ -25,17 +25,19 @@ void Character::setState(IState* newState) {
 }
 
 void Character::moveLeft() {
-    if((behavior == IDLE || behavior == MOVE) && behavior != BRAKE) {
+    if((behavior == IDLE || behavior == MOVE) && behavior != BRAKE && behavior != DUCK) {
         //if(onGround) orientation = LEFT; // Change orientation to LEFT when moving left
         veclocityX = -maxVeclocityX; // Set velocity to move left
     }
+    if (!onGround) veclocityX = -maxVeclocityX; // Maintain left velocity when not on ground
 }
 
 void Character::moveRight() {
-    if((behavior == IDLE || behavior == MOVE) && behavior != BRAKE) {
+    if((behavior == IDLE || behavior == MOVE) && behavior != BRAKE && behavior != DUCK) {
         //if(onGround) orientation = RIGHT; // Change orientation to RIGHT when moving right
         veclocityX = maxVeclocityX; // Set velocity to move right
     }
+    if (!onGround) veclocityX = maxVeclocityX;
 }
 
 void Character::brakeLeft() {
@@ -109,7 +111,7 @@ void Character::baseInputUpdate() {
         onGround = false; // Set onGround to false when jumping
         veclocityY = -jumpVeclocity; // Set initial jump velocity
     }
-    if(!IsKeyDown(KEY_LEFT) && !IsKeyDown(KEY_RIGHT) && onGround && behavior != BRAKE) {
+    if(!IsKeyDown(KEY_LEFT) && !IsKeyDown(KEY_RIGHT)&& onGround && behavior != BRAKE) {
         behavior = IDLE; // If no movement keys are pressed, set behavior to IDLE
         veclocityX = 0.0f; // Reset horizontal velocity
     }
@@ -124,7 +126,7 @@ void Character::update() {
         if(IsKeyReleased(KEY_LEFT) && behavior != BRAKE) {
             orientation = RIGHT; // Change orientation to RIGHT when moving right
         }
-        if (orientation == RIGHT) moveRight();
+        if (orientation == RIGHT || !onGround) moveRight();
     }
     if(IsKeyDown(KEY_LEFT)) {
         if(behavior == IDLE) {
@@ -133,7 +135,7 @@ void Character::update() {
         if(IsKeyReleased(KEY_RIGHT) && behavior != BRAKE) {
             orientation = LEFT; // Change orientation to LEFT when moving left
         }
-        if(orientation == LEFT) moveLeft();
+        if(orientation == LEFT || !onGround) moveLeft();
     }
     switch (behavior) {
         case MOVE:
