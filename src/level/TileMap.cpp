@@ -28,8 +28,8 @@ TileMap::TileMap(std::string filename) {
     inp.open(objectFile);
     inp >> height >> width;
 
-    objectTiles.resize(height);
-    for(int i = 0; i < height; i++) objectTiles[i].resize(width);
+    blockTiles.resize(height);
+    for(int i = 0; i < height; i++) blockTiles[i].resize(width);
 
     for(int i = 0; i < height; i++) {
         for(int j = 0; j < width; j++) {
@@ -39,7 +39,7 @@ TileMap::TileMap(std::string filename) {
             inp >> type;
 
             if(type != "A") {
-                objectTiles[i][j] = std::make_shared<Block>(Vector2{(float)posX, (float)posY}, blockFlyweightFactory.getBlockFlyweight(type));
+                blockTiles[i][j] = std::make_shared<Block>(Vector2{(float)posX, (float)posY}, blockFlyweightFactory.getBlockFlyweight(type));
             }
         }
     }
@@ -57,9 +57,52 @@ void TileMap::draw(void) {
 
     for(int i = 0; i < height; i++) {
         for(int j = 0; j < width; j++) {
-            if(objectTiles[i][j] != nullptr) {
-                objectTiles[i][j]->Draw();
+            if(blockTiles[i][j] != nullptr) {
+                blockTiles[i][j]->Draw();
             }
+        }
+    }
+}
+
+void TileMap::update(std::shared_ptr<Character> player) {
+    for(int i = 0; i < height; i++) {
+        for(int j = 0; j < width; j++) {
+            if(blockTiles[i][j] == nullptr) continue;
+    //         const Rectangle& charRec = player->getRectangle();
+    //         const Rectangle& blockRec = blockTiles[i][j]->getRectangle();
+
+            // Player collisions on ground
+    //         if(charRec.y + charRec.height == blockRec.y &&
+    //            blockRec.x <= charRec.x + charRec.width &&
+    //            charRec.x <= blockRec.x + blockRec.width) {
+    //             player->collisionBottom(true);
+    //         } 
+            // Player head-bumps a block
+    //         else if(charRec.y == blockRec.y + blockRec.height &&
+    //             blockRec.x <= charRec.x + charRec.width && 
+    //             charRec.x <= blockRec.x + blockRec.width) {
+    //             player->collisionTop(blockRec);
+    //             if(player->isSmall()) {
+    //                 blockTiles[i][j]->jiggles();
+    //             }
+    //             else {
+    //                 if(blockTiles[i][j]->break()) {
+    //                     blockTiles[i][j].reset(); // i.e. blockTiles[i][j] = nullptr;
+    //                 }
+    //             }
+    //         }
+            // Player collisions left
+    //         else if(charRec.x == blockRec.x + blockRec.width &&
+    //         blockRec.y <= charRec.y + charRec.height &&
+    //         charRec.y <= blockRec.y + blockRec.height) {
+    //             player->collisionLeft();
+    //         }
+            // Player collision right
+    //         else if(charRec.x + charRec.width == blockRec.x &&
+    //         blockRec.y <= charRec.y + charRec.height &&
+    //         charRec.y <= blockRec.y + blockRec.height) {
+    //             player->collisionRight();
+    //         }
         }
     }
 }
