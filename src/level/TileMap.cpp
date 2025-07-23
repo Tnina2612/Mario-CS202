@@ -4,46 +4,65 @@ TileMap::TileMap(std::string filename) {
     std::string folder = "./world-maps/";
     std::string backgroundFile = folder + "background-maps/" + filename;
     std::string objectFile = folder + "object-maps/" + filename;
+    std::string enemyFile = folder + "enemy-maps/" + filename;
 
-    std::ifstream inp(backgroundFile);
-    inp >> height >> width;
-
-    backgroundTiles.resize(height);
-    for(int i = 0; i < height; i++) backgroundTiles[i].resize(width);
-
-    for(int i = 0; i < height; i++) {
-        for(int j = 0; j < width; j++) {
-            int posX = BLOCKSIDE * j;
-            int posY = BLOCKSIDE * i;
-            std::string type;
-            inp >> type;
-
-            if(type != "A") {
-                backgroundTiles[i][j] = std::make_shared<Block>(Vector2{(float)posX, (float)posY}, blockFlyweightFactory.getBlockFlyweight(type));
+    {   // BACKGROUNDS
+        std::ifstream inp(backgroundFile);
+        inp >> height >> width;
+        backgroundTiles.resize(height);
+        for(int i = 0; i < height; i++) backgroundTiles[i].resize(width);
+        for(int i = 0; i < height; i++) {
+            for(int j = 0; j < width; j++) {
+                int posX = BLOCKSIDE * j;
+                int posY = BLOCKSIDE * i;
+                std::string type;
+                inp >> type;
+                if(type != "A") {
+                    backgroundTiles[i][j] = std::make_shared<Block>(Vector2{(float)posX, (float)posY}, blockFlyweightFactory.getBlockFlyweight(type));
+                }
             }
         }
+        inp.close();
     }
-    inp.close();
 
-    inp.open(objectFile);
-    inp >> height >> width;
-
-    blockTiles.resize(height);
-    for(int i = 0; i < height; i++) blockTiles[i].resize(width);
-
-    for(int i = 0; i < height; i++) {
-        for(int j = 0; j < width; j++) {
-            int posX = BLOCKSIDE * j;
-            int posY = BLOCKSIDE * i;
-            std::string type;
-            inp >> type;
-
-            if(type != "A") {
-                blockTiles[i][j] = std::make_shared<Block>(Vector2{(float)posX, (float)posY}, blockFlyweightFactory.getBlockFlyweight(type));
+    {   // BLOCKS
+        std::ifstream inp(objectFile);
+        inp >> height >> width;
+        blockTiles.resize(height);
+        for(int i = 0; i < height; i++) blockTiles[i].resize(width);
+        for(int i = 0; i < height; i++) {
+            for(int j = 0; j < width; j++) {
+                int posX = BLOCKSIDE * j;
+                int posY = BLOCKSIDE * i;
+                std::string type;
+                inp >> type;
+                if(type != "A") {
+                    blockTiles[i][j] = std::make_shared<Block>(Vector2{(float)posX, (float)posY}, blockFlyweightFactory.getBlockFlyweight(type));
+                }
             }
         }
+        inp.close();
     }
-    inp.close();
+
+    {   // ENEMIES
+        std::ifstream inp(enemyFile);
+        inp.open(objectFile);
+        inp >> height >> width;
+        // enemies.resize(height);
+        for(int i = 0; i < height; i++) blockTiles[i].resize(width);
+        for(int i = 0; i < height; i++) {
+            for(int j = 0; j < width; j++) {
+                int posX = BLOCKSIDE * j;
+                int posY = BLOCKSIDE * i;
+                std::string type;
+                inp >> type;
+                if(type != "A") {
+                    // enemies[i][j] = std::make_shared<Enemy>(Vector2{(float)posX, (float)posY}, enemiesFlyweightFactory.getEnemiesFlyweight(type));
+                }
+            }
+        }
+        inp.close();
+    }
 }
 
 void TileMap::draw(void) {
@@ -60,6 +79,14 @@ void TileMap::draw(void) {
             if(blockTiles[i][j] != nullptr) {
                 blockTiles[i][j]->Draw();
             }
+        }
+    }
+
+    for(int i = 0; i < height; i++) {
+        for(int j = 0; j < width; j++) {
+            // if(enemies[i][j] != nullptr) {
+            //     enemies[i][j]->Draw();
+            // })
         }
     }
 }

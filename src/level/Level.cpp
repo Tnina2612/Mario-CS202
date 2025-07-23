@@ -7,7 +7,8 @@ Level::Level(const std::string& fileName) {
 
 void Level::draw(void) {
     tileMap->draw();
-    // character->draw();
+    // player->draw();
+    
 }
 
 void Level::update() {
