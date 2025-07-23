@@ -1,22 +1,45 @@
 #include<memory>
 #include<string>
-
+#include<iostream>
 #include"raylib.h"
 
 #include"../../include/entities/Enemy/Enemy.hpp"
 #include"../../include/entities/Enemy/EnemyType.hpp"
 
 
-std::shared_ptr<EnemyType> Enemy::getEnemyType() {
-    return m_data._type;
+Enemy::Enemy() : m_data() {}
+
+Enemy::Enemy(const std::string& name)  
+    : Enemy() 
+{
+    m_data._name = name;
 }
 
-Vector2 Enemy::getBaseSpeed() {
-    return m_data._baseSpeed;
+Enemy::Enemy(const std::string& name, Vector2 pos) 
+    : Enemy(name) 
+{
+    m_data._pos = pos;
 }
 
 void Enemy::setActive(bool isActive) {
     m_data._isActive = isActive;
+}
+
+void Enemy::setFrames(std::vector<Rectangle> frames) {
+    if(!m_data._type) {
+        std::cerr << "E1" << std::endl;
+        return;
+    }
+    m_data._type->setFrames(frames);
+}
+
+void Enemy::setType(std::shared_ptr<EnemyType> type) {
+    m_data._type = type;
+}
+
+void Enemy::setMovementStrategy(std::shared_ptr<IEnemyStrategy> strategy) {
+    if(m_data._type)
+        m_data._type->setMovementStrategy(strategy);
 }
 
 bool Enemy::isAlive() {
@@ -59,22 +82,19 @@ bool Enemy::beHitByFireball() {
     return true;
 }
 
-void Enemy::setVelocity(Vector2 vel) {
-    m_data._velocity = vel;
-}
-
-void Enemy::init(std::shared_ptr<EnemyType> newType, Vector2 startPos) {
-    this->m_data._type = newType;
-    this->m_data._pos = startPos;
+// void Enemy::init(std::shared_ptr<EnemyType> newType, Vector2 startPos) {
+//     this->m_data._type = newType;
+//     this->m_data._pos = startPos;
     
-    this->m_data._isOnGround = true;
-    this->m_data._isActive = false;
-}
+//     this->m_data._isOnGround = true;
+//     this->m_data._isActive = false;
+// }
 
 void Enemy::draw() {
     if(!m_data._isActive) {
         return;
     }
+    std::cerr << "OKE3" << std::endl;
     m_data._type->draw(m_data._pos);
 }
 
@@ -84,10 +104,8 @@ void Enemy::update(float dt) {
     }
 
     m_data._velocity.y += m_data._gravity;
+    // if() {
 
-    if(m_data._type->getMovementStrategy()) {
-        //Vector2 dir = {-1,0};
-        m_data._type->getMovementStrategy()->Execute(*this, dt);
-    }
-
+    // }
+    m_data._type->update(dt, m_data._pos);
 }

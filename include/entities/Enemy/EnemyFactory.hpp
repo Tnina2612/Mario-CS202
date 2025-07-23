@@ -1,26 +1,20 @@
 #pragma once
 
-#include<memory>
+#include<vector>
 #include<string>
 #include<unordered_map>
+#include<memory>
 
+#include"raylib.h"
+
+#include"Enemy.hpp"
 #include"EnemyType.hpp"
-#include"EnemyMove.hpp"
 
 class EnemyFactory {
 private:
-    static std::unordered_map<std::string, std::shared_ptr<EnemyType>> s_enemyTypes;
-    static std::shared_ptr<DirectionMove> s_directionMove;
-    static std::shared_ptr<JumpMove> s_jumpMove;
-
-    //ObjectPool<Enemy> ....
+    static std::shared_ptr<EnemyType> s_enemyTypes;
+    static std::unordered_map<std::string, std::vector<Rectangle>> s_enemyFrames;
 public:
-    static std::shared_ptr<EnemyType> getEnemyType(const std::string& name);
-    static std::shared_ptr<DirectionMove> getDirectionMove();
-    static std::shared_ptr<JumpMove> getJumpMove();
-    
-    //void loadEnemyTypes();
-    //void releaseEnemy();          //< object pool
-
-
+    static void loadAllFrames();
+    static std::shared_ptr<Enemy> createEnemy(const std::string& name, Vector2 pos);
 };

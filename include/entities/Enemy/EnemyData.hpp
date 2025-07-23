@@ -9,8 +9,8 @@
 
 struct EnemyData {
     std::shared_ptr<EnemyType> _type;
-
     std::string _name;  //< Enemy name 
+
     Rectangle _hitBox;
 
     int _hp;
@@ -26,18 +26,16 @@ struct EnemyData {
     bool _isActive;
     bool _isOnGround;
 
-    int _currentFrame = 0;
-    float _elapsedTime = 0.0f;
-
-    int _dir;  // 1 facing right, -1 left
+    int _dir;  // Direction: 1 facing right, -1 left
 
     EnemyData(
-        std::string name,
-        std::shared_ptr<EnemyType> type,
+        //std::string name,
+        //std::shared_ptr<EnemyType> type,
         Rectangle hitBox,
         float gra,
         bool imuneFire,
         bool isStompable,
+        bool isOnGround,
         int hp,
 
         Vector2 baseSpeed,
@@ -46,7 +44,8 @@ struct EnemyData {
 
         int dir
 
-    ):  _name(name),
+    ):  //_name(name),
+        _type(),
         _hitBox(hitBox),
         _baseSpeed(baseSpeed),
         _pos(pos),
@@ -54,9 +53,38 @@ struct EnemyData {
         _gravity(gra),
         _isImuneFire(imuneFire),
         _isStompable(isStompable),
-        _type(type),
+        _isOnGround(isOnGround),
+        //_type(type),
         _hp(hp),
-        _isActive(false),
+        //_isActive(false),
         _dir(dir)
     {}
+
+    EnemyData(): _isActive(false), _type() {}
+    EnemyData(
+        Rectangle hitBox,
+        float gra,
+        bool imuneFire,
+        bool isStompable,
+        bool isOnGround,
+        int hp,
+
+        Vector2 baseSpeed,
+        Vector2 vel,
+        
+        int dir
+
+    ):  _type(),
+        _hitBox(hitBox),
+        _baseSpeed(baseSpeed),
+        _velocity(vel),
+        _gravity(gra),
+        _isImuneFire(imuneFire),
+        _isStompable(isStompable),
+        _isOnGround(isOnGround),
+        _hp(hp),
+        _dir(dir)
+    {}
+    EnemyData(std::shared_ptr<EnemyType> type)
+        : _type(type){}
 };

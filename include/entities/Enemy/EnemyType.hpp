@@ -8,7 +8,6 @@
 #include"../include/entities/Animation.hpp"
 #include"IEnemyStrategy.hpp"
 
-
 class EnemyType {
 protected:
 
@@ -26,14 +25,15 @@ protected:
     std::shared_ptr<IEnemyStrategy> _movementStrategy;
     
 public:
-    //EnemyType();
-    EnemyType(const std::string& filepath);
-    // EnemyType(Texture2D tex, std::shared_ptr<IEnemyStrategy> move)
-    //     : _sprite(tex), _movementStrategy(move) {}
+    EnemyType(Animation& animation, std::shared_ptr<IEnemyStrategy> strategy)
+        : m_animation(animation), _movementStrategy(strategy) {}
+    EnemyType(const std::string& path = "./assets/images/sprite-sheets/enemies.png");
+
     void setMovementStrategy(std::shared_ptr<IEnemyStrategy> strategy);
     //void addCommand(std::unique_ptr<IEnemyCommand> command); //<for bosses
+    void setFrames(std::vector<Rectangle> frames);
     void draw(Vector2 pos);
-    std::shared_ptr<IEnemyStrategy> getMovementStrategy();
+    void update(float dt, Vector2& pos);
     
     virtual ~EnemyType();
 };

@@ -7,16 +7,22 @@
 
 class DirectionMove : public IEnemyStrategy {
 private:
-    Vector2 direction;
+    Vector2 velocity;
 public:
-    DirectionMove() : direction(Vector2{1.f, 0.f}) {}
-    DirectionMove(Vector2 dir) : direction(dir) {}
-    void Execute(Enemy& enemy, float dt) override;
+    DirectionMove(Vector2 vel = {-100.f, 0.f}) 
+        : velocity(vel) {}
+    void Execute(Vector2& position, float dt) override;
 };
 
 class JumpMove : public IEnemyStrategy {
+private:
+    float jumpHeight;
+    float gravity;
+    float velocityY;
 public:
-    void Execute(Enemy& enemy, float dt) override;
+    JumpMove(float h = 300.f, float g = 800.f)
+        : jumpHeight(h), gravity(g), velocityY(0.f) {}
+    void Execute(Vector2& position, float dt) override;
 };
 
 

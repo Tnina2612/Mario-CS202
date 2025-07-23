@@ -169,16 +169,28 @@ namespace EnemySprite {
             const Rectangle Leftfoot = {0, 4, 16, 16};
             const Rectangle Rightfoot = {30, 4, 16, 16};
             const Rectangle Dead = {60, 8, 16, 8};
+            const vector<Rectangle> Frames = {
+                Leftfoot,
+                Rightfoot
+            };
         };
         namespace Map2 {
             const Rectangle Leftfoot = {0, 34, 16, 16};
             const Rectangle Rightfoot = {30, 34, 16, 16};
             const Rectangle Dead = {60, 38, 16, 8};
+            const vector<Rectangle> Frames = {
+                Leftfoot,
+                Rightfoot
+            };
         };
         namespace Map3 {
             const Rectangle Leftfoot = {0, 4, 16, 16};
             const Rectangle Rightfoot = {30, 4, 16, 16};
             const Rectangle Dead = {60, 8, 16, 8};
+            const vector<Rectangle> Frames = {
+                Leftfoot,
+                Rightfoot
+            };
         };
     };
     namespace ParaTroopa {

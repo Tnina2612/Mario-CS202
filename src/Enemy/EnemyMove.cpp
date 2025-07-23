@@ -5,22 +5,17 @@
 
 
 //Movement
-void DirectionMove::Execute(Enemy& enemy, float dt) {
-    Vector2 baseSpeed = enemy.getBaseSpeed();
-
-    float vx = direction.x * baseSpeed.x;
-    float vy = direction.y * baseSpeed.y;
-
-    enemy.setVelocity(Vector2{vx, vy});
+void DirectionMove::Execute(Vector2& position, float dt) {
+    position.x += velocity.x * dt;
+    position.y += velocity.y * dt;
 }
 
-void JumpMove::Execute(Enemy& enemy, float dt) {
-    // if(enemy._isOnGround && direction.y < 0) {
-    //     enemy._velocity.y = -500;           //< 
-    //     enemy._isOnGround = false;
-    // }
+void JumpMove::Execute(Vector2& position, float dt) {
+    velocityY += gravity * dt;
+        position.y += velocityY * dt;
 
-    // Vector2 baseSpeed = enemy.getBaseSpeed();
-    
-    // enemy._velocity.x = baseSpeed.x;
+    if (position.y >= 500.0f) { //ground level = 500
+        position.y = 500.0f;
+        velocityY = -jumpHeight;
+    }
 }

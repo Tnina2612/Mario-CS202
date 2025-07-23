@@ -2,10 +2,8 @@
 
 #include"raylib.h"
 
-class Enemy;
-
 class IEnemyStrategy {
 public:
     virtual ~IEnemyStrategy() = default;
-    virtual void Execute(Enemy& enemy, float dt) = 0;
+    virtual void Execute(Vector2& position, float dt) = 0;
 };
