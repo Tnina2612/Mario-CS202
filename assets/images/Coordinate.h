@@ -169,16 +169,28 @@ namespace EnemySprite {
             const Rectangle Leftfoot = {0, 4, 16, 16};
             const Rectangle Rightfoot = {30, 4, 16, 16};
             const Rectangle Dead = {60, 8, 16, 8};
+            const vector<Rectangle> Frames = {
+                Leftfoot,
+                Rightfoot
+            };
         };
         namespace Map2 {
             const Rectangle Leftfoot = {0, 34, 16, 16};
             const Rectangle Rightfoot = {30, 34, 16, 16};
             const Rectangle Dead = {60, 38, 16, 8};
+            const vector<Rectangle> Frames = {
+                Leftfoot,
+                Rightfoot
+            };
         };
         namespace Map3 {
-            const Rectangle Leftfoot = {0, 4, 16, 16};
-            const Rectangle Rightfoot = {30, 4, 16, 16};
-            const Rectangle Dead = {60, 8, 16, 8};
+            const Rectangle Leftfoot = {0, 64, 16, 16};
+            const Rectangle Rightfoot = {30, 64, 16, 16};
+            const Rectangle Dead = {60, 68, 16, 8};
+            const vector<Rectangle> Frames = {
+                Leftfoot,
+                Rightfoot
+            };
         };
     };
     namespace ParaTroopa {
@@ -229,11 +241,20 @@ namespace EnemySprite {
         namespace Map2 {
             const Rectangle Close = {390, 60, 16, 24};
             const Rectangle Open = {420, 60, 16, 23};
+            const vector<Rectangle> Frames = {
+                Close,
+                Open
+            };
         };
         namespace Map3 {
             const Rectangle Close = {390, 30, 16, 24};
             const Rectangle Open = {420, 30, 16, 23};            
+            const vector<Rectangle> Frames = {
+                Close,
+                Open
+            };
         };
+
     };
 };
 
