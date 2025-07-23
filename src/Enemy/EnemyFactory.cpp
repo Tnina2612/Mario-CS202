@@ -28,7 +28,7 @@ std::shared_ptr<Enemy> EnemyFactory::createEnemy(const std::string& name, Vector
         s_enemyTypes = std::make_shared<EnemyType>();
     }
 
-    if(name.rfind("Goomba") == 0) {
+    if(name.find("Goomba") == 0) {
         auto it = std::make_shared<Goomba>(name, pos);
         it->setType(s_enemyTypes);
         it->setFrames(s_enemyFrames[name]);

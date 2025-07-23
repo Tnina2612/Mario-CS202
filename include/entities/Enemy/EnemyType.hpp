@@ -20,19 +20,18 @@ protected:
 //     PiranhaPlant
 // };
     //std::queue<IEnemyCommand*> _commands; //<for bosses
-
-    Animation m_animation;
+    
+    //Animation m_animation;
     std::shared_ptr<IEnemyStrategy> _movementStrategy;
     
 public:
-    EnemyType(Animation& animation, std::shared_ptr<IEnemyStrategy> strategy)
-        : m_animation(animation), _movementStrategy(strategy) {}
+    Texture2D sprite;
     EnemyType(const std::string& path = "./assets/images/sprite-sheets/enemies.png");
 
     void setMovementStrategy(std::shared_ptr<IEnemyStrategy> strategy);
+    
     //void addCommand(std::unique_ptr<IEnemyCommand> command); //<for bosses
-    void setFrames(std::vector<Rectangle> frames);
-    void draw(Vector2 pos);
+    //void draw(Vector2 pos);
     void update(float dt, Vector2& pos);
     
     virtual ~EnemyType();

@@ -11,6 +11,7 @@
 
 class Enemy {
 protected:
+    Animation m_animation;
     EnemyData m_data;
 public:
     Enemy();
@@ -19,7 +20,7 @@ public:
     //Enemy(std::shared_ptr<EnemyType> type, Vector2 pos);
 
     void setActive(bool isActive);
-    void setFrames(std::vector<Rectangle> frames);
+    void setFrames(const std::vector<Rectangle>& frames);
     void setMovementStrategy(std::shared_ptr<IEnemyStrategy> strategy);
     void setType(std::shared_ptr<EnemyType> type);
     bool isAlive();

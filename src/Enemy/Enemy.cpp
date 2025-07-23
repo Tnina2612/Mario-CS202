@@ -25,16 +25,13 @@ void Enemy::setActive(bool isActive) {
     m_data._isActive = isActive;
 }
 
-void Enemy::setFrames(std::vector<Rectangle> frames) {
-    if(!m_data._type) {
-        std::cerr << "E1" << std::endl;
-        return;
-    }
-    m_data._type->setFrames(frames);
+void Enemy::setFrames(const std::vector<Rectangle>& frames) {
+    m_animation.setFrames(frames);
 }
 
 void Enemy::setType(std::shared_ptr<EnemyType> type) {
     m_data._type = type;
+    m_animation.sprite = m_data._type->sprite;
 }
 
 void Enemy::setMovementStrategy(std::shared_ptr<IEnemyStrategy> strategy) {
@@ -95,7 +92,7 @@ void Enemy::draw() {
         return;
     }
     std::cerr << "OKE3" << std::endl;
-    m_data._type->draw(m_data._pos);
+    m_animation.draw(m_data._pos);
 }
 
 void Enemy::update(float dt) {

@@ -184,9 +184,9 @@ namespace EnemySprite {
             };
         };
         namespace Map3 {
-            const Rectangle Leftfoot = {0, 4, 16, 16};
-            const Rectangle Rightfoot = {30, 4, 16, 16};
-            const Rectangle Dead = {60, 8, 16, 8};
+            const Rectangle Leftfoot = {0, 64, 16, 16};
+            const Rectangle Rightfoot = {30, 64, 16, 16};
+            const Rectangle Dead = {60, 68, 16, 8};
             const vector<Rectangle> Frames = {
                 Leftfoot,
                 Rightfoot
