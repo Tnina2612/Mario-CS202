@@ -1,7 +1,6 @@
 #pragma once
 #include "raylib.h"
 #include <string>
-#include "core/InputManager.hpp"
 using namespace std;
 
 namespace Global
@@ -75,5 +74,3 @@ enum Behavior {
     THROW,
     IDLE
 };
-
-extern InputManager& INPUT_MANAGER;

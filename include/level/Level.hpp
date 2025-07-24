@@ -6,6 +6,8 @@
 #include<entities/Mario.hpp>
 #include<entities/Enemy/Enemy.hpp>
 #include<entities/Enemy/EnemyFactory.hpp>
+#include<core/InputManager.hpp>
+#include<core/Global.hpp>
 
 class Level {
     public:
@@ -15,6 +17,7 @@ class Level {
 };
 
 class Level_1_1_Ground : public Level {
+    private:
         const static int BLOCKSIDE = 16;
         TileMap background;
         TileMap blocks;
@@ -22,6 +25,7 @@ class Level_1_1_Ground : public Level {
         std::vector<std::shared_ptr<Enemy>> enemies;
         RenderTexture2D renderTexture;
         Camera2D camera;
+        InputManager& inputManager;
     public:
         Level_1_1_Ground();
         void draw(void) override;

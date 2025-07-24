@@ -1,9 +1,8 @@
 #include"../../include/entities/Character.hpp"
 
-Character::Character() : Animation(CharacterSprite::Small::frames), state(nullptr), pos(CharacterVar::position), 
+Character::Character() : Animation(CharacterSprite::Fire::frames), state(nullptr), pos(CharacterVar::position), 
     invincibilityTime(0.0f), lives(3), score(0), veclocityX(0.0f), veclocityY(0.0f), orientation(RIGHT), characterState(SMALL),
-    isInvincible(false), isDead(false), behavior(IDLE), onGround(true), inputManager(INPUT_MANAGER) {
-        inputManager.addListener(this);
+    isInvincible(false), isDead(false), behavior(IDLE), onGround(true) {
         accelerationX = 0.0f;
         accelerationY = 0.0f;
     }
@@ -11,8 +10,7 @@ Character::Character() : Animation(CharacterSprite::Small::frames), state(nullpt
 Character::Character(const vector<Rectangle>& frames, const Texture2D& sprite)
     : Animation(frames, sprite), state(nullptr), pos(CharacterVar::position), 
     invincibilityTime(0.0f), lives(3), score(0), veclocityX(0.0f), veclocityY(0.0f), orientation(RIGHT), characterState(SMALL),
-    isInvincible(false), isDead(false),behavior(IDLE), inputManager(INPUT_MANAGER), onGround(true) {
-        inputManager.addListener(this);
+    isInvincible(false), isDead(false),behavior(IDLE), onGround(true) {
         accelerationX = 0.0f;
         accelerationY = 0.0f;
     }
@@ -25,17 +23,19 @@ void Character::setState(IState* newState) {
 }
 
 void Character::moveLeft() {
-    if((behavior == IDLE || behavior == MOVE) && behavior != BRAKE) {
+    if((behavior == IDLE || behavior == MOVE) && behavior != BRAKE && behavior != DUCK) {
         //if(onGround) orientation = LEFT; // Change orientation to LEFT when moving left
         veclocityX = -maxVeclocityX; // Set velocity to move left
     }
+    if (!onGround) veclocityX = -maxVeclocityX; // Maintain left velocity when not on ground
 }
 
 void Character::moveRight() {
-    if((behavior == IDLE || behavior == MOVE) && behavior != BRAKE) {
+    if((behavior == IDLE || behavior == MOVE) && behavior != BRAKE && behavior != DUCK) {
         //if(onGround) orientation = RIGHT; // Change orientation to RIGHT when moving right
         veclocityX = maxVeclocityX; // Set velocity to move right
     }
+    if (!onGround) veclocityX = maxVeclocityX;
 }
 
 void Character::brakeLeft() {
@@ -109,40 +109,40 @@ void Character::baseInputUpdate() {
         onGround = false; // Set onGround to false when jumping
         veclocityY = -jumpVeclocity; // Set initial jump velocity
     }
-    if(!IsKeyDown(KEY_LEFT) && !IsKeyDown(KEY_RIGHT) && onGround && behavior != BRAKE) {
+    if(!IsKeyDown(KEY_LEFT) && !IsKeyDown(KEY_RIGHT)&& onGround && behavior != BRAKE) {
         behavior = IDLE; // If no movement keys are pressed, set behavior to IDLE
         veclocityX = 0.0f; // Reset horizontal velocity
     }
 }
 
 void Character::update() {
-    baseInputUpdate();
-    if(IsKeyDown(KEY_RIGHT)) {
-        if(behavior == IDLE) {
-            behavior = MOVE; orientation = RIGHT; // Change orientation to RIGHT when moving right
-        }
-        if(IsKeyReleased(KEY_LEFT) && behavior != BRAKE) {
-            orientation = RIGHT; // Change orientation to RIGHT when moving right
-        }
-        if (orientation == RIGHT) moveRight();
-    }
-    if(IsKeyDown(KEY_LEFT)) {
-        if(behavior == IDLE) {
-            behavior = MOVE; orientation = LEFT; // Change orientation to LEFT when moving left
-        }
-        if(IsKeyReleased(KEY_RIGHT) && behavior != BRAKE) {
-            orientation = LEFT; // Change orientation to LEFT when moving left
-        }
-        if(orientation == LEFT) moveLeft();
-    }
+    //baseInputUpdate();
+    // if(IsKeyDown(KEY_RIGHT)) {
+    //     if(behavior == IDLE) {
+    //         behavior = MOVE; orientation = RIGHT; // Change orientation to RIGHT when moving right
+    //     }
+    //     if(IsKeyReleased(KEY_LEFT) && behavior != BRAKE) {
+    //         orientation = RIGHT; // Change orientation to RIGHT when moving right
+    //     }
+    //     if (orientation == RIGHT || !onGround) moveRight();
+    // }
+    // if(IsKeyDown(KEY_LEFT)) {
+    //     if(behavior == IDLE) {
+    //         behavior = MOVE; orientation = LEFT; // Change orientation to LEFT when moving left
+    //     }
+    //     if(IsKeyReleased(KEY_RIGHT) && behavior != BRAKE) {
+    //         orientation = LEFT; // Change orientation to LEFT when moving left
+    //     }
+    //     if(orientation == LEFT || !onGround) moveLeft();
+    // }
     switch (behavior) {
         case MOVE:
             if (orientation == RIGHT) {
-                //moveRight();
+                moveRight();
                 Animation::update(GetFrameTime(), 10, 3);
             } 
             else if (orientation == LEFT) {
-                //moveLeft();
+                moveLeft();
                 Animation::update(GetFrameTime(), 3, 3);
             }
             break;
@@ -172,7 +172,6 @@ void Character::update() {
             }
             break;
         case BRAKE:
-        cout << "BRAKE" << endl;
             if (orientation == RIGHT) {
                 brakeRight();
                 Animation::update(GetFrameTime(), 9, 1);
@@ -198,4 +197,38 @@ void Character::draw() {
     Animation::draw(pos);
 }
 
-void Character::onkey(KeyboardKey key, bool active) {}
+void Character::setBehavior(Behavior newBehavior) {
+    behavior = newBehavior;
+}
+
+Behavior Character::getBehavior() const {
+    return behavior;
+}
+
+void Character::setOrientation(Orientation newOrientation) {
+    orientation = newOrientation;
+}
+
+Orientation Character::getOrientation() const {
+    return orientation;
+}
+
+bool Character::getOnGround() const {
+    return onGround;
+}
+
+void Character::setOnGround(bool onGround) {
+    this->onGround = onGround;
+}
+
+void Character::setVelocityX(float velocity) {
+    veclocityX = velocity;
+}
+
+void Character::setVeclocityY(float velocity) {
+    veclocityY = velocity;
+}
+
+float Character::getJumpVelocity() const {
+    return jumpVeclocity;
+}

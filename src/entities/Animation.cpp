@@ -26,7 +26,6 @@ void Animation::update(float deltaTime, int startFrame, int size) {
     }
     frameTime -= deltaTime;
     if(frameTime <= 0.0f) {
-        cout << currentFrame << endl;
         currentFrame++;
         if(currentFrame >= startFrame + size || currentFrame < startFrame) {
             currentFrame = startFrame; // Loop back to the start frame
