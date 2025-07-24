@@ -51,7 +51,18 @@ void Koopa::update(float dt) {
 
     // }
 }
+// bool Koopa::onHit() {
 
+// }
+
+bool Koopa::onStomp() {
+    m_state->handleStomp(*this);
+    return true;
+}
+
+// bool Koopa::beHitByFireball() {
+
+// }
 // void Koopa::draw() {
 //     if(!m_data._isActive || !isAlive()) {
 //         return;

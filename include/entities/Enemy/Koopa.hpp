@@ -35,9 +35,10 @@ public:
     void setRecoveryTime(int t);
     void setState(std::unique_ptr<IKoopaState> state);
     int getRecoveryTime();
-    // bool onHit() override;
-    // bool onStomp() override;
-    // bool beHitByFireball() override;
+
+    //bool onHit() override;
+    bool onStomp() override;
+    //bool beHitByFireball() override;
 
     //void draw() override;
     void update(float dt) override;

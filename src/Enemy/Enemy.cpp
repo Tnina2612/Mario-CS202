@@ -1,6 +1,7 @@
 #include<memory>
 #include<string>
 #include<iostream>
+#include<unordered_map>
 #include"raylib.h"
 
 #include"../../include/entities/Enemy/Enemy.hpp"
@@ -25,7 +26,10 @@ void Enemy::setActive(bool isActive) {
     m_data._isActive = isActive;
 }
 
-void Enemy::setFrames(const std::vector<Rectangle>& frames) {
+void Enemy::setAllFrames(std::unordered_map<std::string, std::vector<Rectangle>> frames) {
+    allFrames = frames;
+}
+void Enemy::setAniFrames(const std::vector<Rectangle>& frames) {
     m_animation.setFrames(frames);
 }
 
@@ -46,6 +50,10 @@ void Enemy::setDirection(int dir) {
     m_data._dir = dir;
 }
 
+void Enemy::setVelocity(Vector2 d) {
+    m_data._velocity = d;
+}
+
 int Enemy::getDirection() {
     return m_data._dir;
 }
@@ -54,12 +62,22 @@ Vector2 Enemy::getVelocity() {
     return m_data._velocity;
 }
 
-bool Enemy::isAlive() {
-    return m_data._hp > 0 || !m_data._isActive;
+std::vector<Rectangle> Enemy::getFrames(const std::string& name) {
+    return allFrames[name];
 }
 
+bool Enemy::isAlive() {
+    return m_data._hp > 0;
+}
+
+int Enemy::isOffScreen() {
+    return 2;
+}
 bool Enemy::onHit() {
-    setActive(false);
+    if(!m_data._isActive) {
+        return false;
+    }
+    m_data._hp--;
     return true;
 }
 
@@ -71,10 +89,8 @@ bool Enemy::onStomp() {
     if(!m_data._isStompable) {
         return false;
     }
-    m_data._hp--;
-    if(!isAlive()) {
-        onStomp();
-    }
+
+    onHit();
     return true;
 }
 
@@ -87,16 +103,13 @@ bool Enemy::beHitByFireball() {
         return false;
     }
 
-    m_data._hp--;
-    if(!isAlive()) {
-        onHit();
-    }
+    onHit();
     return true;
 }
 
 
 void Enemy::draw() {
-    if(!m_data._isActive || !isAlive()) {
+    if(!m_data._isActive) {
         return;
     }
 
@@ -108,7 +121,7 @@ void Enemy::update(float dt) {
         return;
     }
 
-    m_data._velocity.y += m_data._gravity;
+    //m_data._velocity.y += m_data._gravity;
     // if() {
 
     // }

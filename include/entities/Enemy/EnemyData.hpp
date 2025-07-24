@@ -16,7 +16,7 @@ struct EnemyData {
 
     int _hp;
 
-    Vector2 _baseSpeed;
+    //Vector2 _baseSpeed;
     Vector2 _pos;
     Vector2 _velocity;
 
@@ -27,7 +27,8 @@ struct EnemyData {
     bool _isActive;
     bool _isOnGround;
 
-    int _dir;  // Direction: 1 facing right, -1 left
+    int _dir;   // Direction: 1 facing right, -1 left
+                // -1 : up, 1 : down
 
     EnemyData(
         //std::string name,
@@ -39,7 +40,7 @@ struct EnemyData {
         bool isOnGround,
         int hp,
 
-        Vector2 baseSpeed,
+        //Vector2 baseSpeed,
         Vector2 pos,
         Vector2 vel,
 
@@ -48,7 +49,7 @@ struct EnemyData {
     ):  //_name(name),
         _type(),
         _hitBox(hitBox),
-        _baseSpeed(baseSpeed),
+        //_baseSpeed(baseSpeed),
         _pos(pos),
         _velocity(vel),
         _gravity(gra),
@@ -70,14 +71,14 @@ struct EnemyData {
         bool isOnGround,
         int hp,
 
-        Vector2 baseSpeed,
+        //Vector2 baseSpeed,
         Vector2 vel,
         
         int dir
 
     ):  _type(),
         _hitBox(hitBox),
-        _baseSpeed(baseSpeed),
+        //_baseSpeed(baseSpeed),
         _velocity(vel),
         _gravity(gra),
         _isImuneFire(imuneFire),
