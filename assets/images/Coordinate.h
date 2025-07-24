@@ -1,5 +1,7 @@
 #pragma once
 #include"raylib.h"
+#include<string>
+#include<unordered_map>
 #include<vector>
 
 using namespace std;
@@ -120,120 +122,137 @@ namespace CharacterSprite {
 
 
 namespace EnemySprite {
-    namespace KoopaTroopa {
+    namespace Koopa {
         namespace Map1 {
             namespace Left {
+                const Rectangle WWalk1 = {90, 0, 16, 24};
+                const Rectangle WWalk2 = {120, 0, 16, 23};
                 const Rectangle Walk1 = {150, 0, 16, 24};
                 const Rectangle Walk2 = {180, 0, 16, 23};
             };
+
             namespace Right {
+                const Rectangle WWalk1 = {300, 0, 16, 24};
+                const Rectangle WWalk2 = {270, 0, 16, 23};
                 const Rectangle Walk1 = {240, 0, 16, 24};
                 const Rectangle Walk2 = {210, 0, 16, 23};
             };
-            namespace Dead {
+
+            namespace Shell {
                 const Rectangle Move = {330, 4, 16, 15};
                 const Rectangle Idle = {360, 5, 16, 14};
             };
+            const std::unordered_map<std::string, std::vector<Rectangle>> Frames = {
+                {"LWWalk", {Left::WWalk1, Left::WWalk2}},
+                {"RWWalk", {Right::WWalk1, Right::WWalk2}},
+                {"RWalk", {Right::Walk1, Right::Walk2}},
+                {"LWalk", {Left::Walk1, Left::Walk2}},
+                {"Shell", {Shell::Move, Shell::Idle}}
+            };
+
         };
         namespace Map2 {
             namespace Left {
+                const Rectangle WWalk1 = {90, 60, 16, 24};
+                const Rectangle WWalk2 = {120, 60, 16, 23};
                 const Rectangle Walk1 = {150, 60, 16, 24};
                 const Rectangle Walk2 = {180, 60, 16, 23};
             };
+
             namespace Right {
+                const Rectangle WWalk1 = {300, 60, 16, 24};
+                const Rectangle WWalk2 = {270, 60, 16, 23};
                 const Rectangle Walk1 = {240, 60, 16, 24};
                 const Rectangle Walk2 = {210, 60, 16, 23};
             };
-            namespace Dead {
+
+            namespace Shell {
                 const Rectangle Move = {330, 64, 16, 15};
                 const Rectangle Idle = {360, 65, 16, 14};
+            };
+            const std::unordered_map<std::string, std::vector<Rectangle>> Frames = {
+                {"LWWalk", {Left::WWalk1, Left::WWalk2}},
+                {"RWWalk", {Right::WWalk1, Right::WWalk2}},
+                {"RWalk", {Right::Walk1, Right::Walk2}},
+                {"LWalk", {Left::Walk1, Left::Walk2}},
+                {"Shell", {Shell::Move, Shell::Idle}}
             };
         };
         namespace Map3 {
             namespace Left {
+                const Rectangle WWalk1 = {90, 30, 16, 24};
+                const Rectangle WWalk2 = {120, 30, 16, 23};
                 const Rectangle Walk1 = {150, 30, 16, 24};
                 const Rectangle Walk2 = {180, 30, 16, 23};
             };
+
             namespace Right {
+                const Rectangle WWalk1 = {300, 30, 16, 24};
+                const Rectangle WWalk2 = {270, 30, 16, 23};
                 const Rectangle Walk1 = {240, 30, 16, 24};
                 const Rectangle Walk2 = {210, 30, 16, 23};
             };
-            namespace Dead {
+
+            namespace Shell {
                 const Rectangle Move = {330, 34, 16, 15};
                 const Rectangle Idle = {360, 35, 16, 14};
             };
+            const std::unordered_map<std::string, std::vector<Rectangle>> Frames = {
+                {"LWWalk", {Left::WWalk1, Left::WWalk2}},
+                {"RWWalk", {Right::WWalk1, Right::WWalk2}},
+                {"RWalk", {Right::Walk1, Right::Walk2}},
+                {"LWalk", {Left::Walk1, Left::Walk2}},
+                {"Shell", {Shell::Move, Shell::Idle}}
+            };
         };
-    };
+    }
+
     namespace Goomba {
         namespace Map1 {
             const Rectangle Leftfoot = {0, 4, 16, 16};
             const Rectangle Rightfoot = {30, 4, 16, 16};
             const Rectangle Dead = {60, 8, 16, 8};
+            const std::unordered_map<std::string, std::vector<Rectangle>> Frames = {
+                {"Walk", {Leftfoot, Rightfoot}},
+                {"Dead", {Dead}}
+            };
         };
         namespace Map2 {
             const Rectangle Leftfoot = {0, 34, 16, 16};
             const Rectangle Rightfoot = {30, 34, 16, 16};
             const Rectangle Dead = {60, 38, 16, 8};
-        };
-        namespace Map3 {
-            const Rectangle Leftfoot = {0, 4, 16, 16};
-            const Rectangle Rightfoot = {30, 4, 16, 16};
-            const Rectangle Dead = {60, 8, 16, 8};
-        };
-    };
-    namespace ParaTroopa {
-        namespace Map1 {
-            namespace Left {
-                const Rectangle Walk1 = {90, 0, 16, 24};
-                const Rectangle Walk2 = {120, 0, 16, 23};
-            };
-            namespace Right {
-                const Rectangle Walk1 = {300, 0, 16, 24};
-                const Rectangle Walk2 = {270, 0, 16, 23};
-            };
-            namespace Dead {
-                const Rectangle Move = {330, 4, 16, 15};
-                const Rectangle Idle = {360, 5, 16, 14};
-            };
-        };
-        namespace Map2 {
-            namespace Left {
-                const Rectangle Walk1 = {90, 60, 16, 24};
-                const Rectangle Walk2 = {120, 60, 16, 23};
-            };
-            namespace Right {
-                const Rectangle Walk1 = {300, 60, 16, 24};
-                const Rectangle Walk2 = {270, 60, 16, 23};
-            };
-            namespace Dead {
-                const Rectangle Move = {330, 64, 16, 15};
-                const Rectangle Idle = {360, 65, 16, 14};
+            const std::unordered_map<std::string, std::vector<Rectangle>> Frames = {
+                {"Walk", {Leftfoot, Rightfoot}},
+                {"Dead", {Dead}}
             };
         };
         namespace Map3 {
-            namespace Left {
-                const Rectangle Walk1 = {90, 30, 16, 24};
-                const Rectangle Walk2 = {120, 30, 16, 23};
-            };
-            namespace Right {
-                const Rectangle Walk1 = {300, 30, 16, 24};
-                const Rectangle Walk2 = {270, 30, 16, 23};
-            };
-            namespace Dead {
-                const Rectangle Move = {330, 34, 16, 15};
-                const Rectangle Idle = {360, 35, 16, 14};
+            const Rectangle Leftfoot = {0, 64, 16, 16};
+            const Rectangle Rightfoot = {30, 64, 16, 16};
+            const Rectangle Dead = {60, 68, 16, 8};
+            const std::unordered_map<std::string, std::vector<Rectangle>> Frames = {
+                {"Walk", {Leftfoot, Rightfoot}},
+                {"Dead", {Dead}}
             };
         };
     };
+    
     namespace PiranhaPlant {
         namespace Map2 {
             const Rectangle Close = {390, 60, 16, 24};
             const Rectangle Open = {420, 60, 16, 23};
+            const std::unordered_map<std::string, std::vector<Rectangle>> Frames = {
+                {"Walk", {Close, Open}}
+            };
         };
         namespace Map3 {
             const Rectangle Close = {390, 30, 16, 24};
             const Rectangle Open = {420, 30, 16, 23};            
+            const std::unordered_map<std::string, std::vector<Rectangle>> Frames = {
+                {"Walk", {Close, Open}}
+            };
         };
+
     };
 };
 
