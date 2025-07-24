@@ -38,7 +38,6 @@ private:
     bool onGround;
     const float jumpVeclocity = 400; //1550.0f; // Initial jump velocity
     const float brakeAcceleration = 200; //600.0f; // Deceleration when braking
-    InputManager& inputManager;
     
 public:
     Character();
