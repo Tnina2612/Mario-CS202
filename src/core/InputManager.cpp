@@ -8,6 +8,14 @@ void InputManager::addKey(KeyboardKey key) {
     }
 }
 
+InputManager::~InputManager() {
+    // Clean up listeners
+    for(auto listener : listeners) {
+        delete listener;
+    }
+    listeners.clear();
+}
+
 void InputManager::addListener(InputListener* listener) {
     if(find(listeners.begin(), listeners.end(), listener) != listeners.end()) {
         return; // Listener already exists
@@ -109,6 +117,7 @@ void downListener::onkey(KeyboardKey key, bool pressed, bool down, Character* ch
     if(character == nullptr || key != KEY_DOWN) return;
     if(down && character->getOnGround()) {
         character->setBehavior(DUCK);
+        character->setVelocityX(0.0f); // Stop horizontal movement when ducking
     }
 }
 

@@ -47,7 +47,7 @@ public:
     void update();
     void addCharacter(Character* character);
     
-    ~InputManager() = default;
+    ~InputManager();
 private:
     unordered_map<KeyboardKey, pair<bool, bool>> keyStates;
     vector<InputListener*> listeners;
