@@ -77,6 +77,9 @@ void Level_1_1_Ground::update(void) {
     inputManager.update();
     blocks.update(player);
     player->update();
+    for(std::shared_ptr<Enemy> enemy : enemies) {
+        enemy->update();
+    }
     camera.target.x = min(blocks.getWidth() * BLOCKSIDE - Global::ORIGINAL_WIDTH / 2.f, max(Global::ORIGINAL_WIDTH / 2.f, player->getPos().x + 8.f));
     camera.target.y = Global::ORIGINAL_HEIGHT / 2.f;
 }
