@@ -52,7 +52,6 @@ public:
     void setVeclocityY(float velocity);
     float getJumpVelocity() const;
 
-    void baseInputUpdate();
     void update();
     void draw();
     void setBehavior(Behavior newBehavior);
@@ -60,13 +59,22 @@ public:
     void setOrientation(Orientation newOrientation);
     Orientation getOrientation() const;
 
+    CharacterState getCharacterState() const;
+
+    void hitBlockLeft();
+    void hitBlockRight();
+    void hitBlockTop();
+    void hitBlockBottom();
+
     bool getOnGround() const;
     void setOnGround(bool onGround);
     
-    void takeDamage();
-    void onCollision(GameObject* obj);
-    void addScore(int points);
+    // void takeDamage();
+    // void onCollision(GameObject* obj);
+    // void addScore(int points);
 
+
+    Rectangle getRectangle() const;
     virtual ~Character();
     virtual CharacterType getType() const = 0; // Pure virtual function to get character type
 
