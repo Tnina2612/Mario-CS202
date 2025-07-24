@@ -68,6 +68,9 @@ void Character::jump() {
     if(IsKeyReleased(KEY_UP)) {
         veclocityY = veclocityY * 0.5f;
     }
+    if(!IsKeyDown(KEY_LEFT) && !IsKeyDown(KEY_RIGHT)) {
+        veclocityX = 0.0f; // Reset horizontal velocity when jumping
+    }
     if (pos.y > CharacterVar::position.y) {
         pos.y = CharacterVar::position.y; // Reset position to initial y if it goes below
         onGround = true; // Set onGround to true when landing
@@ -82,59 +85,8 @@ Character::~Character() {
     }
 }
 
-void Character::baseInputUpdate() {
-    if(IsKeyPressed(KEY_LEFT)) {
-        if(orientation == RIGHT && behavior == MOVE) {
-            behavior = BRAKE;
-        }
-        else if(behavior != JUMP) {
-            behavior = MOVE;
-            orientation = LEFT; // Change orientation to LEFT when moving left
-        }
-    }
-    if(IsKeyPressed(KEY_RIGHT)) {
-        if(orientation == LEFT && behavior == MOVE) {
-            behavior = BRAKE;
-        }
-        else if(behavior != JUMP) {
-            behavior = MOVE;
-            orientation = RIGHT; // Change orientation to RIGHT when moving right
-        }
-    }
-    if(IsKeyPressed(KEY_DOWN) && behavior == IDLE) {
-        behavior = DUCK;
-    }
-    if(IsKeyPressed(KEY_UP) && onGround) {
-        behavior = JUMP;
-        onGround = false; // Set onGround to false when jumping
-        veclocityY = -jumpVeclocity; // Set initial jump velocity
-    }
-    if(!IsKeyDown(KEY_LEFT) && !IsKeyDown(KEY_RIGHT)&& onGround && behavior != BRAKE) {
-        behavior = IDLE; // If no movement keys are pressed, set behavior to IDLE
-        veclocityX = 0.0f; // Reset horizontal velocity
-    }
-}
 
 void Character::update() {
-    //baseInputUpdate();
-    // if(IsKeyDown(KEY_RIGHT)) {
-    //     if(behavior == IDLE) {
-    //         behavior = MOVE; orientation = RIGHT; // Change orientation to RIGHT when moving right
-    //     }
-    //     if(IsKeyReleased(KEY_LEFT) && behavior != BRAKE) {
-    //         orientation = RIGHT; // Change orientation to RIGHT when moving right
-    //     }
-    //     if (orientation == RIGHT || !onGround) moveRight();
-    // }
-    // if(IsKeyDown(KEY_LEFT)) {
-    //     if(behavior == IDLE) {
-    //         behavior = MOVE; orientation = LEFT; // Change orientation to LEFT when moving left
-    //     }
-    //     if(IsKeyReleased(KEY_RIGHT) && behavior != BRAKE) {
-    //         orientation = LEFT; // Change orientation to LEFT when moving left
-    //     }
-    //     if(orientation == LEFT || !onGround) moveLeft();
-    // }
     switch (behavior) {
         case MOVE:
             if (orientation == RIGHT) {
@@ -232,3 +184,31 @@ void Character::setVeclocityY(float velocity) {
 float Character::getJumpVelocity() const {
     return jumpVeclocity;
 }
+
+Rectangle Character::getRectangle() const {
+    return Rectangle{pos.x, pos.y, sprite.width * scale, sprite.height * scale};
+}
+
+CharacterState Character::getCharacterState() const {
+    return characterState;
+}
+
+void Character::hitBlockLeft() {
+    behavior = IDLE;
+    veclocityX = 0.0f; // Stop moving left
+}
+
+void Character::hitBlockRight() {
+    behavior = IDLE;
+    veclocityX = 0.0f; // Stop moving right
+}
+
+void Character::hitBlockTop() {
+    veclocityY = -veclocityY; // Reset vertical velocity when hitting a block from the top
+}
+
+void Character::hitBlockBottom() {
+    onGround = true; // Set onGround to true when hitting a block from the bottom
+    veclocityY = 0.0f; // Reset vertical velocity when hitting a block from the bottom
+}
+
