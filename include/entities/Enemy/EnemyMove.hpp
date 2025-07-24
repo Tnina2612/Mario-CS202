@@ -18,10 +18,10 @@ class JumpMove : public IEnemyStrategy {
 private:
     float jumpHeight;
     float gravity;
-    float velocityY;
+    Vector2 velocity;
 public:
-    JumpMove(float h = 300.f, float g = 800.f)
-        : jumpHeight(h), gravity(g), velocityY(0.f) {}
+    JumpMove(Vector2 vel = Vector2{-100.f, 100.f}, float h = 300.f, float g = 800.f )
+        : jumpHeight(h), gravity(g), velocity(vel) {}
     void Execute(Vector2& position, float dt) override;
 };
 
