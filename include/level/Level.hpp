@@ -20,7 +20,7 @@ class Level {
 class Level_1_1_Ground : public Level {
         const static int BLOCKSIDE = 16;
         TileMap background;
-        // TileMap blocks;
+        TileMap blocks;
         std::shared_ptr<Character> player;
         std::vector<std::shared_ptr<Enemy>> enemies;
     public:

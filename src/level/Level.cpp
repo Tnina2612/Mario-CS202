@@ -1,8 +1,7 @@
 #include "level/Level.hpp"
 
-Level_1_1_Ground::Level_1_1_Ground() : background("./world-maps/1-1-Ground/background.txt")/*, blocks("./world-maps/1-1-Ground/blocks.txt")*/ {
+Level_1_1_Ground::Level_1_1_Ground() : background("./world-maps/1-1-Ground/background.txt"), blocks("./world-maps/1-1-Ground/blocks.txt") {
     player = make_shared<Mario>();
-
     // {
     //     EnemyFactory::loadAllFrames();
     //     ifstream inp("./world-maps/1-1-Ground/enemies.txt");
@@ -26,9 +25,8 @@ Level_1_1_Ground::Level_1_1_Ground() : background("./world-maps/1-1-Ground/backg
 }
 
 void Level_1_1_Ground::draw(void) {
-    cout << "Draw background\n";
     background.draw();
-    // blocks.draw();
+    blocks.draw();
     // player->draw();
     // for(std::shared_ptr<Enemy> enemy : enemies) {
     //     enemy->draw();
@@ -36,7 +34,7 @@ void Level_1_1_Ground::draw(void) {
 }
 
 void Level_1_1_Ground::update(void) {
-    // blocks.update(player);
+    blocks.update(player);
     player->update();
 }
 
