@@ -9,7 +9,7 @@ PlayScene::~PlayScene() {
 }
 
 void PlayScene::init() {
-    level = new Level("1-1-ground.txt");
+    level = new Level_1_1_Ground();
     character = level->getCharacter();
 
     eventManager.addObserver(&Program::getInstance().getHUD());

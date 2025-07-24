@@ -1,101 +1,42 @@
 #include "level/TileMap.hpp"
 
 TileMap::TileMap(std::string filename) {
-    // cout << "Load background.\n";
-    {   // BACKGROUNDS
-        std::string backgroundFile = "./world-maps/background-maps/" + filename;
-        std::ifstream inp(backgroundFile);
-        inp >> height >> width;
-        backgroundTiles.resize(height);
-        for(int i = 0; i < height; i++) backgroundTiles[i].resize(width);
-        for(int i = 0; i < height; i++) {
-            for(int j = 0; j < width; j++) {
-                int posX = BLOCKSIDE * j;
-                int posY = BLOCKSIDE * i;
-                std::string type;
-                inp >> type;
-                if(type != "A") {
-                    backgroundTiles[i][j] = std::make_shared<Block>(Vector2{(float)posX, (float)posY}, blockFlyweightFactory.getBlockFlyweight(type));
-                }
+    std::ifstream inp(filename);
+    inp >> height >> width;
+    tiles.resize(height);
+    for(int i = 0; i < height; i++) {
+        tiles[i].resize(width);
+    }
+    for(int i = 0; i < height; i++) {
+        for(int j = 0; j < width; j++) {
+            string blockType;
+            inp >> blockType;
+            if(blockType != "A") {
+                float posX = j * BLOCKSIDE;
+                float posY = i * BLOCKSIDE;
+                tiles[i][j] = make_shared<Block>(Vector2{posX, posY}, tileFactory.getBlockFlyweight(blockType));
+            } else {
+                tiles[i][j].reset();
             }
         }
-        inp.close();
     }
-    // cout << "End background.\n";
-
-    cout << "Load blocks.\n";
-    {   // BLOCKS
-        std::string objectFile = "./world-maps/object-maps/" + filename;
-        std::ifstream inp(objectFile);
-        inp >> height >> width;
-        blockTiles.resize(height);
-        for(int i = 0; i < height; i++) blockTiles[i].resize(width);
-        for(int i = 0; i < height; i++) {
-            for(int j = 0; j < width; j++) {
-                int posX = BLOCKSIDE * j;
-                int posY = BLOCKSIDE * i;
-                std::string type;
-                inp >> type;
-                if(type != "A") {
-                    blockTiles[i][j] = std::make_shared<Block>(Vector2{(float)posX, (float)posY}, blockFlyweightFactory.getBlockFlyweight(type));
-                }
-            }
-        }
-        inp.close();
-    }
-    cout << "End blocks.\n";
-
-    cout << "Load enimies.\n";
-    {   // ENEMIES
-        std::string enemyFile = "./world-maps/enemy-positions/" + filename;
-        int numType;
-
-        EnemyFactory::loadAllFrames();
-        std::ifstream inp(enemyFile);
-        inp >> numType;
-        for(int _(0); _ < numType; _++) {
-            int numEnemy;
-            inp >> numEnemy;
-            string enemyType;
-            inp >> enemyType;
-            for(int i(0); i < numEnemy; i++) {
-                int y, x; 
-                inp >> y >> x;
-                float posX = y * BLOCKSIDE, posY = x * BLOCKSIDE;
-                enemies.push_back(EnemyFactory::createEnemy(enemyType, Vector2{posX, posY}));
-            }
-        }
-        inp.close();
-    }
-    cout << "End enemies.\n";
+    inp.close();
 }
 
 void TileMap::draw(void) {
     for(int i = 0; i < height; i++) {
         for(int j = 0; j < width; j++) {
-            if(backgroundTiles[i][j] != nullptr) {
-                backgroundTiles[i][j]->Draw();
+            if(tiles[i][j] != nullptr) {
+                tiles[i][j]->Draw();
             }
         }
     }
-
-    for(int i = 0; i < height; i++) {
-        for(int j = 0; j < width; j++) {
-            if(blockTiles[i][j] != nullptr) {
-                blockTiles[i][j]->Draw();
-            }
-        }
-    }
-
-    // for(std::shared_ptr<Enemy> enemy : enemies) {
-    //     enemy->draw();
-    // }
 }
 
 void TileMap::update(std::shared_ptr<Character> player) {
     for(int i = 0; i < height; i++) {
         for(int j = 0; j < width; j++) {
-            if(blockTiles[i][j] == nullptr) continue;
+            if(tiles[i][j] == nullptr) continue;
     //         const Rectangle& charRec = player->getRectangle();
     //         const Rectangle& blockRec = blockTiles[i][j]->getRectangle();
 
