@@ -32,6 +32,7 @@ public:
 
     int getDirection();
     Vector2 getVelocity();
+    Vector2 getPos();
     std::vector<Rectangle> getFrames(const std::string& name);
     bool isAlive();
     int isOffScreen(); //-1 : up, 1 : down, 2 : right, -2 : left 

@@ -17,8 +17,8 @@ void JumpMove::Execute(Vector2& position, float dt) {
     position.y += velocity.y * dt;
     position.x += velocity.x * dt;
 
-    if (position.y >= 50.0f) { //ground level = 500
-        position.y = 50.0f;
+    if (position.y >= 800.0f) { //ground level = 500
+        position.y = 800.0f;
         velocity.y = -jumpHeight;
     }
 }

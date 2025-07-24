@@ -7,7 +7,7 @@
 #include"../../include/entities/Enemy/Enemy.hpp"
 #include"../../include/entities/Enemy/EnemyType.hpp"
 
-
+#include<iostream>
 Enemy::Enemy() : m_data() {}
 
 Enemy::Enemy(const std::string& name)  
@@ -60,6 +60,10 @@ int Enemy::getDirection() {
 
 Vector2 Enemy::getVelocity() {
     return m_data._velocity;
+}
+
+Vector2 Enemy::getPos() {
+    return m_data._pos;
 }
 
 std::vector<Rectangle> Enemy::getFrames(const std::string& name) {

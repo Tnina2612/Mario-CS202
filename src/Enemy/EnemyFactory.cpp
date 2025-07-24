@@ -21,13 +21,11 @@ void EnemyFactory::loadAllFrames() {
 
 
     s_enemyFrames["Plant1"] = EnemySprite::PiranhaPlant::Map2::Frames;
-    s_enemyFrames["Plant2"] = EnemySprite::PiranhaPlant::Map2::Frames;
+    s_enemyFrames["Plant2"] = EnemySprite::PiranhaPlant::Map3::Frames;
 
-    //s_enemyFrames["KoopaTroopa1"] = EnemySprite::Goomba::Map2::Frames;
-    // s_enemyFrames["KoopaTroopa1"] = EnemySprite::KoopaTroopa::Map1::Frames;
-    // s_enemyFrames["Koopa2"] = EnemySprite::KoopaTroopa::Map2::Frames;
-    // s_enemyFrames["Koopa3"] = EnemySprite::KoopaTroopa::Map3::Frames;
-
+    s_enemyFrames["Koopa1"] = EnemySprite::Koopa::Map1::Frames;
+    s_enemyFrames["Koopa2"] = EnemySprite::Koopa::Map1::Frames;
+    s_enemyFrames["Koopa3"] = EnemySprite::Koopa::Map1::Frames;
 }
 
 std::shared_ptr<Enemy> EnemyFactory::createEnemy(const std::string& name, Vector2 pos) {
@@ -52,14 +50,18 @@ std::shared_ptr<Enemy> EnemyFactory::createEnemy(const std::string& name, Vector
         return it;
     }
     else if(name.find("Koopa") == 0) {
-        // auto it = std::make_shared<Koopa>(name, pos);
-        // it->setType(s_enemyTypes);
-        // it->setAllFrames(s_enemyFrames[name]);
-        // it->setAniFrames(it->getFrames("Walk"));
-        // it->setMovementStrategy(std::make_shared<JumpMove>());
+        auto it = std::make_shared<Koopa>(name, pos);
+        it->setType(s_enemyTypes);
+        it->setAllFrames(s_enemyFrames[name]);
+
+        it->setAniFrames(it->getFrames("LWalk"));
+        it->setMovementStrategy(std::make_shared<DirectionMove>(it->getVelocity()));
         
-        return nullptr;
-        // return it;
+        if(name == "Koopa2") {
+            it->setState(std::make_unique<WingedKoopa>());
+        }
+        //it->setState();
+        return it;
         //return nullptr;
     }    
     
