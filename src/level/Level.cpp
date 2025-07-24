@@ -4,6 +4,10 @@ Level_1_1_Ground::Level_1_1_Ground() : background("./world-maps/1-1-Ground/backg
     blocks("./world-maps/1-1-Ground/blocks.txt"),
     player(make_shared<Mario>()),
     inputManager(INPUT_MANAGER) {
+    cout << "Mario's height: " << player->getRectangle().height << '\n';
+    cout << "Mario's width: " << player->getRectangle().width << '\n';
+    cout << "Mario's x: " << player->getRectangle().x << '\n';
+    cout << "Mario's y: " << player->getRectangle().y << '\n';
     {
         EnemyFactory::loadAllFrames();
         ifstream inp("./world-maps/1-1-Ground/enemies.txt");
@@ -20,6 +24,7 @@ Level_1_1_Ground::Level_1_1_Ground() : background("./world-maps/1-1-Ground/backg
                 float posX = x * BLOCKSIDE;
                 float posY = y * BLOCKSIDE;
                 enemies.push_back(EnemyFactory::createEnemy(enemyType, Vector2{posX, posY}));
+                enemies.back()->setActive(true);
             }
         }
         inp.close();
@@ -57,9 +62,9 @@ void Level_1_1_Ground::draw(void) {
             background.draw();
             blocks.draw();
             player->draw();
-            // for(std::shared_ptr<Enemy> enemy : enemies) {
-            //     enemy->draw();
-            // }
+            for(std::shared_ptr<Enemy> enemy : enemies) {
+                enemy->draw();
+            }
         EndMode2D();
     EndTextureMode();
     DrawTexturePro(renderTexture.texture, 
