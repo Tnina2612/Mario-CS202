@@ -10,9 +10,6 @@ class PlayScene : public Scene {
 private:
     Level* level;
     EventManager eventManager;
-    Camera2D camera;
-    RenderTexture2D renderTexture;
-    std::shared_ptr<Character> character;
 
 public:
     ~PlayScene();
@@ -21,6 +18,4 @@ public:
     void handleInput() override;
     void update() override;
     void render() override;
-
-    void setUpCamera();
 };

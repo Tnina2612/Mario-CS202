@@ -11,9 +11,6 @@ class Level {
     public:
         virtual void draw(void) = 0;
         virtual void update(void) = 0;
-        virtual float getWidth(void) = 0;
-        virtual float getHeight(void) = 0;
-        virtual std::shared_ptr<Character> getCharacter() = 0;
         virtual ~Level() = default;
 };
 
@@ -23,12 +20,11 @@ class Level_1_1_Ground : public Level {
         TileMap blocks;
         std::shared_ptr<Character> player;
         std::vector<std::shared_ptr<Enemy>> enemies;
+        RenderTexture2D renderTexture;
+        Camera2D camera;
     public:
         Level_1_1_Ground();
         void draw(void) override;
         void update(void) override;
-        float getWidth(void) override;
-        float getHeight(void) override;
-        std::shared_ptr<Character> getCharacter() override;
-        virtual ~Level_1_1_Ground() = default;
+        virtual ~Level_1_1_Ground();
 };
