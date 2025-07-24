@@ -102,13 +102,13 @@ void TileMap::update(std::shared_ptr<Character> player) {
     //         if(charRec.y + charRec.height == blockRec.y &&
     //            blockRec.x <= charRec.x + charRec.width &&
     //            charRec.x <= blockRec.x + blockRec.width) {
-    //             player->collisionBottom(true);
+    //             player->collisionBottom();
     //         } 
             // Player head-bumps a block
     //         else if(charRec.y == blockRec.y + blockRec.height &&
     //             blockRec.x <= charRec.x + charRec.width && 
     //             charRec.x <= blockRec.x + blockRec.width) {
-    //             player->collisionTop(blockRec);
+    //             player->collisionTop();
     //             if(player->isSmall()) {
     //                 blockTiles[i][j]->jiggles();
     //             }

@@ -17,7 +17,7 @@ class IState {
     virtual void enter() = 0;
 };
 
-class Character : public Animation, public InputManager::Listener {
+class Character : public Animation {
 private:
     Vector2 pos;
     IState* state;
@@ -38,8 +38,6 @@ private:
     bool onGround;
     const float jumpVeclocity = 1550.0f; // Initial jump velocity
     const float brakeAcceleration = 600.0f; // Deceleration when braking
-    InputManager& inputManager;
-    
 public:
     Character();
     Character(const vector<Rectangle>& frames, const Texture2D& sprite);
@@ -50,16 +48,27 @@ public:
     void brakeRight();
     void jump();
 
+    void setVelocityX(float velocity);
+    void setVeclocityY(float velocity);
+    float getJumpVelocity() const;
+
     void baseInputUpdate();
     void update();
     void draw();
+    void setBehavior(Behavior newBehavior);
+    Behavior getBehavior()const;
+    void setOrientation(Orientation newOrientation);
+    Orientation getOrientation() const;
+
+    bool getOnGround() const;
+    void setOnGround(bool onGround);
+    
     void takeDamage();
     void onCollision(GameObject* obj);
     void addScore(int points);
 
     virtual ~Character();
     virtual CharacterType getType() const = 0; // Pure virtual function to get character type
-    void onkey(KeyboardKey key, bool active)override;
 
     Vector2 getPos() const;
 };

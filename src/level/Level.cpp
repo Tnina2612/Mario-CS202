@@ -1,8 +1,19 @@
 #include "level/Level.hpp"
 
-Level::Level(const std::string& fileName) {
+Level::Level(const std::string& fileName) : inputManager(INPUT_MANAGER) {
     tileMap = std::make_shared<TileMap>(fileName);
     player = std::make_shared<Mario>();
+    inputManager.addCharacter(player.get());
+
+    inputManager.addKey(KEY_LEFT);
+    inputManager.addKey(KEY_RIGHT);
+    inputManager.addKey(KEY_UP);
+    inputManager.addKey(KEY_DOWN);
+
+    inputManager.addListener(new upListener());
+    inputManager.addListener(new downListener());
+    inputManager.addListener(new leftListener());
+    inputManager.addListener(new rightListener());
 }
 
 void Level::draw(void) {
@@ -12,6 +23,7 @@ void Level::draw(void) {
 }
 
 void Level::update() {
+    inputManager.update();
     player->update();
     tileMap->update(player);
 }
