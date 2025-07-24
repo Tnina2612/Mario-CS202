@@ -20,20 +20,23 @@ Goomba::Goomba(const std::string& name, Vector2 pos)
         m_data._pos = pos;
 }
 
-void Goomba::update(float dt) {
-    if(!m_data._isActive || !isAlive()) {
-        return;
-    }
+// void Goomba::update(float dt) {
+//     if(!m_data._isActive || !isAlive()) {
+//         return;
+//     }
 
-    if(this->isAlive()) {
-        Enemy::update(dt);
-    }
+//     if(this->isAlive()) {
+//         Enemy::update(dt);
+//     }
     
-    // else {
+//     // else {
 
-    // }
-}
+//     // }
+// }
 
-void Goomba::draw() {
-    Enemy::draw();
-}
+// void Goomba::draw() {
+//     if(!m_data._isActive || !isAlive()) {
+//         return;
+//     }
+//     Enemy::draw();
+// }

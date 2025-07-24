@@ -3,6 +3,7 @@
 #include"../../include/entities/Enemy/EnemyMove.hpp"
 #include"../../include/entities/Enemy/Enemy.hpp"
 
+#include<iostream>
 
 //Movement
 void DirectionMove::Execute(Vector2& position, float dt) {
@@ -11,11 +12,13 @@ void DirectionMove::Execute(Vector2& position, float dt) {
 }
 
 void JumpMove::Execute(Vector2& position, float dt) {
-    velocityY += gravity * dt;
-        position.y += velocityY * dt;
+    velocity.y += gravity * dt;
 
-    if (position.y >= 500.0f) { //ground level = 500
-        position.y = 500.0f;
-        velocityY = -jumpHeight;
+    position.y += velocity.y * dt;
+    position.x += velocity.x * dt;
+
+    if (position.y >= 50.0f) { //ground level = 500
+        position.y = 50.0f;
+        velocity.y = -jumpHeight;
     }
 }

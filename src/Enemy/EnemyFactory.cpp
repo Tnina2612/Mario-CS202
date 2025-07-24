@@ -9,6 +9,7 @@
 #include"../../include/entities/Enemy/Goomba.hpp"
 #include"../../include/entities/Enemy/EnemyMove.hpp"
 #include"../../include/entities/Enemy/Plant.hpp"
+#include"../../include/entities/Enemy/Koopa.hpp"
 
 std::unordered_map<std::string, std::vector<Rectangle>> EnemyFactory::s_enemyFrames;
 std::shared_ptr<EnemyType> EnemyFactory::s_enemyTypes = nullptr;
@@ -22,9 +23,9 @@ void EnemyFactory::loadAllFrames() {
     s_enemyFrames["Plant2"] = EnemySprite::PiranhaPlant::Map2::Frames;
     s_enemyFrames["Plant2"] = EnemySprite::PiranhaPlant::Map2::Frames;
 
-    // s_enemyFrames["Koopa1"] = EnemySprite::Koopa::Map1::Frames;
-    // s_enemyFrames["Koopa2"] = EnemySprite::Koopa::Map2::Frames;
-    // s_enemyFrames["Koopa3"] = EnemySprite::Koopa::Map3::Frames;
+    s_enemyFrames["KoopaTroopa1"] = EnemySprite::KoopaTroopa::Map1::Frames;
+    // s_enemyFrames["Koopa2"] = EnemySprite::KoopaTroopa::Map2::Frames;
+    // s_enemyFrames["Koopa3"] = EnemySprite::KoopaTroopa::Map3::Frames;
 
 }
 
@@ -47,8 +48,12 @@ std::shared_ptr<Enemy> EnemyFactory::createEnemy(const std::string& name, Vector
         it->setMovementStrategy(std::make_shared<DirectionMove>(Vector2{0,-50.f}));
         return it;
     }
-    else if(name.rfind("Koopa") == 0) {
-        return nullptr;
+    else if(name.find("Koopa") == 0) {
+        auto it = std::make_shared<Koopa>(name, pos);
+        it->setType(s_enemyTypes);
+        it->setFrames(s_enemyFrames[name]);
+        it->setMovementStrategy(std::make_shared<JumpMove>());
+        return it;
     }    
     
     return nullptr; 

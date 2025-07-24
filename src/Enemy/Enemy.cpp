@@ -35,8 +35,23 @@ void Enemy::setType(std::shared_ptr<EnemyType> type) {
 }
 
 void Enemy::setMovementStrategy(std::shared_ptr<IEnemyStrategy> strategy) {
-    if(m_data._type)
-        m_data._movementStrategy = strategy;
+    m_data._movementStrategy = strategy;
+}
+
+void Enemy::setEnemyData(const EnemyData& data) {
+    m_data = data;
+}
+
+void Enemy::setDirection(int dir) {
+    m_data._dir = dir;
+}
+
+int Enemy::getDirection() {
+    return m_data._dir;
+}
+
+Vector2 Enemy::getVelocity() {
+    return m_data._velocity;
 }
 
 bool Enemy::isAlive() {
@@ -81,7 +96,7 @@ bool Enemy::beHitByFireball() {
 
 
 void Enemy::draw() {
-    if(!m_data._isActive) {
+    if(!m_data._isActive || !isAlive()) {
         return;
     }
 
@@ -98,6 +113,7 @@ void Enemy::update(float dt) {
 
     // }
     m_animation.update(dt);
-    if(m_data._movementStrategy)
+    if(m_data._movementStrategy) {
         m_data._movementStrategy->Execute(m_data._pos, dt);
+    }
 }

@@ -20,20 +20,23 @@ Plant::Plant(const std::string& name, Vector2 pos)
         m_data._pos = pos;
 }
 
-void Plant::update(float dt) {
-    if(!m_data._isActive || !isAlive()) {
-        return;
-    }
+// void Plant::update(float dt) {
+//     if(!m_data._isActive || !isAlive()) {
+//         return;
+//     }
 
-    if(this->isAlive()) {
-        Enemy::update(dt);
-    }
+//     if(this->isAlive()) {
+//         Enemy::update(dt);
+//     }
     
-    // else {
+//     // else {
 
-    // }
-}
+//     // }
+// }
 
-void Plant::draw() {
-    Enemy::draw();
-}
+// void Plant::draw() {
+//     if(!m_data._isActive || !isAlive()) {
+//         return;
+//     }
+//     Enemy::draw();
+// }

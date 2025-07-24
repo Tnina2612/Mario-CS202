@@ -23,6 +23,11 @@ public:
     void setFrames(const std::vector<Rectangle>& frames);
     void setMovementStrategy(std::shared_ptr<IEnemyStrategy> strategy);
     void setType(std::shared_ptr<EnemyType> type);
+    void setEnemyData(const EnemyData& data);
+    void setDirection(int dir);
+
+    int getDirection();
+    Vector2 getVelocity();
     bool isAlive();
 
     virtual bool onHit();

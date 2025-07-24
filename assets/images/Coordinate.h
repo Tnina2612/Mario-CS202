@@ -134,6 +134,12 @@ namespace EnemySprite {
                 const Rectangle Move = {330, 4, 16, 15};
                 const Rectangle Idle = {360, 5, 16, 14};
             };
+            const vector<Rectangle> Frames = {
+                Left::Walk1,
+                Left::Walk2,
+                Right::Walk1,
+                Right::Walk2
+            };
         };
         namespace Map2 {
             namespace Left {

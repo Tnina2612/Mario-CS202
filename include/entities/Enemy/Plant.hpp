@@ -12,6 +12,6 @@ public:
     //Goomba(Vector2 bSpeed, Vector2 pos, Vector2 vel);
     //void init(std::shared_ptr<EnemyType> newType, Vector2 startPosition);
     
-    void draw() override;
-    void update(float dt) override;
+    // void draw() override;
+    // void update(float dt) override;
 };
