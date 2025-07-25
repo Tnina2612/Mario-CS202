@@ -30,14 +30,15 @@ private:
     float accelerationY;
     Orientation orientation;
     CharacterState characterState;
-    const float gravity = 3900.0f;
-    const float maxVeclocityX = 300.f;
+    const float gravity = 1300; //3900.0f;
+    const float maxVeclocityX = 100; //300.f;
     Behavior behavior;
     bool isInvincible;
     bool isDead;
     bool onGround;
-    const float jumpVeclocity = 1550.0f; // Initial jump velocity
-    const float brakeAcceleration = 600.0f; // Deceleration when braking
+    const float jumpVeclocity = 400; //1550.0f; // Initial jump velocity
+    const float brakeAcceleration = 200; //600.0f; // Deceleration when braking
+    
 public:
     Character();
     Character(const vector<Rectangle>& frames, const Texture2D& sprite);
@@ -52,7 +53,6 @@ public:
     void setVeclocityY(float velocity);
     float getJumpVelocity() const;
 
-    void baseInputUpdate();
     void update();
     void draw();
     void setBehavior(Behavior newBehavior);
@@ -60,13 +60,22 @@ public:
     void setOrientation(Orientation newOrientation);
     Orientation getOrientation() const;
 
+    CharacterState getCharacterState() const;
+
+    void hitBlockLeft();
+    void hitBlockRight();
+    void hitBlockTop();
+    void hitBlockBottom();
+
     bool getOnGround() const;
     void setOnGround(bool onGround);
     
-    void takeDamage();
-    void onCollision(GameObject* obj);
-    void addScore(int points);
+    // void takeDamage();
+    // void onCollision(GameObject* obj);
+    // void addScore(int points);
 
+
+    Rectangle getRectangle() const;
     virtual ~Character();
     virtual CharacterType getType() const = 0; // Pure virtual function to get character type
 
