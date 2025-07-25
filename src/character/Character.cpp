@@ -143,6 +143,7 @@ void Character::update() {
     if(!onGround) veclocityY += gravity * GetFrameTime(); // Apply gravity if not on ground
     pos.x = pos.x + veclocityX * GetFrameTime();
     pos.y = pos.y + veclocityY * GetFrameTime();
+    cout << veclocityX << endl;
 }
 
 void Character::draw() {
