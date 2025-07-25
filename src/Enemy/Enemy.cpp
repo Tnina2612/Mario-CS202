@@ -1,0 +1,136 @@
+#include<memory>
+#include<string>
+#include<iostream>
+#include<unordered_map>
+#include"raylib.h"
+
+#include"../../include/entities/Enemy/Enemy.hpp"
+#include"../../include/entities/Enemy/EnemyType.hpp"
+
+#include<iostream>
+Enemy::Enemy() : m_data() {}
+
+Enemy::Enemy(const std::string& name)  
+    : Enemy() 
+{
+    m_data._name = name;
+}
+
+Enemy::Enemy(const std::string& name, Vector2 pos) 
+    : Enemy(name) 
+{
+    m_data._pos = pos;
+}
+
+void Enemy::setActive(bool isActive) {
+    m_data._isActive = isActive;
+}
+
+void Enemy::setAllFrames(std::unordered_map<std::string, std::vector<Rectangle>> frames) {
+    allFrames = frames;
+}
+void Enemy::setAniFrames(const std::vector<Rectangle>& frames) {
+    m_animation.setFrames(frames);
+}
+
+void Enemy::setType(std::shared_ptr<EnemyType> type) {
+    m_data._type = type;
+    m_animation.sprite = m_data._type->sprite;
+}
+
+void Enemy::setMovementStrategy(std::shared_ptr<IEnemyStrategy> strategy) {
+    m_data._movementStrategy = strategy;
+}
+
+void Enemy::setEnemyData(const EnemyData& data) {
+    m_data = data;
+}
+
+void Enemy::setDirection(int dir) {
+    m_data._dir = dir;
+}
+
+void Enemy::setVelocity(Vector2 d) {
+    m_data._velocity = d;
+}
+
+int Enemy::getDirection() {
+    return m_data._dir;
+}
+
+Vector2 Enemy::getVelocity() {
+    return m_data._velocity;
+}
+
+Vector2 Enemy::getPos() {
+    return m_data._pos;
+}
+
+std::vector<Rectangle> Enemy::getFrames(const std::string& name) {
+    return allFrames[name];
+}
+
+bool Enemy::isAlive() {
+    return m_data._hp > 0;
+}
+
+int Enemy::isOffScreen() {
+    return 2;
+}
+bool Enemy::onHit() {
+    if(!m_data._isActive) {
+        return false;
+    }
+    m_data._hp--;
+    return true;
+}
+
+bool Enemy::onStomp() {
+    if(!m_data._isActive) {
+        return false;
+    }
+
+    if(!m_data._isStompable) {
+        return false;
+    }
+
+    onHit();
+    return true;
+}
+
+bool Enemy::beHitByFireball() {
+    if(!m_data._isActive) {
+        return false;
+    }
+
+    if(!m_data._isImuneFire) {
+        return false;
+    }
+
+    onHit();
+    return true;
+}
+
+
+void Enemy::draw() {
+    if(!m_data._isActive) {
+        return;
+    }
+
+    m_animation.draw(m_data._pos);
+}
+
+void Enemy::update(float dt) {
+    if(!m_data._isActive) {
+        return;
+    }
+
+    //m_data._velocity.y += m_data._gravity;
+    // if() {
+
+    // }
+    m_animation.update(dt);
+    if(m_data._movementStrategy) {
+        m_data._movementStrategy->Execute(m_data._pos, dt);
+    }
+}

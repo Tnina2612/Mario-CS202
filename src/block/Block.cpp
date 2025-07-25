@@ -37,3 +37,74 @@ std::shared_ptr<BlockFlyweight> BlockFlyweightFactory::getBlockFlyweight(const s
     }
     return flyweights[type];
 }
+
+Rectangle Block::getRectangle() const {
+    return Rectangle{ position.x, position.y, 16, 16 };
+}
+
+
+Rectangle BrickBlock::getRectangle() const {
+    return Rectangle{ position.x, position.y + jiggleOffset, 16, 16 };
+}
+
+void BrickBlock::jiggle() {
+    if (jiggleTime <= 0.0f) {
+        jiggleTime = 0.2f;
+    }
+}
+
+bool BrickBlock::breakBrick() {
+    if (!isBroken) {
+        isBroken = true;
+        return true;
+    }
+    return false;
+}
+
+void BrickBlock::update(float deltaTime) {
+    if (jiggleTime > 0.0f) {
+        jiggleTime -= deltaTime;
+        jiggleOffset = -4.0f * sinf((0.2f - jiggleTime) * 20.0f);
+        if (jiggleTime <= 0.0f) {
+            jiggleOffset = 0.0f;
+        }
+    }
+}
+
+void BrickBlock::Draw() {
+    if (isBroken) return;
+    flyweight->Draw(position.x, position.y + jiggleOffset);
+}
+
+Rectangle QuestionBlock::getRectangle() const {
+    return Rectangle{ position.x, position.y + jiggleOffset, 16, 16 };
+}
+
+void QuestionBlock::jiggle() {
+    if (jiggleTime <= 0.0f && !isUsed) {
+        jiggleTime = 0.2f;
+        isUsed = true; 
+    }
+}
+
+bool QuestionBlock::breakBrick() {
+    return false;
+}
+
+void QuestionBlock::update(float deltaTime) {
+    if (jiggleTime > 0.0f) {
+        jiggleTime -= deltaTime;
+        jiggleOffset = -4.0f * sinf((0.2f - jiggleTime) * 20.0f);
+        if (jiggleTime <= 0.0f) {
+            jiggleOffset = 0.0f;
+        }
+    }
+}
+
+void QuestionBlock::Draw() {
+    flyweight->Draw(position.x, position.y + jiggleOffset);
+}
+
+Rectangle GroundBlock::getRectangle() const {
+    return Rectangle{ position.x, position.y, 16, 16 };
+}

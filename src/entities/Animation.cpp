@@ -2,7 +2,7 @@
 #include "core/Variables.hpp"
 #include <iostream>
 
-Animation::Animation() : currentFrame(0), frameTime(0.0f), scale(Global::SCALE_FACTOR) {}
+Animation::Animation() : currentFrame(0), frameTime(0.0f), scale(1) {}
 
 Animation::Animation(const vector<Rectangle>& frames) : Animation() {
     this->frames = frames;
