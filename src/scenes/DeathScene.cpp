@@ -6,7 +6,7 @@
 #include "raylib.h"
 
 void DeathScene::init() {
-    marioIcon = LoadTexture("assets/sprites sheets/mario.png");
+    marioIcon = LoadTexture("assets/images/sprite-sheets/mario.png");
 
     waitTimer = 0.0f;
     waitDuration = 3.0f;
@@ -15,7 +15,7 @@ void DeathScene::init() {
 
 void DeathScene::handleInput() {
     if (IsKeyPressed(KEY_ENTER)  && !hasTriggeredTransition) {
-        // Program::getInstance().changeScene(new PlayScene());
+        Program::getInstance().changeScene(new PlayScene());
     }
 }
 
@@ -26,7 +26,7 @@ void DeathScene::update() {
         // Automatically transition after 3 seconds
         if (waitTimer >= waitDuration) {
             hasTriggeredTransition = true;
-            // Program::getInstance().changeScene(new PlayScene());
+            Program::getInstance().changeScene(new PlayScene());
         }
     }
 }

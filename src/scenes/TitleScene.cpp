@@ -1,6 +1,8 @@
 #include "core/Program.hpp"
 #include "scenes/TitleScene.hpp"
 #include "scenes/PlayScene.hpp"
+#include "scenes/DeathScene.hpp"
+#include "scenes/MapSelectScene.hpp"
 #include "block/Block.h"
 #include "raylib.h"
 
@@ -21,11 +23,15 @@ void TitleScene::init() {
 
 void TitleScene::handleInput() {
     if (IsKeyPressed(KEY_ENTER)) {
-        Program::getInstance().changeScene(new PlayScene());
+        if (curMode == 0 || curMode == 1) {
+            Program::getInstance().changeScene(new DeathScene());
+        } else {
+            Program::getInstance().changeScene(new MapSelectScene());
+        }
     } else if (IsKeyPressed(KEY_DOWN)) {
-        curMode = (curMode + 1) % 2;
+        curMode = (curMode + 1) % 3;
     } else if (IsKeyPressed(KEY_UP)) {
-        curMode = (curMode + 3) % 2;
+        curMode = ((curMode - 1) % 3 >= 0) ? (curMode - 1) % 3 : 2;
     }
 }
 
@@ -57,9 +63,10 @@ void TitleScene::render() {
     DrawTextEx(font, "1985 NINTENDO", {478, 440}, 34, 1, {255, 206, 180, 255});
     
     DrawTextureEx(cursor, {280, (float)cursorPos[curMode]}, 0.0f, 4.0f, WHITE);
-    DrawTextEx(font, "1 PLAYER GAME", {360, 580}, 34, 1, WHITE);
-    DrawTextEx(font, "2 PLAYER GAME", {360, 640}, 34, 1, WHITE);
-    DrawTextEx(font, "TOP- 000000", {384, 720}, 34, 1, WHITE);
+    DrawTextEx(font, "1 PLAYER GAME", {360, 550}, 34, 1, WHITE);
+    DrawTextEx(font, "2 PLAYER GAME", {360, 610}, 34, 1, WHITE);
+    DrawTextEx(font, "MAP SELECT", {360, 670}, 34, 1, WHITE);
+    DrawTextEx(font, "TOP- 000000", {360, 760}, 34, 1, WHITE);
 }
 
 TitleScene::~TitleScene() {
