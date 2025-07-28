@@ -1,10 +1,15 @@
 #include "ui/HUD.hpp"
-#include "core/Program.h"
+#include "core/Program.hpp"
 #include <string>
 #include <cstdio>
 
 HUD::HUD(GameSession* s) {
     session = s;
+    coin = LoadTexture("assets/images/title-scene/coin.png");
+}
+
+HUD::~HUD() {
+    UnloadTexture(coin);
 }
 
 void HUD::onNotify(EventType type) {
@@ -55,7 +60,9 @@ void HUD::draw() {
     DrawTextEx(font, "LIVES", { 878, 14 }, 24, 1, WHITE);
 
     DrawTextEx(font, scoreText, { 60, 35 }, 24, 1, WHITE);
-    DrawTextEx(font, coinText.c_str(), { 290, 35 }, 24, 1, WHITE);
+    DrawTextureEx(coin, {290, 39}, 0.0f, 2.8f, WHITE);
+    DrawText("x", 310, 40, 20, WHITE);
+    DrawTextEx(font, coinText.c_str(), { 330, 35 }, 24, 1, WHITE);
     DrawTextEx(font, worldText.c_str(), { 498, 35 }, 24, 1, WHITE);
     DrawTextEx(font, timeText.c_str(),  { 702, 35 }, 24, 1, WHITE);
     DrawTextEx(font, livesText.c_str(), { 878, 35 }, 24, 1, WHITE);

@@ -2,7 +2,7 @@
 
 Mario::Mario() : Character() {
     sprite = LoadTexture(CharacterVar::MarioSpritePath.c_str());
-    frames = CharacterSprite::Small::frames;
+    frames = CharacterSprite::Super::frames; // Use Fire frames for Mario
 }
 
 Mario::~Mario() {
@@ -11,4 +11,8 @@ Mario::~Mario() {
 
 CharacterType Mario::getType()const {
     return MARIO;
+}
+
+Vector2 Character::getPos() const {
+    return pos;
 }

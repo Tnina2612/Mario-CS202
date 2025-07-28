@@ -11,6 +11,7 @@ namespace Global
     const int SCALE_FACTOR = 4;
     const int WINDOW_WIDTH = ORIGINAL_WIDTH * SCALE_FACTOR;
     const int WINDOW_HEIGHT = ORIGINAL_HEIGHT * SCALE_FACTOR;
+    const int TILE_SIZE = 16;
 
     // Global Font
     // extern Font mainFont;
@@ -44,9 +45,9 @@ namespace MenuScreen {
 }
 
 namespace CharacterVar {
-    const Vector2 position = {10.0f, Global::ORIGINAL_HEIGHT - 48.0f};
-    const string MarioSpritePath = "./assets/images/sprite sheets/mario.png";
-    const string LuigiSpritePath = "./assets/images/sprite sheets/luigi.png";
+    const Vector2 position = {24.f, Global::ORIGINAL_HEIGHT - 32.f - 32.f};
+    const string MarioSpritePath = "./assets/images/sprite-sheets/mario.png";
+    const string LuigiSpritePath = "./assets/images/sprite-sheets/luigi.png";
 }
 
 enum CharacterType {
@@ -63,4 +64,13 @@ enum CharacterState {
     SMALL,
     SUPER,
     FIRE
+};
+
+enum Behavior {
+    MOVE,
+    JUMP,
+    BRAKE,
+    DUCK,
+    THROW,
+    IDLE
 };

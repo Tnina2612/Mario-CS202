@@ -1,6 +1,6 @@
 #include <iostream>
 #include "raylib.h"
-#include "core/Program.h"
+#include "core/Program.hpp"
 
 int main() {
     Program::getInstance().run();

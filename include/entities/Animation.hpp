@@ -1,3 +1,4 @@
+#pragma once
 #include"../../assets/images/Coordinate.h"
 
 class Animation {

@@ -1,5 +1,7 @@
 #pragma once
-#include<memory>
+#include <memory>
+#include <stdexcept>
+
 using namespace std;
 
 template <class T>

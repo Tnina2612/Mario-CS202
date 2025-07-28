@@ -1,5 +1,5 @@
 #pragma once
-#include "Variables.h"
+#include "core/Variables.hpp"
 
 // Observer Interface in Observer Pattern
 class IObserver {

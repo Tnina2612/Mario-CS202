@@ -14,14 +14,17 @@ private:
     Scene* nextScene;
     Font font;
     GameSession session;
-    HUD hud{&session};
+    HUD* hud;
+    Image icon;
+
+    // Singleton Design Pattern
+    Program();
 
 public:
-    Program();
-    ~Program();
-
     Program(const Program&) = delete;
     void operator=(const Program&) = delete;
+
+    ~Program();
 
     static Program& getInstance(); 
     void changeScene(Scene* scene);

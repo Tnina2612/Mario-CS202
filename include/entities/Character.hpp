@@ -1,12 +1,15 @@
 #pragma once
 #include "GameObject.hpp"
 #include "raylib.h"
-#include "../Variables.h"
+#include "../core/Variables.hpp"
 #include <cstring>
 #include"Animation.hpp"
 #include <vector>
+#include <iostream>
+#include<algorithm>
 
 class GameObject;
+
 
 class IState {
     virtual void handleInput() = 0;
@@ -23,22 +26,18 @@ private:
     int score;
     float veclocityX;
     float veclocityY;
+    float accelerationX;
+    float accelerationY;
     Orientation orientation;
     CharacterState characterState;
-    const float friction = 100.0;
-    const float gravity = 200.0f;
-    const float maxVeclocityX = 100.f;
-    enum Behavior {
-        MOVE,
-        JUMP,
-        BRAKE,
-        DUCK,
-        THROW,
-        IDLE
-    };
+    const float gravity = 1300; //3900.0f;
+    const float maxVeclocityX = 100; //300.f;
     Behavior behavior;
     bool isInvincible;
     bool isDead;
+    bool onGround;
+    const float jumpVeclocity = 400; //1550.0f; // Initial jump velocity
+    const float brakeAcceleration = 200; //600.0f; // Deceleration when braking
     
 public:
     Character();
@@ -46,14 +45,39 @@ public:
     void setState(IState* state);
     void moveLeft();
     void moveRight();
+    void brakeLeft();
+    void brakeRight();
     void jump();
+
+    void setVelocityX(float velocity);
+    void setVeclocityY(float velocity);
+    float getJumpVelocity() const;
+
     void update();
     void draw();
-    void takeDamage();
-    void onCollision(GameObject* obj);
-    void addScore(int points);
+    void setBehavior(Behavior newBehavior);
+    Behavior getBehavior()const;
+    void setOrientation(Orientation newOrientation);
+    Orientation getOrientation() const;
+
+    CharacterState getCharacterState() const;
+
+    void hitBlockLeft();
+    void hitBlockRight();
+    void hitBlockTop();
+    void hitBlockBottom();
+
+    bool getOnGround() const;
+    void setOnGround(bool onGround);
+    
+    // void takeDamage();
+    // void onCollision(GameObject* obj);
+    // void addScore(int points);
+
+
+    Rectangle getRectangle() const;
     virtual ~Character();
     virtual CharacterType getType() const = 0; // Pure virtual function to get character type
 
-
+    Vector2 getPos() const;
 };

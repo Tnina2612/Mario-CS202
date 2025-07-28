@@ -1,7 +1,8 @@
-#include"../include/entities/Animation.hpp"
-#include<iostream>
+#include "../include/entities/Animation.hpp"
+#include "core/Variables.hpp"
+#include <iostream>
 
-Animation::Animation() : currentFrame(0), frameTime(0.0f), scale(1.0f) {}
+Animation::Animation() : currentFrame(0), frameTime(0.0f), scale(1) {}
 
 Animation::Animation(const vector<Rectangle>& frames) : Animation() {
     this->frames = frames;
@@ -25,7 +26,6 @@ void Animation::update(float deltaTime, int startFrame, int size) {
     }
     frameTime -= deltaTime;
     if(frameTime <= 0.0f) {
-        cout << currentFrame << endl;
         currentFrame++;
         if(currentFrame >= startFrame + size || currentFrame < startFrame) {
             currentFrame = startFrame; // Loop back to the start frame

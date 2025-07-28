@@ -1,3 +1,4 @@
+#pragma once
 #include"Character.hpp"
 
 class Mario : public Character {
