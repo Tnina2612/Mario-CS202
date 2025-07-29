@@ -66,7 +66,6 @@ public:
     void hitBlockRight(float vline);
     void hitBlockTop(float hline);
     void hitBlockBottom(float hline);
-
     bool getOnGround() const;
     void setOnGround(bool onGround);
     

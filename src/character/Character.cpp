@@ -87,7 +87,6 @@ Character::~Character() {
 
 
 void Character::update() {
-    cout << "On ground: " << onGround << '\n';
     switch (behavior) {
         case MOVE:
             if (orientation == RIGHT) {
