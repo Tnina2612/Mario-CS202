@@ -74,9 +74,9 @@ void Level_1_1_Ground::draw(void) {
 }
 
 void Level_1_1_Ground::update(void) {
+    player->update();
     blocks.update(player);
     inputManager.update();
-    player->update();
     // for(std::shared_ptr<Enemy> enemy : enemies) {
     //     enemy->update();
     // }

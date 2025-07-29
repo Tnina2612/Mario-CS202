@@ -38,11 +38,14 @@ void TileMap::update(std::shared_ptr<Character> player) {
     if(player->getPos().x + player->getRectangle().width >= width * BLOCKSIDE) player->hitBlockRight(width * BLOCKSIDE);
     const Rectangle& charRec = player->getRectangle();
     player->setOnGround(false);
+    cout << "Character rectangle: " << charRec.x << ' ' << charRec.y << ' ' << charRec.x + charRec.width << ' ' << charRec.y + charRec.height << '\n';
     for(int i = 0; i < height; i++) {
         for(int j = 0; j < width; j++) {
             if(tiles[i][j] == nullptr) continue;
             const Rectangle& blockRec = tiles[i][j]->getRectangle();
-            if(player->getRectangle().y + player->getRectangle().height == blockRec.y) {
+            if(charRec.y + charRec.height == blockRec.y && 
+                charRec.x + charRec.width > blockRec.x &&
+                charRec.x < blockRec.x + blockRec.width) {
                 player->setOnGround(true);
             }
             if(CheckCollisionRecs(charRec, blockRec)) {
