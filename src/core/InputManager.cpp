@@ -76,7 +76,6 @@ void InputManager::update() {
     }
     if(IsKeyDown(KEY_LEFT)) {
         if(keyStates[KEY_RIGHT].first == false && keyStates[KEY_RIGHT].second == false) {
-            cout << "Key LEFT is down" << endl;
             keyStates[KEY_LEFT].first = true; // Set KEY_LEFT as down
         }
     }
@@ -88,14 +87,6 @@ void InputManager::update() {
     if(!IsKeyDown(KEY_LEFT) && !IsKeyDown(KEY_RIGHT) && !IsKeyDown(KEY_DOWN) && character->getBehavior() != JUMP) {
         character->setBehavior(IDLE); // Set character behavior to IDLE if no keys are pressed
         character->setVelocityX(0.0f); // Reset horizontal velocity
-    }
-    vector<KeyboardKey> keys = {KEY_LEFT, KEY_RIGHT, KEY_UP, KEY_DOWN};
-
-    // cout keys and their states
-    for(auto key : keys) {
-        if(keyStates.find(key) != keyStates.end() && key == keys[1]) {
-            cout << "Key: " << key  << ", Pressed: " << keyStates[key].first << ", Down: " << keyStates[key].second << endl;
-        }
     }
     for(auto [key, state] : keyStates) {
         for(auto listener : listeners) {

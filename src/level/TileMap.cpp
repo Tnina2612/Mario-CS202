@@ -36,24 +36,26 @@ void TileMap::draw(void) {
 void TileMap::update(std::shared_ptr<Character> player) {
     if(player->getPos().x <= 0) player->hitBlockLeft();
     if(player->getPos().x + player->getRectangle().width >= width * BLOCKSIDE) player->hitBlockRight();
-    const Rectangle& charRec = Rectangle{player->getPos().x, player->getPos().y, 16.f, 32.f};//player->getRectangle();
+    const Rectangle& charRec = Rectangle{player->getRectangle().x, player->getRectangle().y, 
+        player->getRectangle().width, player->getRectangle().height};//player->getRectangle();
+    player->setOnGround(false); // Reset on ground status before checking collisions
     for(int i = 0; i < height; i++) {
         for(int j = 0; j < width; j++) {
-            if(tiles[i][j] == nullptr) continue;
+            if(tiles[i][j] == nullptr) {
+                continue; // Skip empty tiles
+            }
             const Rectangle& blockRec = tiles[i][j]->getRectangle();
 
             // Player collisions on ground
-            if(charRec.y + charRec.height == blockRec.y &&
-               blockRec.x <= charRec.x + charRec.width &&
-               charRec.x <= blockRec.x + blockRec.width) {
+            if(blockRec.y <= charRec.y + charRec.height && charRec.y <= blockRec.y  &&
+               blockRec.x <= charRec.x + charRec.width && charRec.x <= blockRec.x + blockRec.width) {
                 player->hitBlockBottom();
-            } 
+            }
             // Player head-bumps a block
-            else if(charRec.y == blockRec.y + blockRec.height &&
-                blockRec.x <= charRec.x + charRec.width && 
-                charRec.x <= blockRec.x + blockRec.width) {
+            if(charRec.y <= blockRec.y + blockRec.height && blockRec.y <= charRec.y &&
+                blockRec.x <= charRec.x + charRec.width && charRec.x <= blockRec.x + blockRec.width) {
                 player->hitBlockTop();
-                if(player->getCharacterState() == 0) {
+                if(player->getCharacterState() == SMALL) {
                     tiles[i][j]->jiggle();
                 }
                 else {
@@ -63,15 +65,14 @@ void TileMap::update(std::shared_ptr<Character> player) {
                 }
             }
             // Player collisions left
-            else if(charRec.x == blockRec.x + blockRec.width &&
-            blockRec.y <= charRec.y + charRec.height &&
-            charRec.y <= blockRec.y + blockRec.height) {
+            if(charRec.x <= blockRec.x + blockRec.width && blockRec.x <= charRec.x &&
+            blockRec.y <= charRec.y + charRec.height && charRec.y <= blockRec.y + blockRec.height) {
                 player->hitBlockLeft();
             }
             // Player collision right
-            else if(charRec.x + charRec.width == blockRec.x &&
-            blockRec.y <= charRec.y + charRec.height &&
-            charRec.y <= blockRec.y + blockRec.height) {
+            if(charRec.x + charRec.width >= blockRec.x && charRec.x < blockRec.x &&
+            blockRec.y <= charRec.y + charRec.height && charRec.y <= blockRec.y + blockRec.height) {
+                cout << "Hit block right" << endl;
                 player->hitBlockRight();
             }
         }

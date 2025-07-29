@@ -40,7 +40,7 @@ void Character::moveRight() {
 
 void Character::brakeLeft() {
     accelerationX = brakeAcceleration; // Apply left brake acceleration
-    if(abs(veclocityX) <= 5) {
+    if(abs(veclocityX) <= 1) {
         behavior = IDLE;
         veclocityX = 0.0f; // Stop moving left
         accelerationX = 0.0f; // Reset acceleration
@@ -53,7 +53,7 @@ void Character::brakeLeft() {
 
 void Character::brakeRight() {
     accelerationX = -brakeAcceleration;
-    if(abs(veclocityX) <= 5) {
+    if(abs(veclocityX) <= 1) {
         behavior = IDLE;
         veclocityX = 0.0f; // Stop moving right
         accelerationX = 0.0f; // Reset acceleration
@@ -71,9 +71,7 @@ void Character::jump() {
     if(!IsKeyDown(KEY_LEFT) && !IsKeyDown(KEY_RIGHT)) {
         veclocityX = 0.0f; // Reset horizontal velocity when jumping
     }
-    if (pos.y > CharacterVar::position.y) {
-        pos.y = CharacterVar::position.y; // Reset position to initial y if it goes below
-        onGround = true; // Set onGround to true when landing
+    if (onGround) {
         behavior = IDLE; // Reset behavior to IDLE when landing
         veclocityY = 0.0f; // Reset vertical velocity when landing
     }
@@ -143,7 +141,6 @@ void Character::update() {
     if(!onGround) veclocityY += gravity * GetFrameTime(); // Apply gravity if not on ground
     pos.x = pos.x + veclocityX * GetFrameTime();
     pos.y = pos.y + veclocityY * GetFrameTime();
-    cout << veclocityX << endl;
 }
 
 void Character::draw() {
@@ -187,7 +184,7 @@ float Character::getJumpVelocity() const {
 }
 
 Rectangle Character::getRectangle() const {
-    return Rectangle{pos.x, pos.y, sprite.width * scale, sprite.height * scale};
+    return Rectangle{pos.x, pos.y, frames[currentFrame].width * scale, frames[currentFrame].height * scale};
 }
 
 CharacterState Character::getCharacterState() const {
@@ -195,21 +192,27 @@ CharacterState Character::getCharacterState() const {
 }
 
 void Character::hitBlockLeft() {
-    behavior = IDLE;
-    veclocityX = 0.0f; // Stop moving left
+    cout << "Hit block left" << endl;
+    pos.x += -abs(veclocityX) * GetFrameTime(); // Adjust position to prevent going through the block
 }
 
 void Character::hitBlockRight() {
-    behavior = IDLE;
-    veclocityX = 0.0f; // Stop moving right
+    cout << "Hit block right" << endl;
+    pos.x += abs(veclocityX) * GetFrameTime(); // Adjust position to prevent going through the block
 }
 
 void Character::hitBlockTop() {
+    cout << "Hit block top" << endl;
+    pos.y += abs(veclocityY) * GetFrameTime(); // Adjust position to prevent going through the block
     veclocityY = -veclocityY; // Reset vertical velocity when hitting a block from the top
 }
 
 void Character::hitBlockBottom() {
-    onGround = true; // Set onGround to true when hitting a block from the bottom
-    veclocityY = 0.0f; // Reset vertical velocity when hitting a block from the bottom
+    cout << "Hit block bottom" << endl;
+    pos.y += -abs(veclocityY) * GetFrameTime(); // Adjust position
+    if(!IsKeyPressed(KEY_UP)) {
+        onGround = true; // Set onGround to true when hitting a block from the bottom
+        veclocityY = 0.0f; // Reset vertical velocity when hitting a block from the bottom
+    }
 }
 
