@@ -48,7 +48,7 @@ public:
     void brakeLeft();
     void brakeRight();
     void jump();
-
+    void die();
     void setVelocityX(float velocity);
     void setVeclocityY(float velocity);
     float getJumpVelocity() const;

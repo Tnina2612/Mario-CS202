@@ -136,6 +136,13 @@ void Character::update() {
         case THROW:
             // Handle THROW behavior here
             break;
+        case DEAD:
+            veclocityX = 0.0f;
+            // Nếu muốn Mario rơi xuống khi chết:
+            veclocityY += gravity * GetFrameTime();
+            pos.y += veclocityY * GetFrameTime();
+            // Có thể thêm điều kiện để reset game hoặc respawn ở đây
+            break;
         default:
             break;
     }
@@ -218,3 +225,10 @@ void Character::hitBlockBottom(float hline) {
     veclocityY = 0.0f; // Reset vertical velocity when hitting a block from the bottom
 }
 
+void Character::die() {
+    behavior = DEAD;
+    isDead = true;
+    veclocityX = 0.0f;
+    veclocityY = -jumpVeclocity; // Mario sẽ bật lên một chút khi chết (tùy chọn)
+    onGround = false;
+}
