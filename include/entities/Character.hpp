@@ -62,10 +62,10 @@ public:
 
     CharacterState getCharacterState() const;
 
-    void hitBlockLeft();
-    void hitBlockRight();
-    void hitBlockTop();
-    void hitBlockBottom();
+    void hitBlockLeft(float vline);
+    void hitBlockRight(float vline);
+    void hitBlockTop(float hline);
+    void hitBlockBottom(float hline);
 
     bool getOnGround() const;
     void setOnGround(bool onGround);

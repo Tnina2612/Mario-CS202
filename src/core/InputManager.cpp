@@ -76,7 +76,6 @@ void InputManager::update() {
     }
     if(IsKeyDown(KEY_LEFT)) {
         if(keyStates[KEY_RIGHT].first == false && keyStates[KEY_RIGHT].second == false) {
-            cout << "Key LEFT is down" << endl;
             keyStates[KEY_LEFT].first = true; // Set KEY_LEFT as down
         }
     }
@@ -93,7 +92,7 @@ void InputManager::update() {
 
     // cout keys and their states
     for(auto key : keys) {
-        if(keyStates.find(key) != keyStates.end() && key == keys[1]) {
+        if(keyStates.find(key) != keyStates.end() && key == keys[2]) {
             cout << "Key: " << key  << ", Pressed: " << keyStates[key].first << ", Down: " << keyStates[key].second << endl;
         }
     }

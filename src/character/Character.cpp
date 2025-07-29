@@ -87,6 +87,7 @@ Character::~Character() {
 
 
 void Character::update() {
+    cout << "On ground: " << onGround << '\n';
     switch (behavior) {
         case MOVE:
             if (orientation == RIGHT) {
@@ -186,29 +187,35 @@ float Character::getJumpVelocity() const {
 }
 
 Rectangle Character::getRectangle() const {
-    return Rectangle{pos.x, pos.y, sprite.width * scale, sprite.height * scale};
+    return Rectangle{pos.x, pos.y, 16, 32};
+    // return Rectangle{pos.x, pos.y, sprite.width * scale, sprite.height * scale};
 }
 
 CharacterState Character::getCharacterState() const {
     return characterState;
 }
 
-void Character::hitBlockLeft() {
-    behavior = IDLE;
+void Character::hitBlockLeft(float vline) {
+    pos.x = vline;
     veclocityX = 0.0f; // Stop moving left
 }
 
-void Character::hitBlockRight() {
-    behavior = IDLE;
+void Character::hitBlockRight(float vline) {
+    pos.x = vline - getRectangle().width;
     veclocityX = 0.0f; // Stop moving right
 }
 
-void Character::hitBlockTop() {
+void Character::hitBlockTop(float hline) {
+    pos.y = hline;
     veclocityY = -veclocityY; // Reset vertical velocity when hitting a block from the top
 }
 
-void Character::hitBlockBottom() {
-    onGround = true; // Set onGround to true when hitting a block from the bottom
+void Character::hitBlockBottom(float hline) {
+    if(IsKeyDown(KEY_LEFT) == false && IsKeyDown(KEY_RIGHT) == false) {
+        setBehavior(IDLE);
+    }
+    onGround = true;
+    pos.y = hline - getRectangle().height;
     veclocityY = 0.0f; // Reset vertical velocity when hitting a block from the bottom
 }
 
