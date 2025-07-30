@@ -92,6 +92,9 @@ void Character::resetAttributes() {
 }
 
 void Character::update() {
+    if(!onGround) {
+        behavior = JUMP;
+    }
     switch (behavior) {
         case MOVE:
             if (orientation == RIGHT) {
@@ -162,7 +165,6 @@ void Character::update() {
 }
 
 void Character::draw() {
-    // cout << pos.x << ' ' << pos.y << '\n';
     Animation::draw(pos);
 }
 
