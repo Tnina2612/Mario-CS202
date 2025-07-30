@@ -23,24 +23,26 @@ void Character::setState(IState* newState) {
 }
 
 void Character::moveLeft() {
-    if((behavior == IDLE || behavior == MOVE) && behavior != BRAKE && behavior != DUCK) {
+    if((behavior == IDLE || behavior == MOVE) && behavior != BRAKE && behavior != DUCK &&
+    collideLeft == false) {
         //if(onGround) orientation = LEFT; // Change orientation to LEFT when moving left
         veclocityX = -maxVeclocityX; // Set velocity to move left
     }
-    if (!onGround) veclocityX = -maxVeclocityX; // Maintain left velocity when not on ground
+    if (!onGround && collideLeft == false) veclocityX = -maxVeclocityX; // Maintain left velocity when not on ground
 }
 
 void Character::moveRight() {
-    if((behavior == IDLE || behavior == MOVE) && behavior != BRAKE && behavior != DUCK) {
+    if((behavior == IDLE || behavior == MOVE) && behavior != BRAKE && behavior != DUCK &&
+    collideRight == false) {
         //if(onGround) orientation = RIGHT; // Change orientation to RIGHT when moving right
         veclocityX = maxVeclocityX; // Set velocity to move right
     }
-    if (!onGround) veclocityX = maxVeclocityX;
+    if (!onGround && collideRight == false) veclocityX = maxVeclocityX;
 }
 
 void Character::brakeLeft() {
     accelerationX = brakeAcceleration; // Apply left brake acceleration
-    if(abs(veclocityX) <= 1) {
+    if(abs(veclocityX) <= 3) {
         behavior = IDLE;
         veclocityX = 0.0f; // Stop moving left
         accelerationX = 0.0f; // Reset acceleration
@@ -53,7 +55,7 @@ void Character::brakeLeft() {
 
 void Character::brakeRight() {
     accelerationX = -brakeAcceleration;
-    if(abs(veclocityX) <= 1) {
+    if(abs(veclocityX) <= 3) {
         behavior = IDLE;
         veclocityX = 0.0f; // Stop moving right
         accelerationX = 0.0f; // Reset acceleration
@@ -83,8 +85,16 @@ Character::~Character() {
     }
 }
 
+void Character::resetAttributes() {
+    onGround = false;
+    collideLeft = false;
+    collideRight = false;
+}
 
 void Character::update() {
+    if(!onGround) {
+        behavior = JUMP;
+    }
     switch (behavior) {
         case MOVE:
             if (orientation == RIGHT) {
@@ -135,13 +145,23 @@ void Character::update() {
         case THROW:
             // Handle THROW behavior here
             break;
+        case DEAD:
+            veclocityX = 0.0f;
+            // Nếu muốn Mario rơi xuống khi chết:
+            veclocityY += gravity * GetFrameTime();
+            pos.y += veclocityY * GetFrameTime();
+            // Có thể thêm điều kiện để reset game hoặc respawn ở đây
+            break;
         default:
             break;
     }
     veclocityX += accelerationX * GetFrameTime(); // Update horizontal velocity with acceleration
     if(!onGround) veclocityY += gravity * GetFrameTime(); // Apply gravity if not on ground
+    cout << "Before addition: " << pos.x << ", " << pos.y << '\n';
+    cout << "Velocity, acceleration: " << veclocityX << ' ' << accelerationX << '\n';
     pos.x = pos.x + veclocityX * GetFrameTime();
     pos.y = pos.y + veclocityY * GetFrameTime();
+    cout << "After addition: " << pos.x << ", " << pos.y << '\n';
 }
 
 void Character::draw() {
@@ -192,28 +212,36 @@ CharacterState Character::getCharacterState() const {
     return characterState;
 }
 
-void Character::hitBlockLeft() {
-    // cout << "Hit block left" << endl;
-    // pos.x += -abs(veclocityX) * GetFrameTime(); // Adjust position to prevent going through the block
+void Character::hitBlockLeft(float vline) {
+    pos.x = vline;
+    veclocityX = 0.0f; // Stop moving left
+    collideLeft = true;
 }
 
-void Character::hitBlockRight() {
-    // cout << "Hit block right" << endl;
-    // pos.x += abs(veclocityX) * GetFrameTime(); // Adjust position to prevent going through the block
+void Character::hitBlockRight(float vline) {
+    pos.x = vline - getRectangle().width;
+    veclocityX = 0.0f; // Stop moving right
+    collideRight = true;
 }
 
-void Character::hitBlockTop() {
-    // cout << "Hit block top" << endl;
-    // pos.y += abs(veclocityY) * GetFrameTime(); // Adjust position to prevent going through the block
-    // veclocityY = -veclocityY; // Reset vertical velocity when hitting a block from the top
+void Character::hitBlockTop(float hline) {
+    pos.y = hline;
+    veclocityY = -veclocityY; // Reset vertical velocity when hitting a block from the top
 }
 
-void Character::hitBlockBottom() {
-    // cout << "Hit block bottom" << endl;
-    // pos.y += -abs(veclocityY) * GetFrameTime(); // Adjust position
-    // if(!IsKeyPressed(KEY_UP)) {
-    //     onGround = true; // Set onGround to true when hitting a block from the bottom
-    //     veclocityY = 0.0f; // Reset vertical velocity when hitting a block from the bottom
-    // }
+void Character::hitBlockBottom(float hline) {
+    if(IsKeyDown(KEY_LEFT) == false && IsKeyDown(KEY_RIGHT) == false) {
+        setBehavior(IDLE);
+    }
+    onGround = true;
+    pos.y = hline - getRectangle().height;
+    veclocityY = 0.0f; // Reset vertical velocity when hitting a block from the bottom
 }
 
+void Character::die() {
+    behavior = DEAD;
+    isDead = true;
+    veclocityX = 0.0f;
+    veclocityY = -jumpVeclocity; // Mario sẽ bật lên một chút khi chết (tùy chọn)
+    onGround = false;
+}

@@ -15,10 +15,14 @@ class TileMap {
         int height, width;
         std::vector<std::vector<std::shared_ptr<Block>>> tiles;
         BlockFlyweightFactory tileFactory;
+
+        bool debug;
+        std::vector<Rectangle> debugBlocks;
     public:
         TileMap(std::string filename);
         void draw(void);
         void update(std::shared_ptr<Character> character);
+        std::vector<std::pair<int, int>> cellsToCheck(const Rectangle& rec);
 
         float getWidth();
         float getHeight();

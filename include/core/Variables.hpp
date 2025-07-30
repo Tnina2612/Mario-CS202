@@ -72,5 +72,6 @@ enum Behavior {
     BRAKE,
     DUCK,
     THROW,
-    IDLE
+    IDLE,
+    DEAD
 };

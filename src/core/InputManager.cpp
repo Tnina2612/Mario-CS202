@@ -88,6 +88,14 @@ void InputManager::update() {
         character->setBehavior(IDLE); // Set character behavior to IDLE if no keys are pressed
         character->setVelocityX(0.0f); // Reset horizontal velocity
     }
+    vector<KeyboardKey> keys = {KEY_LEFT, KEY_RIGHT, KEY_UP, KEY_DOWN};
+
+    // cout keys and their states
+    for(auto key : keys) {
+        if(keyStates.find(key) != keyStates.end() && key == keys[2]) {
+            cout << "Key: " << key  << ", Pressed: " << keyStates[key].first << ", Down: " << keyStates[key].second << endl;
+        }
+    }
     for(auto [key, state] : keyStates) {
         for(auto listener : listeners) {
             listener->onkey(key, state.first, state.second, character);
