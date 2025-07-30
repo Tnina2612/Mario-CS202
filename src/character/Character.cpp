@@ -71,7 +71,7 @@ void Character::jump() {
     if(!IsKeyDown(KEY_LEFT) && !IsKeyDown(KEY_RIGHT)) {
         veclocityX = 0.0f; // Reset horizontal velocity when jumping
     }
-    if (onGround) {
+    if (onGround && veclocityY > 0) {
         behavior = IDLE; // Reset behavior to IDLE when landing
         veclocityY = 0.0f; // Reset vertical velocity when landing
     }
@@ -114,6 +114,7 @@ void Character::update() {
             }           
             break;
         case IDLE:
+            accelerationX = 0.0f; // Reset acceleration when idle
             if (orientation == LEFT) {
                 Animation::update(GetFrameTime(), 6, 1);
             } 
@@ -192,27 +193,27 @@ CharacterState Character::getCharacterState() const {
 }
 
 void Character::hitBlockLeft() {
-    cout << "Hit block left" << endl;
-    pos.x += -abs(veclocityX) * GetFrameTime(); // Adjust position to prevent going through the block
+    // cout << "Hit block left" << endl;
+    // pos.x += -abs(veclocityX) * GetFrameTime(); // Adjust position to prevent going through the block
 }
 
 void Character::hitBlockRight() {
-    cout << "Hit block right" << endl;
-    pos.x += abs(veclocityX) * GetFrameTime(); // Adjust position to prevent going through the block
+    // cout << "Hit block right" << endl;
+    // pos.x += abs(veclocityX) * GetFrameTime(); // Adjust position to prevent going through the block
 }
 
 void Character::hitBlockTop() {
-    cout << "Hit block top" << endl;
-    pos.y += abs(veclocityY) * GetFrameTime(); // Adjust position to prevent going through the block
-    veclocityY = -veclocityY; // Reset vertical velocity when hitting a block from the top
+    // cout << "Hit block top" << endl;
+    // pos.y += abs(veclocityY) * GetFrameTime(); // Adjust position to prevent going through the block
+    // veclocityY = -veclocityY; // Reset vertical velocity when hitting a block from the top
 }
 
 void Character::hitBlockBottom() {
-    cout << "Hit block bottom" << endl;
-    pos.y += -abs(veclocityY) * GetFrameTime(); // Adjust position
-    if(!IsKeyPressed(KEY_UP)) {
-        onGround = true; // Set onGround to true when hitting a block from the bottom
-        veclocityY = 0.0f; // Reset vertical velocity when hitting a block from the bottom
-    }
+    // cout << "Hit block bottom" << endl;
+    // pos.y += -abs(veclocityY) * GetFrameTime(); // Adjust position
+    // if(!IsKeyPressed(KEY_UP)) {
+    //     onGround = true; // Set onGround to true when hitting a block from the bottom
+    //     veclocityY = 0.0f; // Reset vertical velocity when hitting a block from the bottom
+    // }
 }
 
