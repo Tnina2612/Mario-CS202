@@ -2,7 +2,7 @@
 
 Mario::Mario() : Character() {
     sprite = LoadTexture(CharacterVar::MarioSpritePath.c_str());
-    frames = CharacterSprite::Super::frames; // Use Fire frames for Mario
+    frames = CharacterSprite::Small::frames; // Use Fire frames for Mario
 }
 
 Mario::~Mario() {

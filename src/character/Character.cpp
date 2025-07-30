@@ -40,7 +40,7 @@ void Character::moveRight() {
 
 void Character::brakeLeft() {
     accelerationX = brakeAcceleration; // Apply left brake acceleration
-    if(abs(veclocityX) <= 5) {
+    if(abs(veclocityX) <= 1) {
         behavior = IDLE;
         veclocityX = 0.0f; // Stop moving left
         accelerationX = 0.0f; // Reset acceleration
@@ -53,7 +53,7 @@ void Character::brakeLeft() {
 
 void Character::brakeRight() {
     accelerationX = -brakeAcceleration;
-    if(abs(veclocityX) <= 5) {
+    if(abs(veclocityX) <= 1) {
         behavior = IDLE;
         veclocityX = 0.0f; // Stop moving right
         accelerationX = 0.0f; // Reset acceleration
@@ -71,9 +71,7 @@ void Character::jump() {
     if(!IsKeyDown(KEY_LEFT) && !IsKeyDown(KEY_RIGHT)) {
         veclocityX = 0.0f; // Reset horizontal velocity when jumping
     }
-    if (pos.y > CharacterVar::position.y) {
-        pos.y = CharacterVar::position.y; // Reset position to initial y if it goes below
-        onGround = true; // Set onGround to true when landing
+    if (onGround) {
         behavior = IDLE; // Reset behavior to IDLE when landing
         veclocityY = 0.0f; // Reset vertical velocity when landing
     }
@@ -193,8 +191,7 @@ float Character::getJumpVelocity() const {
 }
 
 Rectangle Character::getRectangle() const {
-    return Rectangle{pos.x, pos.y, 16, 32};
-    // return Rectangle{pos.x, pos.y, sprite.width * scale, sprite.height * scale};
+    return Rectangle{pos.x, pos.y, frames[currentFrame].width * scale, frames[currentFrame].height * scale};
 }
 
 CharacterState Character::getCharacterState() const {

@@ -41,7 +41,9 @@ void TileMap::update(std::shared_ptr<Character> player) {
     cout << "Character rectangle: " << charRec.x << ' ' << charRec.y << ' ' << charRec.x + charRec.width << ' ' << charRec.y + charRec.height << '\n';
     for(int i = 0; i < height; i++) {
         for(int j = 0; j < width; j++) {
-            if(tiles[i][j] == nullptr) continue;
+            if(tiles[i][j] == nullptr) {
+                continue; // Skip empty tiles
+            }
             const Rectangle& blockRec = tiles[i][j]->getRectangle();
             if(charRec.y + charRec.height == blockRec.y && 
                 charRec.x + charRec.width > blockRec.x &&
