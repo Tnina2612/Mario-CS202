@@ -75,8 +75,11 @@ void Level_1_1_Ground::draw(void) {
 
 void Level_1_1_Ground::update(void) {
     inputManager.update();
+    cout << "After update input manager: " << player->getPos().x << ' ' << player->getPos().y << '\n';
     blocks.update(player);
+    cout << "After update blocks: " << player->getPos().x << ' ' << player->getPos().y << '\n';
     player->update();
+    cout << "After update player: " << player->getPos().x << ' ' << player->getPos().y << '\n';
     // for(std::shared_ptr<Enemy> enemy : enemies) {
     //     enemy->update();
     // }

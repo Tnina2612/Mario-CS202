@@ -36,6 +36,8 @@ private:
     bool isInvincible;
     bool isDead;
     bool onGround;
+    bool collideLeft;
+    bool collideRight;
     const float jumpVeclocity = 400; //1550.0f; // Initial jump velocity
     const float brakeAcceleration = 200; //600.0f; // Deceleration when braking
     
@@ -53,6 +55,7 @@ public:
     void setVeclocityY(float velocity);
     float getJumpVelocity() const;
 
+    void resetAttributes();
     void update();
     void draw();
     void setBehavior(Behavior newBehavior);

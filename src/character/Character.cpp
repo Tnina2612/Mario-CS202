@@ -23,24 +23,26 @@ void Character::setState(IState* newState) {
 }
 
 void Character::moveLeft() {
-    if((behavior == IDLE || behavior == MOVE) && behavior != BRAKE && behavior != DUCK) {
+    if((behavior == IDLE || behavior == MOVE) && behavior != BRAKE && behavior != DUCK &&
+    collideLeft == false) {
         //if(onGround) orientation = LEFT; // Change orientation to LEFT when moving left
         veclocityX = -maxVeclocityX; // Set velocity to move left
     }
-    if (!onGround) veclocityX = -maxVeclocityX; // Maintain left velocity when not on ground
+    if (!onGround && collideLeft == false) veclocityX = -maxVeclocityX; // Maintain left velocity when not on ground
 }
 
 void Character::moveRight() {
-    if((behavior == IDLE || behavior == MOVE) && behavior != BRAKE && behavior != DUCK) {
+    if((behavior == IDLE || behavior == MOVE) && behavior != BRAKE && behavior != DUCK &&
+    collideRight == false) {
         //if(onGround) orientation = RIGHT; // Change orientation to RIGHT when moving right
         veclocityX = maxVeclocityX; // Set velocity to move right
     }
-    if (!onGround) veclocityX = maxVeclocityX;
+    if (!onGround && collideRight == false) veclocityX = maxVeclocityX;
 }
 
 void Character::brakeLeft() {
     accelerationX = brakeAcceleration; // Apply left brake acceleration
-    if(abs(veclocityX) <= 1) {
+    if(abs(veclocityX) <= 3) {
         behavior = IDLE;
         veclocityX = 0.0f; // Stop moving left
         accelerationX = 0.0f; // Reset acceleration
@@ -53,7 +55,7 @@ void Character::brakeLeft() {
 
 void Character::brakeRight() {
     accelerationX = -brakeAcceleration;
-    if(abs(veclocityX) <= 1) {
+    if(abs(veclocityX) <= 3) {
         behavior = IDLE;
         veclocityX = 0.0f; // Stop moving right
         accelerationX = 0.0f; // Reset acceleration
@@ -71,7 +73,7 @@ void Character::jump() {
     if(!IsKeyDown(KEY_LEFT) && !IsKeyDown(KEY_RIGHT)) {
         veclocityX = 0.0f; // Reset horizontal velocity when jumping
     }
-    if (onGround) {
+    if (onGround && veclocityY > 0) {
         behavior = IDLE; // Reset behavior to IDLE when landing
         veclocityY = 0.0f; // Reset vertical velocity when landing
     }
@@ -83,6 +85,11 @@ Character::~Character() {
     }
 }
 
+void Character::resetAttributes() {
+    onGround = false;
+    collideLeft = false;
+    collideRight = false;
+}
 
 void Character::update() {
     switch (behavior) {
@@ -114,6 +121,7 @@ void Character::update() {
             }           
             break;
         case IDLE:
+            accelerationX = 0;
             if (orientation == LEFT) {
                 Animation::update(GetFrameTime(), 6, 1);
             } 
@@ -146,11 +154,15 @@ void Character::update() {
     }
     veclocityX += accelerationX * GetFrameTime(); // Update horizontal velocity with acceleration
     if(!onGround) veclocityY += gravity * GetFrameTime(); // Apply gravity if not on ground
+    cout << "Before addition: " << pos.x << ", " << pos.y << '\n';
+    cout << "Velocity, acceleration: " << veclocityX << ' ' << accelerationX << '\n';
     pos.x = pos.x + veclocityX * GetFrameTime();
     pos.y = pos.y + veclocityY * GetFrameTime();
+    cout << "After addition: " << pos.x << ", " << pos.y << '\n';
 }
 
 void Character::draw() {
+    // cout << pos.x << ' ' << pos.y << '\n';
     Animation::draw(pos);
 }
 
@@ -201,11 +213,13 @@ CharacterState Character::getCharacterState() const {
 void Character::hitBlockLeft(float vline) {
     pos.x = vline;
     veclocityX = 0.0f; // Stop moving left
+    collideLeft = true;
 }
 
 void Character::hitBlockRight(float vline) {
     pos.x = vline - getRectangle().width;
     veclocityX = 0.0f; // Stop moving right
+    collideRight = true;
 }
 
 void Character::hitBlockTop(float hline) {
