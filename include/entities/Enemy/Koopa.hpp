@@ -20,10 +20,12 @@ class Koopa : public Enemy {
 private:
     std::unique_ptr<IKoopaState> m_state;
     float _recoveryTime;
+    int _deadAni = 0;   //0: normal, 1: dead, -1: offscreen
     // enum KoopaState {
 
     // };
     //KoopaState m_state;
+    void deadState();
 public:
     const float TIME = 7.f; //for recover in shell state
     Koopa();

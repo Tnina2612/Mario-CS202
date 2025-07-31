@@ -39,7 +39,7 @@ void Enemy::setType(std::shared_ptr<EnemyType> type) {
 }
 
 void Enemy::setMovementStrategy(std::shared_ptr<IEnemyStrategy> strategy) {
-    m_data._movementStrategy = strategy;
+    _movementStrategy = strategy;
 }
 
 void Enemy::setEnemyData(const EnemyData& data) {
@@ -70,9 +70,36 @@ std::vector<Rectangle> Enemy::getFrames(const std::string& name) {
     return allFrames[name];
 }
 
+void Enemy::setVelocityX(float x) {
+    m_data._velocity.x = x;
+}
+
+void Enemy::setVelocityY(float y) {
+    m_data._velocity.y = y;
+}
+
+void Enemy::setPos(Vector2 pos) {
+    m_data._pos = pos;
+}
+
+Rectangle Enemy::getHitBox() {
+    return Rectangle{   m_data._pos.x, 
+                        m_data._pos.y, 
+                        m_data._hitBoxWidth,
+                        m_data._hitBoxHeight   
+                    };
+}
+
 bool Enemy::isAlive() {
     return m_data._hp > 0;
 }
+
+// void Enemy::changeDirection() {
+//     m_data._velocity = {m_data._velocity.x*-1, m_data._velocity.y*-1};
+
+//     //setMovementStrategy(_movementStrategy)
+
+// }
 
 int Enemy::isOffScreen() {
     return 2;
@@ -117,7 +144,9 @@ void Enemy::draw() {
         return;
     }
 
+    DrawRectangleRec(getHitBox(), BLUE);
     m_animation.draw(m_data._pos);
+    
 }
 
 void Enemy::update(float dt) {
@@ -130,7 +159,39 @@ void Enemy::update(float dt) {
 
     // }
     m_animation.update(dt);
-    if(m_data._movementStrategy) {
-        m_data._movementStrategy->Execute(m_data._pos, dt);
+    if(_movementStrategy) {
+        _movementStrategy->Execute(m_data, dt);
     }
+}
+void Enemy::changeDirection() {
+    m_data._dir *= -1; 
+    m_data._velocity.x *= -1;
+    m_data._velocity.y *= -1;
+
+    if(m_data._dir == 1) {
+        setAniFrames(getFrames("RWalk"));
+    }
+    else if(m_data._dir == -1) {
+        setAniFrames(getFrames("LWalk"));
+    }
+}
+
+void Enemy::hitEnemy() {
+    this->changeDirection();
+}
+
+void Enemy::hitUp() {
+    onStomp();
+}
+
+void Enemy::hitDown() {
+    onStomp();
+}
+
+void Enemy::hitLeft() {
+    return;
+}
+
+void Enemy::hitRight() {
+    return;
 }

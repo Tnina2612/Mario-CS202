@@ -147,7 +147,8 @@ namespace EnemySprite {
                 {"RWWalk", {Right::WWalk1, Right::WWalk2}},
                 {"RWalk", {Right::Walk1, Right::Walk2}},
                 {"LWalk", {Left::Walk1, Left::Walk2}},
-                {"Shell", {Shell::Move, Shell::Idle}}
+                {"Shell1", {Shell::Move}},
+                {"Shell2", {Shell::Idle}}
             };
 
         };
@@ -175,7 +176,8 @@ namespace EnemySprite {
                 {"RWWalk", {Right::WWalk1, Right::WWalk2}},
                 {"RWalk", {Right::Walk1, Right::Walk2}},
                 {"LWalk", {Left::Walk1, Left::Walk2}},
-                {"Shell", {Shell::Move, Shell::Idle}}
+                {"Shell1", {Shell::Move}},
+                {"Shell2", {Shell::Idle}}
             };
         };
         namespace Map3 {
@@ -202,7 +204,8 @@ namespace EnemySprite {
                 {"RWWalk", {Right::WWalk1, Right::WWalk2}},
                 {"RWalk", {Right::Walk1, Right::Walk2}},
                 {"LWalk", {Left::Walk1, Left::Walk2}},
-                {"Shell", {Shell::Move, Shell::Idle}}
+                {"Shell1", {Shell::Move}},
+                {"Shell2", {Shell::Idle}}
             };
         };
     }
@@ -253,6 +256,23 @@ namespace EnemySprite {
             };
         };
 
+    };
+
+    namespace Podoboo {
+        const Rectangle Down = {0.f, 150.f, 16.f, 16.f};
+        const Rectangle Up = {60.f, 150.f, 16.f, 16.f};
+        const std::unordered_map<std::string, std::vector<Rectangle>> Frames = {
+            {"Up", {Up}},
+            {"Down", {Down}}
+        };
+    };
+    namespace Firebar {
+        const std::unordered_map<std::string, std::vector<Rectangle>> Frames = {
+            {"Normal", {Rectangle{25.f, 150.f, 10.f, 10.f}, 
+                        Rectangle{40.f, 150.f, 10.f, 10.f}, 
+                        Rectangle{25.f, 165.f, 10.f, 10.f}, 
+                        Rectangle{40.f, 165.f, 10.f, 10.f}}}
+        };
     };
 };
 

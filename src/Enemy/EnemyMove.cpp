@@ -1,24 +1,25 @@
 #include"raylib.h"
 
 #include"../../include/entities/Enemy/EnemyMove.hpp"
-#include"../../include/entities/Enemy/Enemy.hpp"
-
-#include<iostream>
+#include"../../include/entities/Enemy/EnemyData.hpp"
 
 //Movement
-void DirectionMove::Execute(Vector2& position, float dt) {
-    position.x += velocity.x * dt;
-    position.y += velocity.y * dt;
+void DirectionMove::Execute(EnemyData& data, float dt) {
+    data._pos.x += data._velocity.x * dt;
+    data._pos.y += data._velocity.y * dt;
 }
 
-void JumpMove::Execute(Vector2& position, float dt) {
-    velocity.y += gravity * dt;
+void JumpMove::Execute(EnemyData& data, float dt) {
+    data._velocity.y += data._gravity * dt;
 
-    position.y += velocity.y * dt;
-    position.x += velocity.x * dt;
+    data._pos.x += data._velocity.x * dt;
+    data._pos.y += data._velocity.y * dt;
 
-    if (position.y >= 800.0f) { //ground level = 500
-        position.y = 800.0f;
-        velocity.y = -jumpHeight;
+    if(data._isOnGround) {
+        //data._pos.y = ;
     }
+}
+
+void PatrolMove::Execute(EnemyData& data, float dt) {
+    
 }

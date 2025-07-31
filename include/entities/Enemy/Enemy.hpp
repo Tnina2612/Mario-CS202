@@ -15,6 +15,11 @@ protected:
     Animation m_animation;
     EnemyData m_data;
     std::unordered_map<std::string, std::vector<Rectangle>> allFrames;
+    std::shared_ptr<IEnemyStrategy> _movementStrategy;
+
+    virtual bool onHit();
+    virtual bool onStomp();
+    virtual void changeDirection();
 public:
     Enemy();
     Enemy(const std::string& name);
@@ -28,17 +33,31 @@ public:
     void setType(std::shared_ptr<EnemyType> type);
     void setEnemyData(const EnemyData& data);
     void setDirection(int dir);
-    void setVelocity(Vector2 v);
 
     int getDirection();
-    Vector2 getVelocity();
-    Vector2 getPos();
     std::vector<Rectangle> getFrames(const std::string& name);
+    
     bool isAlive();
     int isOffScreen(); //-1 : up, 1 : down, 2 : right, -2 : left 
-    virtual bool onHit();
-    virtual bool onStomp();
-    virtual bool beHitByFireball();
+    
+
+    
+    virtual Rectangle getHitBox();  //Define the hitbox of the enemy
+
+    virtual void hitLeft();         //< return
+    virtual void hitRight();        //< return
+    virtual void hitUp();           // be stomped
+    virtual void hitDown();         // block hit
+    virtual bool beHitByFireball(); // fireball
+    void hitEnemy();                // collisions between enemy
+
+    Vector2 getVelocity();
+    Vector2 getPos();
+
+    void setVelocity(Vector2 v);
+    void setVelocityX(float x);
+    void setVelocityY(float y);
+    void setPos(Vector2 pos);
 
     virtual void draw(); 
     virtual void update(float dt = GetFrameTime());

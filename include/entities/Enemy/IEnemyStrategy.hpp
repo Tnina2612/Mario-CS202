@@ -1,9 +1,9 @@
 #pragma once
 
-#include"raylib.h"
+#include"EnemyData.hpp"
 
 class IEnemyStrategy {
 public:
     virtual ~IEnemyStrategy() = default;
-    virtual void Execute(Vector2& position, float dt) = 0;
+    virtual void Execute(EnemyData& data, float dt) = 0;
 };
