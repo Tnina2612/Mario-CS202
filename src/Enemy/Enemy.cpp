@@ -70,6 +70,18 @@ std::vector<Rectangle> Enemy::getFrames(const std::string& name) {
     return allFrames[name];
 }
 
+void Enemy::setVelocityX(float x) {
+    m_data._velocity.x = x;
+}
+
+void Enemy::setVelocityY(float y) {
+    m_data._velocity.y = y;
+}
+
+void Enemy::setPos(Vector2 pos) {
+    m_data._pos = pos;
+}
+
 Rectangle Enemy::getHitBox() {
     return Rectangle{   m_data._pos.x, 
                         m_data._pos.y, 
