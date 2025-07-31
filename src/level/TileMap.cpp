@@ -14,7 +14,13 @@ TileMap::TileMap(std::string filename) {
             if(blockType != "A") {
                 float posX = j * BLOCKSIDE;
                 float posY = i * BLOCKSIDE;
-                tiles[i][j] = make_shared<Block>(Vector2{posX, posY}, tileFactory.getBlockFlyweight(blockType));
+                if(blockType == "G2") {
+                    tiles[i][j] = make_shared<BrickBlock>(Vector2{posX, posY}, tileFactory.getBlockFlyweight("G2"));
+                } else if(blockType == "C1") {
+                    tiles[i][j] = make_shared<QuestionBlock>(Vector2{posX, posY}, tileFactory.getBlockFlyweight("C1"));
+                } else {
+                    tiles[i][j] = make_shared<Block>(Vector2{posX, posY}, tileFactory.getBlockFlyweight(blockType));
+                }
             } else {
                 tiles[i][j].reset();
             }
@@ -41,7 +47,6 @@ void TileMap::draw(void) {
 }
 
 void TileMap::update(std::shared_ptr<Character> player) {
-    if(player->getPos().x <= 0) player->hitBlockLeft(0);
     if(player->getPos().x + player->getRectangle().width >= width * BLOCKSIDE) player->hitBlockRight(width * BLOCKSIDE);
     const Rectangle& charRec = player->getRectangle();
     player->resetAttributes();
@@ -64,23 +69,32 @@ void TileMap::update(std::shared_ptr<Character> player) {
             float overlapY = min(charRec.y + charRec.height, blockRec.y + blockRec.height) - max(charRec.y, blockRec.y);
             if(overlapX < overlapY) {
                 if(charRec.x < blockRec.x) {
-                    cout << "Player collides right\n";
+                    // cout << "Player collides right\n";
                     player->hitBlockRight(blockRec.x);
                 } else {
-                    cout << "Player collides left\n";
+                    // cout << "Player collides left\n";
                     player->hitBlockLeft(blockRec.x + blockRec.width);
                 }
             } else {
                 if(charRec.y < blockRec.y) {
-                    cout << "Player collides down\n";
+                    // cout << "Player collides down\n";
                     player->hitBlockBottom(blockRec.y);
                 } else {
-                    cout << "Player collides up\n";
+                    // cout << "Player collides up\n";
                     player->hitBlockTop(blockRec.y + blockRec.height);
+                    if(player->getCharacterState() != SMALL) {
+                        if(tiles[i][j]->breakBrick()) {
+                            tiles[i][j].reset();
+                        }
+                    } else {
+                        tiles[i][j]->jiggle();
+                    }
                 }
             }
         }
     }
+
+    player->update();
 
     // Debug
     debugBlocks.clear();
@@ -91,6 +105,14 @@ void TileMap::update(std::shared_ptr<Character> player) {
 
     if(IsKeyPressed(KEY_Q)) {
         debug = debug ^ true;
+    }
+}
+
+void TileMap::update(std::shared_ptr<Enemy> enemy) {
+    std::vector<std::pair<int, int>> nearbyCells = cellsToCheck(enemy->getHitBox());
+    enemy->update();
+    for(std::pair<int, int> pii : nearbyCells) {
+        // enemy->collisionTile(tiles[pii.first][pii.second]);
     }
 }
 

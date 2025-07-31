@@ -74,16 +74,33 @@ void Level_1_1_Ground::draw(void) {
 }
 
 void Level_1_1_Ground::update(void) {
+    // Player update
     inputManager.update();
-    cout << "After update input manager: " << player->getPos().x << ' ' << player->getPos().y << '\n';
+    if(player->getPos().x < camera.target.x - Global::ORIGINAL_WIDTH / 2.f) player->hitBlockLeft(camera.target.x - Global::ORIGINAL_WIDTH / 2.f);
     blocks.update(player);
-    cout << "After update blocks: " << player->getPos().x << ' ' << player->getPos().y << '\n';
-    player->update();
-    cout << "After update player: " << player->getPos().x << ' ' << player->getPos().y << '\n';
-    // for(std::shared_ptr<Enemy> enemy : enemies) {
-    //     enemy->update();
-    // }
-    camera.target.x = min(blocks.getWidth() * BLOCKSIDE - Global::ORIGINAL_WIDTH / 2.f, max(Global::ORIGINAL_WIDTH / 2.f, player->getPos().x + 8.f));
+    if(player->getPos().y >= Global::ORIGINAL_HEIGHT) player->die();
+
+    // Enemy update
+    for(std::shared_ptr<Enemy> enemy : enemies) {
+        if(enemy->getPos().x < camera.target.x + Global::ORIGINAL_WIDTH /2.f &&
+            enemy->getPos().x + 20 > camera.target.x - Global::ORIGINAL_WIDTH / 2.f &&
+            enemy->getPos().y < camera.target.y + Global::ORIGINAL_HEIGHT / 2.f) {
+            blocks.update(enemy);
+            cout << enemy->getHitBox().x << ' ' << enemy->getHitBox().y << ' ' << enemy->getHitBox().width << ' ' << enemy->getHitBox().height << '\n';
+            if(CheckCollisionRecs(enemy->getHitBox(), player->getRectangle()) == true) {
+                float overlapX = min(enemy->getHitBox().x + enemy->getHitBox().width, player->getRectangle().x + player->getRectangle().width) - max(enemy->getHitBox().x, player->getRectangle().x);
+                float overlapY = min(enemy->getHitBox().y + enemy->getHitBox().height, player->getRectangle().y + player->getRectangle().height) - max(enemy->getHitBox().y, player->getRectangle().y);
+                if(overlapY < overlapX) {
+                    cout << "Enemy died.\n";
+                    enemy->hitUp();
+                } else {
+                    cout << "Mario died.\n";
+                    player->die();
+                }
+            }
+        }
+    }
+    camera.target.x = max(camera.target.x, min(blocks.getWidth() * BLOCKSIDE - Global::ORIGINAL_WIDTH / 2.f, max(Global::ORIGINAL_WIDTH / 2.f, player->getPos().x + 8.f)));
     camera.target.y = Global::ORIGINAL_HEIGHT / 2.f;
 }
 

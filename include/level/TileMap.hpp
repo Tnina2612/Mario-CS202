@@ -22,6 +22,8 @@ class TileMap {
         TileMap(std::string filename);
         void draw(void);
         void update(std::shared_ptr<Character> character);
+        void update(std::shared_ptr<Enemy> enemy);
+        void update(std::shared_ptr<Enemy> enemy, std::shared_ptr<Block> block);
         std::vector<std::pair<int, int>> cellsToCheck(const Rectangle& rec);
 
         float getWidth();

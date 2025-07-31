@@ -93,7 +93,7 @@ void InputManager::update() {
     // cout keys and their states
     for(auto key : keys) {
         if(keyStates.find(key) != keyStates.end() && key == keys[2]) {
-            cout << "Key: " << key  << ", Pressed: " << keyStates[key].first << ", Down: " << keyStates[key].second << endl;
+            // cout << "Key: " << key  << ", Pressed: " << keyStates[key].first << ", Down: " << keyStates[key].second << endl;
         }
     }
     for(auto [key, state] : keyStates) {

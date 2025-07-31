@@ -157,11 +157,8 @@ void Character::update() {
     }
     veclocityX += accelerationX * GetFrameTime(); // Update horizontal velocity with acceleration
     if(!onGround) veclocityY += gravity * GetFrameTime(); // Apply gravity if not on ground
-    cout << "Before addition: " << pos.x << ", " << pos.y << '\n';
-    cout << "Velocity, acceleration: " << veclocityX << ' ' << accelerationX << '\n';
     pos.x = pos.x + veclocityX * GetFrameTime();
     pos.y = pos.y + veclocityY * GetFrameTime();
-    cout << "After addition: " << pos.x << ", " << pos.y << '\n';
 }
 
 void Character::draw() {
