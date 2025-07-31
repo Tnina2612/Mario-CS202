@@ -151,3 +151,35 @@ void Enemy::update(float dt) {
         _movementStrategy->Execute(m_data, dt);
     }
 }
+void Enemy::changeDirection() {
+    m_data._dir *= -1; 
+    m_data._velocity.x *= -1;
+    m_data._velocity.y *= -1;
+
+    if(m_data._dir == 1) {
+        setAniFrames(getFrames("RWalk"));
+    }
+    else if(m_data._dir == -1) {
+        setAniFrames(getFrames("LWalk"));
+    }
+}
+
+void Enemy::hitEnemy() {
+    this->changeDirection();
+}
+
+void Enemy::hitUp() {
+    onStomp();
+}
+
+void Enemy::hitDown() {
+    onStomp();
+}
+
+void Enemy::hitLeft() {
+    return;
+}
+
+void Enemy::hitRight() {
+    return;
+}

@@ -17,6 +17,9 @@ protected:
     std::unordered_map<std::string, std::vector<Rectangle>> allFrames;
     std::shared_ptr<IEnemyStrategy> _movementStrategy;
 
+    virtual bool onHit();
+    virtual bool onStomp();
+    virtual void changeDirection();
 public:
     Enemy();
     Enemy(const std::string& name);
@@ -36,19 +39,19 @@ public:
     Vector2 getVelocity();
     Vector2 getPos();
     std::vector<Rectangle> getFrames(const std::string& name);
-    Rectangle getHitBox();
+    
     
     bool isAlive();
     int isOffScreen(); //-1 : up, 1 : down, 2 : right, -2 : left 
     
-    virtual bool onHit();
-    virtual bool onStomp();
-    virtual bool beHitByFireball();
+    virtual Rectangle getHitBox();  //Define the hitbox of the enemy
 
-    // virtual void changeDirection();
-    // virtual void hitBlockLR();
-    // virtual void hitBlockUp();
-    // virtual void hitBlockDown();
+    virtual void hitLeft();         //< return
+    virtual void hitRight();        //< return
+    virtual void hitUp();           // be stomped
+    virtual void hitDown();         // block hit
+    virtual bool beHitByFireball(); // fireball
+    void hitEnemy();                // collisions between enemy
 
     virtual void draw(); 
     virtual void update(float dt = GetFrameTime());

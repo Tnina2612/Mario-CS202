@@ -10,6 +10,7 @@
 #include"../../include/entities/Enemy/EnemyMove.hpp"
 #include"../../include/entities/Enemy/Plant.hpp"
 #include"../../include/entities/Enemy/Koopa.hpp"
+#include"../../include/entities/Enemy/Podoboo.hpp"
 
 std::unordered_map<std::string, std::unordered_map<std::string, std::vector<Rectangle>>> EnemyFactory::s_enemyFrames;
 std::shared_ptr<EnemyType> EnemyFactory::s_enemyTypes = nullptr;
@@ -26,6 +27,11 @@ void EnemyFactory::loadAllFrames() {
     s_enemyFrames["Koopa1"] = EnemySprite::Koopa::Map1::Frames;
     s_enemyFrames["Koopa2"] = EnemySprite::Koopa::Map1::Frames;
     s_enemyFrames["Koopa3"] = EnemySprite::Koopa::Map1::Frames;
+
+    s_enemyFrames["Podoboo"] = EnemySprite::Podoboo::Frames;
+    s_enemyFrames["Firebar"] = EnemySprite::Firebar::Frames;
+
+
 }
 
 std::shared_ptr<Enemy> EnemyFactory::createEnemy(const std::string& name, Vector2 pos) {
@@ -63,7 +69,15 @@ std::shared_ptr<Enemy> EnemyFactory::createEnemy(const std::string& name, Vector
         //it->setState();
         return it;
         //return nullptr;
-    }    
+    }   
+    else if(name.find("Podoboo") == 0) {
+        auto it = std::make_shared<Podoboo>(name, pos);
+        it->setType(s_enemyTypes);
+        it->setAllFrames(s_enemyFrames[name]);
+        it->setAniFrames(it->getFrames("Up"));
+        it->setMovementStrategy(std::make_shared<DirectionMove>());
+        return it;
+    }
     
     return nullptr; 
 }
