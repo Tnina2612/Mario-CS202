@@ -147,7 +147,8 @@ namespace EnemySprite {
                 {"RWWalk", {Right::WWalk1, Right::WWalk2}},
                 {"RWalk", {Right::Walk1, Right::Walk2}},
                 {"LWalk", {Left::Walk1, Left::Walk2}},
-                {"Shell", {Shell::Move, Shell::Idle}}
+                {"Shell1", {Shell::Move}},
+                {"Shell2", {Shell::Idle}}
             };
 
         };
@@ -175,7 +176,8 @@ namespace EnemySprite {
                 {"RWWalk", {Right::WWalk1, Right::WWalk2}},
                 {"RWalk", {Right::Walk1, Right::Walk2}},
                 {"LWalk", {Left::Walk1, Left::Walk2}},
-                {"Shell", {Shell::Move, Shell::Idle}}
+                {"Shell1", {Shell::Move}},
+                {"Shell2", {Shell::Idle}}
             };
         };
         namespace Map3 {
@@ -202,7 +204,8 @@ namespace EnemySprite {
                 {"RWWalk", {Right::WWalk1, Right::WWalk2}},
                 {"RWalk", {Right::Walk1, Right::Walk2}},
                 {"LWalk", {Left::Walk1, Left::Walk2}},
-                {"Shell", {Shell::Move, Shell::Idle}}
+                {"Shell1", {Shell::Move}},
+                {"Shell2", {Shell::Idle}}
             };
         };
     }

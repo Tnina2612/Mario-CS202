@@ -15,8 +15,9 @@ Goomba::Goomba() : Enemy() {
 
 Goomba::Goomba(const std::string& name) : Enemy(name) {
     _deadAni = 0;
-    Rectangle hitbox = {0,0,1,1};
-    m_data = EnemyData ( hitbox, 10, false, true, true, 1, 
+    float width = 16.f;
+    float height = 16.f;
+    m_data = EnemyData (width, height, 10, false, true, true, 1, 
                         Vector2{10,0}, Vector2{0,0}, -1);
     m_data._velocity = Vector2{-100, 0.f};
     
@@ -25,6 +26,7 @@ Goomba::Goomba(const std::string& name) : Enemy(name) {
 Goomba::Goomba(const std::string& name, Vector2 pos)
     : Goomba(name) {
         m_data._pos = pos;
+        //m_data._hitBox = Rectangle{m_data._pos.x, m_data._pos.x, 64, 64};
 }
 
 bool Goomba::onHit() {
@@ -39,7 +41,8 @@ bool Goomba::onHit() {
         */
         if(_deadAni == 0) {
             setAniFrames(getFrames("Dead"));
-            setMovementStrategy(std::make_shared<DirectionMove>(Vector2{0, 500.f}));
+            setVelocity(Vector2{0.f, 500.f});
+            //setMovementStrategy(std::make_shared<DirectionMove>(Vector2{0, 500.f}));
             _deadAni = 1;
         }
         if(isOffScreen() == 1 || isOffScreen() == -2) {

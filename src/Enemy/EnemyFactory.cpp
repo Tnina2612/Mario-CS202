@@ -38,7 +38,7 @@ std::shared_ptr<Enemy> EnemyFactory::createEnemy(const std::string& name, Vector
         it->setType(s_enemyTypes);
         it->setAllFrames(s_enemyFrames[name]);
         it->setAniFrames(it->getFrames("Walk"));
-        it->setMovementStrategy(std::make_shared<DirectionMove>(it->getVelocity()));
+        it->setMovementStrategy(std::make_shared<DirectionMove>());
         return it;
     }
     else if(name.find("Plant") == 0) {
@@ -46,7 +46,7 @@ std::shared_ptr<Enemy> EnemyFactory::createEnemy(const std::string& name, Vector
         it->setType(s_enemyTypes);
         it->setAllFrames(s_enemyFrames[name]);
         it->setAniFrames(it->getFrames("Walk"));
-        it->setMovementStrategy(std::make_shared<DirectionMove>(it->getVelocity()));
+        it->setMovementStrategy(std::make_shared<DirectionMove>());
         return it;
     }
     else if(name.find("Koopa") == 0) {
@@ -55,7 +55,7 @@ std::shared_ptr<Enemy> EnemyFactory::createEnemy(const std::string& name, Vector
         it->setAllFrames(s_enemyFrames[name]);
 
         it->setAniFrames(it->getFrames("LWalk"));
-        it->setMovementStrategy(std::make_shared<DirectionMove>(it->getVelocity()));
+        it->setMovementStrategy(std::make_shared<DirectionMove>());
         
         if(name == "Koopa2") {
             it->setState(std::make_unique<WingedKoopa>());

@@ -9,11 +9,12 @@
 
 struct EnemyData {
     std::shared_ptr<EnemyType> _type;
-    std::shared_ptr<IEnemyStrategy> _movementStrategy;
     std::string _name;  //< Enemy name 
 
-    Rectangle _hitBox;
+    //Rectangle _hitBox;
 
+    float _hitBoxHeight;
+    float _hitBoxWidth;
     int _hp;
 
     //Vector2 _baseSpeed;
@@ -33,7 +34,8 @@ struct EnemyData {
     EnemyData(
         //std::string name,
         //std::shared_ptr<EnemyType> type,
-        Rectangle hitBox,
+        float width,
+        float height,
         float gra,
         bool imuneFire,
         bool isStompable,
@@ -48,7 +50,8 @@ struct EnemyData {
 
     ):  //_name(name),
         _type(),
-        _hitBox(hitBox),
+        _hitBoxWidth(width),
+        _hitBoxHeight(height),
         //_baseSpeed(baseSpeed),
         _pos(pos),
         _velocity(vel),
@@ -56,15 +59,15 @@ struct EnemyData {
         _isImuneFire(imuneFire),
         _isStompable(isStompable),
         _isOnGround(isOnGround),
-        //_type(type),
         _hp(hp),
         //_isActive(false),
         _dir(dir)
     {}
 
-    EnemyData(): _isActive(false), _type(), _movementStrategy(nullptr) {}
+    EnemyData(): _isActive(false), _type() {}
     EnemyData(
-        Rectangle hitBox,
+        float width,
+        float height,
         float gra,
         bool imuneFire,
         bool isStompable,
@@ -77,7 +80,8 @@ struct EnemyData {
         int dir
 
     ):  _type(),
-        _hitBox(hitBox),
+        _hitBoxWidth(width),
+        _hitBoxHeight(height),
         //_baseSpeed(baseSpeed),
         _velocity(vel),
         _gravity(gra),
