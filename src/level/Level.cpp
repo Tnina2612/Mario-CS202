@@ -80,6 +80,7 @@ void Level_1_1_Ground::update(void) {
     inputManager.update();
     if(player->getPos().x < camera.target.x - Global::ORIGINAL_WIDTH / 2.f) player->hitBlockLeft(camera.target.x - Global::ORIGINAL_WIDTH / 2.f);
     blocks.update(player);
+    cout << "orientation" << player->getOrientation() << endl;
     if(player->getPos().y >= Global::ORIGINAL_HEIGHT) player->die();
 
     // Enemy update
@@ -103,7 +104,7 @@ void Level_1_1_Ground::update(void) {
             }
         }
     }
-    camera.target.x = max(camera.target.x, min(blocks.getWidth() * BLOCKSIDE - Global::ORIGINAL_WIDTH / 2.f, max(Global::ORIGINAL_WIDTH / 2.f, player->getPos().x + 8.f)));
+    camera.target.x = min(blocks.getWidth() * BLOCKSIDE - Global::ORIGINAL_WIDTH / 2.f, max(Global::ORIGINAL_WIDTH / 2.f, player->getPos().x + 8.f));
     camera.target.y = Global::ORIGINAL_HEIGHT / 2.f;
 }
 

@@ -42,6 +42,7 @@ void Character::moveRight() {
 
 void Character::brakeLeft() {
     accelerationX = brakeAcceleration; // Apply left brake acceleration
+    veclocityX += accelerationX * GetFrameTime();
     if(abs(veclocityX) <= 3) {
         behavior = IDLE;
         veclocityX = 0.0f; // Stop moving left
@@ -55,6 +56,7 @@ void Character::brakeLeft() {
 
 void Character::brakeRight() {
     accelerationX = -brakeAcceleration;
+    veclocityX += accelerationX * GetFrameTime();
     if(abs(veclocityX) <= 3) {
         behavior = IDLE;
         veclocityX = 0.0f; // Stop moving right
@@ -95,13 +97,13 @@ void Character::update() {
     if(!onGround) {
         behavior = JUMP;
     }
-    else {
-    if(IsKeyDown(KEY_LEFT) == false && IsKeyDown(KEY_RIGHT) == false) {
-        setBehavior(IDLE);
-        }
-        else {
-            setBehavior(MOVE);
-        }
+    else if(behavior != BRAKE){
+        if(IsKeyDown(KEY_LEFT) == false && IsKeyDown(KEY_RIGHT) == false) {
+            setBehavior(IDLE);
+            }
+            else {
+                setBehavior(MOVE);
+            }
     }
     switch (behavior) {
         case MOVE:
@@ -171,10 +173,12 @@ void Character::update() {
     // pos.y = pos.y + veclocityY * GetFrameTime();
     // cout << "After addition: " << pos.x << ", " << pos.y << '\n';
     // cout << "on ground" << onGround << endl;
+    cout << "veclocity X: " << veclocityX <<  endl;
+    cout << "is Brake: " << (behavior == BRAKE) << endl;
 }
 
 void Character::draw() {
-    Animation::draw(pos);
+    Animation::draw({pos.x, pos.y - getRectangle().height});
 }
 
 void Character::setBehavior(Behavior newBehavior) {
@@ -214,7 +218,12 @@ float Character::getJumpVelocity() const {
 }
 
 Rectangle Character::getRectangle() const {
-    return Rectangle{pos.x, pos.y, /*frames[currentFrame].width * scale*/16, /*frames[currentFrame].height * scale*/16};
+    float width;
+    if(characterState == SMALL) width = 14;
+    else {
+        width = 16;
+    }
+    return Rectangle{pos.x, pos.y - frames[currentFrame].height * scale, /*frames[currentFrame].width * scale*/width, frames[currentFrame].height * scale};
 }
 
 CharacterState Character::getCharacterState() const {
@@ -238,12 +247,12 @@ void Character::hitBlockTop(float hline) {
 }
 
 void Character::hitBlockBottom(float hline) {
-    if(IsKeyDown(KEY_LEFT) == false && IsKeyDown(KEY_RIGHT) == false) {
-        setBehavior(IDLE);
-    }
-    else {
-        setBehavior(MOVE);
-    }
+    // if(IsKeyDown(KEY_LEFT) == false && IsKeyDown(KEY_RIGHT) == false) {
+    //     setBehavior(IDLE);
+    // }
+    // else {
+    //     setBehavior(MOVE);
+    // }
     onGround = true;
     veclocityY = restVeclocity; // Reset vertical velocity when hitting a block from the bottom
 }
