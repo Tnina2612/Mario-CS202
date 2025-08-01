@@ -124,7 +124,7 @@ void Character::update() {
             }           
             break;
         case IDLE:
-            accelerationX = 0;
+            accelerationX = 0.0f; // Reset acceleration when idle
             if (orientation == LEFT) {
                 Animation::update(GetFrameTime(), 6, 1);
             } 
