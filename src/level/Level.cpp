@@ -1,4 +1,6 @@
 #include "level/Level.hpp"
+#include "core/Program.hpp"
+#include "scenes/GameOverScene.hpp"
 
 Level_1_1_Ground::Level_1_1_Ground() : background("./world-maps/1-1-Ground/background.txt"), 
     blocks("./world-maps/1-1-Ground/blocks.txt"),
@@ -96,6 +98,7 @@ void Level_1_1_Ground::update(void) {
                 } else {
                     cout << "Mario died.\n";
                     player->die();
+                    Program::getInstance().changeScene(new GameOverScene());
                 }
             }
         }
