@@ -67,20 +67,23 @@ void TileMap::update(std::shared_ptr<Character> player) {
         if(CheckCollisionRecs(charRec, blockRec)) {
             float overlapX = min(charRec.x + charRec.width, blockRec.x + blockRec.width) - max(charRec.x, blockRec.x);
             float overlapY = min(charRec.y + charRec.height, blockRec.y + blockRec.height) - max(charRec.y, blockRec.y);
+
             if(overlapX < overlapY) {
                 if(charRec.x < blockRec.x) {
-                    // cout << "Player collides right\n";
+                    cout << "Player collides right\n";
                     player->hitBlockRight(blockRec.x);
                 } else {
-                    // cout << "Player collides left\n";
+                    cout << "Player collides left\n";
                     player->hitBlockLeft(blockRec.x + blockRec.width);
                 }
-            } else {
+            }
+            else {
                 if(charRec.y < blockRec.y) {
-                    // cout << "Player collides down\n";
+                    cout << "Player collides down\n";
+                    cout << charRec.y << ' ' << blockRec.y << '\n';
                     player->hitBlockBottom(blockRec.y);
                 } else {
-                    // cout << "Player collides up\n";
+                    cout << "Player collides up\n";
                     player->hitBlockTop(blockRec.y + blockRec.height);
                     if(player->getCharacterState() != SMALL) {
                         if(tiles[i][j]->breakBrick()) {

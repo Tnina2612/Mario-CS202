@@ -52,10 +52,15 @@ bool Goomba::onHit() {
         if(_deadAni == -1) {
             setActive(false);
         }
+        std::cerr << "OKE2" << std::endl;
+        return true;
     }
+    return true;
 }
 void Goomba::update(float dt) {
+    std::cerr << "OKE1" << std::endl;
     Enemy::update(dt);
+    std::cerr << "OKE" << std::endl;
     // time += dt;
     // if(time > 1.2f) {
     //     this->onHit();

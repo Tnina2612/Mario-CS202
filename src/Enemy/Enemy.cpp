@@ -120,7 +120,6 @@ bool Enemy::onStomp() {
     if(!m_data._isStompable) {
         return false;
     }
-
     onHit();
     return true;
 }
