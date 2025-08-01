@@ -27,6 +27,7 @@ TileMap::TileMap(std::string filename) {
         }
     }
     inp.close();
+    
 }
 
 void TileMap::draw(void) {
@@ -47,54 +48,55 @@ void TileMap::draw(void) {
 }
 
 void TileMap::update(std::shared_ptr<Character> player) {
+    // cout << "veclocity Y" << player->getVeclocityY();
+    // if(player->getPos().x <= 0) player->hitBlockLeft(0);
     if(player->getPos().x + player->getRectangle().width >= width * BLOCKSIDE) player->hitBlockRight(width * BLOCKSIDE);
     const Rectangle& charRec = player->getRectangle();
     player->resetAttributes();
+    float deltaTime = GetFrameTime();
     // cout << "Character rectangle: " << charRec.x << ' ' << charRec.y << ' ' << charRec.x + charRec.width << ' ' << charRec.y + charRec.height << '\n';
+    Rectangle nextFrame = {charRec.x, charRec.y + player->getVeclocityY() * deltaTime, charRec.width, charRec.height};
 
-    std::vector<std::pair<int, int>> nearbyCells = cellsToCheck(charRec);
+
+    std::vector<std::pair<int, int>> nearbyCells = cellsToCheck(nextFrame);
 
     for(std::pair<int, int> pii : nearbyCells) {
         int i = pii.first, j = pii.second;
         if(i < 0 || i >= height || j < 0 || j >= width ||
             tiles[i][j] == nullptr) continue;
         const Rectangle& blockRec = tiles[i][j]->getRectangle();
-        if(charRec.y + charRec.height == blockRec.y && 
-            charRec.x + charRec.width > blockRec.x &&
-            charRec.x < blockRec.x + blockRec.width) {
-            player->setOnGround(true);
+        if(CheckCollisionRecs(nextFrame, blockRec)) {
+            if(nextFrame.y <= blockRec.y) {
+                cout << "Player collides down\n";
+                player->hitBlockBottom(blockRec.y);
+            } else {
+                cout << "Player collides up\n";
+                player->hitBlockTop(blockRec.y + blockRec.height);
+            }
+            nextFrame.y = charRec.y;
         }
-        if(CheckCollisionRecs(charRec, blockRec)) {
-            float overlapX = min(charRec.x + charRec.width, blockRec.x + blockRec.width) - max(charRec.x, blockRec.x);
-            float overlapY = min(charRec.y + charRec.height, blockRec.y + blockRec.height) - max(charRec.y, blockRec.y);
-
-            if(overlapX < overlapY) {
-                if(charRec.x < blockRec.x) {
+    }
+    nextFrame.x = charRec.x + player->getVeclocityX() * deltaTime;
+    nearbyCells = cellsToCheck(nextFrame);
+    for(std::pair<int, int> pii : nearbyCells) {
+        int i = pii.first, j = pii.second;
+        if(i < 0 || i >= height || j < 0 || j >= width ||
+            tiles[i][j] == nullptr) continue;
+        const Rectangle& blockRec = tiles[i][j]->getRectangle();
+        if(CheckCollisionRecs(nextFrame, blockRec)) {
+                if(nextFrame.x < blockRec.x) {
                     cout << "Player collides right\n";
                     player->hitBlockRight(blockRec.x);
                 } else {
                     cout << "Player collides left\n";
                     player->hitBlockLeft(blockRec.x + blockRec.width);
                 }
-            }
-            else {
-                if(charRec.y < blockRec.y) {
-                    cout << "Player collides down\n";
-                    cout << charRec.y << ' ' << blockRec.y << '\n';
-                    player->hitBlockBottom(blockRec.y);
-                } else {
-                    cout << "Player collides up\n";
-                    player->hitBlockTop(blockRec.y + blockRec.height);
-                    if(player->getCharacterState() != SMALL) {
-                        if(tiles[i][j]->breakBrick()) {
-                            tiles[i][j].reset();
-                        }
-                    } else {
-                        tiles[i][j]->jiggle();
-                    }
-                }
-            }
+                nextFrame.x = charRec.x;
         }
+    }
+    player->setPosition(nextFrame.x, nextFrame.y);
+    if(!player->getOnGround()) {
+        player->setVeclocityY(player->getVeclocityY() + player->getGravity() * deltaTime);
     }
 
     player->update();

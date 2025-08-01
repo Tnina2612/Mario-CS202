@@ -1,7 +1,7 @@
 #include"../../include/entities/Character.hpp"
 
 Character::Character() : Animation(CharacterSprite::Fire::frames), state(nullptr), pos(CharacterVar::position), 
-    invincibilityTime(0.0f), lives(3), score(0), veclocityX(0.0f), veclocityY(0.0f), orientation(RIGHT), characterState(SMALL),
+    invincibilityTime(0.0f), lives(3), score(0), veclocityX(0.0f), veclocityY(50.0f), orientation(RIGHT), characterState(SMALL),
     isInvincible(false), isDead(false), behavior(IDLE), onGround(true) {
         accelerationX = 0.0f;
         accelerationY = 0.0f;
@@ -9,7 +9,7 @@ Character::Character() : Animation(CharacterSprite::Fire::frames), state(nullptr
 
 Character::Character(const vector<Rectangle>& frames, const Texture2D& sprite)
     : Animation(frames, sprite), state(nullptr), pos(CharacterVar::position), 
-    invincibilityTime(0.0f), lives(3), score(0), veclocityX(0.0f), veclocityY(0.0f), orientation(RIGHT), characterState(SMALL),
+    invincibilityTime(0.0f), lives(3), score(0), veclocityX(0.0f), veclocityY(50.0f), orientation(RIGHT), characterState(SMALL),
     isInvincible(false), isDead(false),behavior(IDLE), onGround(true) {
         accelerationX = 0.0f;
         accelerationY = 0.0f;
@@ -73,9 +73,9 @@ void Character::jump() {
     if(!IsKeyDown(KEY_LEFT) && !IsKeyDown(KEY_RIGHT)) {
         veclocityX = 0.0f; // Reset horizontal velocity when jumping
     }
-    if (onGround && veclocityY > 0) {
+    if (onGround && veclocityY > restVeclocity) {
         behavior = IDLE; // Reset behavior to IDLE when landing
-        veclocityY = 0.0f; // Reset vertical velocity when landing
+        veclocityY = restVeclocity; // Reset vertical velocity when landing
     }
 }
 
@@ -94,6 +94,14 @@ void Character::resetAttributes() {
 void Character::update() {
     if(!onGround) {
         behavior = JUMP;
+    }
+    else {
+    if(IsKeyDown(KEY_LEFT) == false && IsKeyDown(KEY_RIGHT) == false) {
+        setBehavior(IDLE);
+        }
+        else {
+            setBehavior(MOVE);
+        }
     }
     switch (behavior) {
         case MOVE:
@@ -124,7 +132,7 @@ void Character::update() {
             }           
             break;
         case IDLE:
-            accelerationX = 0;
+            accelerationX = 0.0f; // Reset acceleration when idle
             if (orientation == LEFT) {
                 Animation::update(GetFrameTime(), 6, 1);
             } 
@@ -148,17 +156,21 @@ void Character::update() {
         case DEAD:
             veclocityX = 0.0f;
             // Nếu muốn Mario rơi xuống khi chết:
-            veclocityY += gravity * GetFrameTime();
-            pos.y += veclocityY * GetFrameTime();
+            characterState = SMALL;
+            Animation::update(GetFrameTime(), 0, 1);
             // Có thể thêm điều kiện để reset game hoặc respawn ở đây
             break;
         default:
             break;
     }
-    veclocityX += accelerationX * GetFrameTime(); // Update horizontal velocity with acceleration
-    if(!onGround) veclocityY += gravity * GetFrameTime(); // Apply gravity if not on ground
-    pos.x = pos.x + veclocityX * GetFrameTime();
-    pos.y = pos.y + veclocityY * GetFrameTime();
+    // veclocityX += accelerationX * GetFrameTime(); // Update horizontal velocity with acceleration
+    // if(!onGround) veclocityY += gravity * GetFrameTime(); // Apply gravity if not on ground
+    // cout << "Before addition: " << pos.x << ", " << pos.y << '\n';
+    // cout << "Velocity, acceleration: " << veclocityX << ' ' << accelerationX << '\n';
+    // pos.x = pos.x + veclocityX * GetFrameTime();
+    // pos.y = pos.y + veclocityY * GetFrameTime();
+    // cout << "After addition: " << pos.x << ", " << pos.y << '\n';
+    // cout << "on ground" << onGround << endl;
 }
 
 void Character::draw() {
@@ -202,7 +214,7 @@ float Character::getJumpVelocity() const {
 }
 
 Rectangle Character::getRectangle() const {
-    return Rectangle{pos.x, pos.y, frames[currentFrame].width * scale, frames[currentFrame].height * scale};
+    return Rectangle{pos.x, pos.y, /*frames[currentFrame].width * scale*/16, /*frames[currentFrame].height * scale*/16};
 }
 
 CharacterState Character::getCharacterState() const {
@@ -210,29 +222,30 @@ CharacterState Character::getCharacterState() const {
 }
 
 void Character::hitBlockLeft(float vline) {
-    pos.x = vline;
+    //pos.x = vline;
     veclocityX = 0.0f; // Stop moving left
     collideLeft = true;
 }
 
 void Character::hitBlockRight(float vline) {
-    pos.x = vline - getRectangle().width;
+    //pos.x = vline - getRectangle().width;
     veclocityX = 0.0f; // Stop moving right
     collideRight = true;
 }
 
 void Character::hitBlockTop(float hline) {
-    pos.y = hline;
-    veclocityY = -veclocityY; // Reset vertical velocity when hitting a block from the top
+    veclocityY = abs(veclocityY); // Reset vertical velocity when hitting a block from the top
 }
 
 void Character::hitBlockBottom(float hline) {
     if(IsKeyDown(KEY_LEFT) == false && IsKeyDown(KEY_RIGHT) == false) {
         setBehavior(IDLE);
     }
+    else {
+        setBehavior(MOVE);
+    }
     onGround = true;
-    pos.y = hline - getRectangle().height;
-    veclocityY = 0.0f; // Reset vertical velocity when hitting a block from the bottom
+    veclocityY = restVeclocity; // Reset vertical velocity when hitting a block from the bottom
 }
 
 void Character::die() {
@@ -241,4 +254,34 @@ void Character::die() {
     veclocityX = 0.0f;
     veclocityY = -jumpVeclocity; // Mario sẽ bật lên một chút khi chết (tùy chọn)
     onGround = false;
+}
+bool Character::getCollideRight()const {
+    return collideRight;
+}
+bool Character::getCollideLeft()const {
+    return collideLeft;
+}
+// bool Character::getCollideUp()const {
+    
+// }
+// bool Character::getCollideDown()const {
+
+// }
+
+float Character::getVeclocityX()const {
+    return veclocityX;
+}
+float Character::getVeclocityY()const {
+    return veclocityY;
+}
+void Character::setPosition(float x, float y) {
+    pos.x = x; pos.y = y;
+}
+
+float Character::getGravity()const {
+    return gravity;
+}
+
+float Character::getRestVeclocity()const {
+    return restVeclocity;
 }
