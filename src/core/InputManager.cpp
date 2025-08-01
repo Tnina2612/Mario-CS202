@@ -116,7 +116,7 @@ void downListener::onkey(KeyboardKey key, bool pressed, bool down, Character* ch
     if(character == nullptr || key != KEY_DOWN) return;
     if(down && character->getOnGround()) {
         character->setBehavior(DUCK);
-        character->setVelocityX(0.0f); // Stop horizontal movement when ducking
+        character->setVelocityX(character->getRestVeclocity()); // Stop horizontal movement when ducking
     }
 }
 
