@@ -18,6 +18,7 @@ class TileMap {
 
         bool debug;
         std::vector<Rectangle> debugBlocks;
+        std::vector<Rectangle> mergeBlock;
     public:
         TileMap(std::string filename);
         void draw(void);

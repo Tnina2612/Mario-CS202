@@ -38,8 +38,10 @@ private:
     bool onGround;
     bool collideLeft;
     bool collideRight;
-    const float jumpVeclocity = 400; //1550.0f; // Initial jump velocity
+    bool collideDown;
+    const float jumpVeclocity = 500; //1550.0f; // Initial jump velocity
     const float brakeAcceleration = 200; //600.0f; // Deceleration when braking
+    const float restVeclocity = 50.0f;
     
 public:
     Character();
@@ -65,12 +67,21 @@ public:
 
     CharacterState getCharacterState() const;
 
-    void hitBlockLeft(float vline);
-    void hitBlockRight(float vline);
-    void hitBlockTop(float hline);
-    void hitBlockBottom(float hline);
+    void hitBlockLeft(float vline = 0.0);
+    void hitBlockRight(float vline = 0.0);
+    void hitBlockTop(float hline = 0.0);
+    void hitBlockBottom(float hline = 0.0);
     bool getOnGround() const;
     void setOnGround(bool onGround);
+    bool getCollideRight()const;
+    bool getCollideLeft()const;
+    float getVeclocityX()const;
+    float getVeclocityY()const;
+    void setPosition(float x, float y);
+    float getGravity()const;
+    float getRestVeclocity()const;
+    // bool getCollideUp()const;
+    // bool getCollideDown()const;
     
     // void takeDamage();
     // void onCollision(GameObject* obj);
@@ -80,6 +91,7 @@ public:
     Rectangle getRectangle() const;
     virtual ~Character();
     virtual CharacterType getType() const = 0; // Pure virtual function to get character type
+
 
     Vector2 getPos() const;
 };

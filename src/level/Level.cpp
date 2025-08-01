@@ -1,4 +1,6 @@
 #include "level/Level.hpp"
+#include "core/Program.hpp"
+#include "scenes/GameOverScene.hpp"
 
 Level_1_1_Ground::Level_1_1_Ground() : background("./world-maps/1-1-Ground/background.txt"), 
     blocks("./world-maps/1-1-Ground/blocks.txt"),
@@ -60,11 +62,11 @@ void Level_1_1_Ground::draw(void) {
         ClearBackground(LevelVar::SkyColor);
         BeginMode2D(camera);
             background.draw();
-            blocks.draw();
-            player->draw();
             for(std::shared_ptr<Enemy> enemy : enemies) {
                 enemy->draw();
             }
+            blocks.draw();
+            player->draw();
         EndMode2D();
     EndTextureMode();
     DrawTexturePro(renderTexture.texture, 
@@ -86,16 +88,17 @@ void Level_1_1_Ground::update(void) {
             enemy->getPos().x + 20 > camera.target.x - Global::ORIGINAL_WIDTH / 2.f &&
             enemy->getPos().y < camera.target.y + Global::ORIGINAL_HEIGHT / 2.f) {
             blocks.update(enemy);
-            cout << enemy->getHitBox().x << ' ' << enemy->getHitBox().y << ' ' << enemy->getHitBox().width << ' ' << enemy->getHitBox().height << '\n';
             if(CheckCollisionRecs(enemy->getHitBox(), player->getRectangle()) == true) {
                 float overlapX = min(enemy->getHitBox().x + enemy->getHitBox().width, player->getRectangle().x + player->getRectangle().width) - max(enemy->getHitBox().x, player->getRectangle().x);
                 float overlapY = min(enemy->getHitBox().y + enemy->getHitBox().height, player->getRectangle().y + player->getRectangle().height) - max(enemy->getHitBox().y, player->getRectangle().y);
                 if(overlapY < overlapX) {
                     cout << "Enemy died.\n";
                     enemy->hitUp();
+                    std::cerr << "EE" << std::endl;
                 } else {
                     cout << "Mario died.\n";
                     player->die();
+                    Program::getInstance().changeScene(new GameOverScene());
                 }
             }
         }
