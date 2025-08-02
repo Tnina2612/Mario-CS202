@@ -33,7 +33,6 @@ Podoboo::Podoboo(const std::string& name, Vector2 pos)
 
 void Podoboo::update(float dt) {
     _curCD += dt;
-    std::cerr << _curCD << " " << _CD << std::endl;
     if(_curCD < _CD) {
         return;
     }

@@ -6,6 +6,7 @@
 
 #include"../../include/entities/Enemy/Enemy.hpp"
 #include"../../include/entities/Enemy/EnemyType.hpp"
+#include"../../include/core/Variables.hpp"
 
 #include<iostream>
 Enemy::Enemy() : m_data() {}
@@ -102,8 +103,21 @@ bool Enemy::isAlive() {
 // }
 
 int Enemy::isOffScreen() {
-    return 2;
+    if(m_data._pos.y > Global::ORIGINAL_HEIGHT) {
+        return 1;
+    }
+    else if(m_data._pos.y <= 0) {
+        return -1;
+    }
+    else if(m_data._pos.x > Global::ORIGINAL_WIDTH) {
+        return 2;
+    }
+    else if(m_data._pos.x <= 0) {
+        return -2;
+    }
+    return 0;
 }
+
 bool Enemy::onHit() {
     if(!m_data._isActive) {
         return false;
@@ -165,7 +179,7 @@ void Enemy::update(float dt) {
 void Enemy::changeDirection() {
     m_data._dir *= -1; 
     m_data._velocity.x *= -1;
-    m_data._velocity.y *= -1;
+    //m_data._velocity.y *= -1;
 
     if(m_data._dir == 1) {
         setAniFrames(getFrames("RWalk"));
