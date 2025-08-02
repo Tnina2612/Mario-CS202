@@ -11,6 +11,8 @@
 #include"../../include/entities/Enemy/Plant.hpp"
 #include"../../include/entities/Enemy/Koopa.hpp"
 #include"../../include/entities/Enemy/Podoboo.hpp"
+//#include"../../include/entities/Enemy/Firebar.hpp"
+
 
 std::unordered_map<std::string, std::unordered_map<std::string, std::vector<Rectangle>>> EnemyFactory::s_enemyFrames;
 std::shared_ptr<EnemyType> EnemyFactory::s_enemyTypes = nullptr;
@@ -29,19 +31,23 @@ void EnemyFactory::loadAllFrames() {
     s_enemyFrames["Koopa3"] = EnemySprite::Koopa::Map1::Frames;
 
     s_enemyFrames["Podoboo"] = EnemySprite::Podoboo::Frames;
-    s_enemyFrames["Firebar"] = EnemySprite::Firebar::Frames;
+    // s_enemyFrames["Firebar"] = EnemySprite::Firebar::Frames;
 
 
 }
-
-std::shared_ptr<Enemy> EnemyFactory::createEnemy(const std::string& name, Vector2 pos) {
-    if(!s_enemyTypes) {
+std::shared_ptr<EnemyType>& EnemyFactory::getEnemyTypes() {
+    if (!s_enemyTypes) {
         s_enemyTypes = std::make_shared<EnemyType>();
     }
+    return s_enemyTypes;
+}
 
+
+std::shared_ptr<Enemy> EnemyFactory::createEnemy(const std::string& name, Vector2 pos) {
+    auto type = getEnemyTypes();
     if(name.find("Goomba") == 0) {
         auto it = std::make_shared<Goomba>(name, pos);
-        it->setType(s_enemyTypes);
+        it->setType(type);
         it->setAllFrames(s_enemyFrames[name]);
         it->setAniFrames(it->getFrames("Walk"));
         it->setMovementStrategy(std::make_shared<DirectionMove>());
@@ -49,7 +55,7 @@ std::shared_ptr<Enemy> EnemyFactory::createEnemy(const std::string& name, Vector
     }
     else if(name.find("Plant") == 0) {
         auto it = std::make_shared<Plant>(name, pos);
-        it->setType(s_enemyTypes);
+        it->setType(type);
         it->setAllFrames(s_enemyFrames[name]);
         it->setAniFrames(it->getFrames("Walk"));
         it->setMovementStrategy(std::make_shared<DirectionMove>());
@@ -57,7 +63,7 @@ std::shared_ptr<Enemy> EnemyFactory::createEnemy(const std::string& name, Vector
     }
     else if(name.find("Koopa") == 0) {
         auto it = std::make_shared<Koopa>(name, pos);
-        it->setType(s_enemyTypes);
+        it->setType(type);
         it->setAllFrames(s_enemyFrames[name]);
 
         it->setAniFrames(it->getFrames("LWalk"));
@@ -72,12 +78,20 @@ std::shared_ptr<Enemy> EnemyFactory::createEnemy(const std::string& name, Vector
     }   
     else if(name.find("Podoboo") == 0) {
         auto it = std::make_shared<Podoboo>(name, pos);
-        it->setType(s_enemyTypes);
+        it->setType(type);
         it->setAllFrames(s_enemyFrames[name]);
         it->setAniFrames(it->getFrames("Up"));
         it->setMovementStrategy(std::make_shared<DirectionMove>());
         return it;
     }
+    // else if(name.find("Firebar") == 0) {
+    //     auto it = std::make_shared<Firebar>(name, pos);
+    //     it->setType(s_enemyTypes);
+    //     it->setAllFrames(s_enemyFrames[name]);
+    //     it->setAniFrames(it->getFrames("Normal"));
+    //     it->setMovementStrategy(std::make_shared<AngularMove>(it->getPos()));
+    //     return it;
+    // }
     
     return nullptr; 
 }
