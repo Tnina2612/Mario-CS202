@@ -49,7 +49,7 @@ public:
     virtual void hitUp();           // be stomped
     virtual void hitDown();         // block hit
     virtual bool beHitByFireball(); // fireball
-    void hitEnemy();                // collisions between enemy
+    virtual void hitEnemy();                // collisions between enemy
 
     Vector2 getVelocity();
     Vector2 getPos();

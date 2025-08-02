@@ -35,13 +35,13 @@ void EnemyFactory::loadAllFrames() {
 
 
 }
+
 std::shared_ptr<EnemyType>& EnemyFactory::getEnemyTypes() {
     if (!s_enemyTypes) {
         s_enemyTypes = std::make_shared<EnemyType>();
     }
     return s_enemyTypes;
 }
-
 
 std::shared_ptr<Enemy> EnemyFactory::createEnemy(const std::string& name, Vector2 pos) {
     auto type = getEnemyTypes();
