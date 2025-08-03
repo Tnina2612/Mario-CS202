@@ -9,7 +9,7 @@ PlayScene::~PlayScene() {
 }
 
 void PlayScene::init() {
-    level = new Level_1_1_Ground();
+    level = new Level("./world-maps/1-1");
     eventManager.addObserver(&Program::getInstance().getHUD());
 }
 

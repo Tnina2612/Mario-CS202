@@ -1,6 +1,7 @@
 // BlockFactory.cpp
 #include <block/Block.h>
 #include "core/Variables.hpp"
+#include <iostream>
 
 // Block Flyweight
 BlockFlyweight::BlockFlyweight(const char* dir) {
@@ -24,6 +25,7 @@ void Block::Draw(void) {
 
 // Block Flyweight Factory
 std::shared_ptr<BlockFlyweight> BlockFlyweightFactory::getBlockFlyweight(const std::string& type) {
+    std::cout << "Get flyweight: " << type << " in world type: " << LevelVar::ThemeID << std::endl;
     if(flyweights.find(type) == flyweights.end()) {
         std::string path = "./assets/images/levels/";
         if(LevelVar::ThemeID == LevelVar::Castle) path += "castle/";

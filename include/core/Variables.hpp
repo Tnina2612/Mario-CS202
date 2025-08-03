@@ -35,8 +35,10 @@ namespace LevelVar {
         Snow,
         Underwater
     };
-    static int ThemeID = 0;
-    static Color SkyColor = {119, 148, 255, 255};
+    inline int ThemeID = 0;
+    inline Color SkyColor = {146, 148, 255, 255};
+    inline Color UndergroundColor = BLACK;
+    inline Color BackGroundColor = SkyColor;
 };
 
 namespace MenuScreen {

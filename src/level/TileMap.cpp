@@ -2,6 +2,9 @@
 
 TileMap::TileMap(std::string filename) {
     std::ifstream inp(filename);
+    if(inp.is_open() == false) {
+        throw runtime_error("Cannot open file " + filename);
+    }
     inp >> height >> width;
     tiles.resize(height);
     for(int i = 0; i < height; i++) {
@@ -48,11 +51,6 @@ void TileMap::draw(void) {
 }
 
 void TileMap::update(std::shared_ptr<Character> player) {
-    // cout << "veclocity Y" << player->getVeclocityY();
-    if(player->getPos().x + player->getRectangle().width >= width * BLOCKSIDE) {
-        player->hitBlockRight(width * BLOCKSIDE);
-        // player->setPosition()
-    }
     const Rectangle& charRec = player->getRectangle();
     player->resetAttributes();
     float deltaTime = GetFrameTime();

@@ -9,26 +9,54 @@
 #include<core/InputManager.hpp>
 #include<core/Global.hpp>
 
-class Level {
-    public:
-        virtual void draw(void) = 0;
-        virtual void update(void) = 0;
-        virtual ~Level() = default;
+struct EnemyList {
+    std::vector<std::shared_ptr<Enemy>> list;
+    EnemyList(std::string filename);
+    ~EnemyList(void) = default;
 };
 
-class Level_1_1_Ground : public Level {
+struct ChangeSubLevelPoint {
+    Rectangle rec;
+    char key;
+    std::string filename;
+    std::string worldType;
+    Vector2 newPlayerPosition;
+};
+
+struct ChangeSubLevelPointList {
+    std::vector<ChangeSubLevelPoint> list;
+    ChangeSubLevelPointList(std::string filename);
+    ~ChangeSubLevelPointList(void) = default;
+};
+
+class Level;
+
+class SubLevel {
+        friend class Level;
+        Level* level;
+        std::shared_ptr<TileMap> background;
+        std::shared_ptr<TileMap> blocks;
+        std::shared_ptr<EnemyList> enemies;
+        std::shared_ptr<ChangeSubLevelPointList> changeSubLevelPoints;
+    public:
+        SubLevel(Level* level, std::string folderName);
+        void draw(void);
+        void update(std::shared_ptr<Character> player);
+        ~SubLevel() = default;
+};
+
+class Level {
     private:
-        const static int BLOCKSIDE = 16;
-        TileMap background;
-        TileMap blocks;
+        std::shared_ptr<SubLevel> subLevel;
+        std::shared_ptr<SubLevel> nextSubLevel;
         std::shared_ptr<Character> player;
-        std::vector<std::shared_ptr<Enemy>> enemies;
         RenderTexture2D renderTexture;
         Camera2D camera;
         InputManager& inputManager;
     public:
-        Level_1_1_Ground();
-        void draw(void) override;
-        void update(void) override;
-        virtual ~Level_1_1_Ground();
+        Level(std::string folderName);
+        void changeSubLevel(ChangeSubLevelPoint point);
+        void draw(void);
+        void update(void);
+        ~Level();
 };

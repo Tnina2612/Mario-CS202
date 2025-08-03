@@ -173,8 +173,8 @@ void Character::update() {
     // pos.y = pos.y + veclocityY * GetFrameTime();
     // cout << "After addition: " << pos.x << ", " << pos.y << '\n';
     // cout << "on ground" << onGround << endl;
-    cout << "veclocity X: " << veclocityX <<  endl;
-    cout << "is Brake: " << (behavior == BRAKE) << endl;
+    // cout << "veclocity X: " << veclocityX <<  endl;
+    // cout << "is Brake: " << (behavior == BRAKE) << endl;
 }
 
 void Character::draw() {
