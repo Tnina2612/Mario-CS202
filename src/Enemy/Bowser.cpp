@@ -156,32 +156,32 @@ std::vector<std::shared_ptr<ICommand>> Bowser::generateSkill() {
 
     std::uniform_int_distribution<> dis(0, 99);
     int r = dis(gen);
-skills.push_back(std::make_shared<ChaseCommand>());
-    // if (r < 15) {
-    //     skills.push_back(std::make_shared<JumpCommand>());
-    //     std::cerr << "Bowser Jump\n";
-    // } 
-    // else if (r < 60) {
-    //     int t = dis(gen);
-    //     if(isMarioClose() || t%4 != 1) {
-    //         skills.push_back(std::make_shared<ChaseCommand>());
-    //         std::cerr << "Bowser Chase\n";
-    //     }
-    //     else {
-    //         skills.push_back(std::make_shared<BreathFire>());
-    //         std::cerr << "Bowser Breath\n";
-    //     }
-    // } 
-    // else if (r < 80) {
-    //     skills.push_back(std::make_shared<JumpCommand>());
-    //     skills.push_back(std::make_shared<BreathFire>());
-    //     std::cerr << "Bowser Jump + Breath\n";
-    // } 
-    // else {
-    //     skills.push_back(std::make_shared<ChaseCommand>());
-    //     skills.push_back(std::make_shared<BreathFire>());
-    //     std::cerr << "Bowser Chase + Breath\n";
-    // }
+
+    if (r < 15) {
+        skills.push_back(std::make_shared<JumpCommand>());
+        std::cerr << "Bowser Jump\n";
+    } 
+    else if (r < 60) {
+        int t = dis(gen);
+        if(isMarioClose() || t%4 != 1) {
+            skills.push_back(std::make_shared<ChaseCommand>());
+            std::cerr << "Bowser Chase\n";
+        }
+        else {
+            skills.push_back(std::make_shared<BreathFire>());
+            std::cerr << "Bowser Breath\n";
+        }
+    } 
+    else if (r < 80) {
+        skills.push_back(std::make_shared<JumpCommand>());
+        skills.push_back(std::make_shared<BreathFire>());
+        std::cerr << "Bowser Jump + Breath\n";
+    } 
+    else {
+        skills.push_back(std::make_shared<ChaseCommand>());
+        skills.push_back(std::make_shared<BreathFire>());
+        std::cerr << "Bowser Chase + Breath\n";
+    }
     return skills;
 }
 

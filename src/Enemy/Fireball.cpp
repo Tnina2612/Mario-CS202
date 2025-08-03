@@ -12,7 +12,7 @@ Fireball::Fireball() {
 
 Fireball::Fireball(Vector2 startPos, Vector2 targetPos) : Fireball() {
     _width = 25.f;
-    _height = 25.f;
+    _height = 10.f;
     _pos = startPos;
     _targetPos = targetPos;
     _spawing = true;
