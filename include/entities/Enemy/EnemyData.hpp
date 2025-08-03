@@ -28,8 +28,10 @@ struct EnemyData {
     bool _isActive;
     bool _isOnGround;
 
-    int _dir;   // Direction: 1 facing right, -1 left
+    int _dir;   // Direction: 
+                // 1: right, -1: left
                 // -1 : up, 1 : down
+                //  0 : stationary
 
     EnemyData(
         //std::string name,

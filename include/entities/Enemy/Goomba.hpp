@@ -8,7 +8,7 @@ class Goomba : public Enemy {
 private:
     int _deadAni;   // 0 : not dead, 1 : active, -1 : finished
 public:
-    float time;
+    //float time;
     Goomba();
     Goomba(const std::string& name);
     Goomba(const std::string& name, Vector2 pos);

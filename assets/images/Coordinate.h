@@ -280,18 +280,18 @@ namespace EnemySprite {
                         Rectangle{40.f, 210.f, 35.f, 35.f}}},
             {"LIdle", {Rectangle{80.f, 210.f, 35.f, 35.f}, 
                         Rectangle{120.f, 210.f, 35.f, 35.f}}},
-            {"RBreath", {Rectangle{160.f, 210.f, 35.f, 35.f}, 
+            {"RIdle", {Rectangle{160.f, 210.f, 35.f, 35.f}, 
                         Rectangle{200.f, 210.f, 35.f, 35.f}}},
-            {"RIdle", {Rectangle{240.f, 210.f, 35.f, 35.f}, 
+            {"RBreath", {Rectangle{240.f, 210.f, 35.f, 35.f}, 
                         Rectangle{280.f, 210.f, 35.f, 35.f}}}
         };
     }
     namespace Fireball {
         const std::unordered_map<std::string, std::vector<Rectangle>> Frames = {
-            {"Left", {Rectangle{100.f, 250.f, 25.f, 25.f}, 
-                        Rectangle{130.f, 250.f, 25.f, 25.f}}},
-            {"Right", {Rectangle{160.f, 250.f, 25.f, 25.f}, 
-                        Rectangle{190.f, 250.f, 25.f, 25.f}}}
+            {"Left", {Rectangle{100.f, 250.f, 25.f, 10.f}, 
+                        Rectangle{130.f, 250.f, 25.f, 10.f}}},
+            {"Right", {Rectangle{160.f, 250.f, 25.f, 10.f}, 
+                        Rectangle{190.f, 250.f, 25.f, 10.f}}}
         };
     }
 };

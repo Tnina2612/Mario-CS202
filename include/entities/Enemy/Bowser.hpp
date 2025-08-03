@@ -19,13 +19,6 @@ private:
     std::queue<std::shared_ptr<ICommand>> _commandsQueue;
     std::shared_ptr<ICommand> _curCommand   = nullptr;
     std::shared_ptr<Character> m_target   = nullptr;
-    enum State {
-        Idle,
-        Jump,
-        Breath,
-        Chase,
-        Die
-    } _state;
 
     std::vector<shared_ptr<Fireball>> fireballs;
 
@@ -43,7 +36,7 @@ private:
     std::vector<std::shared_ptr<ICommand>> generateSkill();           //< generate combo 
     void forceFinished();                   //< force finished current command
     void forceFinishedAll();                //< finised all commands in _commandsQueue
-    bool isMarioClose(float distance = 100.0f);
+    bool isMarioClose(float distance = 50.0f);
     // void fall();                         //< bridge destruction
     void check();                           //< check if bowser is defeated
 public:
@@ -53,10 +46,20 @@ public:
 
     // void respawn();
     bool beHitByFireball();
+
     std::vector<Rectangle> getHitBoxes();       //< hit-boxes of bowser and fireballs
-    
+    Vector2 getVelocity();
+    int getDir();
+    std::vector<Rectangle> getFrames(const std::string& name);
+    Vector2 getPos();
+    std::shared_ptr<Character> getTarget();
+
+    void setActive(bool isActive);
+    void setPosition(Vector2 pos);
+    void setAniFrames(std::vector<Rectangle> frames);
+
     void spawnFireball();
 
-    void update(float dt);                      //< update: Bowser and fireballs
+    void update(float dt = GetFrameTime());                      //< update: Bowser and fireballs
     void draw();                                //< draw Bowser and fireballs
 };

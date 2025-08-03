@@ -15,8 +15,8 @@ Bowser::Bowser(const std::string& name) {
     _dying = false;
     _isFree = true;
 
-    float width = 20.f;
-    float height = 20.f;
+    float width = 35.f;
+    float height = 35.f;
     m_data = EnemyData (width, height, 10, false, true, true, 3, 
                         Vector2{10,0}, Vector2{0,0}, -1);
 
@@ -33,6 +33,41 @@ Bowser::Bowser(const std::string& name, Vector2 pos, std::shared_ptr<Character> 
 {  
     m_data._pos = pos;
     m_target = character;
+}
+
+Vector2 Bowser::getVelocity() {
+    return m_data._velocity;
+}
+
+Vector2 Bowser::getPos() {
+    return m_data._pos;
+}
+
+void Bowser::setPosition(Vector2 pos) {
+    m_data._pos = pos;
+}
+
+void Bowser::setActive(bool isActive) {
+    m_data._isActive = isActive;
+}
+
+std::vector<Rectangle> Bowser::getFrames(const std::string& name) {
+    if(allFrames.find(name) != allFrames.end()) {
+        return allFrames[name];
+    }
+    return {};
+}
+
+void Bowser::setAniFrames(std::vector<Rectangle> frames) {
+    m_animation.setFrames(frames);
+}
+
+int Bowser::getDir() {
+    return m_data._dir;
+}
+
+std::shared_ptr<Character> Bowser::getTarget() {
+    return m_target;
 }
 
 void Bowser::check() {
@@ -64,11 +99,17 @@ void Bowser::processCommand(float dt) {
     if(_isFree) {
         _time += dt;
     }
+
     if(!_curCommand) {
-        return;
+        if(_commandsQueue.empty()) {
+            return;
+        }
+        _curCommand = _commandsQueue.front();
+        _commandsQueue.pop();
     }
+
     //Execute command
-    if(_isFree && _time > _processCommandTimeGap) {
+    if(_isFree) {
         _curCommand->execute(*this);
         _isFree = false;
         _time = 0.f;
@@ -78,7 +119,14 @@ void Bowser::processCommand(float dt) {
     if(_curCommand->isFinished()) {
         _isFree = true;
         _curCommand = nullptr;
-        _state = State::Idle;
+        if(m_data._pos.x < m_target->getPos().x) {
+            m_data._dir = 1;
+            m_animation.setFrames(allFrames["RIdle"]);
+        } 
+        else if(m_data._pos.x > m_target->getPos().x) {
+            m_data._dir = -1;
+            m_animation.setFrames(allFrames["LIdle"]);
+        }
     }
 
 }
@@ -108,28 +156,32 @@ std::vector<std::shared_ptr<ICommand>> Bowser::generateSkill() {
 
     std::uniform_int_distribution<> dis(0, 99);
     int r = dis(gen);
-
-
-    if (r < 15) {
-        skills.push_back(std::make_shared<JumpCommand>());
-    } 
-    else if (r < 60) {
-        int t = dis(gen);
-        if(isMarioClose() || t%7 == 1) {
-            skills.push_back(std::make_shared<ChaseCommand>());
-        }
-        else {
-            skills.push_back(std::make_shared<BreathFire>());
-        }
-    } 
-    else if (r < 80) {
-        skills.push_back(std::make_shared<JumpCommand>());
-        skills.push_back(std::make_shared<BreathFire>());
-    } 
-    else {
-        skills.push_back(std::make_shared<ChaseCommand>());
-        skills.push_back(std::make_shared<BreathFire>());
-    }
+skills.push_back(std::make_shared<ChaseCommand>());
+    // if (r < 15) {
+    //     skills.push_back(std::make_shared<JumpCommand>());
+    //     std::cerr << "Bowser Jump\n";
+    // } 
+    // else if (r < 60) {
+    //     int t = dis(gen);
+    //     if(isMarioClose() || t%4 != 1) {
+    //         skills.push_back(std::make_shared<ChaseCommand>());
+    //         std::cerr << "Bowser Chase\n";
+    //     }
+    //     else {
+    //         skills.push_back(std::make_shared<BreathFire>());
+    //         std::cerr << "Bowser Breath\n";
+    //     }
+    // } 
+    // else if (r < 80) {
+    //     skills.push_back(std::make_shared<JumpCommand>());
+    //     skills.push_back(std::make_shared<BreathFire>());
+    //     std::cerr << "Bowser Jump + Breath\n";
+    // } 
+    // else {
+    //     skills.push_back(std::make_shared<ChaseCommand>());
+    //     skills.push_back(std::make_shared<BreathFire>());
+    //     std::cerr << "Bowser Chase + Breath\n";
+    // }
     return skills;
 }
 
@@ -137,7 +189,6 @@ void Bowser::forceFinished() {
     if (_curCommand) {
         _curCommand = nullptr;
         _isFree = true;
-        _state = State::Idle;
     }
 }
 
@@ -165,8 +216,9 @@ std::vector<Rectangle> Bowser::getHitBoxes() {
 }
 
 void Bowser::spawnFireball() {
-    Vector2 startPos = Vector2{m_data._pos.x - 5 * m_data._dir, m_data._pos.y + 4};
-    Vector2 pos = Vector2{m_data._pos.x - 20 * m_data._dir, m_target->getPos().y};
+    Vector2 startPos = Vector2{m_data._pos.x + 5 * m_data._dir, m_data._pos.y};
+    Vector2 pos = Vector2{m_data._pos.x + 10 * m_data._dir, m_target->getPos().y};
+
     std::shared_ptr<Fireball> fire = std::make_shared<Fireball>(startPos, pos);
     fireballs.push_back(fire);
 }
@@ -175,10 +227,14 @@ void Bowser::draw() {
     if(!m_data._isActive) {
         return;
     }
+    DrawRectangleRec(getHitBoxes()[0], RED);
     m_animation.draw(m_data._pos);
+
     for(const auto& f : fireballs) {
+        DrawRectangleRec(f->getHitBox(), RED);
         f->draw();
     }
+    
 }
 void Bowser::update(float dt) {
     if(!m_data._isActive) {
@@ -195,6 +251,9 @@ void Bowser::update(float dt) {
     //     // dead scene
     // }
     // else {
+
+        generateCommand(dt);
+        processCommand(dt);
         m_animation.update(dt);
         for(const auto& f : fireballs) {
             f->update(dt);
