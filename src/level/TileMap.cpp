@@ -48,13 +48,10 @@ void TileMap::draw(void) {
 }
 
 void TileMap::update(std::shared_ptr<Character> player) {
-    // cout << "veclocity Y" << player->getVeclocityY();
-    // if(player->getPos().x <= 0) player->hitBlockLeft(0);
     if(player->getPos().x + player->getRectangle().width >= width * BLOCKSIDE) player->hitBlockRight(width * BLOCKSIDE);
     const Rectangle& charRec = player->getRectangle();
     player->resetAttributes();
     float deltaTime = GetFrameTime();
-    // cout << "Character rectangle: " << charRec.x << ' ' << charRec.y << ' ' << charRec.x + charRec.width << ' ' << charRec.y + charRec.height << '\n';
     Rectangle nextFrame = {charRec.x, charRec.y + player->getVeclocityY() * deltaTime, charRec.width, charRec.height};
 
 
@@ -67,10 +64,8 @@ void TileMap::update(std::shared_ptr<Character> player) {
         const Rectangle& blockRec = tiles[i][j]->getRectangle();
         if(CheckCollisionRecs(nextFrame, blockRec)) {
             if(nextFrame.y <= blockRec.y) {
-                cout << "Player collides down\n";
                 player->hitBlockBottom(blockRec.y);
             } else {
-                cout << "Player collides up\n";
                 player->hitBlockTop(blockRec.y + blockRec.height);
             }
             nextFrame.y = charRec.y;
@@ -85,10 +80,8 @@ void TileMap::update(std::shared_ptr<Character> player) {
         const Rectangle& blockRec = tiles[i][j]->getRectangle();
         if(CheckCollisionRecs(nextFrame, blockRec)) {
                 if(nextFrame.x < blockRec.x) {
-                    cout << "Player collides right\n";
                     player->hitBlockRight(blockRec.x);
                 } else {
-                    cout << "Player collides left\n";
                     player->hitBlockLeft(blockRec.x + blockRec.width);
                 }
                 nextFrame.x = charRec.x;
@@ -115,7 +108,7 @@ void TileMap::update(std::shared_ptr<Character> player) {
 
 void TileMap::update(std::shared_ptr<Enemy> enemy) {
     std::vector<std::pair<int, int>> nearbyCells = cellsToCheck(enemy->getHitBox());
-    enemy->update();
+    // enemy->update();
     for(std::pair<int, int> pii : nearbyCells) {
         // enemy->collisionTile(tiles[pii.first][pii.second]);
     }

@@ -6,31 +6,23 @@ Level_1_1_Ground::Level_1_1_Ground() : background("./world-maps/1-1-Ground/backg
     blocks("./world-maps/1-1-Ground/blocks.txt"),
     player(make_shared<Mario>()),
     inputManager(INPUT_MANAGER) {
-    cout << "Mario's height: " << player->getRectangle().height << '\n';
-    cout << "Mario's width: " << player->getRectangle().width << '\n';
-    cout << "Mario's x: " << player->getRectangle().x << '\n';
-    cout << "Mario's y: " << player->getRectangle().y << '\n';
-    {
-        EnemyFactory::loadAllFrames();
-        ifstream inp("./world-maps/1-1-Ground/enemies.txt");
-        int numTypes;
-        inp >> numTypes;
-        for(int i = 0; i < numTypes; i++) {
-            int numEnemies;
-            inp >> numEnemies;
-            string enemyType;
-            inp >> enemyType;
-            for(int j = 0; j < numEnemies; j++) {
-                int y, x; 
-                inp >> y >> x;
-                float posX = x * BLOCKSIDE;
-                float posY = y * BLOCKSIDE;
-                enemies.push_back(EnemyFactory::createEnemy(enemyType, Vector2{posX, posY}));
-                enemies.back()->setActive(true);
-            }
+    EnemyFactory::loadAllFrames();
+    ifstream inp("./world-maps/1-1-Ground/enemies.txt");
+    int numTypes;
+    inp >> numTypes;
+    for(int i = 0; i < numTypes; i++) {
+        int numEnemies;
+        inp >> numEnemies;
+        string enemyType;
+        inp >> enemyType;
+        for(int j = 0; j < numEnemies; j++) {
+            float x, y; 
+            inp >> x >> y;
+            enemies.push_back(EnemyFactory::createEnemy(enemyType, Vector2{x, y}));
+            enemies.back()->setActive(true);
         }
-        inp.close();
     }
+    inp.close();
 
     renderTexture = LoadRenderTexture(Global::ORIGINAL_WIDTH, Global::ORIGINAL_HEIGHT);
     if(IsRenderTextureReady(renderTexture) == false) {
@@ -94,16 +86,15 @@ void Level_1_1_Ground::update(void) {
                 if(overlapY < overlapX) {
                     cout << "Enemy died.\n";
                     enemy->hitUp();
-                    std::cerr << "EE" << std::endl;
                 } else {
                     cout << "Mario died.\n";
-                    player->die();
-                    Program::getInstance().changeScene(new GameOverScene());
+                    // player->die();
+                    // Program::getInstance().changeScene(new GameOverScene());
                 }
             }
         }
     }
-    camera.target.x = max(camera.target.x, min(blocks.getWidth() * BLOCKSIDE - Global::ORIGINAL_WIDTH / 2.f, max(Global::ORIGINAL_WIDTH / 2.f, player->getPos().x + 8.f)));
+    camera.target.x = min(blocks.getWidth() * BLOCKSIDE - Global::ORIGINAL_WIDTH / 2.f, max(Global::ORIGINAL_WIDTH / 2.f, player->getPos().x + 8.f));
     camera.target.y = Global::ORIGINAL_HEIGHT / 2.f;
 }
 
