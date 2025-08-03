@@ -72,6 +72,7 @@ void Level_1_1_Ground::update(void) {
     inputManager.update();
     if(player->getPos().x < camera.target.x - Global::ORIGINAL_WIDTH / 2.f) player->hitBlockLeft(camera.target.x - Global::ORIGINAL_WIDTH / 2.f);
     blocks.update(player);
+    cout << "orientation" << player->getOrientation() << endl;
     if(player->getPos().y >= Global::ORIGINAL_HEIGHT) player->die();
 
     // Enemy update

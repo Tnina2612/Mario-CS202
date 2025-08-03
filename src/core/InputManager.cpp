@@ -116,12 +116,13 @@ void downListener::onkey(KeyboardKey key, bool pressed, bool down, Character* ch
     if(character == nullptr || key != KEY_DOWN) return;
     if(down && character->getOnGround()) {
         character->setBehavior(DUCK);
-        character->setVelocityX(character->getRestVeclocity()); // Stop horizontal movement when ducking
+        character->setVelocityX(0.0f); // Stop horizontal movement when ducking
     }
 }
 
 void leftListener::onkey(KeyboardKey key, bool pressed, bool down, Character* character) {
     if(character == nullptr || key != KEY_LEFT) return;
+    if(character->getBehavior() == BRAKE) return;
     if(pressed) {
         if(character->getOrientation() == RIGHT && character->getBehavior() == MOVE) {
             character->setBehavior(BRAKE);
@@ -138,6 +139,7 @@ void leftListener::onkey(KeyboardKey key, bool pressed, bool down, Character* ch
 
 void rightListener::onkey(KeyboardKey key, bool pressed, bool down, Character* character) {
     if(character == nullptr || key != KEY_RIGHT) return;
+    if(character->getBehavior() == BRAKE) return;
     if(pressed) {
         if(character->getOrientation() == LEFT && character->getBehavior() == MOVE) {
             character->setBehavior(BRAKE);
