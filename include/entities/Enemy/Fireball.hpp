@@ -3,7 +3,7 @@
 #include<vector>
 #include"raylib.h"
 
-#include"../../include/entities/Animation.hpp"
+#include<entities/Animation.hpp>
 
 class Fireball {
 private:

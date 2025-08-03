@@ -110,7 +110,6 @@ void Level::changeSubLevel(ChangeSubLevelPoint point) {
         LevelVar::ThemeID = LevelVar::Underground;
         LevelVar::BackGroundColor = LevelVar::UndergroundColor;
     }
-    cout << "Theme ID: " << LevelVar::ThemeID << endl;
 
     nextSubLevel = make_shared<SubLevel>(this, point.filename);
 
