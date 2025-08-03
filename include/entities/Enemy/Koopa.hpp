@@ -2,7 +2,6 @@
 
 #include"raylib.h"
 
-#include"IEnemyState.hpp"
 #include"Enemy.hpp"
 
 class Koopa;
