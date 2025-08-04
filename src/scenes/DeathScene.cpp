@@ -3,11 +3,13 @@
 #include "core/Program.hpp"
 #include "scenes/DeathScene.hpp"
 #include "scenes/PlayScene.hpp"
+#include "core/MusicManager.hpp"
 #include "raylib.h"
 
 DeathScene::DeathScene() {
     // Store current session state
     finalSession = Program::getInstance().getSession();
+    MusicManager::getInstance().stopMusic();
 }
 
 void DeathScene::init() {

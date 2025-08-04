@@ -1,6 +1,7 @@
 #include "core/Program.hpp"
 #include "scenes/GameOverScene.hpp"
 #include "scenes/TitleScene.hpp"
+#include "core/SoundManager.hpp"
 #include "raylib.h"
 #include <string>
 #include <cstdio>
@@ -8,6 +9,7 @@
 GameOverScene::GameOverScene() {
     // Store current session state
     finalSession = Program::getInstance().getSession();
+    SoundManager::getInstance().playSound(SoundType::GAMEOVER);
 }
 
 void GameOverScene::init() {
