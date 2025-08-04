@@ -23,7 +23,41 @@ enum class EventType {
     COLLECT_COINS,
     ADDLIVES,
     MARIO_DIED,
-    RESET_TIMER
+    RESET_TIMER,
+    RESET_LIVES,
+    RESET_SCORES
+};
+
+enum class MusicType {
+    OVERWORLD,
+    UNDERGROUND,
+    CASTLE,
+    UNDERWATER
+};
+
+enum class SoundType {
+    COIN,
+    JUMP_SMALL,
+    JUMP_SUPER,
+    POWERUP,
+    POWERDOWN,
+    BUMP,
+    BREAKBLOCK,
+    FIREBALL,
+    STOMP,
+    KICK,
+    ONE_UP,
+    FLAGPOLE,
+    BOWSER_FIRE,
+    BOWSER_FALLS,
+    FIREWORKS,
+    PIPE,
+    VINE,
+    WARNING,
+    MARIO_DIE,
+    GAMEOVER,
+    STAGE_CLEAR,
+    WORLD_CLEAR,
 };
 
 namespace LevelVar {
