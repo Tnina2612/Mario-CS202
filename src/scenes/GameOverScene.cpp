@@ -14,7 +14,6 @@ void GameOverScene::init() {
     // Initialize timer variables
     waitTimer = 0.0f;
     waitDuration = 3.0f;
-    hasTriggeredTransition = false;
 
     coin = LoadTexture("assets/images/title-scene/coin.png");
 }
@@ -27,14 +26,11 @@ void GameOverScene::handleInput() {
 }
 
 void GameOverScene::update() {
-    if (!hasTriggeredTransition) {
-        waitTimer += GetFrameTime();
-        
-        // Automatically transition after 3 seconds
-        if (waitTimer >= waitDuration) {
-            hasTriggeredTransition = true;
-            Program::getInstance().changeScene(new TitleScene());
-        }
+    waitTimer += GetFrameTime();
+    
+    // Automatically transition after 3 seconds
+    if (waitTimer >= waitDuration) {
+        Program::getInstance().changeScene(new TitleScene());
     }
 }
 
