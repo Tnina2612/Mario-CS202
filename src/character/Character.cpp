@@ -1,4 +1,6 @@
-#include"../../include/entities/Character.hpp"
+#include "../../include/entities/Character.hpp"
+#include "core/SoundManager.hpp"
+#include "core/MusicManager.hpp"
 
 Character::Character() : Animation(CharacterSprite::Fire::frames), state(nullptr), pos(CharacterVar::position), 
     invincibilityTime(0.0f), lives(3), score(0), veclocityX(0.0f), veclocityY(50.0f), orientation(RIGHT), characterState(SMALL),

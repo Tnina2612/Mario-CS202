@@ -1,5 +1,6 @@
-#include"../../include/core/InputManager.hpp"
-#include<string>
+#include "../../include/core/InputManager.hpp"
+#include "core/SoundManager.hpp"
+#include <string>
 
 void InputManager::addKey(KeyboardKey key) {
     // Initialize the key state if it doesn't exist
@@ -106,6 +107,7 @@ void InputManager::update() {
 void upListener::onkey(KeyboardKey key, bool pressed, bool down, Character* character) {
     if(character == nullptr || key != KEY_UP) return;
     if(pressed && character->getOnGround()) {
+        SoundManager::getInstance().playSound(SoundType::JUMP_SMALL);
         character->setBehavior(JUMP);
         character->setOnGround(false); // Set onGround to false when jumping
         character->setVeclocityY(-character->getJumpVelocity()); // Set initial jump velocity
