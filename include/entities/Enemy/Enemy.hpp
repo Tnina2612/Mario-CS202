@@ -16,10 +16,6 @@ protected:
     EnemyData m_data;
     std::unordered_map<std::string, std::vector<Rectangle>> allFrames;
     std::shared_ptr<IEnemyStrategy> _movementStrategy;
-
-    virtual bool onHit();
-    virtual bool onStomp();
-    virtual void changeDirection();
 public:
     Enemy();
     Enemy(const std::string& name);
@@ -39,18 +35,21 @@ public:
     
     bool isAlive();
     int isOffScreen(); //-1 : up, 1 : down, 2 : right, -2 : left 
+
+    virtual bool onHit();
+    virtual bool onStomp();
+    virtual void changeDirection();
     
+    virtual Rectangle getHitBox();       //<Define the hitbox of the enemy
 
+    virtual void hitBlockLeft();         //< hit by block on the left
+    virtual void hitBlockRight();        //< hit by block on the right
+    virtual void hitBlockDown();         //< hit by block beneath
+    virtual void hitUp();                //< hit by character from above
+    virtual bool beHitByFireball();      //< fireball
+
+    virtual void onEnemyCollision(Enemy& enemy) = 0; //< collision with other enemies
     
-    virtual Rectangle getHitBox();  //Define the hitbox of the enemy
-
-    virtual void hitLeft();         //< return
-    virtual void hitRight();        //< return
-    virtual void hitUp();           // be stomped
-    virtual void hitDown();         // block hit
-    virtual bool beHitByFireball(); // fireball
-    virtual void hitEnemy();                // collisions between enemy
-
     Vector2 getVelocity();
     Vector2 getPos();
 

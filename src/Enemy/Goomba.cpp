@@ -39,10 +39,10 @@ bool Goomba::onHit() {
         setAniFrames(frames["Dead"]);
         setMovementStrategy(...);
         */
+
         if(_deadAni == 0) {
             setAniFrames(getFrames("Dead"));
             setVelocity(Vector2{0.f, 500.f});
-            //setMovementStrategy(std::make_shared<DirectionMove>(Vector2{0, 500.f}));
             _deadAni = 1;
         }
         if(isOffScreen() == 1 || isOffScreen() == -2) {
@@ -52,24 +52,19 @@ bool Goomba::onHit() {
         if(_deadAni == -1) {
             setActive(false);
         }
-        std::cerr << "OKE2" << std::endl;
         return true;
     }
     return true;
 }
-void Goomba::update(float dt) {
-    std::cerr << "OKE1" << std::endl;
-    Enemy::update(dt);
-    std::cerr << "OKE" << std::endl;
-    // time += dt;
-    // if(time > 1.2f) {
-    //     this->onHit();
-    // }
+
+void Goomba::onEnemyCollision(Enemy& enemy) {
+    changeDirection();
+    float overlapX = min(getHitBox().x + getHitBox().width, enemy.getHitBox().x + enemy.getHitBox().width) - max(getHitBox().x, enemy.getHitBox().x);
+    if (overlapX <= 0.0f) return;
+    
+    setPos(Vector2{getPos().x + overlapX * getDirection(), getPos().y});
 }
 
-// void Goomba::draw() {
-//     if(!m_data._isActive || !isAlive()) {
-//         return;
-//     }
-//     Enemy::draw();
-// }
+void Goomba::changeDirection() {
+    Enemy::changeDirection();
+}

@@ -50,5 +50,8 @@ void Podoboo::update(float dt) {
         this->setAniFrames(this->getFrames("Up"));
     }
     Enemy::update();
+}
 
+void Podoboo::onEnemyCollision(Enemy& enemy) {
+    return; // Podoboo does not interact with other enemies
 }

@@ -72,9 +72,6 @@ void Plant::update(float dt) {
     Enemy::update(dt);
 }
 
-// void Plant::draw() {
-//     if(!m_data._isActive || !isAlive()) {
-//         return;
-//     }
-//     Enemy::draw();
-// }
+void Plant::onEnemyCollision(Enemy& enemy) {
+    return; // Plant does not interact with other enemies
+}
