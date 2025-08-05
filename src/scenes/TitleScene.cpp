@@ -4,6 +4,7 @@
 #include "scenes/DeathScene.hpp"
 #include "scenes/MapSelectScene.hpp"
 #include "block/Block.h"
+#include "core/MusicManager.hpp"
 #include "raylib.h"
 
 void TitleScene::init() {
@@ -19,6 +20,8 @@ void TitleScene::init() {
         ClearBackground(LevelVar::SkyColor);
         background->draw();
     EndTextureMode();
+
+    MusicManager::getInstance().playMusic(MusicType::OVERWORLD);
 }
 
 void TitleScene::handleInput() {

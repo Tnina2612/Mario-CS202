@@ -1,4 +1,6 @@
-#include"../../include/entities/Character.hpp"
+#include "../../include/entities/Character.hpp"
+#include "core/SoundManager.hpp"
+#include "core/MusicManager.hpp"
 
 IntoPipeAnimation::IntoPipeAnimation(Character* character) : character(character) {}
 

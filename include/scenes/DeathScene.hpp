@@ -4,11 +4,13 @@
 class DeathScene : public Scene {
 private:
     Texture2D marioIcon;
+    Texture2D coin;
+    GameSession finalSession;
     float waitTimer;
     float waitDuration;
-    bool hasTriggeredTransition;
     
 public:
+    DeathScene();
     void init() override;
     void handleInput() override;
     void update() override;
