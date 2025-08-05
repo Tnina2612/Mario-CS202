@@ -70,9 +70,22 @@ void Koopa::update(float dt) {
 
 // }
 
+void Koopa::changeDirection() {
+    
+}
+
+bool Koopa::setInShell(bool inShell) {
+    _inShell = inShell;
+    return _inShell;
+}
+
 bool Koopa::onStomp() {
     m_state->handleStomp(*this);
     return true;
+}
+
+void Koopa::onEnemyCollision(Enemy& enemy) {
+    m_state->onEnemyCollision(*this, enemy);
 }
 
 // bool Koopa::beHitByFireball() {
@@ -85,12 +98,23 @@ bool Koopa::onStomp() {
 //     Enemy::draw();
 // }
 
+void NormalKoopa::onEnemyCollision(Koopa& koopa, Enemy& other) {
+    koopa.changeDirection();
+    if(koopa.getDirection() == 1) {
+        koopa.setAniFrames(koopa.getFrames("RWalk"));
+    }
+    else if(koopa.getDirection() == -1) {
+        koopa.setAniFrames(koopa.getFrames("LWalk"));
+    }
+}
+
 void NormalKoopa::enter(Koopa& koopa) {
     koopa.setEnemyData(EnemyData (  koopa.getHitBox().width, koopa.getHitBox().height, 10, 
                                     false, true, true, 1, 
                                     koopa.getPos(), Vector2{0,0}, -1));
     koopa.setVelocity(Vector2{-50.f, 0.f});
     koopa.setMovementStrategy(std::make_shared<DirectionMove>());
+    koopa.setInShell(false);
     if(koopa.getDirection() == 1) {
         koopa.setAniFrames(koopa.getFrames("RWalk"));
     }
@@ -114,6 +138,7 @@ void ShellKoopa::enter(Koopa& koopa) {
     koopa.setMovementStrategy(std::make_shared<DirectionMove>());
     koopa.setVelocity(Vector2{0.f, 0.f});
     koopa.setAniFrames(koopa.getFrames("Shell1"));
+    koopa.setInShell(true);
 }
 
 void ShellKoopa::update(Koopa& koopa, float dt) {
@@ -130,7 +155,7 @@ void ShellKoopa::update(Koopa& koopa, float dt) {
 
 void ShellKoopa::handleStomp(Koopa& koopa) {
     if(abs(koopa.getVelocity().x) <= pow(10,-5)) {
-        Vector2 temp = {-50.f*koopa.getDirection(), 0.f};
+        Vector2 temp = {-150.f*koopa.getDirection(), 0.f};
         koopa.setVelocity(temp);
         koopa.setMovementStrategy(std::make_shared<DirectionMove>());
         koopa.setRecoveryTime(0);
@@ -141,12 +166,19 @@ void ShellKoopa::handleStomp(Koopa& koopa) {
     }
 }
 
+void ShellKoopa::onEnemyCollision(Koopa& koopa, Enemy& other) {
+    if(koopa.getVelocity().x < pow(10, -3)) {
+        return;
+    }
+    other.onHit();
+}
 
 void WingedKoopa::enter(Koopa& koopa) {
     koopa.setEnemyData(EnemyData (koopa.getHitBox().width, koopa.getHitBox().height, 10, false, true, true, 1, 
                         koopa.getPos(), Vector2{0,0}, -1));
     koopa.setVelocity(Vector2{-100.f, 100.f});
     koopa.setMovementStrategy(std::make_shared<JumpMove>());
+    koopa.setInShell(false);
     if(koopa.getDirection() == 1) {
         koopa.setAniFrames(koopa.getFrames("RWWalk"));
     }
@@ -161,4 +193,14 @@ void WingedKoopa::update(Koopa& koopa, float dt) {
 
 void WingedKoopa::handleStomp(Koopa& koopa) {
     koopa.setState(std::make_unique<NormalKoopa>());
+}
+
+void WingedKoopa::onEnemyCollision(Koopa& koopa, Enemy& other) {
+    koopa.changeDirection();
+    if(koopa.getDirection() == 1) {
+        koopa.setAniFrames(koopa.getFrames("RWWalk"));
+    }
+    else if(koopa.getDirection() == -1) {
+        koopa.setAniFrames(koopa.getFrames("LWWalk"));
+    }
 }

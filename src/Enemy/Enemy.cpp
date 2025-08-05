@@ -95,13 +95,6 @@ bool Enemy::isAlive() {
     return m_data._hp > 0;
 }
 
-// void Enemy::changeDirection() {
-//     m_data._velocity = {m_data._velocity.x*-1, m_data._velocity.y*-1};
-
-//     //setMovementStrategy(_movementStrategy)
-
-// }
-
 int Enemy::isOffScreen() {
     if(m_data._pos.y > Global::ORIGINAL_HEIGHT) {
         return 1;
@@ -179,32 +172,21 @@ void Enemy::update(float dt) {
 void Enemy::changeDirection() {
     m_data._dir *= -1; 
     m_data._velocity.x *= -1;
-    //m_data._velocity.y *= -1;
-
-    if(m_data._dir == 1) {
-        setAniFrames(getFrames("RWalk"));
-    }
-    else if(m_data._dir == -1) {
-        setAniFrames(getFrames("LWalk"));
-    }
 }
 
-void Enemy::hitEnemy() {
-    this->changeDirection();
-}
 
 void Enemy::hitUp() {
     onStomp();
 }
 
-void Enemy::hitDown() {
+void Enemy::hitBlockDown() {
     onStomp();
 }
 
-void Enemy::hitLeft() {
-    return;
+void Enemy::hitBlockLeft() {
+    changeDirection();
 }
 
-void Enemy::hitRight() {
-    return;
+void Enemy::hitBlockRight() {
+    changeDirection();
 }
