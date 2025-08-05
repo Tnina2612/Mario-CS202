@@ -4,10 +4,10 @@ Level_1_1_Ground::Level_1_1_Ground() : background("./world-maps/1-1-Ground/backg
     blocks("./world-maps/1-1-Ground/blocks.txt"),
     player(make_shared<Mario>()),
     inputManager(INPUT_MANAGER) {
-    cout << "Mario's height: " << player->getRectangle().height << '\n';
-    cout << "Mario's width: " << player->getRectangle().width << '\n';
-    cout << "Mario's x: " << player->getRectangle().x << '\n';
-    cout << "Mario's y: " << player->getRectangle().y << '\n';
+    // cout << "Mario's height: " << player->getRectangle().height << '\n';
+    // cout << "Mario's width: " << player->getRectangle().width << '\n';
+    // cout << "Mario's x: " << player->getRectangle().x << '\n';
+    // cout << "Mario's y: " << player->getRectangle().y << '\n';
     {
         EnemyFactory::loadAllFrames();
         ifstream inp("./world-maps/1-1-Ground/enemies.txt");
@@ -78,7 +78,6 @@ void Level_1_1_Ground::update(void) {
     inputManager.update();
     if(player->getPos().x < camera.target.x - Global::ORIGINAL_WIDTH / 2.f) player->hitBlockLeft(camera.target.x - Global::ORIGINAL_WIDTH / 2.f);
     blocks.update(player);
-    cout << "orientation" << player->getOrientation() << endl;
     if(player->getPos().y >= Global::ORIGINAL_HEIGHT) player->die();
 
     // Enemy update
