@@ -1,5 +1,5 @@
 1
-200 176 8 32
+204 192 4 16
 R
 ./world-maps/1-1/overworld
 overworld

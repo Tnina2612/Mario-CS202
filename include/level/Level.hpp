@@ -1,5 +1,6 @@
 #pragma once
 #include<level/TileMap.hpp>
+#include<level/LevelPlayerAnimation.hpp>
 #include<raylib.h>
 #include<iostream>
 #include<entities/Character.hpp>
@@ -30,18 +31,58 @@ struct ChangeSubLevelPointList {
 };
 
 class Level;
+class SubLevel;
+
+class SubLevelPlayerCollisionManager {
+    private:
+        SubLevel* subLevel;
+    public:
+        SubLevelPlayerCollisionManager(SubLevel* subLevel);
+        void update();
+};
+
+class SubLevelPlayerNextSceneManager {
+    private:
+        SubLevel* subLevel;
+        unique_ptr<SubLevelAnimation> animation;
+        ChangeSubLevelPoint nextScene;
+    public:
+        SubLevelPlayerNextSceneManager(SubLevel* subLevel, unique_ptr<SubLevelAnimation> animation, ChangeSubLevelPoint nextScene);
+        void update();
+};
+
+class SubLevelPlayerManager {
+    private:
+        SubLevel* subLevel;
+        SubLevelPlayerCollisionManager collisionManager;
+        unique_ptr<SubLevelPlayerNextSceneManager> nextSceneManager;
+    public:
+        SubLevelPlayerManager(SubLevel* subLevel);
+        void update();
+        void addNextScene(unique_ptr<SubLevelPlayerNextSceneManager> nextSceneManager);
+};
 
 class SubLevel {
         friend class Level;
+        friend class SubLevelPlayerCollisionManager;
+        friend class SubLevelPlayerNextSceneManager;
         Level* level;
+        Character* player;
         std::shared_ptr<TileMap> background;
         std::shared_ptr<TileMap> blocks;
         std::shared_ptr<EnemyList> enemies;
         std::shared_ptr<ChangeSubLevelPointList> changeSubLevelPoints;
+        SubLevelPlayerManager playerManager;
+
+        bool debug = false;
     public:
-        SubLevel(Level* level, std::string folderName);
-        void draw(void);
-        void update(std::shared_ptr<Character> player);
+        SubLevel(Level* level, std::string folderName, Character* player);
+        void draw();
+        void playerGoesIntoDownwardPipe();
+        void playerGoesIntoUpwardPipe();
+        void playerGoesIntoLeftwardPipe();
+        void playerGoesIntoRightwardPipe();
+        void update();
         ~SubLevel() = default;
 };
 

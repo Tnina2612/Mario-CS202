@@ -40,6 +40,115 @@ ChangeSubLevelPointList::ChangeSubLevelPointList(std::string filename) {
     inp.close();
 }
 
+SubLevelPlayerCollisionManager::SubLevelPlayerCollisionManager(SubLevel* subLevel) : subLevel(subLevel) {}
+
+void SubLevelPlayerCollisionManager::update() {
+    // Collision
+    subLevel->blocks->update(subLevel->player);
+    subLevel->player->update();
+
+    // Changing maps
+    for(ChangeSubLevelPoint point : subLevel->changeSubLevelPoints->list) {
+        if(CheckCollisionRecs(subLevel->player->getRectangle(), point.rec)) {
+            if(point.key == 'D' && IsKeyPressed(KEY_DOWN)) {
+                subLevel->playerManager.addNextScene(make_unique<SubLevelPlayerNextSceneManager>(subLevel, 
+                    make_unique<PlayerDownPipeAnimation>(subLevel->player), point));
+            }
+            if(point.key == 'L' && IsKeyPressed(KEY_LEFT)) {
+                subLevel->playerManager.addNextScene(make_unique<SubLevelPlayerNextSceneManager>(subLevel, 
+                    make_unique<PlayerIntoLeftPipeAnimation>(subLevel->player), point));
+            }
+            if(point.key == 'U' && IsKeyPressed(KEY_UP)) {
+                subLevel->playerManager.addNextScene(make_unique<SubLevelPlayerNextSceneManager>(subLevel, 
+                    make_unique<PlayerUpPipeAnimation>(subLevel->player), point));
+            }
+            if(point.key == 'R' && IsKeyPressed(KEY_RIGHT)) {
+                subLevel->playerManager.addNextScene(make_unique<SubLevelPlayerNextSceneManager>(subLevel, 
+                    make_unique<PlayerIntoRightPipeAnimation>(subLevel->player), point));
+            }
+        }
+    }
+}
+
+SubLevelPlayerNextSceneManager::SubLevelPlayerNextSceneManager(SubLevel* subLevel, unique_ptr<SubLevelAnimation> animation, ChangeSubLevelPoint nextScene) :
+    subLevel(subLevel), animation(move(animation)), nextScene(nextScene)
+{
+    // Constructor
+}
+
+void SubLevelPlayerNextSceneManager::update() {
+    animation->update();
+    if(animation->isDone()) {
+        animation.reset();
+        subLevel->level->changeSubLevel(nextScene);
+    }
+}
+
+SubLevelPlayerManager::SubLevelPlayerManager(SubLevel* subLevel) : subLevel(subLevel), collisionManager(subLevel)
+{
+    // Constructor
+}
+
+void SubLevelPlayerManager::update() {
+    if(nextSceneManager != nullptr) {
+        nextSceneManager->update();
+    } else {
+        collisionManager.update();
+    }
+}
+
+void SubLevelPlayerManager::addNextScene(unique_ptr<SubLevelPlayerNextSceneManager> nextScene) {
+    if(nextSceneManager != nullptr) {
+        throw runtime_error("Another next scene animation is being performed!\n");
+    }
+    nextSceneManager = move(nextScene);
+}
+
+SubLevel::SubLevel(Level* level, std::string folderName, Character* player) : // Initializer
+    level(level),
+    background(make_shared<TileMap>(folderName + "/background.txt")), 
+    blocks(make_shared<TileMap>(folderName + "/blocks.txt")),
+    enemies(make_shared<EnemyList>(folderName + "/enemies.txt")),
+    changeSubLevelPoints(make_shared<ChangeSubLevelPointList>(folderName + "/changingPoints.txt")),
+    player(player), 
+    playerManager(this) {
+}
+
+void SubLevel::draw() {
+    ClearBackground(LevelVar::BackGroundColor);
+    background->draw();
+    for(const std::shared_ptr<Enemy>& enemy : enemies->list) {
+        enemy->draw();
+    }
+    player->draw();
+    blocks->draw();
+
+    // Debug
+    if(debug) {
+        for(ChangeSubLevelPoint point : changeSubLevelPoints->list) {
+            DrawRectangleRec(point.rec, Color{100, 50, 50, 100});
+        }
+    }
+}
+
+void SubLevel::playerGoesIntoDownwardPipe() {
+    player->intoPipeAnimation.goDownward();
+}
+
+void SubLevel::update() {
+    playerManager.update();
+
+    // Enemy update
+    for(const std::shared_ptr<Enemy>& enemy : enemies->list) {
+        // enemy->update();
+    }
+
+    // Debug
+    if(IsKeyPressed(KEY_Q)) {
+        debug ^= 1;
+    }
+}
+
 Level::Level(std::string folderName) :
     player(make_shared<Mario>()),
     renderTexture(LoadRenderTexture(Global::ORIGINAL_WIDTH, Global::ORIGINAL_HEIGHT)),
@@ -67,7 +176,7 @@ Level::Level(std::string folderName) :
     }
         std::string initialWorld;
         getline(inp, initialWorld);
-        subLevel = make_shared<SubLevel>(this, initialWorld);
+        subLevel = make_shared<SubLevel>(this, initialWorld, player.get());
         nextSubLevel.reset();
     inp.close();
 }
@@ -76,7 +185,6 @@ void Level::draw(void) {
     BeginTextureMode(renderTexture);
         BeginMode2D(camera);
             subLevel->draw();
-            player->draw();
         EndMode2D();
     EndTextureMode();
 
@@ -88,8 +196,7 @@ void Level::update(void) {
     inputManager.update();
     if(player->getPos().x < camera.target.x - Global::ORIGINAL_WIDTH / 2.f) player->hitBlockLeft(camera.target.x - Global::ORIGINAL_WIDTH / 2.f);
     if(player->getPos().x + player->getRectangle().width > camera.target.x + Global::ORIGINAL_WIDTH / 2.f) player->hitBlockRight(camera.target.x + Global::ORIGINAL_WIDTH / 2.f);
-    subLevel->update(player);
-    if(player->getPos().y >= Global::ORIGINAL_HEIGHT) player->die();
+    subLevel->update();
 
     // Sub-level update
     if(nextSubLevel != nullptr) {
@@ -102,7 +209,6 @@ void Level::update(void) {
 }
 
 void Level::changeSubLevel(ChangeSubLevelPoint point) {
-    cout << "World type: " << point.worldType << endl;
     if(point.worldType == "overworld") {
         LevelVar::ThemeID = LevelVar::Overworld;
         LevelVar::BackGroundColor = LevelVar::SkyColor;
@@ -111,47 +217,11 @@ void Level::changeSubLevel(ChangeSubLevelPoint point) {
         LevelVar::BackGroundColor = LevelVar::UndergroundColor;
     }
 
-    nextSubLevel = make_shared<SubLevel>(this, point.filename);
+    nextSubLevel = make_shared<SubLevel>(this, point.filename, player.get());
 
     player->setPosition(point.newPlayerPosition.x, point.newPlayerPosition.y);
 }
 
 Level::~Level() {
     UnloadRenderTexture(renderTexture);
-}
-
-SubLevel::SubLevel(Level* level, std::string folderName) : // Initializer
-    level(level),
-    background(make_shared<TileMap>(folderName + "/background.txt")), 
-    blocks(make_shared<TileMap>(folderName + "/blocks.txt")),
-    enemies(make_shared<EnemyList>(folderName + "/enemies.txt")),
-    changeSubLevelPoints(make_shared<ChangeSubLevelPointList>(folderName + "/changingPoints.txt")) {
-}
-
-void SubLevel::draw(void) {
-    ClearBackground(LevelVar::BackGroundColor);
-    background->draw();
-    for(const std::shared_ptr<Enemy>& enemy : enemies->list) {
-        enemy->draw();
-    }
-    blocks->draw();
-}
-
-void SubLevel::update(std::shared_ptr<Character> player) {
-    blocks->update(player);
-
-    // Enemy update
-    for(const std::shared_ptr<Enemy>& enemy : enemies->list) {
-        // enemy->update();
-    }
-
-    // Changing maps
-    for(ChangeSubLevelPoint point : changeSubLevelPoints->list) {
-        if(CheckCollisionRecs(player->getRectangle(), point.rec)) {
-            if(point.key == 'D' && IsKeyPressed(KEY_DOWN)) level->changeSubLevel(point);
-            if(point.key == 'L' && IsKeyPressed(KEY_LEFT)) level->changeSubLevel(point);
-            if(point.key == 'U' && IsKeyPressed(KEY_UP)) level->changeSubLevel(point);
-            if(point.key == 'R' && IsKeyPressed(KEY_RIGHT)) level->changeSubLevel(point);
-        }
-    }
 }

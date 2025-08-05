@@ -50,7 +50,9 @@ void TileMap::draw(void) {
     }
 }
 
-void TileMap::update(std::shared_ptr<Character> player) {
+void TileMap::update(Character* player) {
+    if(player->getPos().y >= Global::ORIGINAL_HEIGHT) player->die();
+    
     const Rectangle& charRec = player->getRectangle();
     player->resetAttributes();
     float deltaTime = GetFrameTime();
@@ -100,8 +102,6 @@ void TileMap::update(std::shared_ptr<Character> player) {
     if(!player->getOnGround()) {
         player->setVeclocityY(player->getVeclocityY() + player->getGravity() * deltaTime);
     }
-
-    player->update();
 
     // Debug
     debugBlocks.clear();

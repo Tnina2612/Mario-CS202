@@ -1,6 +1,5 @@
 #pragma once
 #include<block/Block.h>
-#include<entities/Character.hpp>
 #include<entities/Enemy/Enemy.hpp>
 #include<entities/Enemy/EnemyFactory.hpp>
 #include<vector>
@@ -8,6 +7,7 @@
 #include<string>
 #include<fstream>
 #include<iostream>
+#include<entities/Character.hpp>
 
 class TileMap {
     private:
@@ -22,7 +22,7 @@ class TileMap {
     public:
         TileMap(std::string filename);
         void draw(void);
-        void update(std::shared_ptr<Character> character);
+        void update(Character* character);
         void update(std::shared_ptr<Enemy> enemy);
         std::vector<std::pair<int, int>> cellsToCheck(const Rectangle& rec);
 
