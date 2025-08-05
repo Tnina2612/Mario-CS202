@@ -1,0 +1,16 @@
+15 16
+A   A   A   A   A   A   A   A   A   A   A   A   A   A   A   A
+A   A   A   A   A   A   A   A   A   A   A   A   A   A   A   A
+G3  A   A   A   G3  G3  G3  G3  G3  G3  G3  A   A   A   A   P16
+G3  A   A   A   A   A   A   A   A   A   A   A   A   A   A   P16
+G3  A   A   A   A   A   A   A   A   A   A   A   A   A   A   P16
+G3  A   A   A   A   A   A   A   A   A   A   A   A   A   A   P16
+G3  A   A   A   A   A   A   A   A   A   A   A   A   A   A   P16
+G3  A   A   A   A   A   A   A   A   A   A   A   A   A   A   P16
+G3  A   A   A   A   A   A   A   A   A   A   A   A   A   A   P16
+G3  A   A   A   A   A   A   A   A   A   A   A   A   A   A   P16
+G3  A   A   A   G3  G3  G3  G3  G3  G3  G3  A   A   A   A   P16
+G3  A   A   A   G3  G3  G3  G3  G3  G3  G3  A   A   P21 P22 P23
+G3  A   A   A   G3  G3  G3  G3  G3  G3  G3  A   A   P30 P31 P32
+G1  G1  G1  G1  G1  G1  G1  G1  G1  G1  G1  G1  G1  G1  G1  G1
+G1  G1  G1  G1  G1  G1  G1  G1  G1  G1  G1  G1  G1  G1  G1  G1
