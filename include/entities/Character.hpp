@@ -17,6 +17,20 @@ class IState {
     virtual void enter() = 0;
 };
 
+class Character; 
+
+class IntoPipeAnimation {
+private:
+    Character* character;
+public:
+    IntoPipeAnimation(Character* character);
+    void goDownward();
+    void goUpward();
+    void goLeftward();
+    void goRightward();
+};
+
+// Now define Character, which can use IntoPipeAnimation
 class Character : public Animation {
 private:
     Vector2 pos;
@@ -44,6 +58,8 @@ private:
     const float restVeclocity = 50.0f;
     
 public:
+    IntoPipeAnimation intoPipeAnimation;
+
     Character();
     Character(const vector<Rectangle>& frames, const Texture2D& sprite);
     void setState(IState* state);

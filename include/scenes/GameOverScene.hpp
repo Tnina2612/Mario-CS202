@@ -6,7 +6,6 @@ class GameOverScene : public Scene {
 private:
     float waitTimer;
     float waitDuration;
-    bool hasTriggeredTransition;
     GameSession finalSession;
     Texture2D coin;
 

@@ -5,8 +5,8 @@
 
 #include"EnemyData.hpp"
 #include"Fireball.hpp"
-#include"../../include/entities/Animation.hpp"
-#include"../../include/entities/Character.hpp"
+#include<entities/Animation.hpp>
+#include<entities/Character.hpp>
 
 class ICommand;
 

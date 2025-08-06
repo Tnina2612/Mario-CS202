@@ -2,6 +2,7 @@
 #include "scenes/MapSelectScene.hpp"
 #include "scenes/PlayScene.hpp"
 #include "scenes/DeathScene.hpp"
+#include "scenes/ComingSoonScene.hpp"
 #include "level/TileMap.hpp"
 #include "raylib.h"
 #include <string>
@@ -21,7 +22,11 @@ void MapSelectScene::init() {
 
 void MapSelectScene::handleInput() {
     if (IsKeyPressed(KEY_ENTER)) {
-        Program::getInstance().changeScene(new PlayScene());
+        if (curModeRow == 0 && curModeCol < 3) {
+            Program::getInstance().changeScene(new PlayScene());
+        } else {
+            Program::getInstance().changeScene(new ComingSoonScene());
+        }
     } else if (IsKeyPressed(KEY_DOWN)) {
         curModeRow = (curModeRow + 1) % 8;
     } else if (IsKeyPressed(KEY_UP)) {

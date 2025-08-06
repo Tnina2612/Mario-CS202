@@ -1,5 +1,7 @@
 #include "core/Program.hpp"
 #include "core/Variables.hpp"
+#include "core/SoundManager.hpp"
+#include "core/MusicManager.hpp"
 #include "scenes/TitleScene.hpp"
 #include "scenes/PlayScene.hpp"
 
@@ -11,8 +13,11 @@ Program::Program() : running(true), currentScene(nullptr), nextScene(nullptr) {
     SetWindowIcon(icon);
     InitAudioDevice();
     SetTargetFPS(120);
+
     font = LoadFont("assets/fonts/super-mario-bros-nes.otf");
     hud = new HUD(&session);
+    SoundManager::getInstance().loadSounds();
+    MusicManager::getInstance().loadMusic();
 }
 
 Program::~Program() {
@@ -62,6 +67,8 @@ void Program::run() { // Game loop
         if (currentScene) {
             currentScene->handleInput();
             currentScene->update();
+
+            MusicManager::getInstance().updateMusic();
             
             BeginDrawing();
             ClearBackground(RAYWHITE);

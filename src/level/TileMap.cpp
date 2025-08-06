@@ -2,6 +2,9 @@
 
 TileMap::TileMap(std::string filename) {
     std::ifstream inp(filename);
+    if(inp.is_open() == false) {
+        throw runtime_error("Cannot open file " + filename);
+    }
     inp >> height >> width;
     tiles.resize(height);
     for(int i = 0; i < height; i++) {
@@ -47,16 +50,12 @@ void TileMap::draw(void) {
     }
 }
 
-void TileMap::update(std::shared_ptr<Character> player) {
-    // cout << "veclocity Y" << player->getVeclocityY();
-    if(player->getPos().x + player->getRectangle().width >= width * BLOCKSIDE) {
-        player->hitBlockRight(width * BLOCKSIDE);
-        // player->setPosition()
-    }
+void TileMap::update(Character* player) {
+    if(player->getPos().y >= Global::ORIGINAL_HEIGHT) player->die();
+    
     const Rectangle& charRec = player->getRectangle();
     player->resetAttributes();
     float deltaTime = GetFrameTime();
-    // cout << "Character rectangle: " << charRec.x << ' ' << charRec.y << ' ' << charRec.x + charRec.width << ' ' << charRec.y + charRec.height << '\n';
     Rectangle nextFrame = {charRec.x, charRec.y + player->getVeclocityY() * deltaTime, charRec.width, charRec.height};
 
 
@@ -103,8 +102,6 @@ void TileMap::update(std::shared_ptr<Character> player) {
     if(!player->getOnGround()) {
         player->setVeclocityY(player->getVeclocityY() + player->getGravity() * deltaTime);
     }
-
-    player->update();
 
     // Debug
     debugBlocks.clear();

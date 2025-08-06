@@ -117,6 +117,14 @@ namespace CharacterSprite {
             Left::Throw, 
             Right::Throw
         };
+        namespace Fireball {
+        const std::unordered_map<std::string, std::vector<Rectangle>> Frames = {
+            {"Normal", {Rectangle{25.f, 150.f, 10.f, 10.f}, 
+                        Rectangle{40.f, 150.f, 10.f, 10.f}, 
+                        Rectangle{25.f, 165.f, 10.f, 10.f}, 
+                        Rectangle{40.f, 165.f, 10.f, 10.f}}}
+        };
+    };
     };
 };
 

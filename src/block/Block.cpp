@@ -1,6 +1,7 @@
 // BlockFactory.cpp
 #include <block/Block.h>
 #include "core/Variables.hpp"
+#include <iostream>
 
 // Block Flyweight
 BlockFlyweight::BlockFlyweight(const char* dir) {
