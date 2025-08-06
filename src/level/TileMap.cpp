@@ -49,8 +49,10 @@ void TileMap::draw(void) {
 
 void TileMap::update(std::shared_ptr<Character> player) {
     // cout << "veclocity Y" << player->getVeclocityY();
-    // if(player->getPos().x <= 0) player->hitBlockLeft(0);
-    if(player->getPos().x + player->getRectangle().width >= width * BLOCKSIDE) player->hitBlockRight(width * BLOCKSIDE);
+    if(player->getPos().x + player->getRectangle().width >= width * BLOCKSIDE) {
+        player->hitBlockRight(width * BLOCKSIDE);
+        // player->setPosition()
+    }
     const Rectangle& charRec = player->getRectangle();
     player->resetAttributes();
     float deltaTime = GetFrameTime();
@@ -67,10 +69,10 @@ void TileMap::update(std::shared_ptr<Character> player) {
         const Rectangle& blockRec = tiles[i][j]->getRectangle();
         if(CheckCollisionRecs(nextFrame, blockRec)) {
             if(nextFrame.y <= blockRec.y) {
-                cout << "Player collides down\n";
+                // cout << "Player collides down\n";
                 player->hitBlockBottom(blockRec.y);
             } else {
-                cout << "Player collides up\n";
+                // cout << "Player collides up\n";
                 player->hitBlockTop(blockRec.y + blockRec.height);
             }
             nextFrame.y = charRec.y;
@@ -84,17 +86,20 @@ void TileMap::update(std::shared_ptr<Character> player) {
             tiles[i][j] == nullptr) continue;
         const Rectangle& blockRec = tiles[i][j]->getRectangle();
         if(CheckCollisionRecs(nextFrame, blockRec)) {
-                if(nextFrame.x < blockRec.x) {
-                    cout << "Player collides right\n";
-                    player->hitBlockRight(blockRec.x);
-                } else {
-                    cout << "Player collides left\n";
-                    player->hitBlockLeft(blockRec.x + blockRec.width);
-                }
-                nextFrame.x = charRec.x;
+            if(nextFrame.x <= blockRec.x) {
+                // cout << "Player collides right\n";
+                player->hitBlockRight(blockRec.x);
+            } else {
+                // cout << "Player collides left\n";
+                player->hitBlockLeft(blockRec.x + blockRec.width);
+            }
+            nextFrame.x = charRec.x;
         }
     }
-    player->setPosition(nextFrame.x, nextFrame.y);
+    if(nextFrame.x <= 0) {
+        nextFrame.x = charRec.x;
+    }
+    player->setPosition(nextFrame.x, nextFrame.y + charRec.height);
     if(!player->getOnGround()) {
         player->setVeclocityY(player->getVeclocityY() + player->getGravity() * deltaTime);
     }
@@ -115,10 +120,47 @@ void TileMap::update(std::shared_ptr<Character> player) {
 
 void TileMap::update(std::shared_ptr<Enemy> enemy) {
     std::vector<std::pair<int, int>> nearbyCells = cellsToCheck(enemy->getHitBox());
-    enemy->update();
+    float deltaTime = GetFrameTime();
+    enemy->setOnGround(false);
+    Rectangle enemyRec = enemy->getHitBox();
+    Rectangle nextFrame = {enemyRec.x, enemyRec.y + enemy->getVelocity().y * deltaTime, enemyRec.width, enemyRec.height};
+
+    // checking collision on Oy 
     for(std::pair<int, int> pii : nearbyCells) {
-        // enemy->collisionTile(tiles[pii.first][pii.second]);
+        int i = pii.first, j = pii.second;
+        if(i < 0 || i >= height || j < 0 || j >= width ||
+            tiles[i][j] == nullptr) continue;
+        const Rectangle& blockRec = tiles[i][j]->getRectangle();
+        if(CheckCollisionRecs(nextFrame, blockRec)) {
+            if(nextFrame.y <= blockRec.y) {
+                enemy->setOnGround(true);
+                enemy->setVelocityY(enemy->getRestVelocity());
+            } else {
+                enemy->setVelocityY(enemy->getVelocity().y * -1.0f);
+            }
+            nextFrame.y = enemyRec.y;
+        }
     }
+
+    //checking collision on Ox
+    nextFrame.x = enemyRec.x + enemy->getVelocity().x * deltaTime;
+    for(std::pair<int, int> pii : nearbyCells) {
+        int i = pii.first, j = pii.second;
+        if(i < 0 || i >= height || j < 0 || j >= width ||
+            tiles[i][j] == nullptr) continue;
+        const Rectangle& blockRec = tiles[i][j]->getRectangle();
+        if(CheckCollisionRecs(nextFrame, blockRec)) {
+            if(nextFrame.x <= blockRec.x) {
+                enemy->setDirection(-1);
+            } else {
+                enemy->setDirection(1);
+            }
+            nextFrame.x = enemyRec.x;
+        }
+    }
+
+    enemy->setPos({nextFrame.x, nextFrame.y});
+    enemy->update();
 }
 
 std::vector<std::pair<int, int>> TileMap::cellsToCheck(const Rectangle& rec) {

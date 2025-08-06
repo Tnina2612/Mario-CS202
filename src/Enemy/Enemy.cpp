@@ -51,6 +51,10 @@ void Enemy::setDirection(int dir) {
     m_data._dir = dir;
 }
 
+void Enemy::setOnGround(bool onGround) {
+    m_data._isOnGround = onGround;
+}
+
 void Enemy::setVelocity(Vector2 d) {
     m_data._velocity = d;
 }
@@ -85,7 +89,7 @@ void Enemy::setPos(Vector2 pos) {
 
 Rectangle Enemy::getHitBox() {
     return Rectangle{   m_data._pos.x, 
-                        m_data._pos.y, 
+                        m_data._pos.y - m_data._hitBoxHeight - 1, 
                         m_data._hitBoxWidth,
                         m_data._hitBoxHeight   
                     };
@@ -151,7 +155,7 @@ void Enemy::draw() {
     }
 
     DrawRectangleRec(getHitBox(), BLUE);
-    m_animation.draw(m_data._pos);
+    m_animation.draw({m_data._pos.x, m_data._pos.y - m_data._hitBoxHeight});
     
 }
 
@@ -172,8 +176,19 @@ void Enemy::update(float dt) {
 void Enemy::changeDirection() {
     m_data._dir *= -1; 
     m_data._velocity.x *= -1;
+    // m_data._velocity.y *= -1;
+
+    if(m_data._dir == 1) {
+        setAniFrames(getFrames("RWalk"));
+    }
+    else if(m_data._dir == -1) {
+        setAniFrames(getFrames("LWalk"));
+    }
 }
 
+void Enemy::hitEnemy() {
+    this->changeDirection();
+}
 
 void Enemy::hitUp() {
     onStomp();
@@ -189,4 +204,8 @@ void Enemy::hitBlockLeft() {
 
 void Enemy::hitBlockRight() {
     changeDirection();
+}
+
+float Enemy::getRestVelocity()const {
+    return m_data._restVelocityY;
 }
