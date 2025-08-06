@@ -1,0 +1,6 @@
+1
+204 192 4 16
+R
+./world-maps/1-1/overworld
+overworld
+2616 144

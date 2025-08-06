@@ -2,7 +2,6 @@
 
 #include"raylib.h"
 
-#include"IEnemyState.hpp"
 #include"Enemy.hpp"
 
 class Koopa;
@@ -13,6 +12,7 @@ public:
     virtual void enter(Koopa& koopa) = 0;
     virtual void update(Koopa& koopa, float dt) = 0;
     virtual void handleStomp(Koopa& koopa) = 0;
+    virtual void onEnemyCollision(Koopa& koopa, Enemy& other) = 0;
 };
 
 
@@ -21,28 +21,27 @@ private:
     std::unique_ptr<IKoopaState> m_state;
     float _recoveryTime;
     int _deadAni = 0;   //0: normal, 1: dead, -1: offscreen
-    // enum KoopaState {
+    bool _inShell = false;
 
-    // };
-    //KoopaState m_state;
-    void deadState();
+    // void deadState();
 public:
     const float TIME = 7.f; //for recover in shell state
     Koopa();
     Koopa(const std::string& name);
     Koopa(const std::string& name, Vector2 pos);
-    //Koopa(Vector2 bSpeed, Vector2 pos, Vector2 vel);
-    //void init(std::shared_ptr<EnemyType> newType, Vector2 startPosition);
 
     void setRecoveryTime(float t);
     void setState(std::unique_ptr<IKoopaState> state);
     float getRecoveryTime();
 
     //bool onHit() override;
+
+    void changeDirection() override;
     bool onStomp() override;
+    bool setInShell(bool inShell);
     //bool beHitByFireball() override;
 
-    //void draw() override;
+    void onEnemyCollision(Enemy& enemy) override;
     void update(float dt) override;
 };
 
@@ -53,6 +52,7 @@ public:
     void enter(Koopa& koopa) override;
     void update(Koopa& koopa, float dt) override;
     void handleStomp(Koopa& koopa) override;
+    void onEnemyCollision(Koopa& koopa, Enemy& other) override;
 };
 
 class NormalKoopa : public IKoopaState {
@@ -60,6 +60,7 @@ public:
     void enter(Koopa& koopa) override;
     void update(Koopa& koopa, float dt) override;
     void handleStomp(Koopa& koopa) override;
+    void onEnemyCollision(Koopa& koopa, Enemy& other) override;
 };
 
 class ShellKoopa : public IKoopaState {
@@ -67,4 +68,5 @@ public:
     void enter(Koopa& koopa) override;
     void update(Koopa& koopa, float dt) override;
     void handleStomp(Koopa& koopa) override;
+    void onEnemyCollision(Koopa& koopa, Enemy& other) override;
 };

@@ -2,6 +2,7 @@
 #include "scenes/TitleScene.hpp"
 #include "level/Level.hpp"
 #include "core/Program.hpp"
+#include "core/MusicManager.hpp"
 #include "entities/Character.hpp"
 
 PlayScene::~PlayScene() {
@@ -9,8 +10,26 @@ PlayScene::~PlayScene() {
 }
 
 void PlayScene::init() {
-    level = new Level_1_1_Ground();
+    level = new Level("./world-maps/1-1");
     eventManager.addObserver(&Program::getInstance().getHUD());
+
+    switch (LevelVar::ThemeID) {
+        case LevelVar::Overworld:
+            MusicManager::getInstance().playMusic(MusicType::OVERWORLD);
+            break;
+        case LevelVar::Underground:
+            MusicManager::getInstance().playMusic(MusicType::UNDERGROUND);
+            break;
+        case LevelVar::Castle:
+            MusicManager::getInstance().playMusic(MusicType::CASTLE);
+            break;
+        case LevelVar::Underwater:
+            MusicManager::getInstance().playMusic(MusicType::UNDERWATER);
+            break;
+        default:
+            MusicManager::getInstance().playMusic(MusicType::OVERWORLD);
+            break;
+    }
 }
 
 void PlayScene::handleInput() {

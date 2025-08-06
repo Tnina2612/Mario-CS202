@@ -33,7 +33,6 @@ Podoboo::Podoboo(const std::string& name, Vector2 pos)
 
 void Podoboo::update(float dt) {
     _curCD += dt;
-    std::cerr << _curCD << " " << _CD << std::endl;
     if(_curCD < _CD) {
         return;
     }
@@ -51,5 +50,8 @@ void Podoboo::update(float dt) {
         this->setAniFrames(this->getFrames("Up"));
     }
     Enemy::update();
+}
 
+void Podoboo::onEnemyCollision(Enemy& enemy) {
+    return; // Podoboo does not interact with other enemies
 }
