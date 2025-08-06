@@ -4,8 +4,10 @@ import os
 tile_size = 16
 map_image = Image.open("MAP.png")
 map_width, map_height = map_image.size
-tiles_x = 192
+tiles_x = 16
 tiles_y = 15
+shift_x = 3840
+diff_threshold = 100
 
 def image_diff(img1, img2):
     pixels1 = img1.convert("RGBA").getdata()
@@ -18,7 +20,7 @@ def image_diff(img1, img2):
             continue
         total += sum((a - b) ** 2 for a, b in zip(p1[:3], p2[:3]))
         count += 1
-    return total / count if count > 0 else float('inf')
+    return total / count if count > 0 and total / count <= diff_threshold else float('inf')
 
 tile_images = {}
 for filename in os.listdir("."):
@@ -30,7 +32,7 @@ with open("blocks.txt", "w") as output:
     for i in range(tiles_y):
         line = []
         for j in range(tiles_x):
-            x = j * tile_size + 256
+            x = j * tile_size + shift_x
             y = i * tile_size
             tile = map_image.crop((x, y, x + tile_size, y + tile_size))
 
