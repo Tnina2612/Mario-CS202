@@ -29,10 +29,17 @@ public:
     void setType(std::shared_ptr<EnemyType> type);
     void setEnemyData(const EnemyData& data);
     void setDirection(int dir);
+    void setOnGround(bool onGround);
+
+    std::shared_ptr<IEnemyStrategy> getMovementStrategy();
+    EnemyData& getEnemyData();
+    float getGravity();
+    bool getOnGround();
 
     int getDirection();
     std::vector<Rectangle> getFrames(const std::string& name);
     
+    void applyGravity(float dt);
     bool isAlive();
     int isOffScreen(); //-1 : up, 1 : down, 2 : right, -2 : left 
 
@@ -57,6 +64,7 @@ public:
     void setVelocityX(float x);
     void setVelocityY(float y);
     void setPos(Vector2 pos);
+    float getRestVelocity()const;
 
     virtual void draw(); 
     virtual void update(float dt = GetFrameTime());

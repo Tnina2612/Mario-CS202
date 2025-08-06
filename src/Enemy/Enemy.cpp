@@ -51,6 +51,10 @@ void Enemy::setDirection(int dir) {
     m_data._dir = dir;
 }
 
+void Enemy::setOnGround(bool onGround) {
+    m_data._isOnGround = onGround;
+}
+
 void Enemy::setVelocity(Vector2 d) {
     m_data._velocity = d;
 }
@@ -71,6 +75,14 @@ std::vector<Rectangle> Enemy::getFrames(const std::string& name) {
     return allFrames[name];
 }
 
+std::shared_ptr<IEnemyStrategy> Enemy::getMovementStrategy() {
+    return _movementStrategy;
+}
+
+EnemyData& Enemy::getEnemyData() {
+    return m_data;
+}
+
 void Enemy::setVelocityX(float x) {
     m_data._velocity.x = x;
 }
@@ -85,7 +97,7 @@ void Enemy::setPos(Vector2 pos) {
 
 Rectangle Enemy::getHitBox() {
     return Rectangle{   m_data._pos.x, 
-                        m_data._pos.y, 
+                        m_data._pos.y - m_data._hitBoxHeight - 1, 
                         m_data._hitBoxWidth,
                         m_data._hitBoxHeight   
                     };
@@ -144,6 +156,19 @@ bool Enemy::beHitByFireball() {
     return true;
 }
 
+float Enemy::getGravity() {
+    return m_data._gravity;
+}
+
+bool Enemy::getOnGround() {
+    return m_data._isOnGround;
+}
+
+void Enemy::applyGravity(float dt) {
+    if(!m_data._isOnGround) {
+        m_data._velocity.y += m_data._gravity * dt;
+    }
+}
 
 void Enemy::draw() {
     if(!m_data._isActive) {
@@ -151,7 +176,7 @@ void Enemy::draw() {
     }
 
     DrawRectangleRec(getHitBox(), BLUE);
-    m_animation.draw(m_data._pos);
+    m_animation.draw({m_data._pos.x, m_data._pos.y - m_data._hitBoxHeight});
     
 }
 
@@ -160,20 +185,20 @@ void Enemy::update(float dt) {
         return;
     }
 
-    //m_data._velocity.y += m_data._gravity;
-    // if() {
-
-    // }
     m_animation.update(dt);
-    if(_movementStrategy) {
-        _movementStrategy->Execute(m_data, dt);
-    }
+    // if(_movementStrategy) {
+    //     _movementStrategy->Execute(m_data, dt);
+    // }
 }
 void Enemy::changeDirection() {
     m_data._dir *= -1; 
     m_data._velocity.x *= -1;
+    // m_data._velocity.y *= -1;
 }
 
+// void Enemy::hitEnemy() {
+//     this->changeDirection();
+// }
 
 void Enemy::hitUp() {
     onStomp();
@@ -189,4 +214,8 @@ void Enemy::hitBlockLeft() {
 
 void Enemy::hitBlockRight() {
     changeDirection();
+}
+
+float Enemy::getRestVelocity()const {
+    return m_data._restVelocityY;
 }

@@ -5,5 +5,5 @@
 class IEnemyStrategy {
 public:
     virtual ~IEnemyStrategy() = default;
-    virtual void Execute(EnemyData& data, float dt) = 0;
+    virtual Vector2 Execute(EnemyData& data, float dt) = 0;
 };

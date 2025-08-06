@@ -112,10 +112,52 @@ void TileMap::update(Character* player) {
 
 void TileMap::update(std::shared_ptr<Enemy> enemy) {
     std::vector<std::pair<int, int>> nearbyCells = cellsToCheck(enemy->getHitBox());
-    // enemy->update();
-    for(std::pair<int, int> pii : nearbyCells) {
-        // enemy->collisionTile(tiles[pii.first][pii.second]);
+    float deltaTime = GetFrameTime();
+    enemy->setOnGround(false);
+    Rectangle enemyRec = enemy->getHitBox();
+    Vector2 dx = enemy->getMovementStrategy()->Execute(enemy->getEnemyData(), deltaTime);
+    Rectangle nextFrame = {enemyRec.x + dx.x, enemyRec.y + dx.y, enemyRec.width, enemyRec.height};
+
+    if(!enemy->isAlive()) {
+        nextFrame.y += enemyRec.height + 1;
+        enemy->setPos({nextFrame.x, nextFrame.y});
+        enemy->update(deltaTime);
+        return;
     }
+
+    // checking collision on Oy 
+    for(std::pair<int, int> pii : nearbyCells) {
+        int i = pii.first, j = pii.second;
+        if(i < 0 || i >= height || j < 0 || j >= width ||
+            tiles[i][j] == nullptr) continue;
+        const Rectangle& blockRec = tiles[i][j]->getRectangle();
+        if(CheckCollisionRecs(nextFrame, blockRec)) {
+            if(nextFrame.y <= blockRec.y) {
+                enemy->setOnGround(true);
+                enemy->setVelocityY(enemy->getRestVelocity());
+            } else {
+                enemy->setVelocityY(enemy->getVelocity().y * -1.0f);
+            }
+            nextFrame.y = enemyRec.y;
+        }
+    }
+
+    //checking collision on Ox
+    nextFrame.x = enemyRec.x + enemy->getVelocity().x * deltaTime;
+    for(std::pair<int, int> pii : nearbyCells) {
+        int i = pii.first, j = pii.second;
+        if(i < 0 || i >= height || j < 0 || j >= width ||
+            tiles[i][j] == nullptr) continue;
+        const Rectangle& blockRec = tiles[i][j]->getRectangle();
+        if(CheckCollisionRecs(nextFrame, blockRec)) {
+            enemy->changeDirection();
+            nextFrame.x = enemyRec.x;
+        }
+    }
+
+    nextFrame.y += enemyRec.height + 1;
+    enemy->setPos({nextFrame.x, nextFrame.y});
+    enemy->update(deltaTime);
 }
 
 std::vector<std::pair<int, int>> TileMap::cellsToCheck(const Rectangle& rec) {

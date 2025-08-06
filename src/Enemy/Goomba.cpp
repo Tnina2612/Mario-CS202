@@ -10,7 +10,7 @@
 
 Goomba::Goomba() : Enemy() {
     _deadAni = 0;
-    m_data._velocity = Vector2{-100, 0.f};
+    m_data._velocity = Vector2{50.f, 0.f};
 }
 
 Goomba::Goomba(const std::string& name) : Enemy(name) {
@@ -42,7 +42,9 @@ bool Goomba::onHit() {
 
         if(_deadAni == 0) {
             setAniFrames(getFrames("Dead"));
-            setVelocity(Vector2{0.f, 500.f});
+            setVelocity(Vector2{60.f, 100.f});
+            m_data._dir = 1;
+            std::cout << "Goomba is dead\n";
             _deadAni = 1;
         }
         if(isOffScreen() == 1 || isOffScreen() == -2) {
@@ -67,4 +69,5 @@ void Goomba::onEnemyCollision(Enemy& enemy) {
 
 void Goomba::changeDirection() {
     Enemy::changeDirection();
+    setAniFrames(getFrames("Walk"));
 }
