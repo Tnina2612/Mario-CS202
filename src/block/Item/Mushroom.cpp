@@ -1,83 +1,82 @@
-#include "Item/MushRoom.h"
+#include "Item/Mushroom.h"
 #include <iostream>
-
-Mush_Room::Mush_Room(Vector2 pos, State_MushRoom state)
-    : Item(pos), state_(state), direct_(1), fall_(false), is_appear(false), jump_(true), before_pos_({pos.x, pos.y - Tile_Size})
+const float scale_screen = 3.0f;
+Mushroom::Mushroom(Vector2 pos, StateMushroom state)
+    : Item(pos), state_(state), direct_(1), fall_(false), isAppear(false), jump_(true), beforePos_({pos.x, pos.y - tileSize})
 {
     velocity_ = {0.0f, 0.0f};
-    previous_frame_pos = pos_;
+    previousFramePos = pos_;
 
     switch (state_)
     {
-    case State_MushRoom::super_:
-        rec_ = Item_Sprite::Mushroom::super_mushroom;
+    case StateMushroom::super_:
+        rec_ = ItemSprite::MUSHROOM_SUPER;
         break;
-    case State_MushRoom::one_up:
-        rec_ = Item_Sprite::Mushroom::one_up_mushroom;
+    case StateMushroom::one_up:
+        rec_ = ItemSprite::MUSHROOM_ONE_UP;
         break;
-    case State_MushRoom::posion_:
-        rec_ = Item_Sprite::Mushroom::posion_mushroom;
-        break;
+    // case StateMushroom::poison_:
+    //     rec_ = ItemSprite::MUSHROOM_POISON;
+    //     break;
     default:
         break;
     }
 }
 
-void Mush_Room::Notify_Fall()
+void Mushroom::checkFall()
 {
     if (!jump_ && !fall_)
     {
         fall_ = true;
-        velocity_.y = 0.0f; // bắt đầu rơi từ vận tốc đứng yên
+        velocity_.y = 0.0f; 
     }
 }
 
-void Mush_Room::Notify_On_Ground()
+void Mushroom::checkOnGround()
 {
     fall_ = false;
     jump_ = false;
     velocity_.y = 0.0f;
 }
 
-void Mush_Room::Notify_Change_Direct() { direct_ = !direct_; }
+void Mushroom::checkChangeDirect() { direct_ = !direct_; }
 
-void Mush_Room::Notify_Jump()
+void Mushroom::checkJump()
 {
     jump_ = true;
     fall_ = false;
-    velocity_.y = -Mushroom_Ini_Velo;
+    velocity_.y = -mushroomIniVelo;
 }
 
-void Mush_Room::Jump_()
+void Mushroom::jump()
 {
-    if (!is_appear || !jump_)
+    if (!isAppear || !jump_)
         return;
 
     float dt = GetFrameTime();
-    velocity_.y += Physics::gravity_ * dt;
+    velocity_.y += 1000.0f * dt;
     pos_.y += velocity_.y * dt;
 
-    float move = Mush_Room_And_Star_Speed * dt;
+    float move = MushroomAndStarSpeed * dt;
     pos_.x += direct_ ? move : -move;
 }
 
-void Mush_Room::Fall_()
+void Mushroom::fall()
 {
-    if (!is_appear || !fall_)
+    if (!isAppear || !fall_)
         return;
 
     float dt = GetFrameTime();
-    velocity_.y += Physics::gravity_ * dt;
+    velocity_.y += 1000.0f * dt;
     pos_.y += velocity_.y * dt;
 }
 
-void Mush_Room::Move_()
+void Mushroom::move()
 {
-    if (!is_appear || fall_ || jump_)
+    if (!isAppear || fall_ || jump_)
         return;
 
-    // Thiết lập tốc độ ngang, không ảnh hưởng dọc
-    velocity_.x = (direct_ ? 1 : -1) * Mush_Room_And_Star_Speed;
+    velocity_.x = (direct_ ? 1 : -1) * MushroomAndStarSpeed;
     velocity_.y = 0.0f;
 
     pos_.x += velocity_.x * GetFrameTime();
@@ -95,52 +94,52 @@ void Mush_Room::Move_()
     }
 }
 
-void Mush_Room::Appear_()
+void Mushroom::appear()
 {
-    if (is_appear)
+    if (isAppear)
         return;
 
-    pos_.y -= Appear_Animation;
-    if (pos_.y <= before_pos_.y)
+    pos_.y -= appearAnimation;
+    if (pos_.y <= beforePos_.y)
     {
-        appear_animation = 0;
-        is_appear = true;
-        pos_.y = before_pos_.y;
-        previous_frame_pos = pos_;
+        appearAnimation = 0;
+        isAppear = true;
+        pos_.y = beforePos_.y;
+        previousFramePos = pos_;
     }
 }
 
-void Mush_Room::Be_Delete()
+void Mushroom::beDelete()
 {
-    if (pos_.y - rec_.height * scale_screen >= Screen_h)
-        is_delete = true;
+    if (pos_.y - rec_.height * scale_screen >= /*Screen_h*/)
+        isDelete_ = true;
 }
 
-void Mush_Room::Update_()
+void Mushroom::update()
 {
-    previous_frame_pos = pos_;
-    Appear_();
-    Move_();
-    Fall_();
-    Jump_();
-    Be_Delete();
+    previousFramePos = pos_;
+    appear();
+    move();
+    fall();
+    jump();
+    beDelete();
 }
 
-void Mush_Room::Activate_(Player &player, PlayerInformation &info)
-{
-    if (state_ == State_MushRoom::super_)
-    {
-        Score_Manager &score_manager = Score_Manager::GetInstance();
-        score_manager.AddScore(player.getPosition(), Score_One_Up_Super);
-        player.getMushroom();
-    }
-    info.UpdateScore(Score_One_Up_Super);
+// void Mushroom::activate(Character& character)
+// {
+//     if (state_ == State_MushRoom::super_)
+//     {
+//         Score_Manager &score_manager = Score_Manager::GetInstance();
+//         score_manager.AddScore(player.getPosition(), Score_One_Up_Super);
+//         player.getMushroom();
+//     }
+//     info.UpdateScore(Score_One_Up_Super);
 
-    is_delete = true;
-}
+//     isDelete_ = true;
+// }
 
-Vector2 Mush_Room::Get_Previous_Frame_Pos() { return previous_frame_pos; }
+Vector2 Mushroom::getPreviousFramePos() { return previousFramePos; }
 
-bool Mush_Room::Get_Direct() const { return direct_; }
+bool Mushroom::getDirect() const { return direct_; }
 
-bool Mush_Room::Can_Move() const { return true; }
+bool Mushroom::canMove() const { return true; }

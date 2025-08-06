@@ -18,7 +18,7 @@ void Coin::update()
 void Coin::activate(Character &character)
 {
     character.UpdateCoins(1);
-    isDelete = 1;
+    isDelete_ = 1;
 }
 
 bool Coin::canMove() const { return false; }
