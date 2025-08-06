@@ -2,7 +2,7 @@
 const float scale_screen = 3.0f; 
 
 QuestionBlock::QuestionBlock(Block &block)
-    : m_block(block), m_rec(Item_Sprite::Question_Brick::question_), frame_(0.0f), type_(0), velocity_y(0.0f), jiggle_(false)
+    : m_block(block), m_rec(), frame_(0.0f), type_(0), velocity_y(0.0f), jiggle_(false)
 {
     before_pos = m_block.getPos();
     rec_ = m_rec[type_];

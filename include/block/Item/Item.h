@@ -1,11 +1,12 @@
 #pragma once
 #include "Character.hpp"
 #include "Coordinate.h"
-
+#include <raylib.h>
+#include <vector>
 
 const float MushroomAndStarSpeed = 120.0f;
 const float appearAnimation = 0.75f;
-// const float Tile_Size = 16.0f * scale_screen;
+const float tileSize = 16.0f * 3.0f;
 
 class Item
 {
@@ -18,15 +19,15 @@ protected:
     float frame_;
     int type_;
     bool appearAnimation;
-    bool isDelete;
+    bool isDelete_;
 
 public:
     Item(Vector2 pos);
 
-    void draw_();
-    virtual void update_() = 0;
-    virtual void appear_() = 0;
-    virtual void activate_(Character &character) = 0;
+    void draw();
+    virtual void update() = 0;
+    virtual void appear() = 0;
+    virtual void activate(Character &character) = 0;
 
     Vector2 getPos() const;
     void setPos(Vector2 pos);
@@ -34,7 +35,7 @@ public:
     Rectangle getSourceRec() const;
     Rectangle getDrawRec() const;
     bool isAppearAnimation() const;
-    bool getIsDelete() const;
+    bool isDelete() const;
     virtual bool canMove() const = 0;
 
     virtual void checkFall() {}

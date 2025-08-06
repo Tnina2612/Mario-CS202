@@ -1,11 +1,11 @@
 #include "block/SolidBlock.h"
-
-const scale_screen = 3.0f;
+#include "Coordinate.h"
+const float scale_screen = 3.0f;
 
 SolidBlock::SolidBlock(Block &m_block)
     : m_block(m_block)
 {
-    rec_ = Item_Sprite::Brown_Brick::type_1;
+    rec_ = 
 }
 
 void SolidBlock::draw_()

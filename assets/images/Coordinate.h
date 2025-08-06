@@ -314,7 +314,7 @@ namespace ItemSprite
         {4, 4, 16, 16},
         {34, 4, 16, 16},
         {64, 4, 16, 16}
-    }
+    };
     const Rectangle SPRINGBOARD_EXTENDED =    {94, 0, 16, 24};
     const Rectangle SPRINGBOARD =             {124, 4, 16, 16};
     const Rectangle SPRINGBOARD_COMPRESSED =  {154, 8, 16, 8};
@@ -325,6 +325,10 @@ namespace ItemSprite
     };
     const Rectangle BEANSTALK_FRAME_1 =       {188, 7, 8, 9};
     const Rectangle BEANSTALK_FRAME_2 =       {215, 4, 14, 16};
+    const vector <Rectangle> BEANSTALK = {
+        {188, 7, 8, 9},
+        {215, 4, 14, 16}
+    };  
     const Rectangle CHAR_TOAD =               {244, 0, 16, 24};
 
     //Line 2
@@ -340,20 +344,44 @@ namespace ItemSprite
     const Rectangle FIRE_FLOWER_ANIMATION_1_FRAME_2 = {34, 64, 16, 16};
     const Rectangle FIRE_FLOWER_ANIMATION_1_FRAME_3 = {64, 64, 16, 16};
     const Rectangle FIRE_FLOWER_ANIMATION_1_FRAME_4 = {94, 64, 16, 16};
+    const vector <Rectangle> FIRE_FLOWER_1 = {
+        {4, 64, 16, 16},
+        {34, 64, 16, 16},
+        {64, 64, 16, 16},
+        {94, 64, 16, 16}
+    };
     const Rectangle FIRE_FLOWER_ANIMATION_2_FRAME_1 = {124, 64, 16, 16};
     const Rectangle FIRE_FLOWER_ANIMATION_2_FRAME_2 = {154, 64, 16, 16};
     const Rectangle FIRE_FLOWER_ANIMATION_2_FRAME_3 = {184, 64, 16, 16};
     const Rectangle FIRE_FLOWER_ANIMATION_2_FRAME_4 = {214, 64, 16, 16};
+    const vector <Rectangle> FIRE_FLOWER_2 = {
+        {124, 64, 16, 16},
+        {154, 64, 16, 16},
+        {184, 64, 16, 16},
+        {214, 64, 16, 16}
+    };
 
     //Line 4
     const Rectangle SUPER_STAR_FRAME_1 = {5, 94, 14, 16};
     const Rectangle SUPER_STAR_FRAME_2 = {35, 94, 14, 16};
     const Rectangle SUPER_STAR_FRAME_3 = {65, 94, 14, 16};
     const Rectangle SUPER_STAR_FRAME_4 = {95, 94, 14, 16};
+    const vector <Rectangle> SUPER_STAR = {
+        {5, 94, 14, 16},
+        {35, 94, 14, 16},
+        {65, 94, 14, 16},
+        {95, 94, 14, 16}
+    };
     const Rectangle COIN_SPIN_FRAME_1 =  {128, 95, 8, 14};
     const Rectangle COIN_SPIN_FRAME_2 =  {160, 95, 4, 14};
     const Rectangle COIN_SPIN_FRAME_3 =  {191, 95, 1, 14};
     const Rectangle COIN_SPIN_FRAME_4 =  {220, 95, 4, 14};
+    const vector <Rectangle> COIN_SPIN = {
+        {128, 95, 8, 14},
+        {160, 95, 4, 14},
+        {191, 95, 1, 14},
+        {220, 95, 4, 14}
+    };
     const Rectangle PRINCESS_PEACH =     {245, 90, 14,24};
     
 } 

@@ -40,8 +40,6 @@ public:
     std::string getTypeItem() const;
     void decreaseItem();
 
-    // const SpriteSheet &getSprite();
-
     BlockState *getQuestionState() const;
     BlockState *getNormalState() const;
     BlockState *getSolidState() const;
