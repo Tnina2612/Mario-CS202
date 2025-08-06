@@ -31,9 +31,15 @@ public:
     void setDirection(int dir);
     void setOnGround(bool onGround);
 
+    std::shared_ptr<IEnemyStrategy> getMovementStrategy();
+    EnemyData& getEnemyData();
+    float getGravity();
+    bool getOnGround();
+
     int getDirection();
     std::vector<Rectangle> getFrames(const std::string& name);
     
+    void applyGravity(float dt);
     bool isAlive();
     int isOffScreen(); //-1 : up, 1 : down, 2 : right, -2 : left 
 

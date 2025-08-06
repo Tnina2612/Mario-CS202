@@ -5,6 +5,7 @@
 #include"../../include/entities/Enemy/Bowser.hpp"
 #include"../../include/entities/Enemy/BossCommand.hpp"
 #include"../../assets/images/Coordinate.h"
+#include"../../include/core/Variables.hpp"
 
 static std::random_device rd;
 static std::mt19937 gen(rd());
@@ -89,6 +90,9 @@ void Bowser::check() {
 
 }
 bool Bowser::isMarioClose(float distance) {
+    if(!m_target) {
+        return false;
+    }
     Vector2 pos = m_target->getPos();
     float dis = pow(m_data._pos.x - pos.x, 2) + pow(m_data._pos.y - pos.y, 2);
     return sqrt(dis) < distance;
@@ -234,7 +238,6 @@ void Bowser::draw() {
         DrawRectangleRec(f->getHitBox(), RED);
         f->draw();
     }
-    
 }
 void Bowser::update(float dt) {
     if(!m_data._isActive) {

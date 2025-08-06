@@ -123,7 +123,15 @@ void TileMap::update(std::shared_ptr<Enemy> enemy) {
     float deltaTime = GetFrameTime();
     enemy->setOnGround(false);
     Rectangle enemyRec = enemy->getHitBox();
-    Rectangle nextFrame = {enemyRec.x, enemyRec.y + enemy->getVelocity().y * deltaTime, enemyRec.width, enemyRec.height};
+    Vector2 dx = enemy->getMovementStrategy()->Execute(enemy->getEnemyData(), deltaTime);
+    Rectangle nextFrame = {enemyRec.x + dx.x, enemyRec.y + dx.y, enemyRec.width, enemyRec.height};
+
+    if(!enemy->isAlive()) {
+        nextFrame.y += enemyRec.height + 1;
+        enemy->setPos({nextFrame.x, nextFrame.y});
+        enemy->update(deltaTime);
+        return;
+    }
 
     // checking collision on Oy 
     for(std::pair<int, int> pii : nearbyCells) {
@@ -150,17 +158,14 @@ void TileMap::update(std::shared_ptr<Enemy> enemy) {
             tiles[i][j] == nullptr) continue;
         const Rectangle& blockRec = tiles[i][j]->getRectangle();
         if(CheckCollisionRecs(nextFrame, blockRec)) {
-            if(nextFrame.x <= blockRec.x) {
-                enemy->setDirection(-1);
-            } else {
-                enemy->setDirection(1);
-            }
+            enemy->changeDirection();
             nextFrame.x = enemyRec.x;
         }
     }
 
+    nextFrame.y += enemyRec.height + 1;
     enemy->setPos({nextFrame.x, nextFrame.y});
-    enemy->update();
+    enemy->update(deltaTime);
 }
 
 std::vector<std::pair<int, int>> TileMap::cellsToCheck(const Rectangle& rec) {

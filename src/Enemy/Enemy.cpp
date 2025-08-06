@@ -75,6 +75,14 @@ std::vector<Rectangle> Enemy::getFrames(const std::string& name) {
     return allFrames[name];
 }
 
+std::shared_ptr<IEnemyStrategy> Enemy::getMovementStrategy() {
+    return _movementStrategy;
+}
+
+EnemyData& Enemy::getEnemyData() {
+    return m_data;
+}
+
 void Enemy::setVelocityX(float x) {
     m_data._velocity.x = x;
 }
@@ -148,6 +156,19 @@ bool Enemy::beHitByFireball() {
     return true;
 }
 
+float Enemy::getGravity() {
+    return m_data._gravity;
+}
+
+bool Enemy::getOnGround() {
+    return m_data._isOnGround;
+}
+
+void Enemy::applyGravity(float dt) {
+    if(!m_data._isOnGround) {
+        m_data._velocity.y += m_data._gravity * dt;
+    }
+}
 
 void Enemy::draw() {
     if(!m_data._isActive) {
@@ -164,31 +185,20 @@ void Enemy::update(float dt) {
         return;
     }
 
-    //m_data._velocity.y += m_data._gravity;
-    // if() {
-
-    // }
     m_animation.update(dt);
-    if(_movementStrategy) {
-        _movementStrategy->Execute(m_data, dt);
-    }
+    // if(_movementStrategy) {
+    //     _movementStrategy->Execute(m_data, dt);
+    // }
 }
 void Enemy::changeDirection() {
     m_data._dir *= -1; 
     m_data._velocity.x *= -1;
     // m_data._velocity.y *= -1;
-
-    if(m_data._dir == 1) {
-        setAniFrames(getFrames("RWalk"));
-    }
-    else if(m_data._dir == -1) {
-        setAniFrames(getFrames("LWalk"));
-    }
 }
 
-void Enemy::hitEnemy() {
-    this->changeDirection();
-}
+// void Enemy::hitEnemy() {
+//     this->changeDirection();
+// }
 
 void Enemy::hitUp() {
     onStomp();
