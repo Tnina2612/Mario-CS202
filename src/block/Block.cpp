@@ -1,110 +1,105 @@
-// BlockFactory.cpp
-#include <block/Block.h>
-#include "core/Variables.hpp"
 
-// Block Flyweight
-BlockFlyweight::BlockFlyweight(const char* dir) {
-    texture = LoadTexture(dir);
+#include "Block/Block.h"
+#include "Block/BlockState.h"
+#include "Block/QuestionBlock.h"
+#include "Block/NormalBlock.h"
+#include "Block/BreakBlock.h"
+#include "Block/SolidBlock.h"
+#include "Character.hpp"
+
+Block::Block(Vector2 pos, int item_count, const std::string &type_item, const std::string &type_block)
+    : sprite_(Item_Sprite::item_), pos_(pos), item_count_(item_count), type_item_(type_item)
+{
+    questionState_ = new QuestionBlock(*this);
+    normalState_ = new NormalBlock(*this);
+    solidState_ = new SolidBlock(*this);
+    breakState_ = new BreakBlock(*this);
+    if (type_block == "question")
+        currentState_ = questionState_;
+    else if (type_block == "normal")
+        currentState_ = normalState_;
 }
 
-void BlockFlyweight::Draw(int posX, int posY) {
-    DrawTexture(texture, posX, posY, WHITE);
+Block::~Block()
+{
+    delete questionState_;
+    delete normalState_;
+    delete breakState_;
+    delete solidState_;
+    currentState_ = nullptr;
 }
 
-BlockFlyweight::~BlockFlyweight(void) {
-    UnloadTexture(texture);
+void Block::draw_()
+{
+    currentState_->Draw_();
 }
 
-// Block
-Block::Block(Vector2 position, std::shared_ptr<BlockFlyweight> flyweight) : position(position), flyweight(flyweight) {}
-
-void Block::Draw(void) {
-    flyweight->Draw(position.x, position.y);
+void Block::update_()
+{
+    currentState_->Update_();
 }
 
-// Block Flyweight Factory
-std::shared_ptr<BlockFlyweight> BlockFlyweightFactory::getBlockFlyweight(const std::string& type) {
-    if(flyweights.find(type) == flyweights.end()) {
-        std::string path = "./assets/images/levels/";
-        if(LevelVar::ThemeID == LevelVar::Castle) path += "castle/";
-        else if(LevelVar::ThemeID == LevelVar::Mushrooms) path += "mushrooms/";
-        else if(LevelVar::ThemeID == LevelVar::Overworld) path += "overworld/";
-        else if(LevelVar::ThemeID == LevelVar::Snow) path += "snow/";
-        else if(LevelVar::ThemeID == LevelVar::Underground) path += "underground/";
-        else if(LevelVar::ThemeID == LevelVar::Underwater) path += "underwater/";
-        path += type + ".png";
-        flyweights[type] = std::make_shared<BlockFlyweight>(path.c_str());
-    }
-    return flyweights[type];
+void Block::onHit(std::vector<Item *> &item,Character & character)
+{
+    currentState_->onHit(item, player, info);
 }
 
-Rectangle Block::getRectangle() const {
-    return Rectangle{ position.x, position.y, 16, 16 };
+void Block::setState(A_Block_State *new_state)
+{
+    currentState_ = new_state;
 }
 
-
-Rectangle BrickBlock::getRectangle() const {
-    return Rectangle{ position.x, position.y + jiggleOffset, 16, 16 };
+Vector2 Block::getPos() const
+{
+    return pos_;
 }
 
-void BrickBlock::jiggle() {
-    if (jiggleTime <= 0.0f) {
-        jiggleTime = 0.2f;
-    }
+void Block::setPos(Vector2 pos)
+{
+    pos_ = pos;
 }
 
-bool BrickBlock::breakBrick() {
-    if (!isBroken) {
-        isBroken = true;
-        return true;
-    }
-    return false;
+int Block::getItemCount() const
+{
+    return item_count_;
 }
 
-void BrickBlock::update(float deltaTime) {
-    if (jiggleTime > 0.0f) {
-        jiggleTime -= deltaTime;
-        jiggleOffset = -4.0f * sinf((0.2f - jiggleTime) * 20.0f);
-        if (jiggleTime <= 0.0f) {
-            jiggleOffset = 0.0f;
-        }
-    }
+Rectangle Block::getSourceRec() const { return currentState_->getSourceRec(); }
+
+Rectangle Block::getDrawRec() const { return currentState_->getDrawRec(); }
+
+bool Block::getJiggle() const { return currentState_->getJiggle(); }
+
+bool Block::getIsDelete() const { return currentState_->getIsDelete(); }
+
+std::string Block::getTypeItem() const { return type_item_; }
+
+void Block::decreaseItem()
+{
+    item_count_--;
 }
 
-void BrickBlock::Draw() {
-    if (isBroken) return;
-    flyweight->Draw(position.x, position.y + jiggleOffset);
+const SpriteSheet &Block::getSprite()
+{
+    return sprite_;
 }
 
-Rectangle QuestionBlock::getRectangle() const {
-    return Rectangle{ position.x, position.y + jiggleOffset, 16, 16 };
+BlockState *Block::getQuestionState() const
+{
+    return questionState_;
 }
 
-void QuestionBlock::jiggle() {
-    if (jiggleTime <= 0.0f && !isUsed) {
-        jiggleTime = 0.2f;
-        isUsed = true; 
-    }
+NormalBlock *Block::getNormalState() const
+{
+    return normalState_;
 }
 
-bool QuestionBlock::breakBrick() {
-    return false;
+BlockState *Block::GetSolidState() const
+{
+    return solidState_;
 }
 
-void QuestionBlock::update(float deltaTime) {
-    if (jiggleTime > 0.0f) {
-        jiggleTime -= deltaTime;
-        jiggleOffset = -4.0f * sinf((0.2f - jiggleTime) * 20.0f);
-        if (jiggleTime <= 0.0f) {
-            jiggleOffset = 0.0f;
-        }
-    }
-}
-
-void QuestionBlock::Draw() {
-    flyweight->Draw(position.x, position.y + jiggleOffset);
-}
-
-Rectangle GroundBlock::getRectangle() const {
-    return Rectangle{ position.x, position.y, 16, 16 };
+BlockState *Block::GetBreakState() const
+{
+    return breakState_;
 }

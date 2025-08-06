@@ -310,9 +310,19 @@ namespace ItemSprite
     const Rectangle BLOCK_QUESTION =          {4, 4, 16, 16};
     const Rectangle BLOCK_QUESTION_FLASHING = {34, 4, 16, 16};
     const Rectangle BLOCK_QUESTION_USED =     {64, 4, 16, 16};
+    const vector <Rectangle> QUESTIONBLOCK = {
+        {4, 4, 16, 16},
+        {34, 4, 16, 16},
+        {64, 4, 16, 16}
+    }
     const Rectangle SPRINGBOARD_EXTENDED =    {94, 0, 16, 24};
     const Rectangle SPRINGBOARD =             {124, 4, 16, 16};
     const Rectangle SPRINGBOARD_COMPRESSED =  {154, 8, 16, 8};
+    const vector <Rectangle> SPRINGBOARD = {
+        {94, 0, 16, 24},
+        {124, 4, 16, 16},
+        {154, 8, 16, 8}
+    };
     const Rectangle BEANSTALK_FRAME_1 =       {188, 7, 8, 9};
     const Rectangle BEANSTALK_FRAME_2 =       {215, 4, 14, 16};
     const Rectangle CHAR_TOAD =               {244, 0, 16, 24};
