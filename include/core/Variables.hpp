@@ -110,5 +110,6 @@ enum Behavior {
     DUCK,
     THROW,
     IDLE,
-    DEAD
+    DEAD,
+    CLIMB
 };

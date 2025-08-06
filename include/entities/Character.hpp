@@ -59,6 +59,7 @@ private:
     const float jumpVeclocity = 500; //1550.0f; // Initial jump velocity
     const float brakeAcceleration = 200; //600.0f; // Deceleration when braking
     const float restVeclocity = 50.0f;
+    float timeEffect;
     
 public:
     LevelPlayerAnimationManager levelPlayerAnimationManager;
@@ -90,6 +91,8 @@ public:
     void hitBlockRight(float vline = 0.0);
     void hitBlockTop(float hline = 0.0);
     void hitBlockBottom(float hline = 0.0);
+    void climb(float TimeEffect = -1);
+    void Growth(float TimeEffect = -1);
     bool getOnGround() const;
     void setOnGround(bool onGround);
     bool getCollideRight()const;

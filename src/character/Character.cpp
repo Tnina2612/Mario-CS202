@@ -7,6 +7,7 @@ Character::Character() : Animation(CharacterSprite::Fire::frames), state(nullptr
     isInvincible(false), isDead(false), behavior(IDLE), onGround(true), levelPlayerAnimationManager(this) {
         accelerationX = 0.0f;
         accelerationY = 0.0f;
+        timeEffect = 0.0f;
     }
 
 Character::Character(const vector<Rectangle>& frames, const Texture2D& sprite)
@@ -15,6 +16,7 @@ Character::Character(const vector<Rectangle>& frames, const Texture2D& sprite)
     isInvincible(false), isDead(false),behavior(IDLE), onGround(true), levelPlayerAnimationManager(this) {
         accelerationX = 0.0f;
         accelerationY = 0.0f;
+        timeEffect = 0.0f;
     }
 
 void Character::setState(IState* newState) {
@@ -95,6 +97,16 @@ void Character::resetAttributes() {
     collideRight = false;
 }
 
+void Character::climb(float timeEffect) {
+    if(this->timeEffect > timeEffect) {
+        this->timeEffect = 0;
+        behavior = IDLE;
+        return;
+    }
+    this->timeEffect += GetFrameTime();
+    veclocityX = 0.0f;
+}
+
 void Character::update() {
     if(!onGround) {
         behavior = JUMP;
@@ -163,6 +175,14 @@ void Character::update() {
             characterState = SMALL;
             Animation::update(GetFrameTime(), 0, 1);
             // Có thể thêm điều kiện để reset game hoặc respawn ở đây
+            break;
+        case CLIMB:
+            if(orientation == LEFT) {
+                Animation::update(GetFrameTime(), 14, 2);
+            }
+            else {
+                Animation::update(GetFrameTime(), 16, 2);
+            }
             break;
         default:
             break;
