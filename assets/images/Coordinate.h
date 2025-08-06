@@ -120,26 +120,26 @@ namespace CharacterSprite {
             const Rectangle Climb2 = {363, 89, 14, 27};
         };
         const vector<Rectangle> frames = {
-            Left::Duck, 
-            Left::Jump, 
-            Left::Brake, 
-            Left::Run1, 
-            Left::Run2, 
-            Left::Run3, 
-            Left::Idle,
-            Right::Duck, 
-            Right::Jump, 
-            Right::Brake, 
-            Right::Run1, 
-            Right::Run2, 
-            Right::Run3, 
-            Right::Idle,
-            Left::Climb1,
-            Left::Climb2,
-            Right::Climb1,
-            Right::Climb2,
-            Left::Throw, 
-            Right::Throw
+            Left::Duck, //0
+            Left::Jump, //1
+            Left::Brake, //2
+            Left::Run1, //3
+            Left::Run2, //4
+            Left::Run3, //5
+            Left::Idle, //6
+            Right::Duck, //7
+            Right::Jump, //8
+            Right::Brake, //9
+            Right::Run1, //10
+            Right::Run2, //11
+            Right::Run3, //12
+            Right::Idle,//13
+            Left::Climb1, //14
+            Left::Climb2,// 15
+            Right::Climb1, //16
+            Right::Climb2, //17
+            Left::Throw, //18
+            Right::Throw //19
         };
         namespace Fireball {
         const std::unordered_map<std::string, std::vector<Rectangle>> Frames = {

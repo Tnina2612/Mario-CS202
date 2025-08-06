@@ -28,7 +28,7 @@ struct EnemyData {
     bool _isActive;
     bool _isOnGround;
 
-    float _restVelocityY = 0.0f;
+    float _restVelocityY = 30.0f;
 
     int _dir;   // Direction: 1 facing right, -1 left
                 // -1 : up, 1 : down
