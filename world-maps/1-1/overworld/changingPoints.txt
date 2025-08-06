@@ -1,6 +1,23 @@
+3
+
+927 140 2 4 Down
 1
-927 140 2 4
-D
+Down
 ./world-maps/1-1/underground
 underground
 24 32
+
+2608 176 32 32 Disappear
+2
+ExitDoor
+Up 176
+None
+
+3168 40 16 152 Touch
+3
+ClimbDown 192
+WalkToX 3264
+EnterDoor
+./world-maps/1-2/overworld1
+overworld
+32 208

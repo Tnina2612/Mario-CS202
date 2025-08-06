@@ -48,3 +48,7 @@ void Animation::reset() {
 void Animation::setScale(float scale) {
     this->scale = scale;
 }
+
+float Animation::getScale() const {
+    return scale;
+}

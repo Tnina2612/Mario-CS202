@@ -19,5 +19,6 @@ public:
     void draw(Vector2 position) const;
     void reset();
     void setScale(float scale);
+    float getScale() const;
     virtual ~Animation() = default;
 };

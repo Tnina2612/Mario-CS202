@@ -19,15 +19,18 @@ class IState {
 
 class Character; 
 
-class IntoPipeAnimation {
+class LevelPlayerAnimationManager {
 private:
     Character* character;
 public:
-    IntoPipeAnimation(Character* character);
+    LevelPlayerAnimationManager(Character* character);
     void goDownward();
     void goUpward();
     void goLeftward();
     void goRightward();
+    void climbDown(float pivotX);
+    void disappear();
+    void appear();
 };
 
 // Now define Character, which can use IntoPipeAnimation
@@ -58,7 +61,7 @@ private:
     const float restVeclocity = 50.0f;
     
 public:
-    IntoPipeAnimation intoPipeAnimation;
+    LevelPlayerAnimationManager levelPlayerAnimationManager;
 
     Character();
     Character(const vector<Rectangle>& frames, const Texture2D& sprite);

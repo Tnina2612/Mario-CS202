@@ -2,39 +2,9 @@
 #include "core/SoundManager.hpp"
 #include "core/MusicManager.hpp"
 
-IntoPipeAnimation::IntoPipeAnimation(Character* character) : character(character) {}
-
-void IntoPipeAnimation::goDownward() {
-    float x = character->getPos().x;
-    float y = character->getPos().y + GetFrameTime() * character->getRectangle().height * 2.f;
-    character->setPosition(x, y);
-}
-
-void IntoPipeAnimation::goLeftward() {
-    character->moveLeft();
-    character->Animation::update(GetFrameTime(), 3, 3);
-    float x = character->getPos().x + character->getVeclocityX() * GetFrameTime();
-    float y = character->getPos().y;
-    character->setPosition(x, y);
-}
-
-void IntoPipeAnimation::goRightward() {
-    character->moveRight();
-    character->Animation::update(GetFrameTime(), 10, 3);
-    float x = character->getPos().x + character->getVeclocityX() * GetFrameTime();
-    float y = character->getPos().y;
-    character->setPosition(x, y);
-}
-
-void IntoPipeAnimation::goUpward() {
-    float x = character->getPos().x;
-    float y = character->getPos().y - GetFrameTime() * character->getRectangle().height * 2.f;
-    character->setPosition(x, y);
-}
-
 Character::Character() : Animation(CharacterSprite::Fire::frames), state(nullptr), pos(CharacterVar::position), 
     invincibilityTime(0.0f), lives(3), score(0), veclocityX(0.0f), veclocityY(50.0f), orientation(RIGHT), characterState(SMALL),
-    isInvincible(false), isDead(false), behavior(IDLE), onGround(true), intoPipeAnimation(this) {
+    isInvincible(false), isDead(false), behavior(IDLE), onGround(true), levelPlayerAnimationManager(this) {
         accelerationX = 0.0f;
         accelerationY = 0.0f;
     }
@@ -42,7 +12,7 @@ Character::Character() : Animation(CharacterSprite::Fire::frames), state(nullptr
 Character::Character(const vector<Rectangle>& frames, const Texture2D& sprite)
     : Animation(frames, sprite), state(nullptr), pos(CharacterVar::position), 
     invincibilityTime(0.0f), lives(3), score(0), veclocityX(0.0f), veclocityY(50.0f), orientation(RIGHT), characterState(SMALL),
-    isInvincible(false), isDead(false),behavior(IDLE), onGround(true), intoPipeAnimation(this) {
+    isInvincible(false), isDead(false),behavior(IDLE), onGround(true), levelPlayerAnimationManager(this) {
         accelerationX = 0.0f;
         accelerationY = 0.0f;
     }

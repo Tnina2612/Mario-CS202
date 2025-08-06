@@ -1,0 +1,13 @@
+2
+
+32 176 16 32 Disappear
+1
+ExitDoor
+None
+
+32 176 16 32 Touch
+1
+WalkToX 160
+./world-maps/1-2/underground1
+underground
+32 208

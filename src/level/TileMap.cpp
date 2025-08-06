@@ -58,7 +58,6 @@ void TileMap::update(Character* player) {
     float deltaTime = GetFrameTime();
     Rectangle nextFrame = {charRec.x, charRec.y + player->getVeclocityY() * deltaTime, charRec.width, charRec.height};
 
-
     std::vector<std::pair<int, int>> nearbyCells = cellsToCheck(nextFrame);
 
     for(std::pair<int, int> pii : nearbyCells) {
@@ -68,10 +67,8 @@ void TileMap::update(Character* player) {
         const Rectangle& blockRec = tiles[i][j]->getRectangle();
         if(CheckCollisionRecs(nextFrame, blockRec)) {
             if(nextFrame.y <= blockRec.y) {
-                // cout << "Player collides down\n";
                 player->hitBlockBottom(blockRec.y);
             } else {
-                // cout << "Player collides up\n";
                 player->hitBlockTop(blockRec.y + blockRec.height);
             }
             nextFrame.y = charRec.y;
@@ -86,10 +83,8 @@ void TileMap::update(Character* player) {
         const Rectangle& blockRec = tiles[i][j]->getRectangle();
         if(CheckCollisionRecs(nextFrame, blockRec)) {
             if(nextFrame.x <= blockRec.x) {
-                cout << "Player collides right\n";
                 player->hitBlockRight(blockRec.x);
             } else {
-                cout << "Player collides left\n";
                 player->hitBlockLeft(blockRec.x + blockRec.width);
             }
             nextFrame.x = charRec.x;

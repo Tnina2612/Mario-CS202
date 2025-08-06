@@ -1,10 +1,13 @@
 #pragma once
 #include<entities/Character.hpp>
+#include<level/TileMap.hpp>
 
 class SubLevelAnimation {
     public:
+        virtual void initialize(Character* player) = 0;
         virtual bool isDone() = 0;
         virtual void update() = 0;
+        virtual string getType() const = 0;
 };
 
 class PlayerDownPipeAnimation : public SubLevelAnimation {
@@ -12,9 +15,10 @@ class PlayerDownPipeAnimation : public SubLevelAnimation {
         float targetY;
         Character* player;
     public:
-        PlayerDownPipeAnimation(Character* player);
+        void initialize(Character* player) override;
         bool isDone() override;
         void update() override;
+        string getType() const override;
 };
 
 class PlayerIntoLeftPipeAnimation : public SubLevelAnimation {
@@ -22,9 +26,10 @@ class PlayerIntoLeftPipeAnimation : public SubLevelAnimation {
         float targetX;
         Character* player;
     public:
-        PlayerIntoLeftPipeAnimation(Character* player);
+        void initialize(Character* player) override;
         bool isDone() override;
         void update() override;
+        string getType() const override;
 };
 
 class PlayerIntoRightPipeAnimation : public SubLevelAnimation {
@@ -32,9 +37,10 @@ class PlayerIntoRightPipeAnimation : public SubLevelAnimation {
         float targetX;
         Character* player;
     public:
-        PlayerIntoRightPipeAnimation(Character* player);
+        void initialize(Character* player) override;
         bool isDone() override;
         void update() override;
+        string getType() const override;
 };
 
 class PlayerUpPipeAnimation : public SubLevelAnimation {
@@ -42,7 +48,59 @@ class PlayerUpPipeAnimation : public SubLevelAnimation {
         float targetY;
         Character* player;
     public:
-        PlayerUpPipeAnimation(Character* player);
+        PlayerUpPipeAnimation(float targetY);
+        void initialize(Character* player) override;
         bool isDone() override;
         void update() override;
+        string getType() const override;
+};
+
+class PlayerClimbDownAnimation : public SubLevelAnimation {
+    private:
+        float pivotX;
+        float targetY;
+        Character* player;
+    public:
+        PlayerClimbDownAnimation(float pivotX, float targetY);
+        void initialize(Character* player) override;
+        bool isDone() override;
+        void update() override;
+        string getType() const override;
+};
+
+class PlayerWalkToXAnimation : public SubLevelAnimation {
+    private:
+        float targetX;
+        Character* player;
+        TileMap* blocks;
+    public:
+        PlayerWalkToXAnimation(float targetX, TileMap* blocks);
+        void initialize(Character* player) override;
+        bool isDone() override;
+        void update() override;
+        string getType() const override;
+};
+
+class PlayerEnterDoorAnimation : public SubLevelAnimation {
+    private:
+        float targetTime;
+        float elapsedTime;
+        Character* player;
+    public:
+        void initialize(Character* player) override;
+        bool isDone() override;
+        void update() override;
+        string getType() const override;
+};
+
+class PlayerExitDoorAnimation : public SubLevelAnimation {
+    private:
+        float targetTime;
+        float elapsedTime;
+        Character* player;
+    public:
+        void initialize(Character* player) override;
+        bool isDone() override;
+        void update() override;
+        string getType() const override;
 };

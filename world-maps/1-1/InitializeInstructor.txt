@@ -1,1 +1,2 @@
 ./world-maps/1-1/overworld
+26 208
