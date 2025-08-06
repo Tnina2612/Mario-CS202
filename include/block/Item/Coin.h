@@ -13,6 +13,6 @@ public:
     Coin(Vector2 pos);
     void update() override;
     void appear() override;
-    // void activate_(Character& character) override;
+    void activate(Character& character) override;
     bool canMove() const override;
 };

@@ -1,53 +1,53 @@
 #include "Item/Star.h"
 #include <iostream>
-
+const float scale_screen = 3.0f;
 Star::Star(Vector2 pos)
     : Item(pos),
       direct_(true),
-      is_appear(false),
-      before_pos(pos),
-      velocity_({0.0f, -Star_Ini_Velo}),
-      previous_frame_pos(pos)
+      isAppear(false),
+      beforePos(pos),
+      velocity_({0.0f, -starIniVelo}),
+      previousFramePos(pos)
 {
-    rec_ = Item_Sprite::Star::invincible_star;
+    rec_ = ItemSprite::STAR[0];
 }
 
-void Star::Notify_On_Ground()
+void Star::checkOnGround()
 {
-    if (velocity_.y != -Star_Ini_Velo)
+    if (velocity_.y != -starIniVelo)
     {
-        velocity_.y = -Star_Ini_Velo;
-        before_pos = pos_;
+        velocity_.y = -starIniVelo;
+        beforePos = pos_;
     }
 }
 
-void Star::Notify_Change_Direct()
+void Star::checkChangeDirect()
 {
     direct_ = !direct_;
 }
 
-void Star::Fall_(float dt)
+void Star::fall(float dt)
 {
-    if (!is_appear)
+    if (!isAppear)
         return;
 
-    velocity_.y += Physics::gravity_ * dt;
+    velocity_.y += 1000.0f * dt;
     pos_.y += velocity_.y * dt;
 }
 
-void Star::Move_(float dt)
+void Star::move(float dt)
 {
-    if (!is_appear)
+    if (!isAppear)
         return;
 
-    float speed = Mush_Room_And_Star_Speed * dt;
+    float speed = MushroomAndStarSpeed * dt;
     if (direct_)
         pos_.x += speed;
     else
         pos_.x -= speed;
 
     // Va chạm biên
-    float left_bound = rec_.width * scale_screen / 2.0f;
+    float left_bound = rec_.width * 3.0f / 2.0f;
     float right_bound = 214 * 48.0f - left_bound;
 
     if (pos_.x >= right_bound)
@@ -62,61 +62,61 @@ void Star::Move_(float dt)
     }
 }
 
-void Star::Appear_()
+void Star::appear()
 {
-    if (is_appear)
+    if (isAppear)
         return;
 
-    pos_.y -= Appear_Animation;
+    pos_.y -= appearAnimation;
 
-    if (pos_.y <= before_pos.y - Tile_Size)
+    if (pos_.y <= beforePos.y - tileSize)
     {
-        appear_animation = false;
-        is_appear = true;
-        pos_.y = before_pos.y - Tile_Size;
-        before_pos = pos_;
-        previous_frame_pos = pos_;
+        appearAnimation = false;
+        isAppear = true;
+        pos_.y = beforePos.y - tileSize;
+        beforePos = pos_;
+        previousFramePos = pos_;
 
         // Bắt đầu nhảy lên
-        velocity_.y = -Star_Ini_Velo;
+        velocity_.y = -starIniVelo;
     }
 }
 
-void Star::Be_Delete()
+void Star::beDelete()
 {
     if (pos_.y - rec_.height * scale_screen >= Screen_h)
-        is_delete = true;
+        isDelete_ = true;
 }
 
-void Star::Update_()
+void Star::update()
 {
     float dt = GetFrameTime();
-    previous_frame_pos = pos_;
+    previousFramePos = pos_;
 
-    Appear_();
-    Move_(dt);
-    Fall_(dt);
-    Be_Delete();
+    appear();
+    move(dt);
+    fall(dt);
+    beDelete();
 }
 
-void Star::Activate_(Player &player, PlayerInformation &info)
+void Star::activate(Character &character)
 {
-    player.getStar();
-    info.UpdateScore(Score_Star);
-    is_delete = true;
+    character.getStar();
+    character.updateScore(Score_Star);
+    isDelete_ = true;
 }
 
-Vector2 Star::Get_Previous_Frame_Pos()
+Vector2 Star::getPreviousFramePos()
 {
-    return previous_frame_pos;
+    return previousFramePos;
 }
 
-bool Star::Get_Direct() const
+bool Star::getDirect() const
 {
     return direct_;
 }
 
-bool Star::Can_Move() const
+bool Star::canMove() const
 {
     return true;
 }
