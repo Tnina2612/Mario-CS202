@@ -195,6 +195,11 @@ void Enemy::update(float dt) {
     //     _movementStrategy->Execute(m_data, dt);
     // }
 }
+
+std::string Enemy::getTypeName() const {
+    return m_data.getTypeName();
+}
+
 void Enemy::changeDirection() {
     m_data._dir *= -1; 
     std::cerr << "Change dir " << std::endl;

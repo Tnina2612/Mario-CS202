@@ -19,11 +19,11 @@ class IState {
 
 class Character; 
 
-class LevelPlayerAnimationManager {
+class PlayerLevelAnimationManager {
 private:
     Character* character;
 public:
-    LevelPlayerAnimationManager(Character* character);
+    PlayerLevelAnimationManager(Character* character);
     void goDownward();
     void goUpward();
     void goLeftward();
@@ -62,7 +62,7 @@ private:
     float timeEffect;
     
 public:
-    LevelPlayerAnimationManager levelPlayerAnimationManager;
+    PlayerLevelAnimationManager playerLevelAnimationManager;
 
     Character();
     Character(const vector<Rectangle>& frames, const Texture2D& sprite);

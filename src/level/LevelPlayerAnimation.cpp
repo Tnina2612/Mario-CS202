@@ -1,45 +1,45 @@
 #include<level/LevelPlayerAnimation.hpp>
 
-LevelPlayerAnimationManager::LevelPlayerAnimationManager(Character* character) : character(character) {}
+PlayerLevelAnimationManager::PlayerLevelAnimationManager(Character* character) : character(character) {}
 
-void LevelPlayerAnimationManager::goDownward() {
+void PlayerLevelAnimationManager::goDownward() {
     float x = character->getPos().x;
     float y = character->getPos().y + GetFrameTime() * LevelVar::animationSpeed;
     character->setPosition(x, y);
 }
 
-void LevelPlayerAnimationManager::goLeftward() {
+void PlayerLevelAnimationManager::goLeftward() {
     character->Animation::update(GetFrameTime(), 3, 3);
     float x = character->getPos().x - GetFrameTime() * LevelVar::animationSpeed;
     float y = character->getPos().y;
     character->setPosition(x, y);
 }
 
-void LevelPlayerAnimationManager::goRightward() {
+void PlayerLevelAnimationManager::goRightward() {
     character->Animation::update(GetFrameTime(), 10, 3);
     float x = character->getPos().x + GetFrameTime() * LevelVar::animationSpeed;
     float y = character->getPos().y;
     character->setPosition(x, y);
 }
 
-void LevelPlayerAnimationManager::goUpward() {
+void PlayerLevelAnimationManager::goUpward() {
     float x = character->getPos().x;
     float y = character->getPos().y - GetFrameTime() * LevelVar::animationSpeed;
     character->setPosition(x, y);
 }
 
-void LevelPlayerAnimationManager::climbDown(float pivotX) {
+void PlayerLevelAnimationManager::climbDown(float pivotX) {
     // Set frame
     float x = pivotX;
     float y = character->getPos().y + GetFrameTime() * LevelVar::animationSpeed;
     character->setPosition(x, y);
 }
 
-void LevelPlayerAnimationManager::disappear() {
+void PlayerLevelAnimationManager::disappear() {
     character->Animation::setScale(0.0f);
 }
 
-void LevelPlayerAnimationManager::appear() {
+void PlayerLevelAnimationManager::appear() {
     character->Animation::setScale(1.0f);
 }
 
@@ -52,11 +52,15 @@ bool PlayerDownPipeAnimation::isDone() {
     return player->getPos().y >= targetY;
 }
 void PlayerDownPipeAnimation::update() {
-    player->levelPlayerAnimationManager.goDownward();
+    player->playerLevelAnimationManager.goDownward();
 }
 
 string PlayerDownPipeAnimation::getType() const {
     return "Down";
+}
+
+void PlayerDownPipeAnimation::saveToFile(std::ofstream& out) const {
+    out << getType();
 }
 
 void PlayerIntoLeftPipeAnimation::initialize(Character* player) {
@@ -69,11 +73,15 @@ bool PlayerIntoLeftPipeAnimation::isDone() {
 }
 
 void PlayerIntoLeftPipeAnimation::update() {
-    player->levelPlayerAnimationManager.goLeftward();
+    player->playerLevelAnimationManager.goLeftward();
 }
 
 string PlayerIntoLeftPipeAnimation::getType() const {
     return "Left";
+}
+
+void PlayerIntoLeftPipeAnimation::saveToFile(std::ofstream& out) const {
+    out << getType();
 }
 
 void PlayerIntoRightPipeAnimation::initialize(Character* player) {
@@ -86,11 +94,15 @@ bool PlayerIntoRightPipeAnimation::isDone() {
 }
     
 void PlayerIntoRightPipeAnimation::update() {
-    player->levelPlayerAnimationManager.goRightward();
+    player->playerLevelAnimationManager.goRightward();
 }
 
 string PlayerIntoRightPipeAnimation::getType() const {
     return "Right";
+}
+
+void PlayerIntoRightPipeAnimation::saveToFile(std::ofstream& out) const {
+    out << getType();
 }
 
 PlayerUpPipeAnimation::PlayerUpPipeAnimation(float targetY) : targetY(targetY) {}
@@ -104,11 +116,15 @@ bool PlayerUpPipeAnimation::isDone() {
 }
 
 void PlayerUpPipeAnimation::update() {
-    player->levelPlayerAnimationManager.goUpward();
+    player->playerLevelAnimationManager.goUpward();
 }
 
 string PlayerUpPipeAnimation::getType() const {
     return "Up";
+}
+
+void PlayerUpPipeAnimation::saveToFile(std::ofstream& out) const {
+    out << getType() << ' ' << targetY << '\n';
 }
 
 PlayerClimbDownAnimation::PlayerClimbDownAnimation(float pivotX, float targetY) : pivotX(pivotX), targetY(targetY) {}
@@ -122,11 +138,21 @@ bool PlayerClimbDownAnimation::isDone() {
 }
 
 void PlayerClimbDownAnimation::update() {
-    player->levelPlayerAnimationManager.climbDown(pivotX);
+    if(player->getOrientation() == LEFT) {
+        player->Animation::update(GetFrameTime(), 14, 2);
+    }
+    else {
+        player->Animation::update(GetFrameTime(), 16, 2);
+    }
+    player->playerLevelAnimationManager.climbDown(pivotX);
 }
 
 string PlayerClimbDownAnimation::getType() const {
     return "ClimbDown";
+}
+
+void PlayerClimbDownAnimation::saveToFile(std::ofstream& out) const {
+    out << getType() << ' ' << pivotX << ' ' << targetY << '\n';
 }
 
 PlayerWalkToXAnimation::PlayerWalkToXAnimation(float targetX, TileMap* blocks) : targetX(targetX), blocks(blocks) {}
@@ -143,15 +169,19 @@ void PlayerWalkToXAnimation::update() {
     player->setVelocityX(0.f);
     if(player->getPos().x < targetX) {
         blocks->update(player);
-        player->levelPlayerAnimationManager.goRightward();
+        player->playerLevelAnimationManager.goRightward();
     } else if(player->getPos().x > targetX) {
         blocks->update(player);
-        player->levelPlayerAnimationManager.goLeftward();
+        player->playerLevelAnimationManager.goLeftward();
     }
 }
 
 string PlayerWalkToXAnimation::getType() const {
     return "WalkToX";
+}
+
+void PlayerWalkToXAnimation::saveToFile(std::ofstream& out) const {
+    out << getType() << ' ' << targetX << '\n';
 }
 
 void PlayerEnterDoorAnimation::initialize(Character* player) {
@@ -166,11 +196,15 @@ bool PlayerEnterDoorAnimation::isDone() {
 
 void PlayerEnterDoorAnimation::update() {
     elapsedTime += GetFrameTime();
-    player->levelPlayerAnimationManager.disappear();
+    player->playerLevelAnimationManager.disappear();
 }
 
 string PlayerEnterDoorAnimation::getType() const {
     return "EnterDoor";
+}
+
+void PlayerEnterDoorAnimation::saveToFile(std::ofstream& out) const {
+    out << getType() << '\n';
 }
 
 void PlayerExitDoorAnimation::initialize(Character* player) {
@@ -186,9 +220,13 @@ bool PlayerExitDoorAnimation::isDone() {
 void PlayerExitDoorAnimation::update() {
     elapsedTime += GetFrameTime();
     player->Animation::update(GetFrameTime(), 6, 1);
-    player->levelPlayerAnimationManager.appear();
+    player->playerLevelAnimationManager.appear();
 }
 
 string PlayerExitDoorAnimation::getType() const {
     return "ExitDoor";
+}
+
+void PlayerExitDoorAnimation::saveToFile(std::ofstream& out) const {
+    out << getType() << '\n';
 }

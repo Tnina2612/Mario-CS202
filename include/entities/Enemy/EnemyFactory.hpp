@@ -21,4 +21,5 @@ public:
     static void loadAllFrames();
     static std::shared_ptr<EnemyType>& getEnemyTypes();
     static std::shared_ptr<Enemy> createEnemy(const std::string& name, Vector2 pos);
+    static std::vector<std::string> getEnemyTypesNames();
 };

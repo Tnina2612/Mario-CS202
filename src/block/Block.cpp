@@ -1,14 +1,20 @@
-// BlockFactory.cpp
 #include <block/Block.h>
 #include "core/Variables.hpp"
+#include <filesystem>
 
 // Block Flyweight
 BlockFlyweight::BlockFlyweight(const char* dir) {
+    std::filesystem::path p(dir);
+    type = p.stem().string();
     texture = LoadTexture(dir);
 }
 
 void BlockFlyweight::Draw(int posX, int posY) {
     DrawTexture(texture, posX, posY, WHITE);
+}
+
+std::string BlockFlyweight::getType() {
+    return type;
 }
 
 BlockFlyweight::~BlockFlyweight(void) {
@@ -20,6 +26,10 @@ Block::Block(Vector2 position, std::shared_ptr<BlockFlyweight> flyweight) : posi
 
 void Block::Draw(void) {
     flyweight->Draw(position.x, position.y);
+}
+
+std::string Block::getType() {
+    return flyweight->getType();
 }
 
 // Block Flyweight Factory

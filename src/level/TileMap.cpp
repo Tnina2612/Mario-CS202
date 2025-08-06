@@ -212,6 +212,26 @@ std::vector<std::pair<int, int>> TileMap::cellsToCheck(const Rectangle& rec) {
     return res;
 }
 
+void TileMap::saveToFile(const std::string& filename) const {
+    std::ofstream out(filename);
+    if(!out.is_open()) {
+        throw std::runtime_error("Cannot open file " + filename);
+    }
+    out << height << " " << width << "\n";
+    for(int i = 0; i < height; i++) {
+        for(int j = 0; j < width; j++) {
+            if(tiles[i][j] == nullptr) {
+                out << "A ";
+            }
+            else {
+                out << tiles[i][j]->getType() << " ";
+            }
+        }
+        out << "\n";
+    }
+    out.close();
+}
+
 float TileMap::getWidth() {
     return width;
 }

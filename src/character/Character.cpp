@@ -4,7 +4,7 @@
 
 Character::Character() : Animation(CharacterSprite::Fire::frames), state(nullptr), pos(CharacterVar::position), 
     invincibilityTime(0.0f), lives(3), score(0), veclocityX(0.0f), veclocityY(50.0f), orientation(RIGHT), characterState(SMALL),
-    isInvincible(false), isDead(false), behavior(IDLE), onGround(true), levelPlayerAnimationManager(this) {
+    isInvincible(false), isDead(false), behavior(IDLE), onGround(true), playerLevelAnimationManager(this) {
         accelerationX = 0.0f;
         accelerationY = 0.0f;
         timeEffect = 0.0f;
@@ -13,7 +13,7 @@ Character::Character() : Animation(CharacterSprite::Fire::frames), state(nullptr
 Character::Character(const vector<Rectangle>& frames, const Texture2D& sprite)
     : Animation(frames, sprite), state(nullptr), pos(CharacterVar::position), 
     invincibilityTime(0.0f), lives(3), score(0), veclocityX(0.0f), veclocityY(50.0f), orientation(RIGHT), characterState(SMALL),
-    isInvincible(false), isDead(false),behavior(IDLE), onGround(true), levelPlayerAnimationManager(this) {
+    isInvincible(false), isDead(false),behavior(IDLE), onGround(true), playerLevelAnimationManager(this) {
         accelerationX = 0.0f;
         accelerationY = 0.0f;
         timeEffect = 0.0f;

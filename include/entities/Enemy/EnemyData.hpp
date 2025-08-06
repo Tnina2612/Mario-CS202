@@ -96,4 +96,8 @@ struct EnemyData {
     {}
     EnemyData(std::shared_ptr<EnemyType> type)
         : _type(type){}
+    
+    std::string getTypeName() const {
+        return _name;
+    }
 };

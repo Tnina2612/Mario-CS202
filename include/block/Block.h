@@ -6,10 +6,12 @@
 #include <cmath>
 class BlockFlyweight {
     private:
+        std::string type;
         Texture2D texture;
     public:
         BlockFlyweight(const char* dir);
         void Draw(int posX, int posY);
+        std::string getType();
         ~BlockFlyweight(void);
 };
 
@@ -24,6 +26,7 @@ public:
     virtual Rectangle getRectangle() const;
     virtual void jiggle() {}
     virtual bool breakBrick() { return false; }
+    std::string getType();
 };
 
 class BlockFlyweightFactory {
