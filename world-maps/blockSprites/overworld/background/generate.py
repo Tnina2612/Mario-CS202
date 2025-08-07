@@ -4,9 +4,9 @@ import os
 tile_size = 16
 map_image = Image.open("MAP.png")
 map_width, map_height = map_image.size
-tiles_x = 32
-tiles_y = 15
-shift_x = 3328
+tiles_x = 48
+tiles_y = 11
+shift_x = 0
 diff_threshold = 100
 
 def image_diff(img1, img2):

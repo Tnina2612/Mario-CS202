@@ -1,7 +1,20 @@
-0
-32 176 16 32
-Touch
+3
+
+1663 159 2 1 Down
 1
-WalkToX 160
-./world-maps/1-2/underground1
+Down
+./world-maps/1-2/underground2
 underground
+24 64
+
+1840 176 32 32 Touch
+1
+Up 176
+None
+
+2654 128 2 32 Right
+1
+Right
+./world-maps/1-2/overworld2
+overworld
+56 208

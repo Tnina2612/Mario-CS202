@@ -8,13 +8,11 @@ LevelPlayerManager::LevelPlayerManager(SubLevel* subLevel, InputManager& inputMa
 
 void LevelPlayerManager::update() {
     if(animationManager != nullptr) {
-        cout << "Update animation manager" << endl;
         animationManager->update();
         if(animationManager->done()) {
             animationManager.reset();
         }
     } else {
-        cout << "Update gameplay manager" << endl;
         inputManager.update();
         gameplayManager.update();
     }

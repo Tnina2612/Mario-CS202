@@ -25,9 +25,14 @@ EnemyManager::EnemyManager(std::string filename, SubLevel* subLevel) :
 }
 
 void EnemyManager::update() {
-    for(auto& enemy : list) {
-        enemy->update();
-        subLevel->blocks->update(enemy);
+    for(auto& enemy : list){
+        if(enemy->isAlive() && enemy->getPos().x < subLevel->camera->target.x + Global::ORIGINAL_WIDTH / 2) {
+            enemy->update();
+            subLevel->blocks->update(enemy);
+        }
+        if(enemy->getPos().x < 0 || enemy->getPos().y > Global::ORIGINAL_HEIGHT) {
+            enemy->setActive(false);
+        }
     }
 }
 
@@ -44,13 +49,13 @@ void EnemyManager::saveToFile(std::string filename) {
     for(const auto& type : enemyTypes) {
         int count = 0;
         for(const auto& enemy : list) {
-            if(enemy->getTypeName() == type) {
+            if(enemy->getTypeName() == type && enemy->isAlive()) {
                 count++;
             }
         }
         out << count << " " << type << endl;
         for(const auto& enemy : list) {
-            if(enemy->getTypeName() == type) {
+            if(enemy->getTypeName() == type && enemy->isAlive()) {
                 Vector2 pos = enemy->getPos();
                 out << pos.x << " " << pos.y << endl;
             }

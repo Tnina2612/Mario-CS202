@@ -3,14 +3,15 @@
 #include "scenes/GameOverScene.hpp"
 #include <filesystem>
 
-SubLevel::SubLevel(Level* level, std::string folderName, Character* player, InputManager& inputManager) : // Initializer
+SubLevel::SubLevel(Level* level, std::string folderName, Character* player, InputManager& inputManager, Camera2D* camera) : // Initializer
     level(level),
     background(make_shared<TileMap>(folderName + "/background.txt")), 
     blocks(make_shared<TileMap>(folderName + "/blocks.txt")),
     enemies(make_shared<EnemyManager>(folderName + "/enemies.txt", this)),
     changeSubLevelManager(make_shared<ChangeSubLevelManager>(folderName + "/changingPoints.txt", this)),
     player(player), 
-    playerManager(this, inputManager)
+    playerManager(this, inputManager),
+    camera(camera)
 {
 }
 
@@ -64,7 +65,7 @@ Level::Level(std::string folderName) :
     }
         std::string initialWorld;
         getline(inp, initialWorld);
-        subLevel = make_shared<SubLevel>(this, initialWorld, player.get(), inputManager);
+        subLevel = make_shared<SubLevel>(this, initialWorld, player.get(), inputManager, &camera);
         nextSubLevel.reset();
 
         float x, y;
@@ -108,7 +109,7 @@ void Level::changeSubLevel(NextSubLevelScene nextScene) {
         LevelVar::ThemeID = LevelVar::Underground;
         LevelVar::BackGroundColor = LevelVar::UndergroundColor;
     }
-    nextSubLevel = make_shared<SubLevel>(this, nextScene.filename, player.get(), inputManager);
+    nextSubLevel = make_shared<SubLevel>(this, nextScene.filename, player.get(), inputManager, &camera);
     player->setPosition(nextScene.newPlayerPosition.x, nextScene.newPlayerPosition.y);
 }
 

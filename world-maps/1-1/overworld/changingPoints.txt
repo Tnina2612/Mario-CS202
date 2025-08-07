@@ -13,7 +13,7 @@ ExitDoor
 Up 176
 None
 
-3168 40 16 152 Touch
+3172 40 8 152 Touch
 3
 ClimbDown 192
 WalkToX 3264

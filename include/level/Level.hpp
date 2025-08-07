@@ -96,10 +96,11 @@ class SubLevel {
         std::shared_ptr<EnemyManager> enemies;
         std::shared_ptr<ChangeSubLevelManager> changeSubLevelManager;
         LevelPlayerManager playerManager;
+        Camera2D* camera;
 
         bool debug = false;
     public:
-        SubLevel(Level* level, std::string folderName, Character* player, InputManager& inputManager);
+        SubLevel(Level* level, std::string folderName, Character* player, InputManager& inputManager, Camera2D* camera);
         void draw();
         void update();
         ~SubLevel() = default;
