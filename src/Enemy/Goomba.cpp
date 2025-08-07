@@ -5,12 +5,13 @@
 #include"../../include/entities/Enemy/EnemyData.hpp"
 #include"../../include/entities/Enemy/Goomba.hpp"
 #include"../../include/entities/Enemy/EnemyMove.hpp"
+#include<core/Variables.hpp>
 
 
 
 Goomba::Goomba() : Enemy() {
     _deadAni = 0;
-    m_data._velocity = Vector2{50.f, 0.f};
+    m_data._velocity = LevelVar::GoombaSpeed;
 }
 
 Goomba::Goomba(const std::string& name) : Enemy(name) {
@@ -19,7 +20,7 @@ Goomba::Goomba(const std::string& name) : Enemy(name) {
     float height = 16.f;
     m_data = EnemyData (width, height, 1000.f, false, true, true, 1, 
                         Vector2{10,0}, Vector2{0,0}, -1);
-    m_data._velocity = Vector2{100, 50.f};
+    m_data._velocity = LevelVar::GoombaSpeed;
     
 }
 

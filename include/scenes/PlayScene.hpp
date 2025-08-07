@@ -12,6 +12,7 @@ private:
     EventManager eventManager;
 
 public:
+    PlayScene(const std::string& levelName);
     ~PlayScene();
 
     void init() override;

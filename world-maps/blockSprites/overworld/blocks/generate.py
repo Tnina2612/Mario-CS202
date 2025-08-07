@@ -1,33 +1,26 @@
 from PIL import Image
+import imagehash
 import os
 
 tile_size = 16
+tiles_x = 164
+tiles_y = 15
+shift_x = 0
+diff_threshold = 10  
+
 map_image = Image.open("MAP.png")
 map_width, map_height = map_image.size
-tiles_x = 32
-tiles_y = 15
-shift_x = 3328
-diff_threshold = 100
-
-def image_diff(img1, img2):
-    pixels1 = img1.convert("RGBA").getdata()
-    pixels2 = img2.convert("RGBA").getdata()
-    total = 0
-    count = 0
-
-    for p1, p2 in zip(pixels1, pixels2):
-        if p2[3] == 0:
-            continue
-        total += sum((a - b) ** 2 for a, b in zip(p1[:3], p2[:3]))
-        count += 1
-    return total / count if count > 0 and total / count <= diff_threshold else float('inf')
 
 tile_images = {}
+tile_hashes = {}
+
 for filename in os.listdir("."):
     if filename == "MAP.png":
         continue
     if filename.endswith(".png"):
-        tile_images[filename] = Image.open(filename)
+        img = Image.open(filename).convert("RGBA")
+        tile_images[filename] = img
+        tile_hashes[filename] = imagehash.phash(img)
 
 with open("blocks.txt", "w") as output:
     output.write(f"{tiles_y} {tiles_x}\n")
@@ -36,14 +29,17 @@ with open("blocks.txt", "w") as output:
         for j in range(tiles_x):
             x = j * tile_size + shift_x
             y = i * tile_size
-            tile = map_image.crop((x, y, x + tile_size, y + tile_size))
+            tile = map_image.crop((x, y, x + tile_size, y + tile_size)).convert("RGBA")
+            tile_hash = imagehash.phash(tile)
 
             matched = "A"
-            min_diff = float('inf')
-            for name, img in tile_images.items():
-                diff = image_diff(tile, img)
+            min_diff = diff_threshold
+
+            for name, h in tile_hashes.items():
+                diff = tile_hash - h
                 if diff < min_diff:
                     min_diff = diff
                     matched = name
+
             line.append(os.path.splitext(matched)[0])
         output.write("\t".join(line) + "\n")

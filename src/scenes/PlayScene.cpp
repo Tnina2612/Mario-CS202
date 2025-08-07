@@ -5,12 +5,15 @@
 #include "core/MusicManager.hpp"
 #include "entities/Character.hpp"
 
+PlayScene::PlayScene(const std::string& levelName)
+    : level(new Level("./world-maps/" + levelName)) {
+}
+
 PlayScene::~PlayScene() {
     delete level;
 }
 
 void PlayScene::init() {
-    level = new Level("./world-maps/1-1");
     eventManager.addObserver(&Program::getInstance().getHUD());
 
     switch (LevelVar::ThemeID) {

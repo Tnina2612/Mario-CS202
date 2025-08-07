@@ -26,12 +26,41 @@ EnemyManager::EnemyManager(std::string filename, SubLevel* subLevel) :
 
 void EnemyManager::update() {
     for(auto& enemy : list){
-        if(enemy->isAlive() && enemy->getPos().x < subLevel->camera->target.x + Global::ORIGINAL_WIDTH / 2) {
+        // Check if the enemy is off-screen
+        if(enemy->getPos().x < 0 || enemy->getPos().y - enemy->getHitBox().height > Global::ORIGINAL_HEIGHT) {
+            continue;
+        }
+
+        // Check if the enemy is alive and within the camera view
+        if(enemy->getPos().x < subLevel->camera->target.x + Global::ORIGINAL_WIDTH / 2) {
             enemy->update();
             subLevel->blocks->update(enemy);
+            for(auto& enemy2 : list) {
+                if(enemy != enemy2 && enemy->isAlive() && enemy2->isAlive() && CheckCollisionRecs(enemy->getHitBox(), enemy2->getHitBox())) {
+                    if(enemy->getPos().x < enemy2->getPos().x) {
+                        enemy->hitBlockRight();
+                        enemy2->hitBlockLeft();
+                    } else {
+                        enemy->hitBlockLeft();
+                        enemy2->hitBlockRight();
+                    }
+                }
+            }
         }
-        if(enemy->getPos().x < 0 || enemy->getPos().y > Global::ORIGINAL_HEIGHT) {
-            enemy->setActive(false);
+
+        // Check for collisions with the player
+        if(CheckCollisionRecs(enemy->getHitBox(), subLevel->player->getRectangle())) {
+            float overlapX = std::min(enemy->getHitBox().x + enemy->getHitBox().width, subLevel->player->getRectangle().x + subLevel->player->getRectangle().width) - std::max(enemy->getHitBox().x, subLevel->player->getRectangle().x);
+            float overlapY = std::min(enemy->getHitBox().y, subLevel->player->getRectangle().y) - std::max(enemy->getHitBox().y - enemy->getHitBox().height, subLevel->player->getRectangle().y - subLevel->player->getRectangle().height);
+            if(overlapY < overlapX) {
+                if(subLevel->player->getPos().y < enemy->getPos().y) {
+                    enemy->onStomp();
+                } else {
+                    subLevel->player->die();
+                }
+            } else {
+                subLevel->player->die();
+            }
         }
     }
 }
