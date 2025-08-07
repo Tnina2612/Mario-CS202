@@ -25,7 +25,7 @@ public:
     void update() override;
     void activate(Character& character) override;
 
-    Vector2 getPreviousFramePos() override;
+    // Vector2 getPreviousFramePos() override;
     bool getDirect() const;
     bool canMove() const override;
 };

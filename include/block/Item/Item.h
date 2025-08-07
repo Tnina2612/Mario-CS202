@@ -1,6 +1,6 @@
 #pragma once
-#include "Character.hpp"
-#include "Coordinate.h"
+#include "../include/entities/Character.hpp"
+#include "../assets/images/Coordinate.h"
 #include <raylib.h>
 #include <vector>
 
@@ -30,7 +30,7 @@ public:
 
     Vector2 getPos() const;
     void setPos(Vector2 pos);
-    virtual Vector2 getPreviousFramePos() {}
+    // virtual Vector2 getPreviousFramePos();
     Rectangle getSourceRec() const;
     Rectangle getDrawRec() const;
     bool isAppearAnimation() const;

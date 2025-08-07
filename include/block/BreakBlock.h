@@ -1,8 +1,8 @@
 #pragma once
 #include "Block.h"
 #include "BlockState.h"
-#include "Character.hpp"
-class BreakBLock : public BlockState
+#include "../entities/Character.hpp"
+class BreakBlock : public BlockState
 {
 private:
     Texture2D blockTexture;
@@ -18,9 +18,10 @@ private:
     Vector2 before_pos;
     void fall();
     void beDelete();
+    Animation* animation_;
 
 public:
-    BreakBLock(Block &block);
+    BreakBlock(Block &block/*, Animation* animation*/);
     void draw_() override;
     void update_() override;
     void onHit(std::vector<Item *> &item, Character & character) override {}

@@ -1,9 +1,9 @@
 #pragma once
-#include "Character.hpp"
+#include "../entities/Character.hpp"
 #include <raylib.h>
 #include <string>
 #include <vector>
-#include "Item.h"
+#include "Item/Item.h"
 
 class BlockState
 {

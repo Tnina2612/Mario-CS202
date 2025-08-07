@@ -1,7 +1,7 @@
-#include "Block/BreakBlock.h"
+#include <Block/BreakBlock.h>
 const float scale_screen = 3.0f;
-BreakBLock::BreakBLock(Block &block)
-    : m_block(block), isDelete(false), rotation(0.0f)
+BreakBlock::BreakBlock(Block &block/*, Animation* animation*/)
+    : m_block(block), isDelete(false), rotation(0.0f)/*animation_(animation)*/
 {
     blockTexture = LoadTexture("assets/images/levels/castle/C4.png"); 
     before_pos = {m_block.getPos().x, m_block.getPos().y - rec_.height};
@@ -11,7 +11,7 @@ BreakBLock::BreakBLock(Block &block)
     down_velocity = {-move_, 0.0f};        // rơi xuống từ từ
 }
 
-void BreakBLock::draw_()
+void BreakBlock::draw_()
 {
     Vector2 origin = {rec_.width * scale_screen / 2.0f, rec_.height * scale_screen / 2.0f};
 
@@ -39,23 +39,24 @@ void BreakBLock::draw_()
         rec_.width * scale_screen,
         rec_.height * scale_screen};
 
-    DrawTexturePro(m_block.Get_Sprite().sprite, rec_, dest_rec_up_left, origin, rotation, WHITE);
-    DrawTexturePro(m_block.Get_Sprite().sprite, rec_, dest_rec_up_right, origin, rotation, WHITE);
-    DrawTexturePro(m_block.Get_Sprite().sprite, rec_, dest_rec_down_left, origin, rotation, WHITE);
-    DrawTexturePro(m_block.Get_Sprite().sprite, rec_, dest_rec_down_right, origin, rotation, WHITE);
+    animation_->draw(before_pos);
+    // DrawTexturePro(m_block.Get_Sprite().sprite, rec_, dest_rec_up_left, origin, rotation, WHITE);
+    // DrawTexturePro(m_block.Get_Sprite().sprite, rec_, dest_rec_up_right, origin, rotation, WHITE);
+    // DrawTexturePro(m_block.Get_Sprite().sprite, rec_, dest_rec_down_left, origin, rotation, WHITE);
+    // DrawTexturePro(m_block.Get_Sprite().sprite, rec_, dest_rec_down_right, origin, rotation, WHITE);
 }
 
-void BreakBLock::update_()
+void BreakBlock::update_()
 {
     fall();
     beDelete();
 }
 
-bool BreakBLock::getJiggle() { return true; }
+bool BreakBlock::getJiggle() { return true; }
 
-bool BreakBLock::getIsDelete() const { return isDelete; }
+bool BreakBlock::getIsDelete() const { return isDelete; }
 
-void BreakBLock::fall()
+void BreakBlock::fall()
 {
     float dt = GetFrameTime();
 
@@ -79,13 +80,13 @@ void BreakBLock::fall()
         rotation = 0.0f;
 }
 
-void BreakBLock::beDelete()
+void BreakBlock::beDelete()
 {
-    if (up_pos_left.y - rec_.height * scale_screen / 2.0f >= Screen_h)
+    if (up_pos_left.y - rec_.height * scale_screen / 2.0f >= 240)
         isDelete = true;
 }
 
-Rectangle BreakBLock::getDrawRec() const
+Rectangle BreakBlock::getDrawRec() const
 {
     return {
         m_block.getPos().x - tileSize / 2.0f,

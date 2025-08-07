@@ -1,4 +1,4 @@
-#include "Item/HiddenCoin.h"
+#include "../include/Block/Item/HiddenCoin.h"
 
 HiddenCoin::HiddenCoin(Vector2 pos)
     : Item(pos),

@@ -1,14 +1,14 @@
 
-#include "Block/Block.h"
-#include "Block/BlockState.h"
-#include "Block/QuestionBlock.h"
-#include "Block/NormalBlock.h"
-#include "Block/BreakBlock.h"
-#include "Block/SolidBlock.h"
-#include "Character.hpp"
-
+#include "../include/Block/Block.h"
+#include "../include/Block/BlockState.h"
+#include "../include/Block/QuestionBlock.h"
+#include "../include/Block/NormalBlock.h"
+#include "../include/Block/BreakBlock.h"
+#include "../include/Block/SolidBlock.h"
+#include "../include/entities/Character.hpp"
+#include "../assets/images/Coordinate.h"
 Block::Block(Vector2 pos, int item_count, const std::string &type_item, const std::string &type_block)
-    : sprite_(Item_Sprite::item_), pos_(pos), itemCount(item_count), typeItem(type_item)
+    : sprite_(LoadTexture("item.png")), pos_(pos), itemCount(item_count), typeItem(type_item)
 {
     questionState_ = new QuestionBlock(*this);
     normalState_ = new NormalBlock(*this);
@@ -84,22 +84,22 @@ void Block::decreaseItem()
 //     return sprite_;
 // }
 
-BlockState *Block::getQuestionState() const
-{
-    return questionState_;
-}
+// BlockState *Block::getQuestionState() const
+// {
+//     return questionState_;
+// }
 
-NormalBlock *Block::getNormalState() const
-{
-    return normalState_;
-}
+// NormalBlock *Block::getNormalState() const
+// {
+//     return normalState_;
+// }
 
-BlockState *Block::GetSolidState() const
-{
-    return solidState_;
-}
+// BlockState *Block::GetSolidState() const
+// {
+//     return solidState_;
+// }
 
-BlockState *Block::GetBreakState() const
-{
-    return breakState_;
-}
+// BlockState *Block::GetBreakState() const
+// {
+//     return breakState_;
+// }

@@ -2,7 +2,7 @@
 #include "Item.h"
 #include <vector>
 #include "raylib.h"
-#include "Character.hpp"
+#include <entities/Character.hpp>
 
 class Coin : public Item
 {

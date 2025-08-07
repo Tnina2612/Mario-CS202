@@ -1,4 +1,4 @@
-#include "Item/Coin.h"
+#include "../include/Block/Item/Coin.h"
 
 Coin::Coin(Vector2 pos)
     : Item(pos), m_rec(ItemSprite::COINSPIN) {}
@@ -15,10 +15,10 @@ void Coin::update()
     rec_ = m_rec[type_];
 }
 
-void Coin::activate(Character &character)
-{
-    character.UpdateCoins(1);
-    isDelete_ = 1;
-}
+// void Coin::activate(Character &character)
+// {
+//     character.UpdateCoins(1);
+//     isDelete_ = 1;
+// }
 
 bool Coin::canMove() const { return false; }

@@ -1,4 +1,4 @@
-#include "../Item/Item.h"
+#include "block/Item/Item.h"
 
 const float scale_screen = 3.0f;
 Item::Item(Vector2 pos)

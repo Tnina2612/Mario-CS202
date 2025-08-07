@@ -3,7 +3,8 @@
 #include <memory>
 #include "BlockState.h"
 #include "Item/ItemFactory.h"
-#include "Character.hpp"
+#include "../include/entities/Character.hpp"
+#include "../assets/images/Coordinate.h"
 
 class Block
 {
@@ -26,7 +27,7 @@ public:
     std::vector<bool> surroundedBlock{0, 0, 0, 0}; 
     void update_();
     void draw_();
-    void onHit(std::vector<Item *> &item, Character & character) override;
+    void onHit(std::vector<Item *> &item, Character & character);
 
     void setState(BlockState *new_state);
 

@@ -10,22 +10,22 @@ NormalBlock::NormalBlock(Block &block)
     isBreak = (m_block.getTypeItem() == "");
 }
 
-void NormalBlock::draw_()
-{
-    Rectangle dest_rec = {
-        m_block.getPos().x,
-        m_block.getPos().y,
-        rec_.width * 3.0f,
-        rec_.height * 3.0f};
+// void NormalBlock::draw_()
+// {
+//     Rectangle dest_rec = {
+//         m_block.getPos().x,
+//         m_block.getPos().y,
+//         rec_.width * 3.0f,
+//         rec_.height * 3.0f};
 
-    DrawTexturePro(
-        m_block.getSprite().sprite,
-        rec_,
-        dest_rec,
-        {dest_rec.width / 2.0f, dest_rec.height},
-        0.0f,
-        WHITE);
-}
+//     DrawTexturePro(
+//         m_block.getSprite().sprite,
+//         rec_,
+//         dest_rec,
+//         {dest_rec.width / 2.0f, dest_rec.height},
+//         0.0f,
+//         WHITE);
+// }
 
 void NormalBlock::update_()
 {
@@ -33,31 +33,31 @@ void NormalBlock::update_()
     changeState();
 }
 
-void NormalBlock::onHit(std::vector<Item *> &item, Character& character)
-{
-    if (m_block.getItemCount() > 0)
-    {
-        SpawnItem::ItemSpawn(m_block.getTypeItem(), item, m_block.getPos(), character);
-        m_block.decreaseItem();
-        jiggle_ = true;
-        velocity_y = -pushHeight; // đẩy lên
-        if (m_block.getItemCount() == 0)
-        {
-            changeState_ = true;
-            return;
-        }
-    }
-    else if (m_block.getItemCount() == 0 &&
-             (character.getForm() == PlayerForm::Small || character.getForm() == PlayerForm::Invincible))
-    {
-        jiggle_ = true;
-        velocity_y = -pushHeight; // đẩy lên
-    }
-    else
-    {
-        changeState_ = true;
-    }
-}
+// void NormalBlock::onHit(std::vector<Item *> &item, Character& character)
+// {
+//     if (m_block.getItemCount() > 0)
+//     {
+//         SpawnItem::ItemSpawn(m_block.getTypeItem(), item, m_block.getPos(), character);
+//         m_block.decreaseItem();
+//         jiggle_ = true;
+//         velocity_y = -pushHeight; // đẩy lên
+//         if (m_block.getItemCount() == 0)
+//         {
+//             changeState_ = true;
+//             return;
+//         }
+//     }
+//     else if (m_block.getItemCount() == 0 &&
+//              (character.getForm() == PlayerForm::Small || character.getForm() == PlayerForm::Invincible))
+//     {
+//         jiggle_ = true;
+//         velocity_y = -pushHeight; // đẩy lên
+//     }
+//     else
+//     {
+//         changeState_ = true;
+//     }
+// }
 
 void NormalBlock::jiggle()
 {
@@ -83,11 +83,11 @@ void NormalBlock::jiggle()
 
 void NormalBlock::changeState()
 {
-    if (changeState && isBreak)
+    if (changeState_ && isBreak)
     {
         m_block.setState(m_block.getBreakState());
     }
-    else if (changeState && !isBreak && !jiggle_)
+    else if (changeState_ && !isBreak && !jiggle_)
     {
         m_block.setState(m_block.getSolidState());
     }
@@ -104,5 +104,5 @@ Rectangle NormalBlock::getDrawRec() const
 
 bool NormalBlock::getJiggle()
 {
-    return jiggle_ || changeState;
+    return jiggle_ || changeState_;
 }

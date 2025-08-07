@@ -1,4 +1,4 @@
-#include "Item/Star.h"
+#include "block/Item/Star.h"
 #include <iostream>
 const float scale_screen = 3.0f;
 Star::Star(Vector2 pos)
@@ -84,7 +84,7 @@ void Star::appear()
 
 void Star::beDelete()
 {
-    if (pos_.y - rec_.height * scale_screen >= Screen_h)
+    if (pos_.y - rec_.height * scale_screen >= 240)
         isDelete_ = true;
 }
 
@@ -99,17 +99,17 @@ void Star::update()
     beDelete();
 }
 
-void Star::activate(Character &character)
-{
-    character.getStar();
-    character.updateScore(Score_Star);
-    isDelete_ = true;
-}
+// void Star::activate(Character &character)
+// {
+//     character.getStar();
+//     character.updateScore(Score_Star);
+//     isDelete_ = true;
+// }
 
-Vector2 Star::getPreviousFramePos()
-{
-    return previousFramePos;
-}
+// Vector2 Star::getPreviousFramePos()
+// {
+//     return previousFramePos;
+// }
 
 bool Star::getDirect() const
 {

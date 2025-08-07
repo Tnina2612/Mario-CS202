@@ -5,7 +5,8 @@
 #include "HiddenCoin.h"
 #include "MushRoom.h"
 #include "Star.h"
-#include "Character.hpp"
+#include "../include/entities/Character.hpp"
+#include "../assets/images/Coordinate.h"
 class SpawnItem
 {
 public:

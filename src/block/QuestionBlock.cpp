@@ -8,21 +8,21 @@ QuestionBlock::QuestionBlock(Block &block)
     rec_ = m_rec[type_];
 }
 
-void QuestionBlock::draw_()
-{
-    Rectangle dest_rec = {
-        m_block.getPos().x,
-        m_block.getPos().y,
-        rec_.width * scale_screen,
-        rec_.height * scale_screen};
-    DrawTexturePro(
-        m_block.Get_Sprite().sprite,
-        rec_,
-        dest_rec,
-        {dest_rec.width / 2.0f, dest_rec.height},
-        0.0f,
-        WHITE);
-}
+// void QuestionBlock::draw_()
+// {
+//     Rectangle dest_rec = {
+//         m_block.getPos().x,
+//         m_block.getPos().y,
+//         rec_.width * scale_screen,
+//         rec_.height * scale_screen};
+//     DrawTexturePro(
+//         m_block.Get_Sprite().sprite,
+//         rec_,
+//         dest_rec,
+//         {dest_rec.width / 2.0f, dest_rec.height},
+//         0.0f,
+//         WHITE);
+// }
 
 void QuestionBlock::animation_()
 {

@@ -32,7 +32,7 @@ public:
     void checkOnGround() override;
     void checkChangeDirect() override;
     void checkJump();
-    Vector2 getPreviousFramePos() override;
+    // Vector2 getPreviousFramePos() override;
     bool getDirect() const;
     bool canMove() const override;
 };

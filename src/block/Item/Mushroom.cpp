@@ -1,4 +1,4 @@
-#include "Item/Mushroom.h"
+#include "block/Item/Mushroom.h"
 #include <iostream>
 const float scale_screen = 3.0f;
 Mushroom::Mushroom(Vector2 pos, StateMushroom state)
@@ -81,7 +81,7 @@ void Mushroom::move()
 
     pos_.x += velocity_.x * GetFrameTime();
 
-    // Chặn biên màn hình
+
     if (pos_.x >= 214 * 48.0f - rec_.width * scale_screen / 2.0f)
     {
         pos_.x = 214 * 48.0f - rec_.width * scale_screen / 2.0f;
@@ -111,7 +111,7 @@ void Mushroom::appear()
 
 void Mushroom::beDelete()
 {
-    if (pos_.y - rec_.height * scale_screen >= /*Screen_h*/)
+    if (pos_.y - rec_.height * scale_screen >= 240)
         isDelete_ = true;
 }
 
@@ -138,7 +138,7 @@ void Mushroom::update()
 //     isDelete_ = true;
 // }
 
-Vector2 Mushroom::getPreviousFramePos() { return previousFramePos; }
+// Vector2 Mushroom::getPreviousFramePos() { return previousFramePos; }
 
 bool Mushroom::getDirect() const { return direct_; }
 
