@@ -8,7 +8,7 @@ HiddenCoin::HiddenCoin(Vector2 pos)
 {
     rec_ = m_rec[0];
 
-    const float gravity = Physics::gravity_;                       
+    const float gravity = 1000.0f;                       
     const float totalAirTime = 2 * pushHeight / gravity * 0.8f; 
 
     spriteInterval = totalAirTime / static_cast<float>(m_rec.size());
@@ -21,7 +21,7 @@ void HiddenCoin::update()
 
 void HiddenCoin::appear()
 {
-    const float gravity = Physics::gravity_;
+    const float gravity = 1000.0f;
 
     frame_ += GetFrameTime();
     if (frame_ >= spriteInterval)

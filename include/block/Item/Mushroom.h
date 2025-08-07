@@ -21,22 +21,17 @@ private:
 
 public:
     Mushroom(Vector2 pos, StateMushroom state);
-
     void update() override;
-    //
     void activate(Character &character) override;
-
     void fall();
     void move();
     void jump();
     void beDelete();
     void appear() override;
-
     void checkFall() override;
     void checkOnGround() override;
     void checkChangeDirect() override;
     void checkJump();
-
     Vector2 getPreviousFramePos() override;
     bool getDirect() const;
     bool canMove() const override;

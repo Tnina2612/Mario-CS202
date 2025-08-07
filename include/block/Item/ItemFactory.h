@@ -14,5 +14,5 @@ public:
     static void HiddenCoinSpawner(std::vector<Item *> &items, Vector2 pos, Character &character);
     static void FlowerSpawner(std::vector<Item *> &items, Vector2 pos);
     static void MushroomSpawner(std::vector<Item *> &items, Vector2 pos, StateMushroom state);
-    static void ItemSpawn(const std::string &type_item, std::vector<Item *> &items, Vector2 pos, Character &character);
+    static void ItemSpawn(const std::string &typeItem, std::vector<Item *> &items, Vector2 pos, Character &character);
 };

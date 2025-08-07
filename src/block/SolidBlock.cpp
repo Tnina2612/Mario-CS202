@@ -5,7 +5,7 @@ const float scale_screen = 3.0f;
 SolidBlock::SolidBlock(Block &m_block)
     : m_block(m_block)
 {
-    rec_ = 
+    // rec_ =... 
 }
 
 void SolidBlock::draw_()

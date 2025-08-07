@@ -5,7 +5,7 @@ NormalBlock::NormalBlock(Block &block)
     : m_block(block), jiggle_(false), changeState_(false), velocity_y(0.0f)
 {
     before_pos = m_block.getPos();
-    rec_ = Item_Sprite::Brown_Brick::type_2;
+    // rec_ = ItemSprite::;
 
     isBreak = (m_block.getTypeItem() == "");
 }
@@ -37,7 +37,7 @@ void NormalBlock::onHit(std::vector<Item *> &item, Character& character)
 {
     if (m_block.getItemCount() > 0)
     {
-        SpawnItem::Item_Spawn(m_block.getTypeItem(), item, m_block.getPos(), character);
+        SpawnItem::ItemSpawn(m_block.getTypeItem(), item, m_block.getPos(), character);
         m_block.decreaseItem();
         jiggle_ = true;
         velocity_y = -pushHeight; // đẩy lên
@@ -65,7 +65,7 @@ void NormalBlock::jiggle()
         return;
 
     float dt = GetFrameTime();
-    velocity_y += Physics::gravity_ * dt;
+    velocity_y += 1000.0f * dt;
 
     Vector2 tmp = m_block.getPos();
     tmp.y += velocity_y * dt;

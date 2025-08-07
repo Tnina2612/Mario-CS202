@@ -11,8 +11,7 @@ const float tileSize = 16.0f * 3.0f;
 class Item
 {
 private:
-    Texture2D item_;
-
+    Texture2D itemTexture;
 protected:
     Vector2 pos_;
     Rectangle rec_;
@@ -23,7 +22,7 @@ protected:
 
 public:
     Item(Vector2 pos);
-
+    virtual ~Item() = default;
     void draw();
     virtual void update() = 0;
     virtual void appear() = 0;

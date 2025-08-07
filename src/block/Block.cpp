@@ -8,7 +8,7 @@
 #include "Character.hpp"
 
 Block::Block(Vector2 pos, int item_count, const std::string &type_item, const std::string &type_block)
-    : sprite_(Item_Sprite::item_), pos_(pos), item_count_(item_count), type_item_(type_item)
+    : sprite_(Item_Sprite::item_), pos_(pos), itemCount(item_count), typeItem(type_item)
 {
     questionState_ = new QuestionBlock(*this);
     normalState_ = new NormalBlock(*this);
@@ -31,20 +31,20 @@ Block::~Block()
 
 void Block::draw_()
 {
-    currentState_->Draw_();
+    currentState_->draw_();
 }
 
 void Block::update_()
 {
-    currentState_->Update_();
+    currentState_->update_();
 }
 
 void Block::onHit(std::vector<Item *> &item,Character & character)
 {
-    currentState_->onHit(item, player, info);
+    currentState_->onHit(item, character);
 }
 
-void Block::setState(A_Block_State *new_state)
+void Block::setState(BlockState *new_state)
 {
     currentState_ = new_state;
 }
@@ -61,7 +61,7 @@ void Block::setPos(Vector2 pos)
 
 int Block::getItemCount() const
 {
-    return item_count_;
+    return itemCount;
 }
 
 Rectangle Block::getSourceRec() const { return currentState_->getSourceRec(); }
@@ -72,17 +72,17 @@ bool Block::getJiggle() const { return currentState_->getJiggle(); }
 
 bool Block::getIsDelete() const { return currentState_->getIsDelete(); }
 
-std::string Block::getTypeItem() const { return type_item_; }
+std::string Block::getTypeItem() const { return typeItem; }
 
 void Block::decreaseItem()
 {
-    item_count_--;
+    itemCount--;
 }
 
-const SpriteSheet &Block::getSprite()
-{
-    return sprite_;
-}
+// const SpriteSheet &Block::getSprite()
+// {
+//     return sprite_;
+// }
 
 BlockState *Block::getQuestionState() const
 {

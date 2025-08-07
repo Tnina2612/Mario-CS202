@@ -2,7 +2,7 @@
 
 const float scale_screen = 3.0f;
 Item::Item(Vector2 pos)
-    : item_(ItemSprite::), pos_(pos), frame_(0.0f), type_(0), appearAnimation(1), isDelete_(0) {}
+    : itemTexture(LoadTexture("assets/images/items.png")), pos_(pos), frame_(0.0f), type_(0), appearAnimation(1), isDelete_(0) {}
 
 Vector2 Item::getPos() const { return pos_; }
 
@@ -19,5 +19,5 @@ bool Item::isDelete() const { return isDelete_; }
 void Item::draw()
 {
     Rectangle dest_rec = {pos_.x, pos_.y, rec_.width * scale_screen, rec_.height * scale_screen};
-    DrawTexturePro(item_.sprite, rec_, dest_rec, {dest_rec.width / 2.0f, dest_rec.height}, 0.0f, WHITE);
+    DrawTexturePro(itemTexture, rec_, dest_rec, {dest_rec.width / 2.0f, dest_rec.height}, 0.0f, WHITE);
 }

@@ -47,7 +47,7 @@ void QuestionBlock::onHit(std::vector<Item *> &item, Character &character)
     if (m_block.getItemCount() > 0)
     {
         m_block.decreaseItem();
-        SpawnItem::itemSpawn(m_block.getTypeItem(), item, m_block.getPos(), character);
+        SpawnItem::ItemSpawn(m_block.getTypeItem(), item, m_block.getPos(), character);
         jiggle_ = true;
         velocity_y = -pushHeight; // Đẩy lên
     }
@@ -59,7 +59,7 @@ void QuestionBlock::jiggle()
         return;
 
     float dt = GetFrameTime();
-    velocity_y += Physics::gravity_ * dt;
+    velocity_y += 1000.0f * dt;
 
     Vector2 tmp = m_block.getPos();
     tmp.y += velocity_y * dt;

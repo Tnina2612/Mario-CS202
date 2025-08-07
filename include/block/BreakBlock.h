@@ -5,6 +5,8 @@
 class BreakBLock : public BlockState
 {
 private:
+    Texture2D blockTexture;
+    Rectangle rec_;
     Block &m_block;
     bool isDelete;
     Vector2 up_pos_left, down_pos_left;

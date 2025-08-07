@@ -32,7 +32,7 @@ void Flower::update()
 //     Score_Manager &score_manager = Score_Manager::GetInstance();
 //     score_manager.AddScore({character.getPosition().x + character.get_draw_rec().width, character.getPosition().y}, Score_Flower);
 //     character.getFlower();
-//     info.UpdateScore(Score_Flower);
+//     info.UpdateScore(ScoreFlower);
 //     isDelete = 1;
 // }
 

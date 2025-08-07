@@ -3,7 +3,7 @@ const float scale_screen = 3.0f;
 BreakBLock::BreakBLock(Block &block)
     : m_block(block), isDelete(false), rotation(0.0f)
 {
-    rec_ = ItemSprite::Brown_Brick::break_;
+    blockTexture = LoadTexture("assets/images/levels/castle/C4.png"); 
     before_pos = {m_block.getPos().x, m_block.getPos().y - rec_.height};
     up_pos_left = down_pos_left = before_pos;
 
@@ -60,8 +60,8 @@ void BreakBLock::fall()
     float dt = GetFrameTime();
 
     // Cập nhật vận tốc theo gia tốc trọng lực
-    up_velocity.y += Physics::gravity_ * dt;
-    down_velocity.y += Physics::gravity_ * dt;
+    up_velocity.y += 1000.0f * dt;
+    down_velocity.y += 1000.0f * dt;
 
     // Cập nhật vị trí
     up_pos_left.x += up_velocity.x * dt;
@@ -88,8 +88,8 @@ void BreakBLock::beDelete()
 Rectangle BreakBLock::getDrawRec() const
 {
     return {
-        m_block.getPos().x - Tile_Size / 2.0f,
-        m_block.getPos().y - Tile_Size,
-        Tile_Size,
-        Tile_Size};
+        m_block.getPos().x - tileSize / 2.0f,
+        m_block.getPos().y - tileSize,
+        tileSize,
+        tileSize};
 }
