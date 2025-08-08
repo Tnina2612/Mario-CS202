@@ -1,4 +1,6 @@
 #include "Block/NormalBlock.h"
+#include<block/BreakBlock.h>
+#include<block/SolidBlock.h> 
 const float scale_screen= 3.0f;
 
 NormalBlock::NormalBlock(Block &block)
@@ -10,22 +12,10 @@ NormalBlock::NormalBlock(Block &block)
     isBreak = (m_block.getTypeItem() == "");
 }
 
-// void NormalBlock::draw_()
-// {
-//     Rectangle dest_rec = {
-//         m_block.getPos().x,
-//         m_block.getPos().y,
-//         rec_.width * 3.0f,
-//         rec_.height * 3.0f};
-
-//     DrawTexturePro(
-//         m_block.getSprite().sprite,
-//         rec_,
-//         dest_rec,
-//         {dest_rec.width / 2.0f, dest_rec.height},
-//         0.0f,
-//         WHITE);
-// }
+void NormalBlock::draw_()
+{
+    m_block.animation.draw(m_block.pos_.x, m_block.pos_.y);
+}
 
 void NormalBlock::update_()
 {
@@ -33,8 +23,8 @@ void NormalBlock::update_()
     changeState();
 }
 
-// void NormalBlock::onHit(std::vector<Item *> &item, Character& character)
-// {
+void NormalBlock::onHit(std::vector<Item *> &item, Character& character)
+{
 //     if (m_block.getItemCount() > 0)
 //     {
 //         SpawnItem::ItemSpawn(m_block.getTypeItem(), item, m_block.getPos(), character);
@@ -57,7 +47,7 @@ void NormalBlock::update_()
 //     {
 //         changeState_ = true;
 //     }
-// }
+}
 
 void NormalBlock::jiggle()
 {
@@ -85,21 +75,21 @@ void NormalBlock::changeState()
 {
     if (changeState_ && isBreak)
     {
-        m_block.setState(m_block.getBreakState());
+        m_block.setState(make_shared<BreakBlock>(m_block));
     }
     else if (changeState_ && !isBreak && !jiggle_)
     {
-        m_block.setState(m_block.getSolidState());
+        m_block.setState(make_shared<SolidBlock>(m_block));
     }
 }
 
 Rectangle NormalBlock::getDrawRec() const
 {
     return {
-        m_block.getPos().x - rec_.width * scale_screen / 2.0f,
-        m_block.getPos().y - rec_.height * scale_screen,
-        rec_.width * scale_screen,
-        rec_.height * scale_screen};
+        m_block.getPos().x,
+        m_block.getPos().y,
+        rec_.x,
+        rec_.y};
 }
 
 bool NormalBlock::getJiggle()

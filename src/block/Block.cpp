@@ -7,26 +7,19 @@
 #include "../include/Block/SolidBlock.h"
 #include "../include/entities/Character.hpp"
 #include "../assets/images/Coordinate.h"
-Block::Block(Vector2 pos, int item_count, const std::string &type_item, const std::string &type_block)
-    : sprite_(LoadTexture("item.png")), pos_(pos), itemCount(item_count), typeItem(type_item)
+Block::Block(Vector2 pos, int item_count, const std::string &type_item, const std::string &type_block, const std::string &name_block)
+    : pos_(pos), itemCount(item_count), typeItem(type_item), 
+    animation(name_block), name_block(name_block), nextState_(nullptr)
 {
-    questionState_ = new QuestionBlock(*this);
-    normalState_ = new NormalBlock(*this);
-    solidState_ = new SolidBlock(*this);
-    breakState_ = new BreakBlock(*this);
     if (type_block == "question")
-        currentState_ = questionState_;
+        currentState_ = make_shared<QuestionBlock>(*this);
     else if (type_block == "normal")
-        currentState_ = normalState_;
+        currentState_ = make_shared<NormalBlock>(*this);
 }
 
 Block::~Block()
 {
-    delete questionState_;
-    delete normalState_;
-    delete breakState_;
-    delete solidState_;
-    currentState_ = nullptr;
+    currentState_.reset();
 }
 
 void Block::draw_()
@@ -36,6 +29,10 @@ void Block::draw_()
 
 void Block::update_()
 {
+    if(nextState_ != nullptr) {
+        currentState_ = nextState_;
+        nextState_.reset();
+    }
     currentState_->update_();
 }
 
@@ -44,9 +41,9 @@ void Block::onHit(std::vector<Item *> &item,Character & character)
     currentState_->onHit(item, character);
 }
 
-void Block::setState(BlockState *new_state)
+void Block::setState(std::shared_ptr<BlockState> new_state)
 {
-    currentState_ = new_state;
+    nextState_ = new_state;
 }
 
 Vector2 Block::getPos() const
@@ -64,8 +61,6 @@ int Block::getItemCount() const
     return itemCount;
 }
 
-Rectangle Block::getSourceRec() const { return currentState_->getSourceRec(); }
-
 Rectangle Block::getDrawRec() const { return currentState_->getDrawRec(); }
 
 bool Block::getJiggle() const { return currentState_->getJiggle(); }
@@ -73,6 +68,8 @@ bool Block::getJiggle() const { return currentState_->getJiggle(); }
 bool Block::getIsDelete() const { return currentState_->getIsDelete(); }
 
 std::string Block::getTypeItem() const { return typeItem; }
+
+std::string Block::getBlockName() const { return name_block; }
 
 void Block::decreaseItem()
 {

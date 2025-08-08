@@ -1,4 +1,5 @@
 #include<level/Level.hpp>
+#include<limits>
 
 ChangeSubLevelManager::ChangeSubLevelManager(std::string filename, SubLevel* subLevel) : subLevel(subLevel) {
     ifstream inp(filename);

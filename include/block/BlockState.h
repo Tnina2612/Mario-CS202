@@ -8,8 +8,7 @@
 class BlockState
 {
 protected:
-    Rectangle rec_;
-
+    const Vector2 rec_ = Vector2{16.f, 16.f};
 public:
     virtual ~BlockState() = default;
     virtual void draw_() = 0;
@@ -17,6 +16,5 @@ public:
     virtual void onHit(std::vector<Item *> &item, Character &character) = 0;
     virtual bool getJiggle() = 0;
     virtual bool getIsDelete() const;
-    Rectangle getSourceRec() const;
     virtual Rectangle getDrawRec() const = 0;
 };

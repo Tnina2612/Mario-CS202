@@ -46,7 +46,6 @@ bool Goomba::onHit() {
             setVelocity(Vector2{20.f, -60.f});
             m_data._dir = 1;
             m_data._isOnGround = false;
-            std::cout << "Goomba is dead\n";
             _deadAni = 1;
         }
         if(isOffScreen() == 1 || isOffScreen() == -2) {

@@ -11,7 +11,7 @@ void Flower::update()
     appear();
 }
 
-// void Flower::activate(Character &character){
+void Flower::activate(Character &character){
 //     if (isDelete())
 //         return;
 
@@ -34,7 +34,7 @@ void Flower::update()
 //     character.getFlower();
 //     info.UpdateScore(ScoreFlower);
 //     isDelete = 1;
-// }
+}
 
 void Flower::appear()
 {

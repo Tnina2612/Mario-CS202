@@ -15,10 +15,14 @@ void Coin::update()
     rec_ = m_rec[type_];
 }
 
-// void Coin::activate(Character &character)
-// {
+void Coin::appear() {
+    
+}
+
+void Coin::activate(Character &character)
+{
 //     character.UpdateCoins(1);
 //     isDelete_ = 1;
-// }
+}
 
 bool Coin::canMove() const { return false; }

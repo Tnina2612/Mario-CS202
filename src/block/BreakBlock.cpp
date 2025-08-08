@@ -89,8 +89,8 @@ void BreakBlock::beDelete()
 Rectangle BreakBlock::getDrawRec() const
 {
     return {
-        m_block.getPos().x - tileSize / 2.0f,
-        m_block.getPos().y - tileSize,
-        tileSize,
-        tileSize};
+        m_block.getPos().x,
+        m_block.getPos().y,
+        rec_.x,
+        rec_.y};
 }

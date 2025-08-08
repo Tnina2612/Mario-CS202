@@ -99,12 +99,12 @@ void Star::update()
     beDelete();
 }
 
-// void Star::activate(Character &character)
-// {
+void Star::activate(Character &character)
+{
 //     character.getStar();
 //     character.updateScore(Score_Star);
 //     isDelete_ = true;
-// }
+}
 
 // Vector2 Star::getPreviousFramePos()
 // {

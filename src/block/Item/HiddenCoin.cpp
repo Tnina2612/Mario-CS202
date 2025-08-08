@@ -46,11 +46,11 @@ void HiddenCoin::appear()
     }
 }
 
-// void HiddenCoin::activate(Character &character)
-// {
+void HiddenCoin::activate(Character &character)
+{
 //     character.collectCoin();
 //     character.getInfo().UpdateCoins(1);
-// }
+}
 
 bool HiddenCoin::canMove() const
 {

@@ -12,7 +12,6 @@ void LevelPlayerAnimationManager::update() {
     if(animations.empty()) {
         throw runtime_error("Animation queue is empty!\n");
     }
-    cout << "Updating animation: " << animations.front()->getType() << endl;
     animations.front()->update();
     if(animations.front()->isDone()) {
         animations.pop();

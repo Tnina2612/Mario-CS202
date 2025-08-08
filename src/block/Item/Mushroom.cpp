@@ -125,8 +125,8 @@ void Mushroom::update()
     beDelete();
 }
 
-// void Mushroom::activate(Character& character)
-// {
+void Mushroom::activate(Character& character)
+{
 //     if (state_ == State_MushRoom::super_)
 //     {
 //         Score_Manager &score_manager = Score_Manager::GetInstance();
@@ -136,7 +136,7 @@ void Mushroom::update()
 //     info.UpdateScore(Score_One_Up_Super);
 
 //     isDelete_ = true;
-// }
+}
 
 // Vector2 Mushroom::getPreviousFramePos() { return previousFramePos; }
 

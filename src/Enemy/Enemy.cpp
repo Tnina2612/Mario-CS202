@@ -36,7 +36,7 @@ void Enemy::setAniFrames(const std::vector<Rectangle>& frames) {
 
 void Enemy::setType(std::shared_ptr<EnemyType> type) {
     m_data._type = type;
-    m_animation.sprite = m_data._type->sprite;
+    m_animation.setSprite(m_data._type->sprite);
 }
 
 void Enemy::setMovementStrategy(std::shared_ptr<IEnemyStrategy> strategy) {
