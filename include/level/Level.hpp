@@ -75,6 +75,7 @@ class SubLevel {
         SubLevelPlayerManager playerManager;
 
         bool debug = false;
+        bool oke =false;
     public:
         SubLevel(Level* level, std::string folderName, Character* player);
         void draw();

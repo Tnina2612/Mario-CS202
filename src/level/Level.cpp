@@ -139,8 +139,15 @@ void SubLevel::update() {
     playerManager.update();
 
     // Enemy update
+    if(IsKeyPressed(KEY_SPACE)) {
+        oke =!oke;
+    }
+    if(!oke) {
+        return;
+    }
     for(const std::shared_ptr<Enemy>& enemy : enemies->list) {
-        // enemy->update();
+        blocks->update(enemy);
+        enemy->update();
     }
 
     // Debug
