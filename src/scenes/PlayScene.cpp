@@ -5,12 +5,8 @@
 #include "core/MusicManager.hpp"
 #include "entities/Character.hpp"
 
-PlayScene::PlayScene(const std::string& levelName) : 
-    level(new Level("./world-maps/" + levelName)) {
-}
-
-PlayScene::PlayScene(std::string subLevelFolder, Vector2 playerPosition, int numLives) :
-    level(new Level(subLevelFolder, playerPosition, numLives)) {
+PlayScene::PlayScene(const std::string& levelName)
+    : level(new Level("./world-maps/" + levelName)) {
 }
 
 PlayScene::~PlayScene() {

@@ -10,4 +10,4 @@ None
 WalkToX 160
 ./world-maps/1-2/underground1
 underground
-32 64
+32 208

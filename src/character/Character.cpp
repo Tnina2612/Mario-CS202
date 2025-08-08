@@ -76,13 +76,12 @@ void Character::jump() {
     if(IsKeyReleased(KEY_UP)) {
         veclocityY = veclocityY * 0.5f;
     }
-    if (onGround && veclocityY > restVeclocity) {
-        behavior = IDLE; // Reset behavior to IDLE when landing
-        veclocityX = 0.0f;
-        veclocityY = restVeclocity; // Reset vertical velocity when landing
-    }
     if(!IsKeyDown(KEY_LEFT) && !IsKeyDown(KEY_RIGHT)) {
         veclocityX = 0.0f; // Reset horizontal velocity when jumping
+    }
+    if (onGround && veclocityY > restVeclocity) {
+        behavior = IDLE; // Reset behavior to IDLE when landing
+        veclocityY = restVeclocity; // Reset vertical velocity when landing
     }
 }
 
@@ -109,17 +108,17 @@ void Character::climb(float timeEffect) {
 }
 
 void Character::update() {
-    // if(!onGround) {
-    //     behavior = JUMP;
-    // }
-    // else if(behavior != BRAKE){
-    //     if(IsKeyDown(KEY_LEFT) == false && IsKeyDown(KEY_RIGHT) == false) {
-    //         setBehavior(IDLE);
-    //     }
-    //     else {
-    //         setBehavior(MOVE);
-    //     }
-    // }
+    if(!onGround) {
+        behavior = JUMP;
+    }
+    else if(behavior != BRAKE){
+        if(IsKeyDown(KEY_LEFT) == false && IsKeyDown(KEY_RIGHT) == false) {
+            setBehavior(IDLE);
+            }
+            else {
+                setBehavior(MOVE);
+            }
+    }
     switch (behavior) {
         case MOVE:
             if (orientation == RIGHT) {
@@ -241,16 +240,12 @@ float Character::getJumpVelocity() const {
 }
 
 Rectangle Character::getRectangle() const {
-    float width, height;
-    if(characterState == SMALL) {
-        width = 14;
-        height = 15;
-    }
+    float width;
+    if(characterState == SMALL) width = 14;
     else {
         width = 16;
-        height = 31;
     }
-    return Rectangle{pos.x, pos.y - height * scale, /*frames[currentFrame].width * scale*/width * scale, height * scale};
+    return Rectangle{pos.x, pos.y - frames[currentFrame].height * scale, /*frames[currentFrame].width * scale*/width, frames[currentFrame].height * scale};
 }
 
 CharacterState Character::getCharacterState() const {
@@ -281,9 +276,6 @@ void Character::hitBlockBottom(float hline) {
     //     setBehavior(MOVE);
     // }
     onGround = true;
-    if(!IsKeyDown(KEY_LEFT) && !IsKeyDown(KEY_RIGHT) && !IsKeyDown(KEY_DOWN) && behavior != BRAKE) {
-        behavior = IDLE;
-    }
     veclocityY = restVeclocity; // Reset vertical velocity when hitting a block from the bottom
 }
 
@@ -293,17 +285,7 @@ void Character::die() {
     veclocityX = 0.0f;
     veclocityY = -jumpVeclocity; // Mario sẽ bật lên một chút khi chết (tùy chọn)
     onGround = false;
-    lives--;
 }
-
-void Character::setNumLives(int numLives) {
-    lives = numLives;
-}
-
-int Character::getNumLives() const {   
-    return lives;
-}
-
 bool Character::getCollideRight()const {
     return collideRight;
 }

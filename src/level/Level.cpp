@@ -3,19 +3,16 @@
 #include "scenes/GameOverScene.hpp"
 #include <filesystem>
 
-SubLevel::SubLevel(Level* level, std::string folderName, Character* player, Vector2 initPlayerPosition, InputManager& inputManager, Camera2D* camera) : // Initializer
+SubLevel::SubLevel(Level* level, std::string folderName, Character* player, InputManager& inputManager, Camera2D* camera) : // Initializer
     level(level),
     background(make_shared<TileMap>(folderName + "/background.txt")), 
     blocks(make_shared<TileMap>(folderName + "/blocks.txt")),
     enemies(make_shared<EnemyManager>(folderName + "/enemies.txt", this)),
     changeSubLevelManager(make_shared<ChangeSubLevelManager>(folderName + "/changingPoints.txt", this)),
     player(player), 
-    initPlayerPosition(initPlayerPosition),
     playerManager(this, inputManager),
-    camera(camera),
-    folderName(folderName)
+    camera(camera)
 {
-    player->setPosition(initPlayerPosition.x, initPlayerPosition.y);
 }
 
 void SubLevel::draw() {
@@ -61,41 +58,20 @@ Level::Level(std::string folderName) :
     inputManager.addListener(new rightListener());
 
     // Level configurations
+    LevelVar::ThemeID = LevelVar::Overworld;
     ifstream inp(folderName + "/InitializeInstructor.txt");
     if(inp.is_open() == false) {
         throw runtime_error("Cannot open " + folderName + "/InitializeInstructor.txt");
     }
         std::string initialWorld;
         getline(inp, initialWorld);
+        subLevel = make_shared<SubLevel>(this, initialWorld, player.get(), inputManager, &camera);
+        nextSubLevel.reset();
+
         float x, y;
         inp >> x >> y;
         player->setPosition(x, y);
-        subLevel = make_shared<SubLevel>(this, initialWorld, player.get(), Vector2{x, y}, inputManager, &camera);
-        nextSubLevel.reset();
     inp.close();
-}
-
-Level::Level(std::string subLevelFolder, Vector2 playerPosition, int numLives) :
-    player(make_shared<Mario>()),
-    renderTexture(LoadRenderTexture(Global::ORIGINAL_WIDTH, Global::ORIGINAL_HEIGHT)),
-    camera(Camera2D{Vector2{Global::ORIGINAL_WIDTH / 2.f, Global::ORIGINAL_HEIGHT / 2.f}, Vector2{Global::ORIGINAL_WIDTH / 2.f, Global::ORIGINAL_HEIGHT / 2.f}, 0.f, 1.f}),
-    inputManager(INPUT_MANAGER) 
-{
-    // Input manager
-    inputManager.addCharacter(player.get());
-    inputManager.addKey(KEY_LEFT);
-    inputManager.addKey(KEY_RIGHT);
-    inputManager.addKey(KEY_UP);
-    inputManager.addKey(KEY_DOWN);
-    inputManager.addListener(new upListener());
-    inputManager.addListener(new downListener());
-    inputManager.addListener(new leftListener());
-    inputManager.addListener(new rightListener());
-
-    // Level configurations
-    player->setNumLives(numLives);
-    subLevel = make_shared<SubLevel>(this, subLevelFolder, player.get(), playerPosition, inputManager, &camera);
-    nextSubLevel.reset();
 }
 
 void Level::draw(void) {
@@ -133,7 +109,8 @@ void Level::changeSubLevel(NextSubLevelScene nextScene) {
         LevelVar::ThemeID = LevelVar::Underground;
         LevelVar::BackGroundColor = LevelVar::UndergroundColor;
     }
-    nextSubLevel = make_shared<SubLevel>(this, nextScene.filename, player.get(), nextScene.newPlayerPosition, inputManager, &camera);
+    nextSubLevel = make_shared<SubLevel>(this, nextScene.filename, player.get(), inputManager, &camera);
+    player->setPosition(nextScene.newPlayerPosition.x, nextScene.newPlayerPosition.y);
 }
 
 void Level::saveGame(std::string folderName) {

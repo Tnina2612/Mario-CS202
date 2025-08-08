@@ -2,11 +2,6 @@
 #include<fstream>
 #include<unordered_map>
 #include<string>
-#include<filesystem>
-#include<core/Program.hpp>
-#include<scenes/PlayScene.hpp>
-#include<scenes/DeathScene.hpp>
-#include<scenes/TitleScene.hpp>
 
 EnemyManager::EnemyManager(std::string filename, SubLevel* subLevel) :
     subLevel(subLevel) {
@@ -19,15 +14,11 @@ EnemyManager::EnemyManager(std::string filename, SubLevel* subLevel) :
         inp >> numEnemies;
         string enemyType;
         inp >> enemyType;
-        if(enemyType != "Bowser") {
-            for(int j = 0; j < numEnemies; j++) {
-                float x, y; 
-                inp >> x >> y;
-                list.push_back(EnemyFactory::createEnemy(enemyType, Vector2{x, y}));
-                list.back()->setActive(true);
-            }
-        } else {
-            
+        for(int j = 0; j < numEnemies; j++) {
+            float x, y; 
+            inp >> x >> y;
+            list.push_back(EnemyFactory::createEnemy(enemyType, Vector2{x, y}));
+            list.back()->setActive(true);
         }
     }
     inp.close();
@@ -58,20 +49,17 @@ void EnemyManager::update() {
         }
 
         // Check for collisions with the player
-        Rectangle pastPlayerRec = subLevel->playerManager.gameplayManager.pastPlayerRec;
-        if(CheckCollisionRecs(enemy->getHitBox(), subLevel->player->getRectangle()) && enemy->isAlive()) {
-            if(pastPlayerRec.y + pastPlayerRec.height < enemy->getHitBox().y && 
-                enemy->getTypeName().find("Plant") == std::string::npos) {
-                enemy->onStomp();
-                subLevel->player->setVeclocityY(-100);
+        if(CheckCollisionRecs(enemy->getHitBox(), subLevel->player->getRectangle())) {
+            float overlapX = std::min(enemy->getHitBox().x + enemy->getHitBox().width, subLevel->player->getRectangle().x + subLevel->player->getRectangle().width) - std::max(enemy->getHitBox().x, subLevel->player->getRectangle().x);
+            float overlapY = std::min(enemy->getHitBox().y, subLevel->player->getRectangle().y) - std::max(enemy->getHitBox().y - enemy->getHitBox().height, subLevel->player->getRectangle().y - subLevel->player->getRectangle().height);
+            if(overlapY < overlapX) {
+                if(subLevel->player->getPos().y < enemy->getPos().y) {
+                    enemy->onStomp();
+                } else {
+                    subLevel->player->die();
+                }
             } else {
                 subLevel->player->die();
-                if(subLevel->player->getNumLives() > 0) {
-                    Program::getInstance().changeScene(new TitleScene());
-                } else {
-                    cout << "Game Over! You have no lives left." << endl;
-                    Program::getInstance().changeScene(new DeathScene());
-                }
             }
         }
     }

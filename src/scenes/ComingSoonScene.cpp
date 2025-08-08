@@ -2,7 +2,6 @@
 #include "scenes/ComingSoonScene.hpp"
 #include "level/TileMap.hpp"
 #include "raylib.h"
-#include <scenes/MapSelectScene.hpp>
 
 void ComingSoonScene::init() {
     background = new TileMap("world-maps/titleScene/titleScene.txt");
@@ -15,9 +14,7 @@ void ComingSoonScene::init() {
 }
 
 void ComingSoonScene::handleInput() {
-    if(IsKeyPressed(KEY_ENTER) || IsKeyPressed(KEY_SPACE)) {
-        Program::getInstance().changeScene(new MapSelectScene());
-    }
+
 }
 
 void ComingSoonScene::update() {

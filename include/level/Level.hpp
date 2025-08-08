@@ -54,9 +54,7 @@ public:
 
 class LevelGameplayManager {
     private:
-        friend class EnemyManager;
         SubLevel* subLevel;
-        Rectangle pastPlayerRec;
     public:
         LevelGameplayManager(SubLevel* subLevel);
         void update();
@@ -75,7 +73,6 @@ class LevelPlayerAnimationManager {
 
 class LevelPlayerManager {
     private:
-        friend class EnemyManager;
         SubLevel* subLevel;
         LevelGameplayManager gameplayManager;
         std::unique_ptr<LevelPlayerAnimationManager> animationManager;
@@ -100,12 +97,10 @@ class SubLevel {
         std::shared_ptr<ChangeSubLevelManager> changeSubLevelManager;
         LevelPlayerManager playerManager;
         Camera2D* camera;
-        std::string folderName;
-        Vector2 initPlayerPosition;
 
         bool debug = false;
     public:
-        SubLevel(Level* level, std::string folderName, Character* player, Vector2 initPlayerPosition, InputManager& inputManager, Camera2D* camera);
+        SubLevel(Level* level, std::string folderName, Character* player, InputManager& inputManager, Camera2D* camera);
         void draw();
         void update();
         ~SubLevel() = default;
@@ -122,7 +117,6 @@ class Level {
         std::string folderName;
     public:
         Level(std::string folderName);
-        Level(std::string subLevelFolder, Vector2 playerPosition, int numLives = 3);
         void changeSubLevel(NextSubLevelScene nextScene);
         void draw(void);
         void update(void);
