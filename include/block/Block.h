@@ -1,19 +1,10 @@
 #pragma once
-#include<raylib.h>
-#include<map>
-#include<string>
-#include<memory>
-#include <cmath>
-class BlockFlyweight {
-    private:
-        std::string type;
-        Texture2D texture;
-    public:
-        BlockFlyweight(const char* dir);
-        void Draw(int posX, int posY);
-        std::string getType();
-        ~BlockFlyweight(void);
-};
+#include <raylib.h>
+#include <memory>
+#include "BlockState.h"
+#include "Item/ItemFactory.h"
+#include "../include/entities/Character.hpp"
+#include "../assets/images/Coordinate.h"
 
 class Block {
 protected:
@@ -31,13 +22,12 @@ public:
 
 class BlockFlyweightFactory {
 private:
-    SpriteSheet sprite_;
+    Texture2D sprite_;
 
     BlockState *questionState_;
     BlockState *normalState_;
     BlockState *solidState_;
     BlockState *breakState_;
-
     BlockState *currentState_;
 
     Vector2 pos_;
@@ -47,10 +37,10 @@ private:
 public:
     Block(Vector2 pos, int itemCount, const std::string &typeItem, const std::string &typeBlock);
     ~Block();
-    std::vector<bool> Surrounded_Block{0, 0, 0, 0}; // top bot left right
+    std::vector<bool> surroundedBlock{0, 0, 0, 0}; 
     void update_();
     void draw_();
-    void onHit(std::vector<Item *> &item, Character & character) override;
+    void onHit(std::vector<Item *> &item, Character & character);
 
     void setState(BlockState *new_state);
 
@@ -59,12 +49,10 @@ public:
     int getItemCount() const;
     Rectangle getSourceRec() const;
     Rectangle getDrawRec() const;
-    bool getElapse() const;
+    bool getJiggle() const;
     bool getIsDelete() const;
     std::string getTypeItem() const;
     void decreaseItem();
-
-    const SpriteSheet &getSprite();
 
     BlockState *getQuestionState() const;
     BlockState *getNormalState() const;
