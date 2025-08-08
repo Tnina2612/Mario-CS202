@@ -1,7 +1,8 @@
-0
-32 176 16 32
-Touch
 1
-WalkToX 160
+
+206 191 2 2 Right
+1
+Right
 ./world-maps/1-2/underground1
 underground
+1848 208

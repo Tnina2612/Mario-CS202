@@ -4,17 +4,19 @@
 
 Character::Character() : Animation(CharacterSprite::Fire::frames), state(nullptr), pos(CharacterVar::position), 
     invincibilityTime(0.0f), lives(3), score(0), veclocityX(0.0f), veclocityY(50.0f), orientation(RIGHT), characterState(SMALL),
-    isInvincible(false), isDead(false), behavior(IDLE), onGround(true), levelPlayerAnimationManager(this) {
+    isInvincible(false), isDead(false), behavior(IDLE), onGround(true), playerLevelAnimationManager(this) {
         accelerationX = 0.0f;
         accelerationY = 0.0f;
+        timeEffect = 0.0f;
     }
 
 Character::Character(const vector<Rectangle>& frames, const Texture2D& sprite)
     : Animation(frames, sprite), state(nullptr), pos(CharacterVar::position), 
     invincibilityTime(0.0f), lives(3), score(0), veclocityX(0.0f), veclocityY(50.0f), orientation(RIGHT), characterState(SMALL),
-    isInvincible(false), isDead(false),behavior(IDLE), onGround(true), levelPlayerAnimationManager(this) {
+    isInvincible(false), isDead(false),behavior(IDLE), onGround(true), playerLevelAnimationManager(this) {
         accelerationX = 0.0f;
         accelerationY = 0.0f;
+        timeEffect = 0.0f;
     }
 
 void Character::setState(IState* newState) {
@@ -74,12 +76,13 @@ void Character::jump() {
     if(IsKeyReleased(KEY_UP)) {
         veclocityY = veclocityY * 0.5f;
     }
-    if(!IsKeyDown(KEY_LEFT) && !IsKeyDown(KEY_RIGHT)) {
-        veclocityX = 0.0f; // Reset horizontal velocity when jumping
-    }
     if (onGround && veclocityY > restVeclocity) {
         behavior = IDLE; // Reset behavior to IDLE when landing
+        veclocityX = 0.0f;
         veclocityY = restVeclocity; // Reset vertical velocity when landing
+    }
+    if(!IsKeyDown(KEY_LEFT) && !IsKeyDown(KEY_RIGHT)) {
+        veclocityX = 0.0f; // Reset horizontal velocity when jumping
     }
 }
 
@@ -95,18 +98,28 @@ void Character::resetAttributes() {
     collideRight = false;
 }
 
+void Character::climb(float timeEffect) {
+    if(this->timeEffect > timeEffect) {
+        this->timeEffect = 0;
+        behavior = IDLE;
+        return;
+    }
+    this->timeEffect += GetFrameTime();
+    veclocityX = 0.0f;
+}
+
 void Character::update() {
-    if(!onGround) {
-        behavior = JUMP;
-    }
-    else if(behavior != BRAKE){
-        if(IsKeyDown(KEY_LEFT) == false && IsKeyDown(KEY_RIGHT) == false) {
-            setBehavior(IDLE);
-            }
-            else {
-                setBehavior(MOVE);
-            }
-    }
+    // if(!onGround) {
+    //     behavior = JUMP;
+    // }
+    // else if(behavior != BRAKE){
+    //     if(IsKeyDown(KEY_LEFT) == false && IsKeyDown(KEY_RIGHT) == false) {
+    //         setBehavior(IDLE);
+    //     }
+    //     else {
+    //         setBehavior(MOVE);
+    //     }
+    // }
     switch (behavior) {
         case MOVE:
             if (orientation == RIGHT) {
@@ -164,6 +177,14 @@ void Character::update() {
             Animation::update(GetFrameTime(), 0, 1);
             // Có thể thêm điều kiện để reset game hoặc respawn ở đây
             break;
+        case CLIMB:
+            if(orientation == LEFT) {
+                Animation::update(GetFrameTime(), 14, 2);
+            }
+            else {
+                Animation::update(GetFrameTime(), 16, 2);
+            }
+            break;
         default:
             break;
     }
@@ -220,12 +241,16 @@ float Character::getJumpVelocity() const {
 }
 
 Rectangle Character::getRectangle() const {
-    float width;
-    if(characterState == SMALL) width = 14;
+    float width, height;
+    if(characterState == SMALL) {
+        width = 14;
+        height = 15;
+    }
     else {
         width = 16;
+        height = 31;
     }
-    return Rectangle{pos.x, pos.y - frames[currentFrame].height * scale, /*frames[currentFrame].width * scale*/width, frames[currentFrame].height * scale};
+    return Rectangle{pos.x, pos.y - height * scale, /*frames[currentFrame].width * scale*/width * scale, height * scale};
 }
 
 CharacterState Character::getCharacterState() const {
@@ -256,6 +281,9 @@ void Character::hitBlockBottom(float hline) {
     //     setBehavior(MOVE);
     // }
     onGround = true;
+    if(!IsKeyDown(KEY_LEFT) && !IsKeyDown(KEY_RIGHT) && !IsKeyDown(KEY_DOWN) && behavior != BRAKE) {
+        behavior = IDLE;
+    }
     veclocityY = restVeclocity; // Reset vertical velocity when hitting a block from the bottom
 }
 
@@ -265,7 +293,17 @@ void Character::die() {
     veclocityX = 0.0f;
     veclocityY = -jumpVeclocity; // Mario sẽ bật lên một chút khi chết (tùy chọn)
     onGround = false;
+    lives--;
 }
+
+void Character::setNumLives(int numLives) {
+    lives = numLives;
+}
+
+int Character::getNumLives() const {   
+    return lives;
+}
+
 bool Character::getCollideRight()const {
     return collideRight;
 }

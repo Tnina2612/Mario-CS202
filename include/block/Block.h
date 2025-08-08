@@ -1,13 +1,35 @@
 #pragma once
-#include <raylib.h>
-#include <memory>
-#include "Constants.h"
-#include "BlockState.h"
-#include "Item/Spawn_Item.h"
-#include "Character.hpp"
+#include<raylib.h>
+#include<map>
+#include<string>
+#include<memory>
+#include <cmath>
+class BlockFlyweight {
+    private:
+        std::string type;
+        Texture2D texture;
+    public:
+        BlockFlyweight(const char* dir);
+        void Draw(int posX, int posY);
+        std::string getType();
+        ~BlockFlyweight(void);
+};
 
-class Block
-{
+class Block {
+protected:
+    Vector2 position;
+    std::shared_ptr<BlockFlyweight> flyweight;
+public:
+    Block(Vector2 position, std::shared_ptr<BlockFlyweight> flyweight);
+    virtual ~Block() = default;
+    virtual void Draw();
+    virtual Rectangle getRectangle() const;
+    virtual void jiggle() {}
+    virtual bool breakBrick() { return false; }
+    std::string getType();
+};
+
+class BlockFlyweightFactory {
 private:
     SpriteSheet sprite_;
 

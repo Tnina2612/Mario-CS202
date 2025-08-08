@@ -1,24 +1,29 @@
 #pragma once
 #include<level/TileMap.hpp>
 #include<level/LevelPlayerAnimation.hpp>
+#include<entities/Enemy/Enemy.hpp>
+#include<entities/Enemy/EnemyFactory.hpp>
 #include<raylib.h>
 #include<iostream>
 #include<entities/Character.hpp>
 #include<entities/Mario.hpp>
-#include<entities/Enemy/Enemy.hpp>
-#include<entities/Enemy/EnemyFactory.hpp>
 #include<core/InputManager.hpp>
 #include<core/Global.hpp>
 #include<queue>
 
-struct EnemyList {
-    std::vector<std::shared_ptr<Enemy>> list;
-    EnemyList(std::string filename);
-    ~EnemyList(void) = default;
-};
-
 class Level;
 class SubLevel;
+
+class EnemyManager {
+    std::vector<std::shared_ptr<Enemy>> list;
+    SubLevel* subLevel;
+public:
+    EnemyManager(std::string filename, SubLevel* subLevel);
+    void update();
+    void draw() const;
+    void saveToFile(std::string filename);
+    ~EnemyManager(void) = default;
+};
 
 struct NextSubLevelScene {
     std::string filename;
@@ -44,55 +49,63 @@ public:
     bool okToChange(int id);
     void transit(int id);
     void draw() const;
+    void saveToFile(std::string filename) const;
 };
 
-class SubLevelPlayerGameplayManager {
+class LevelGameplayManager {
     private:
+        friend class EnemyManager;
         SubLevel* subLevel;
+        Rectangle pastPlayerRec;
     public:
-        SubLevelPlayerGameplayManager(SubLevel* subLevel);
+        LevelGameplayManager(SubLevel* subLevel);
         void update();
 };
 
-class SubLevelPlayerAnimationManager {
+class LevelPlayerAnimationManager {
     private:
         SubLevel* subLevel;
         std::queue<std::shared_ptr<SubLevelAnimation>> animations;
         std::shared_ptr<NextSubLevelScene> nextScene;
     public:
-        SubLevelPlayerAnimationManager(SubLevel* subLevel, std::vector<std::shared_ptr<SubLevelAnimation>> animations, std::shared_ptr<NextSubLevelScene> nextScene);
+        LevelPlayerAnimationManager(SubLevel* subLevel, std::vector<std::shared_ptr<SubLevelAnimation>> animations, std::shared_ptr<NextSubLevelScene> nextScene);
         void update();
         bool done() const;
 };
 
-class SubLevelPlayerManager {
+class LevelPlayerManager {
     private:
+        friend class EnemyManager;
         SubLevel* subLevel;
-        SubLevelPlayerGameplayManager gameplayManager;
-        std::unique_ptr<SubLevelPlayerAnimationManager> animationManager;
+        LevelGameplayManager gameplayManager;
+        std::unique_ptr<LevelPlayerAnimationManager> animationManager;
         InputManager& inputManager;
     public:
-        SubLevelPlayerManager(SubLevel* subLevel, InputManager& inputManager);
+        LevelPlayerManager(SubLevel* subLevel, InputManager& inputManager);
         void update();
-        void addAnimation(unique_ptr<SubLevelPlayerAnimationManager> nextSceneManager);
+        void addAnimation(unique_ptr<LevelPlayerAnimationManager> nextSceneManager);
 };
 
 class SubLevel {
         friend class Level;
+        friend class EnemyManager;
         friend class ChangeSubLevelManager;
-        friend class SubLevelPlayerGameplayManager;
-        friend class SubLevelPlayerAnimationManager;
+        friend class LevelGameplayManager;
+        friend class LevelPlayerAnimationManager;
         Level* level;
         Character* player;
         std::shared_ptr<TileMap> background;
         std::shared_ptr<TileMap> blocks;
-        std::shared_ptr<EnemyList> enemies;
+        std::shared_ptr<EnemyManager> enemies;
         std::shared_ptr<ChangeSubLevelManager> changeSubLevelManager;
-        SubLevelPlayerManager playerManager;
+        LevelPlayerManager playerManager;
+        Camera2D* camera;
+        std::string folderName;
+        Vector2 initPlayerPosition;
 
         bool debug = false;
     public:
-        SubLevel(Level* level, std::string folderName, Character* player, InputManager& inputManager);
+        SubLevel(Level* level, std::string folderName, Character* player, Vector2 initPlayerPosition, InputManager& inputManager, Camera2D* camera);
         void draw();
         void update();
         ~SubLevel() = default;
@@ -106,10 +119,14 @@ class Level {
         RenderTexture2D renderTexture;
         Camera2D camera;
         InputManager& inputManager;
+        std::string folderName;
     public:
         Level(std::string folderName);
+        Level(std::string subLevelFolder, Vector2 playerPosition, int numLives = 3);
         void changeSubLevel(NextSubLevelScene nextScene);
         void draw(void);
         void update(void);
+        void saveGame(std::string folderName);
+        static vector<std::pair<std::string, std::string>> getSavedLevels();
         ~Level();
 };

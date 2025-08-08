@@ -25,6 +25,7 @@ class TileMap {
         void update(Character* character);
         void update(std::shared_ptr<Enemy> enemy);
         std::vector<std::pair<int, int>> cellsToCheck(const Rectangle& rec);
+        void saveToFile(const std::string& filename) const;
 
         float getWidth();
         float getHeight();

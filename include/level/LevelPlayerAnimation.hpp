@@ -8,6 +8,8 @@ class SubLevelAnimation {
         virtual bool isDone() = 0;
         virtual void update() = 0;
         virtual string getType() const = 0;
+        virtual void saveToFile(std::ofstream& out) const = 0;
+        virtual ~SubLevelAnimation() = default;
 };
 
 class PlayerDownPipeAnimation : public SubLevelAnimation {
@@ -19,6 +21,7 @@ class PlayerDownPipeAnimation : public SubLevelAnimation {
         bool isDone() override;
         void update() override;
         string getType() const override;
+        void saveToFile(std::ofstream& out) const override;
 };
 
 class PlayerIntoLeftPipeAnimation : public SubLevelAnimation {
@@ -30,6 +33,7 @@ class PlayerIntoLeftPipeAnimation : public SubLevelAnimation {
         bool isDone() override;
         void update() override;
         string getType() const override;
+        void saveToFile(std::ofstream& out) const override;
 };
 
 class PlayerIntoRightPipeAnimation : public SubLevelAnimation {
@@ -41,6 +45,7 @@ class PlayerIntoRightPipeAnimation : public SubLevelAnimation {
         bool isDone() override;
         void update() override;
         string getType() const override;
+        void saveToFile(std::ofstream& out) const override;
 };
 
 class PlayerUpPipeAnimation : public SubLevelAnimation {
@@ -53,6 +58,7 @@ class PlayerUpPipeAnimation : public SubLevelAnimation {
         bool isDone() override;
         void update() override;
         string getType() const override;
+        void saveToFile(std::ofstream& out) const override;
 };
 
 class PlayerClimbDownAnimation : public SubLevelAnimation {
@@ -66,6 +72,7 @@ class PlayerClimbDownAnimation : public SubLevelAnimation {
         bool isDone() override;
         void update() override;
         string getType() const override;
+        void saveToFile(std::ofstream& out) const override;
 };
 
 class PlayerWalkToXAnimation : public SubLevelAnimation {
@@ -79,6 +86,7 @@ class PlayerWalkToXAnimation : public SubLevelAnimation {
         bool isDone() override;
         void update() override;
         string getType() const override;
+        void saveToFile(std::ofstream& out) const override;
 };
 
 class PlayerEnterDoorAnimation : public SubLevelAnimation {
@@ -91,6 +99,7 @@ class PlayerEnterDoorAnimation : public SubLevelAnimation {
         bool isDone() override;
         void update() override;
         string getType() const override;
+        void saveToFile(std::ofstream& out) const override;
 };
 
 class PlayerExitDoorAnimation : public SubLevelAnimation {
@@ -103,4 +112,5 @@ class PlayerExitDoorAnimation : public SubLevelAnimation {
         bool isDone() override;
         void update() override;
         string getType() const override;
+        void saveToFile(std::ofstream& out) const override;
 };

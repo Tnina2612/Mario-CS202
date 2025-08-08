@@ -79,7 +79,7 @@ bool ChangeSubLevelManager::okToChange(int id) {
 }
 
 void ChangeSubLevelManager::transit(int id) {
-    subLevel->playerManager.addAnimation(make_unique<SubLevelPlayerAnimationManager>(subLevel, list[id].animations, list[id].nextScene));
+    subLevel->playerManager.addAnimation(make_unique<LevelPlayerAnimationManager>(subLevel, list[id].animations, list[id].nextScene));
 }
 
 void ChangeSubLevelManager::draw() const {
@@ -87,4 +87,26 @@ void ChangeSubLevelManager::draw() const {
         DrawRectangleRec(point.detectRec, Color{50, 50, 100, 100});
         DrawText(point.key.c_str(), point.detectRec.x + 5, point.detectRec.y + 5, 10, WHITE);
     }
+}
+
+void ChangeSubLevelManager::saveToFile(std::string filename) const {
+    ofstream out(filename);
+    out << list.size() << endl;
+    for(const ChangeSubLevelPoint& point : list) {
+        out << point.detectRec.x << " " << point.detectRec.y << " " 
+            << point.detectRec.width << " " << point.detectRec.height << endl;
+        out << point.key << endl;
+        out << point.animations.size() << endl;
+        for(auto animation : point.animations) {
+            animation->saveToFile(out);
+        }
+        if(point.nextScene) {
+            out << point.nextScene->filename << endl;
+            out << point.nextScene->worldType << endl;
+            out << point.nextScene->newPlayerPosition.x << " " << point.nextScene->newPlayerPosition.y << endl;
+        } else {
+            out << "None" << endl;
+        }
+    }
+    out.close();
 }

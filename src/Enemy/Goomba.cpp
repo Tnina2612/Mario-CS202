@@ -5,21 +5,22 @@
 #include"../../include/entities/Enemy/EnemyData.hpp"
 #include"../../include/entities/Enemy/Goomba.hpp"
 #include"../../include/entities/Enemy/EnemyMove.hpp"
+#include<core/Variables.hpp>
 
 
 
 Goomba::Goomba() : Enemy() {
     _deadAni = 0;
-    m_data._velocity = Vector2{50.f, 0.f};
+    m_data._velocity = LevelVar::GoombaSpeed;
 }
 
 Goomba::Goomba(const std::string& name) : Enemy(name) {
     _deadAni = 0;
     float width = 16.f;
     float height = 16.f;
-    m_data = EnemyData (width, height, 10, false, true, true, 1, 
+    m_data = EnemyData (width, height, 1000.f, false, true, true, 1, 
                         Vector2{10,0}, Vector2{0,0}, -1);
-    m_data._velocity = Vector2{-100, 0.f};
+    m_data._velocity = LevelVar::GoombaSpeed;
     
 }
 
@@ -42,8 +43,9 @@ bool Goomba::onHit() {
 
         if(_deadAni == 0) {
             setAniFrames(getFrames("Dead"));
-            setVelocity(Vector2{60.f, 100.f});
+            setVelocity(Vector2{20.f, -60.f});
             m_data._dir = 1;
+            m_data._isOnGround = false;
             std::cout << "Goomba is dead\n";
             _deadAni = 1;
         }

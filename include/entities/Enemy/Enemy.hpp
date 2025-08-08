@@ -68,6 +68,7 @@ public:
 
     virtual void draw(); 
     virtual void update(float dt = GetFrameTime());
+    std::string getTypeName() const;
 
     virtual~Enemy() =default;
 };

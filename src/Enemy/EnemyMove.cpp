@@ -8,7 +8,7 @@
 Vector2 DirectionMove::Execute(EnemyData& data, float dt) {
     Vector2 res = {0.f, 0.f};
     res.x = data._velocity.x * data._dir * dt;
-    res.y = data._velocity.y * data._dir * dt;
+    res.y = data._velocity.y * dt;
     return res;
 }
 
