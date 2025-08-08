@@ -1,0 +1,16 @@
+15 16
+A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		
+A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		
+A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		
+A		A		A		S1		S2		S2		S3		A		A		A		A		A		A		A		A		A		
+A		A		A		S6		S7		S7		S8		A		A		A		A		A		A		A		A		A		
+A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		
+A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		
+A		G5		G5		G5		A		A		A		A		A		S1		S2		S3		A		A		A		A		
+A		G12		G13		G14		A		A		A		A		A		S6		S7		S8		A		A		A		A		
+G5		G6		G6		G6		G5		A		A		A		A		A		A		A		A		A		A		A		
+brick2		brick2		G7		brick2		brick2		A		A		A		A		A		A		A		A		A		A		A		
+brick2		brick2		G15		brick2		brick2		A		A		A		A		A		A		A		A		A		A		A		
+brick2		brick2		G15		brick2		brick2		A		A		A		A		A		A		A		A		A		A		A		
+A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		
+A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		

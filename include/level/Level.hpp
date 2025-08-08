@@ -1,88 +1,113 @@
 #pragma once
 #include<level/TileMap.hpp>
 #include<level/LevelPlayerAnimation.hpp>
+#include<entities/Enemy/Enemy.hpp>
+#include<entities/Enemy/EnemyFactory.hpp>
 #include<raylib.h>
 #include<iostream>
 #include<entities/Character.hpp>
 #include<entities/Mario.hpp>
-#include<entities/Enemy/Enemy.hpp>
-#include<entities/Enemy/EnemyFactory.hpp>
 #include<core/InputManager.hpp>
 #include<core/Global.hpp>
+#include<queue>
 
-struct EnemyList {
+class Level;
+class SubLevel;
+
+class EnemyManager {
     std::vector<std::shared_ptr<Enemy>> list;
-    EnemyList(std::string filename);
-    ~EnemyList(void) = default;
+    SubLevel* subLevel;
+public:
+    EnemyManager(std::string filename, SubLevel* subLevel);
+    void update();
+    void draw() const;
+    void saveToFile(std::string filename);
+    ~EnemyManager(void) = default;
 };
 
-struct ChangeSubLevelPoint {
-    Rectangle rec;
-    char key;
+struct NextSubLevelScene {
     std::string filename;
     std::string worldType;
     Vector2 newPlayerPosition;
 };
 
-struct ChangeSubLevelPointList {
+struct ChangeSubLevelPoint {
+    Rectangle detectRec;
+    std::string key;
+    std::vector<std::shared_ptr<SubLevelAnimation>> animations;
+    std::shared_ptr<NextSubLevelScene> nextScene;
+};
+
+class ChangeSubLevelManager {
     std::vector<ChangeSubLevelPoint> list;
-    ChangeSubLevelPointList(std::string filename);
-    ~ChangeSubLevelPointList(void) = default;
+    SubLevel* subLevel;
+public:
+    ChangeSubLevelManager(std::string filename, SubLevel* subLevel);
+    ~ChangeSubLevelManager(void) = default;
+    void update();
+    void addAnimation(int id, ifstream& inp);
+    bool okToChange(int id);
+    void transit(int id);
+    void draw() const;
+    void saveToFile(std::string filename) const;
 };
 
-class Level;
-class SubLevel;
-
-class SubLevelPlayerCollisionManager {
+class LevelGameplayManager {
     private:
+        friend class EnemyManager;
         SubLevel* subLevel;
+        Rectangle pastPlayerRec;
     public:
-        SubLevelPlayerCollisionManager(SubLevel* subLevel);
+        LevelGameplayManager(SubLevel* subLevel);
         void update();
 };
 
-class SubLevelPlayerNextSceneManager {
+class LevelPlayerAnimationManager {
     private:
         SubLevel* subLevel;
-        unique_ptr<SubLevelAnimation> animation;
-        ChangeSubLevelPoint nextScene;
+        std::queue<std::shared_ptr<SubLevelAnimation>> animations;
+        std::shared_ptr<NextSubLevelScene> nextScene;
     public:
-        SubLevelPlayerNextSceneManager(SubLevel* subLevel, unique_ptr<SubLevelAnimation> animation, ChangeSubLevelPoint nextScene);
+        LevelPlayerAnimationManager(SubLevel* subLevel, std::vector<std::shared_ptr<SubLevelAnimation>> animations, std::shared_ptr<NextSubLevelScene> nextScene);
         void update();
+        bool done() const;
 };
 
-class SubLevelPlayerManager {
+class LevelPlayerManager {
     private:
+        friend class EnemyManager;
         SubLevel* subLevel;
-        SubLevelPlayerCollisionManager collisionManager;
-        unique_ptr<SubLevelPlayerNextSceneManager> nextSceneManager;
+        LevelGameplayManager gameplayManager;
+        std::unique_ptr<LevelPlayerAnimationManager> animationManager;
+        InputManager& inputManager;
     public:
-        SubLevelPlayerManager(SubLevel* subLevel);
+        LevelPlayerManager(SubLevel* subLevel, InputManager& inputManager);
         void update();
-        void addNextScene(unique_ptr<SubLevelPlayerNextSceneManager> nextSceneManager);
+        void addAnimation(unique_ptr<LevelPlayerAnimationManager> nextSceneManager);
 };
 
 class SubLevel {
         friend class Level;
-        friend class SubLevelPlayerCollisionManager;
-        friend class SubLevelPlayerNextSceneManager;
+        friend class EnemyManager;
+        friend class ChangeSubLevelManager;
+        friend class LevelGameplayManager;
+        friend class LevelPlayerAnimationManager;
         Level* level;
         Character* player;
         std::shared_ptr<TileMap> background;
         std::shared_ptr<TileMap> blocks;
-        std::shared_ptr<EnemyList> enemies;
-        std::shared_ptr<ChangeSubLevelPointList> changeSubLevelPoints;
-        SubLevelPlayerManager playerManager;
+        std::shared_ptr<EnemyManager> enemies;
+        std::shared_ptr<ChangeSubLevelManager> changeSubLevelManager;
+        LevelPlayerManager playerManager;
+        Camera2D* camera;
+        std::string folderName;
+        Vector2 initPlayerPosition;
 
         bool debug = false;
         bool oke =false;
     public:
-        SubLevel(Level* level, std::string folderName, Character* player);
+        SubLevel(Level* level, std::string folderName, Character* player, Vector2 initPlayerPosition, InputManager& inputManager, Camera2D* camera);
         void draw();
-        void playerGoesIntoDownwardPipe();
-        void playerGoesIntoUpwardPipe();
-        void playerGoesIntoLeftwardPipe();
-        void playerGoesIntoRightwardPipe();
         void update();
         ~SubLevel() = default;
 };
@@ -95,10 +120,14 @@ class Level {
         RenderTexture2D renderTexture;
         Camera2D camera;
         InputManager& inputManager;
+        std::string folderName;
     public:
         Level(std::string folderName);
-        void changeSubLevel(ChangeSubLevelPoint point);
+        Level(std::string subLevelFolder, Vector2 playerPosition, int numLives = 3);
+        void changeSubLevel(NextSubLevelScene nextScene);
         void draw(void);
         void update(void);
+        void saveGame(std::string folderName);
+        static vector<std::pair<std::string, std::string>> getSavedLevels();
         ~Level();
 };

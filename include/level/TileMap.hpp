@@ -11,10 +11,9 @@
 
 class TileMap {
     private:
-        const static int BLOCKSIDE = 16;
+        constexpr static float BLOCKSIDE = 16.f;
         int height, width;
         std::vector<std::vector<std::shared_ptr<Block>>> tiles;
-        BlockFlyweightFactory tileFactory;
 
         bool debug = false;
         std::vector<Rectangle> debugBlocks;
@@ -25,6 +24,7 @@ class TileMap {
         void update(Character* character);
         void update(std::shared_ptr<Enemy> enemy);
         std::vector<std::pair<int, int>> cellsToCheck(const Rectangle& rec);
+        void saveToFile(const std::string& filename) const;
 
         float getWidth();
         float getHeight();

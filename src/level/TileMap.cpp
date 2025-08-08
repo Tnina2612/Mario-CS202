@@ -1,4 +1,4 @@
-#include "level/TileMap.hpp"
+#include<level/TileMap.hpp>
 
 TileMap::TileMap(std::string filename) {
     std::ifstream inp(filename);
@@ -12,32 +12,25 @@ TileMap::TileMap(std::string filename) {
     }
     for(int i = 0; i < height; i++) {
         for(int j = 0; j < width; j++) {
-            string blockType;
-            inp >> blockType;
-            if(blockType != "A") {
-                float posX = j * BLOCKSIDE;
-                float posY = i * BLOCKSIDE;
-                if(blockType == "G2") {
-                    tiles[i][j] = make_shared<BrickBlock>(Vector2{posX, posY}, tileFactory.getBlockFlyweight("G2"));
-                } else if(blockType == "C1") {
-                    tiles[i][j] = make_shared<QuestionBlock>(Vector2{posX, posY}, tileFactory.getBlockFlyweight("C1"));
-                } else {
-                    tiles[i][j] = make_shared<Block>(Vector2{posX, posY}, tileFactory.getBlockFlyweight(blockType));
-                }
+            string blockName;
+            inp >> blockName;
+
+            Vector2 pos = Vector2{j * BLOCKSIDE, i * BLOCKSIDE};
+            if(blockName != "A") {
+                tiles[i][j] = make_shared<Block>(pos, 0, "", "normal", blockName);
             } else {
                 tiles[i][j].reset();
             }
         }
     }
-    inp.close();
-    
+    inp.close();   
 }
 
 void TileMap::draw(void) {
     for(int i = 0; i < height; i++) {
         for(int j = 0; j < width; j++) {
             if(tiles[i][j] != nullptr) {
-                tiles[i][j]->Draw();
+                tiles[i][j]->draw_();
             }
         }
     }
@@ -58,20 +51,17 @@ void TileMap::update(Character* player) {
     float deltaTime = GetFrameTime();
     Rectangle nextFrame = {charRec.x, charRec.y + player->getVeclocityY() * deltaTime, charRec.width, charRec.height};
 
-
     std::vector<std::pair<int, int>> nearbyCells = cellsToCheck(nextFrame);
 
     for(std::pair<int, int> pii : nearbyCells) {
         int i = pii.first, j = pii.second;
         if(i < 0 || i >= height || j < 0 || j >= width ||
             tiles[i][j] == nullptr) continue;
-        const Rectangle& blockRec = tiles[i][j]->getRectangle();
+        const Rectangle& blockRec = tiles[i][j]->getDrawRec();
         if(CheckCollisionRecs(nextFrame, blockRec)) {
             if(nextFrame.y <= blockRec.y) {
-                // cout << "Player collides down\n";
                 player->hitBlockBottom(blockRec.y);
             } else {
-                // cout << "Player collides up\n";
                 player->hitBlockTop(blockRec.y + blockRec.height);
             }
             nextFrame.y = charRec.y;
@@ -83,13 +73,11 @@ void TileMap::update(Character* player) {
         int i = pii.first, j = pii.second;
         if(i < 0 || i >= height || j < 0 || j >= width ||
             tiles[i][j] == nullptr) continue;
-        const Rectangle& blockRec = tiles[i][j]->getRectangle();
+        const Rectangle& blockRec = tiles[i][j]->getDrawRec();
         if(CheckCollisionRecs(nextFrame, blockRec)) {
             if(nextFrame.x <= blockRec.x) {
-                // cout << "Player collides right\n";
                 player->hitBlockRight(blockRec.x);
             } else {
-                // cout << "Player collides left\n";
                 player->hitBlockLeft(blockRec.x + blockRec.width);
             }
             nextFrame.x = charRec.x;
@@ -141,7 +129,7 @@ void TileMap::update(std::shared_ptr<Enemy> enemy) {
         int i = pii.first, j = pii.second;
         if(i < 0 || i >= height || j < 0 || j >= width ||
             tiles[i][j] == nullptr) continue;
-        const Rectangle& blockRec = tiles[i][j]->getRectangle();
+        const Rectangle& blockRec = tiles[i][j]->getDrawRec();
 
         if(CheckCollisionRecs(nextFrame, blockRec)) 
         {
@@ -165,7 +153,7 @@ void TileMap::update(std::shared_ptr<Enemy> enemy) {
         if(i < 0 || i >= height || j < 0 || j >= width ||
             tiles[i][j] == nullptr) continue;
         okee = true;
-        const Rectangle& blockRec = tiles[i][j]->getRectangle();
+        const Rectangle& blockRec = tiles[i][j]->getDrawRec();
 
         if(CheckCollisionRecs(nextFrame, blockRec) && enemy->getOnGround()) {
             if(nextFrame.x <= blockRec.x) {
@@ -215,6 +203,26 @@ std::vector<std::pair<int, int>> TileMap::cellsToCheck(const Rectangle& rec) {
     res.push_back({BR.second - 1, BR.first + 1});
 
     return res;
+}
+
+void TileMap::saveToFile(const std::string& filename) const {
+    std::ofstream out(filename);
+    if(!out.is_open()) {
+        throw std::runtime_error("Cannot open file " + filename);
+    }
+    out << height << " " << width << "\n";
+    for(int i = 0; i < height; i++) {
+        for(int j = 0; j < width; j++) {
+            if(tiles[i][j] == nullptr) {
+                out << "A ";
+            }
+            else {
+                out << tiles[i][j]->getBlockName() << " ";
+            }
+        }
+        out << "\n";
+    }
+    out.close();
 }
 
 float TileMap::getWidth() {

@@ -1,0 +1,16 @@
+15 32
+A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		
+A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		
+A		A		A		A		S1		S2		S2		S3		A		A		A		A		A		A		A		A		A		A		A		A		A		A		P24		A		A		A		A		A		A		A		A		A		
+A		A		A		A		S6		S7		S7		S8		A		A		A		A		A		A		A		A		A		A		A		A		A		A		P33		A		S1		S2		S3		A		A		A		A		A		
+A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		P33		A		S6		S7		S8		A		A		A		A		A		
+A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		P33		A		A		A		A		A		A		A		A		A		
+A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		P33		A		A		A		A		A		A		A		A		A		
+A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		P33		A		A		A		A		A		A		A		A		A		
+A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		P33		A		A		A		A		G5		G5		G5		A		A		
+A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		P33		A		A		A		A		G12		brick2		G14		A		A		
+A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		P20		A		A		A		P33		A		A		A		G5		G6		G6		G6		G5		A		
+A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		P25		P26		P29		A		A		P33		A		A		A		brick2		brick2		G7		brick2		brick2		A		
+A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		P25		P26		P27		P28		P29		A		A		A		A		A		brick2		brick2		G15		brick2		brick2		P12		
+A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		
+A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		

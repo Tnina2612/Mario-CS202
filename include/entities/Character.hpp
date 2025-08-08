@@ -19,15 +19,18 @@ class IState {
 
 class Character; 
 
-class IntoPipeAnimation {
+class PlayerLevelAnimationManager {
 private:
     Character* character;
 public:
-    IntoPipeAnimation(Character* character);
+    PlayerLevelAnimationManager(Character* character);
     void goDownward();
     void goUpward();
     void goLeftward();
     void goRightward();
+    void climbDown(float pivotX);
+    void disappear();
+    void appear();
 };
 
 // Now define Character, which can use IntoPipeAnimation
@@ -44,7 +47,7 @@ private:
     float accelerationY;
     Orientation orientation;
     CharacterState characterState;
-    const float gravity = 1300; //3900.0f;
+    const float gravity = 1000; //3900.0f;
     const float maxVeclocityX = 100; //300.f;
     Behavior behavior;
     bool isInvincible;
@@ -53,13 +56,13 @@ private:
     bool collideLeft;
     bool collideRight;
     bool collideDown;
-    const float jumpVeclocity = 450; //1550.0f; // Initial jump velocity
+    const float jumpVeclocity = 380; //1550.0f; // Initial jump velocity
     const float brakeAcceleration = 200; //600.0f; // Deceleration when braking
     const float restVeclocity = 50.0f;
     float timeEffect;
     
 public:
-    IntoPipeAnimation intoPipeAnimation;
+    PlayerLevelAnimationManager playerLevelAnimationManager;
 
     Character();
     Character(const vector<Rectangle>& frames, const Texture2D& sprite);
@@ -70,6 +73,8 @@ public:
     void brakeRight();
     void jump();
     void die();
+    void setNumLives(int numLives);
+    int getNumLives() const;
     void setVelocityX(float velocity);
     void setVeclocityY(float velocity);
     float getJumpVelocity() const;

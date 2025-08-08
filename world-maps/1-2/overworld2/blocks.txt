@@ -1,0 +1,16 @@
+15 32
+A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		
+A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		
+A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		
+A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		
+A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		
+A		A		A		A		A		A		A		A		A		A		A		A		ground2		ground2		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		
+A		A		A		A		A		A		A		A		A		A		A		ground2		ground2		ground2		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		
+A		A		A		A		A		A		A		A		A		A		ground2		ground2		ground2		ground2		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		
+A		A		A		A		A		A		A		A		A		ground2		ground2		ground2		ground2		ground2		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		
+A		A		A		A		A		A		A		A		ground2		ground2		ground2		ground2		ground2		ground2		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		
+A		A		A		A		A		A		A		ground2		ground2		ground2		ground2		ground2		ground2		ground2		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		
+A		A		A		P8		P9		A		ground2		ground2		ground2		ground2		ground2		ground2		ground2		ground2		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		A		
+A		A		A		P16		P17		ground2		ground2		ground2		ground2		ground2		ground2		ground2		ground2		ground2		A		A		A		A		A		A		A		A		ground2		A		A		A		A		A		A		A		A		A		
+ground1		ground1		ground1		ground1		ground1		ground1		ground1		ground1		ground1		ground1		ground1		ground1		ground1		ground1		ground1		ground1		ground1		ground1		ground1		ground1		ground1		ground1		ground1		ground1		ground1		ground1		ground1		ground1		ground1		ground1		ground1		ground1		
+ground1		ground1		ground1		ground1		ground1		ground1		ground1		ground1		ground1		ground1		ground1		ground1		ground1		ground1		ground1		ground1		ground1		ground1		ground1		ground1		ground1		ground1		ground1		ground1		ground1		ground1		ground1		ground1		ground1		ground1		ground1		ground1		

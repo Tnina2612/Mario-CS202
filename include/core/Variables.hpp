@@ -73,6 +73,9 @@ namespace LevelVar {
     inline Color SkyColor = {146, 148, 255, 255};
     inline Color UndergroundColor = BLACK;
     inline Color BackGroundColor = SkyColor;
+    const float animationSpeed = 64.f;
+    const Vector2 GoombaSpeed = {32.f, 50.f};
+    const Vector2 KoopaSpeed = {-32.f, 0.f};
 };
 
 namespace MenuScreen {

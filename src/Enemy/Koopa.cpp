@@ -5,20 +5,21 @@
 #include"../../include/entities/Enemy/EnemyData.hpp"
 #include"../../include/entities/Enemy/Koopa.hpp"
 #include"../../include/entities/Enemy/EnemyMove.hpp"
+#include<core/Variables.hpp>
 
 #include<iostream>
 Koopa::Koopa() : Enemy() {
     m_state = std::make_unique<NormalKoopa>();
-    m_data._velocity = Vector2{-100, 0.f};
+    m_data._velocity = LevelVar::KoopaSpeed;
 }
 
 Koopa::Koopa(const std::string& name) : Enemy(name) {
     float width = 16.f;
-    float height = 16.f;
+    float height = 24.f;
     m_data = EnemyData ( width, height, 10, false, true, true, 1, 
                         Vector2{10,0}, Vector2{0,0}, -1);
     m_state = std::make_unique<NormalKoopa>();
-    m_data._velocity = Vector2{-100, 0.f};
+    m_data._velocity = LevelVar::KoopaSpeed;
 }
 
 Koopa::Koopa(const std::string& name, Vector2 pos)

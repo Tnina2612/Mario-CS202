@@ -96,3 +96,10 @@ std::shared_ptr<Enemy> EnemyFactory::createEnemy(const std::string& name, Vector
     return nullptr; 
 }
 
+std::vector<std::string> EnemyFactory::getEnemyTypesNames() {
+    std::vector<std::string> names;
+    for(const auto& pair : s_enemyFrames) {
+        names.push_back(pair.first);
+    }
+    return names;
+}

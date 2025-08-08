@@ -48,3 +48,11 @@ void Animation::reset() {
 void Animation::setScale(float scale) {
     this->scale = scale;
 }
+
+float Animation::getScale() const {
+    return scale;
+}
+
+void Animation::setSprite(const Texture2D& sprite) {
+    this->sprite = sprite;
+}
