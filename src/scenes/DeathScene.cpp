@@ -1,6 +1,5 @@
 #include "core/Variables.hpp"
 #include "../../assets/images/Coordinate.h"
-#include "core/Program.hpp"
 #include "scenes/DeathScene.hpp"
 #include "scenes/PlayScene.hpp"
 #include "core/MusicManager.hpp"

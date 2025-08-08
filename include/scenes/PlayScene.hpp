@@ -13,6 +13,7 @@ private:
 
 public:
     PlayScene(const std::string& levelName);
+    PlayScene(std::string subLevelFolder, Vector2 playerPosition, int numLives = 3);
     ~PlayScene();
 
     void init() override;

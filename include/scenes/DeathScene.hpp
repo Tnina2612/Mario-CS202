@@ -1,5 +1,6 @@
 #pragma once
 #include "core/Scene.hpp"
+#include <core/Program.hpp>
 
 class DeathScene : public Scene {
 private:
