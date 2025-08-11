@@ -39,7 +39,6 @@ private:
     Vector2 pos;
     IState* state;
     float invincibilityTime; // Time in seconds
-    int lives; // Number of lives
     int score;
     float veclocityX;
     float veclocityY;
@@ -73,8 +72,6 @@ public:
     void brakeRight();
     void jump();
     void die();
-    void setNumLives(int numLives);
-    int getNumLives() const;
     void setVelocityX(float velocity);
     void setVeclocityY(float velocity);
     float getJumpVelocity() const;

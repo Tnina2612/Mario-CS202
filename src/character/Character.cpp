@@ -1,9 +1,10 @@
 #include "../../include/entities/Character.hpp"
+#include "core/Program.hpp"
 #include "core/SoundManager.hpp"
 #include "core/MusicManager.hpp"
 
 Character::Character() : Animation(CharacterSprite::Fire::frames), state(nullptr), pos(CharacterVar::position), 
-    invincibilityTime(0.0f), lives(3), score(0), veclocityX(0.0f), veclocityY(50.0f), orientation(RIGHT), characterState(SMALL),
+    invincibilityTime(0.0f), score(0), veclocityX(0.0f), veclocityY(50.0f), orientation(RIGHT), characterState(SMALL),
     isInvincible(false), isDead(false), behavior(IDLE), onGround(true), playerLevelAnimationManager(this) {
         accelerationX = 0.0f;
         accelerationY = 0.0f;
@@ -12,7 +13,7 @@ Character::Character() : Animation(CharacterSprite::Fire::frames), state(nullptr
 
 Character::Character(const vector<Rectangle>& frames, const Texture2D& sprite)
     : Animation(frames, sprite), state(nullptr), pos(CharacterVar::position), 
-    invincibilityTime(0.0f), lives(3), score(0), veclocityX(0.0f), veclocityY(50.0f), orientation(RIGHT), characterState(SMALL),
+    invincibilityTime(0.0f), score(0), veclocityX(0.0f), veclocityY(50.0f), orientation(RIGHT), characterState(SMALL),
     isInvincible(false), isDead(false),behavior(IDLE), onGround(true), playerLevelAnimationManager(this) {
         accelerationX = 0.0f;
         accelerationY = 0.0f;
@@ -293,15 +294,8 @@ void Character::die() {
     veclocityX = 0.0f;
     veclocityY = -jumpVeclocity; // Mario sẽ bật lên một chút khi chết (tùy chọn)
     onGround = false;
-    lives--;
-}
-
-void Character::setNumLives(int numLives) {
-    lives = numLives;
-}
-
-int Character::getNumLives() const {   
-    return lives;
+    Program::getInstance().getHUD().onNotify(EventType::MARIO_DIED);
+    SoundManager::getInstance().playSound(SoundType::MARIO_DIE);
 }
 
 bool Character::getCollideRight()const {

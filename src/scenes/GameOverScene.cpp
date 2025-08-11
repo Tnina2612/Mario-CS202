@@ -15,7 +15,7 @@ GameOverScene::GameOverScene() {
 void GameOverScene::init() {
     // Initialize timer variables
     waitTimer = 0.0f;
-    waitDuration = 3.0f;
+    waitDuration = 4.0f;
 
     coin = LoadTexture("assets/images/title-scene/coin.png");
 }

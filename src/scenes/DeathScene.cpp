@@ -13,9 +13,10 @@ DeathScene::DeathScene() {
 
 void DeathScene::init() {
     marioIcon = LoadTexture("assets/images/sprite-sheets/mario.png");
+    coin = LoadTexture("assets/images/title-scene/coin.png");
 
     waitTimer = 0.0f;
-    waitDuration = 3.0f;
+    waitDuration = 4.0f;
 }
 
 void DeathScene::handleInput() {
