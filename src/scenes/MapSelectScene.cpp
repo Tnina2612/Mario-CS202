@@ -1,4 +1,6 @@
 #include "core/Program.hpp"
+#include "core/Setting.hpp"
+#include "core/BackButton.hpp"
 #include "scenes/MapSelectScene.hpp"
 #include "scenes/PlayScene.hpp"
 #include "scenes/DeathScene.hpp"
@@ -36,6 +38,9 @@ void MapSelectScene::handleInput() {
     } else if (IsKeyPressed(KEY_LEFT)) {
         curModeCol = ((curModeCol - 1) % 4 >= 0) ? (curModeCol - 1) % 4 : 3;
     }
+
+    Setting::getInstance().handleInput();
+    BackButton::getInstance().handleInput();
 }
 
 void MapSelectScene::update() {
@@ -50,17 +55,6 @@ void MapSelectScene::render() {
 
     // Draw game session
     Font font = Program::getInstance().getFont();
-
-    DrawTextEx(font, "MARIO", { 80, 14 }, 34, 1, WHITE);
-    DrawTextEx(font, "COINS", { 360, 14 }, 34, 1, WHITE);
-    DrawTextEx(font, "WORLD", { 600, 14 }, 34, 1, WHITE);
-    DrawTextEx(font, "TIME",  { 830, 14 }, 34, 1, WHITE);
-
-    DrawTextEx(font, "000400", { 80, 45 }, 34, 1, WHITE);
-    DrawTextureEx(coin, {360, 49}, 0.0f, 3.5f, WHITE);
-    DrawText("x", 380, 43, 40, WHITE);
-    DrawTextEx(font, "02", { 405, 45 }, 34, 1, WHITE);
-    DrawTextEx(font, "1-1", { 630, 45 }, 34, 1, WHITE);
     
     DrawTextureEx(cursor, {(float)cursorCol[curModeCol], (float)cursorRow[curModeRow]}, 0.0f, 4.0f, WHITE);
     DrawTextEx(font, "1-1", {170, 150}, 34, 1, WHITE);
@@ -95,6 +89,9 @@ void MapSelectScene::render() {
     DrawTextEx(font, "8-2", {370, 640}, 34, 1, WHITE);
     DrawTextEx(font, "8-3", {570, 640}, 34, 1, WHITE);
     DrawTextEx(font, "8-4", {770, 640}, 34, 1, WHITE);
+
+    Setting::getInstance().draw();
+    BackButton::getInstance().draw();
 }
 
 MapSelectScene::~MapSelectScene() {

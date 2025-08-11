@@ -37,6 +37,9 @@ void LoadGameScene::handleInput() {
     } else if (IsKeyPressed(KEY_UP)) {
         curRow = ((curRow - 1) % playerNum >= 0) ? (curRow - 1) % playerNum : playerNum - 1;
     }
+
+    Setting::getInstance().handleInput();
+    BackButton::getInstance().handleInput();
 }
 
 void LoadGameScene::update() {
@@ -64,6 +67,9 @@ void LoadGameScene::render() {
         DrawTextEx(font, player.first.c_str(), {170, cursorPos}, 34, 1, WHITE);
         cursorPos += 40;
     }
+
+    Setting::getInstance().draw();
+    BackButton::getInstance().draw();
 }
 
 LoadGameScene::~LoadGameScene() {

@@ -1,4 +1,5 @@
 #include "core/Program.hpp"
+#include "core/Setting.hpp"
 #include "scenes/TitleScene.hpp"
 #include "scenes/PlayScene.hpp"
 #include "scenes/DeathScene.hpp"
@@ -46,6 +47,8 @@ void TitleScene::handleInput() {
     } else if (IsKeyPressed(KEY_UP)) {
         curMode = ((curMode - 1) % 4 >= 0) ? (curMode - 1) % 4 : 3;
     }
+
+    Setting::getInstance().handleInput();
 }
 
 void TitleScene::update() {
@@ -60,16 +63,16 @@ void TitleScene::render() {
     // Draw game session
     Font font = Program::getInstance().getFont();
 
-    DrawTextEx(font, "MARIO", { 80, 14 }, 34, 1, WHITE);
-    DrawTextEx(font, "COINS", { 360, 14 }, 34, 1, WHITE);
-    DrawTextEx(font, "WORLD", { 600, 14 }, 34, 1, WHITE);
-    DrawTextEx(font, "TIME",  { 830, 14 }, 34, 1, WHITE);
+    DrawTextEx(font, "MARIO", { 40, 14 }, 34, 1, WHITE);
+    DrawTextEx(font, "COINS", { 320, 14 }, 34, 1, WHITE);
+    DrawTextEx(font, "WORLD", { 560, 14 }, 34, 1, WHITE);
+    DrawTextEx(font, "TIME",  { 790, 14 }, 34, 1, WHITE);
 
-    DrawTextEx(font, "000400", { 80, 45 }, 34, 1, WHITE);
-    DrawTextureEx(coin, {360, 49}, 0.0f, 3.5f, WHITE);
-    DrawText("x", 380, 43, 40, WHITE);
-    DrawTextEx(font, "02", { 405, 45 }, 34, 1, WHITE);;
-    DrawTextEx(font, "1-1", { 630, 45 }, 34, 1, WHITE);
+    DrawTextEx(font, "000400", { 40, 45 }, 34, 1, WHITE);
+    DrawTextureEx(coin, {320, 49}, 0.0f, 3.5f, WHITE);
+    DrawText("x", 340, 43, 40, WHITE);
+    DrawTextEx(font, "02", { 365, 45 }, 34, 1, WHITE);
+    DrawTextEx(font, "1-1", { 590, 45 }, 34, 1, WHITE);
     
     DrawTextureEx(logo, {150, 80}, 0.0f, 0.5f, WHITE);
     DrawTextureEx(copyright, {445, 441}, 0.0f, 1.0f, WHITE);
@@ -81,6 +84,8 @@ void TitleScene::render() {
     DrawTextEx(font, "LOAD GAME", {360, (float)cursorPos[2]}, 34, 1, WHITE);
     DrawTextEx(font, "MAP SELECT", {360, (float)cursorPos[3]}, 34, 1, WHITE);
     DrawTextEx(font, "TOP- 000000", {360, 780}, 34, 1, WHITE);
+
+    Setting::getInstance().draw();
 }
 
 TitleScene::~TitleScene() {
