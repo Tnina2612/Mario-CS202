@@ -37,7 +37,7 @@ void PlayScene::init() {
 
 void PlayScene::handleInput() {
     if (IsKeyPressed(KEY_ESCAPE)) {
-        Program::getInstance().changeScene(new TitleScene());
+        Program::getInstance().pushScene(new TitleScene());
     }
 }
 

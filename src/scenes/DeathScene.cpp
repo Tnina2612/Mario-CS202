@@ -21,7 +21,7 @@ void DeathScene::init() {
 
 void DeathScene::handleInput() {
     if (IsKeyPressed(KEY_ENTER)) {
-        Program::getInstance().changeScene(new PlayScene("1-1"));
+        Program::getInstance().pushScene(new PlayScene("1-1"));
     }
 }
 
@@ -30,7 +30,7 @@ void DeathScene::update() {
     
     // Automatically transition after 3 seconds
     if (waitTimer >= waitDuration) {
-        Program::getInstance().changeScene(new PlayScene("1-1"));
+        Program::getInstance().pushScene(new PlayScene("1-1"));
     }
 }
 

@@ -5,7 +5,7 @@
 #include "scenes/TitleScene.hpp"
 #include "scenes/PlayScene.hpp"
 
-Program::Program() : running(true), currentScene(nullptr), nextScene(nullptr) {
+Program::Program() : running(true), nextScene(nullptr) {
     // Khởi tạo Raylib
     SetConfigFlags(FLAG_MSAA_4X_HINT);  
     InitWindow(Global::WINDOW_WIDTH, Global::WINDOW_HEIGHT, "Super Mario Bros. 1985");
@@ -22,9 +22,9 @@ Program::Program() : running(true), currentScene(nullptr), nextScene(nullptr) {
 
 Program::~Program() {
     // Free resources
-    if (currentScene) {
-        delete currentScene;
-        currentScene = nullptr;
+    while (!sceneStack.empty()) {
+        delete sceneStack.top();
+        sceneStack.pop();
     }
     if (nextScene) {
         delete nextScene;
@@ -46,35 +46,42 @@ Program& Program::getInstance() {
     return instance;
 }
 
-void Program::changeScene(Scene* scene) {
+void Program::pushScene(Scene* scene) {
     nextScene = scene;
 }
 
+void Program::popScene() {
+    sceneStack.pop();
+}
+
 void Program::run() { // Game loop
-    changeScene(new TitleScene());
+    pushScene(new TitleScene());
 
     while (!WindowShouldClose() && running) {
+        // Handle immediate scene changes at the start of each frame
         if (nextScene != nullptr) {
-            if (currentScene) {
-                delete currentScene;
-                currentScene = nullptr; 
-            }
-            currentScene = nextScene;
-            currentScene->init();
+            sceneStack.push(nextScene);
+            nextScene->init();
             nextScene = nullptr;
         }
 
-        if (currentScene) {
+        Scene* currentScene = nullptr;
+        if (!sceneStack.empty()) {
+            currentScene = sceneStack.top();
+        }
+
+        // Update the current scene
+        if (currentScene != nullptr) {
             currentScene->handleInput();
             currentScene->update();
 
             MusicManager::getInstance().updateMusic();
             
             BeginDrawing();
-            ClearBackground(RAYWHITE);
-            currentScene->render();
+                ClearBackground(RAYWHITE);
+                currentScene->render();
             EndDrawing();
-        }   
+        }
     }
 }
 

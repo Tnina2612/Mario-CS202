@@ -1,24 +1,25 @@
 #pragma once
 #include "core/Scene.hpp"
-#include "raylib.h"
+#include <vector>
+#include <string>
 
 class TileMap;
 
-class TitleScene : public Scene {
+class LoadGameScene : public Scene {
 private:
     RenderTexture2D renderTexture;
     TileMap* background;
     Texture2D coin;
-    Texture2D logo;
-    Texture2D copyright;
     Texture2D cursor;
-    int cursorPos[4] = {520, 580, 640, 700};
-    int curMode = 0;
+    float initialPos = 170;
+    int curRow = 0;
+
+    std::vector<std::pair<std::string, std::string>> playerList;
 
 public:
     void init() override;
     void handleInput() override;
     void update() override;
     void render() override;
-    ~TitleScene();
+    ~LoadGameScene();
 };

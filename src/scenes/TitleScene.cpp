@@ -3,6 +3,7 @@
 #include "scenes/PlayScene.hpp"
 #include "scenes/DeathScene.hpp"
 #include "scenes/MapSelectScene.hpp"
+#include "scenes/LoadGameScene.hpp"
 #include "block/Block.h"
 #include "core/MusicManager.hpp"
 #include "raylib.h"
@@ -26,15 +27,24 @@ void TitleScene::init() {
 
 void TitleScene::handleInput() {
     if (IsKeyPressed(KEY_ENTER)) {
-        if (curMode == 0 || curMode == 1) {
-            Program::getInstance().changeScene(new DeathScene());
-        } else {
-            Program::getInstance().changeScene(new MapSelectScene());
+        switch (curMode) {
+            case 0:
+            case 1:
+                Program::getInstance().pushScene(new DeathScene());
+                break;
+            case 2:
+                Program::getInstance().pushScene(new LoadGameScene());
+                break;
+            case 3:
+                Program::getInstance().pushScene(new MapSelectScene());
+                break;
+            default:
+                break;
         }
     } else if (IsKeyPressed(KEY_DOWN)) {
-        curMode = (curMode + 1) % 3;
+        curMode = (curMode + 1) % 4;
     } else if (IsKeyPressed(KEY_UP)) {
-        curMode = ((curMode - 1) % 3 >= 0) ? (curMode - 1) % 3 : 2;
+        curMode = ((curMode - 1) % 4 >= 0) ? (curMode - 1) % 4 : 3;
     }
 }
 
@@ -66,10 +76,11 @@ void TitleScene::render() {
     DrawTextEx(font, "1985 NINTENDO", {478, 440}, 34, 1, {255, 206, 180, 255});
     
     DrawTextureEx(cursor, {280, (float)cursorPos[curMode]}, 0.0f, 4.0f, WHITE);
-    DrawTextEx(font, "1 PLAYER GAME", {360, 550}, 34, 1, WHITE);
-    DrawTextEx(font, "2 PLAYER GAME", {360, 610}, 34, 1, WHITE);
-    DrawTextEx(font, "MAP SELECT", {360, 670}, 34, 1, WHITE);
-    DrawTextEx(font, "TOP- 000000", {360, 760}, 34, 1, WHITE);
+    DrawTextEx(font, "1 PLAYER GAME", {360, (float)cursorPos[0]}, 34, 1, WHITE);
+    DrawTextEx(font, "2 PLAYER GAME", {360, (float)cursorPos[1]}, 34, 1, WHITE);
+    DrawTextEx(font, "LOAD GAME", {360, (float)cursorPos[2]}, 34, 1, WHITE);
+    DrawTextEx(font, "MAP SELECT", {360, (float)cursorPos[3]}, 34, 1, WHITE);
+    DrawTextEx(font, "TOP- 000000", {360, 780}, 34, 1, WHITE);
 }
 
 TitleScene::~TitleScene() {
