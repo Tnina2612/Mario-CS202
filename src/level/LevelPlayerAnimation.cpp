@@ -112,7 +112,7 @@ void PlayerUpPipeAnimation::initialize(Character* player) {
 }
 
 bool PlayerUpPipeAnimation::isDone() {
-    return player->getPos().y + player->getRectangle().height <= targetY;
+    return player->getPos().y <= targetY;
 }
 
 void PlayerUpPipeAnimation::update() {

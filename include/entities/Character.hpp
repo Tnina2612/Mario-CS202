@@ -60,6 +60,7 @@ private:
     const float restVeclocity = 50.0f;
     float timeEffect;
     
+    bool isDebug = false;
 public:
     PlayerLevelAnimationManager playerLevelAnimationManager;
 
@@ -79,6 +80,7 @@ public:
     void resetAttributes();
     void update();
     void draw();
+    void debug();
     void setBehavior(Behavior newBehavior);
     Behavior getBehavior()const;
     void setOrientation(Orientation newOrientation);

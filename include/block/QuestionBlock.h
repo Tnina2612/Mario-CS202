@@ -13,6 +13,7 @@ private:
     float velocity_y;
     const float pushHeight = 150.0f;
     bool jiggle_;
+    bool changeState_ = false;
     void animation_();
     void jiggle();
     void changeState();
@@ -21,7 +22,8 @@ public:
     QuestionBlock(Block &m_block);
     void draw_() override;
     void update_() override;
-    void onHit(std::vector<Item *> &item, Character &character) override;
+    void onHit(const std::vector<Item*> &item, Character &character) override;
     bool getJiggle() override;
     Rectangle getDrawRec() const override;
+    std::string getStateName() const override;
 };

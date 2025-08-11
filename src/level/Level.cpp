@@ -33,6 +33,8 @@ void SubLevel::draw() {
 }
 
 void SubLevel::update() {
+    background->updateBlocks();
+    blocks->updateBlocks();
     playerManager.update();
     enemies->update();
 
