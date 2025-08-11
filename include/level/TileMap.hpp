@@ -11,10 +11,9 @@
 
 class TileMap {
     private:
-        const static int BLOCKSIDE = 16;
+        constexpr static float BLOCKSIDE = 16.f;
         int height, width;
         std::vector<std::vector<std::shared_ptr<Block>>> tiles;
-        BlockFlyweightFactory tileFactory;
 
         bool debug = false;
         std::vector<Rectangle> debugBlocks;

@@ -6,7 +6,7 @@
 
 Fireball::Fireball() {
     allFrames = EnemySprite::Fireball::Frames;
-    m_animation.sprite = EnemyFactory::getEnemyTypes()->sprite;
+    m_animation.setSprite(EnemyFactory::getEnemyTypes()->sprite);
     
 }
 

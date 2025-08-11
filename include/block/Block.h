@@ -1,72 +1,41 @@
 #pragma once
-#include<raylib.h>
-#include<map>
-#include<string>
-#include<memory>
-#include <cmath>
-class BlockFlyweight {
-    private:
-        std::string type;
-        Texture2D texture;
-    public:
-        BlockFlyweight(const char* dir);
-        void Draw(int posX, int posY);
-        std::string getType();
-        ~BlockFlyweight(void);
-};
+#include <raylib.h>
+#include <memory>
+#include "BlockState.h"
+#include "Item/ItemFactory.h"
+#include "../include/entities/Character.hpp"
+#include "../assets/images/Coordinate.h"
 
-class Block {
-protected:
-    Vector2 position;
-    std::shared_ptr<BlockFlyweight> flyweight;
-public:
-    Block(Vector2 position, std::shared_ptr<BlockFlyweight> flyweight);
-    virtual ~Block() = default;
-    virtual void Draw();
-    virtual Rectangle getRectangle() const;
-    virtual void jiggle() {}
-    virtual bool breakBrick() { return false; }
-    std::string getType();
-};
-
-class BlockFlyweightFactory {
+class Block
+{
+    friend class BlockState;
+    friend class NormalBlock;
 private:
-    std::map<std::string, std::shared_ptr<BlockFlyweight>> flyweights;
-public:
-    std::shared_ptr<BlockFlyweight> getBlockFlyweight(const std::string& type);
-};
+    std::shared_ptr<BlockState> currentState_;
+    std::shared_ptr<BlockState> nextState_;
 
-class BrickBlock : public Block {
-protected:
-    bool isBroken = false;
-    float jiggleOffset = 0.0f;
-    float jiggleTime = 0.0f;
+    Vector2 pos_;
+    int itemCount;
+    std::string typeItem;
+    std::string name_block;
+    AnimationVectorTexture animation;
 public:
-    using Block::Block;
-    Rectangle getRectangle() const override;
-    void jiggle() override;
-    bool breakBrick() override;
-    void update(float deltaTime);
-    void Draw() override;
-};
+    Block(Vector2 pos, int itemCount, const std::string &typeItem, const std::string &typeBlock, const std::string &name_block);
+    ~Block();
+    std::vector<bool> surroundedBlock{0, 0, 0, 0}; 
+    void update_();
+    void draw_();
+    void onHit(std::vector<Item *> &item, Character & character);
 
-class QuestionBlock : public Block {
-protected:
-    bool isUsed = false;
-    float jiggleOffset = 0.0f;
-    float jiggleTime = 0.0f;
-public:
-    using Block::Block;
-    Rectangle getRectangle() const override;
-    void jiggle() override;
-    bool breakBrick() override; 
-    void update(float deltaTime);
-    void Draw() override;
-};
+    void setState(std::shared_ptr<BlockState> new_state);
 
-class GroundBlock : public Block {
-public:
-    using Block::Block;
-    Rectangle getRectangle() const override;
-    
+    Vector2 getPos() const;
+    void setPos(Vector2 pos);
+    int getItemCount() const;
+    Rectangle getDrawRec() const;
+    bool getJiggle() const;
+    bool getIsDelete() const;
+    std::string getTypeItem() const;
+    std::string getBlockName() const;
+    void decreaseItem();
 };

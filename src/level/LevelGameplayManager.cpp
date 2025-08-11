@@ -7,6 +7,7 @@ LevelGameplayManager::LevelGameplayManager(SubLevel* subLevel) : subLevel(subLev
 
 void LevelGameplayManager::update() {
     // Detect and simulate collision
+    pastPlayerRec = subLevel->player->getRectangle();
     subLevel->blocks->update(subLevel->player);
     subLevel->player->update();
 
