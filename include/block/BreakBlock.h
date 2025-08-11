@@ -2,11 +2,11 @@
 #include "Block.h"
 #include "BlockState.h"
 #include "../entities/Character.hpp"
+#include <entities/Animation.hpp>
 class BreakBlock : public BlockState
 {
 private:
-    Texture2D blockTexture;
-    Rectangle rec_;
+    AnimationVectorTexture debris;
     Block &m_block;
     bool isDelete;
     Vector2 up_pos_left, down_pos_left;
@@ -18,14 +18,14 @@ private:
     Vector2 before_pos;
     void fall();
     void beDelete();
-    Animation* animation_;
 
 public:
-    BreakBlock(Block &block/*, Animation* animation*/);
+    BreakBlock(Block &block);
     void draw_() override;
     void update_() override;
-    void onHit(std::vector<Item *> &item, Character & character) override {}
+    void onHit(const std::vector<Item*> &item, Character & character) override {}
     bool getJiggle() override;
     bool getIsDelete() const override;
     Rectangle getDrawRec() const override;
+    std::string getStateName() const override;
 };

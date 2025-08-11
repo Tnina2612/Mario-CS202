@@ -29,14 +29,14 @@ public:
 class AnimationVectorTexture {
 private:
     AnimationVectorTextureFlyweight* flyweight;
-    float textureTime = 0.5f;
+    float textureTime = 0.20f;
     float elaspedTime = 0;
     int currentTexture = 0;
     int startID = 0;
     int endID = 0;
 public:
     AnimationVectorTexture(std::string name);
-    void draw(float posX, float posY);
+    void draw(float posX, float posY, float rotation = 0.f);
     void update();
     void setTextureRange(int start, int end);
 };

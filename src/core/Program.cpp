@@ -74,7 +74,7 @@ void Program::run() { // Game loop
             ClearBackground(RAYWHITE);
             currentScene->render();
             EndDrawing();
-        }   
+        }
     }
 }
 

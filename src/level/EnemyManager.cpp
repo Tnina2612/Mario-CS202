@@ -69,7 +69,6 @@ void EnemyManager::update() {
                 if(subLevel->player->getNumLives() > 0) {
                     Program::getInstance().changeScene(new TitleScene());
                 } else {
-                    cout << "Game Over! You have no lives left." << endl;
                     Program::getInstance().changeScene(new DeathScene());
                 }
             }

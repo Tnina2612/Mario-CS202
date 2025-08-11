@@ -15,6 +15,8 @@ Block::Block(Vector2 pos, int item_count, const std::string &type_item, const st
         currentState_ = make_shared<QuestionBlock>(*this);
     else if (type_block == "normal")
         currentState_ = make_shared<NormalBlock>(*this);
+    else if (type_block == "solid") 
+        currentState_ = make_shared<SolidBlock>(*this);
 }
 
 Block::~Block()
@@ -25,6 +27,7 @@ Block::~Block()
 void Block::draw_()
 {
     currentState_->draw_();
+    animation.draw(pos_.x, pos_.y);
 }
 
 void Block::update_()
@@ -34,9 +37,10 @@ void Block::update_()
         nextState_.reset();
     }
     currentState_->update_();
+    animation.update();
 }
 
-void Block::onHit(std::vector<Item *> &item,Character & character)
+void Block::onHit(const std::vector<Item*> &item, Character & character)
 {
     currentState_->onHit(item, character);
 }
@@ -44,6 +48,10 @@ void Block::onHit(std::vector<Item *> &item,Character & character)
 void Block::setState(std::shared_ptr<BlockState> new_state)
 {
     nextState_ = new_state;
+}
+
+std::string Block::getStateName() const {
+    return currentState_->getStateName();
 }
 
 Vector2 Block::getPos() const

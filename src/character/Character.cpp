@@ -198,10 +198,26 @@ void Character::update() {
     // cout << "on ground" << onGround << endl;
     // cout << "veclocity X: " << veclocityX <<  endl;
     // cout << "is Brake: " << (behavior == BRAKE) << endl;
+    debug();
 }
 
 void Character::draw() {
     Animation::draw({pos.x, pos.y - getRectangle().height});
+}
+
+void Character::debug() {
+    if(IsKeyPressed(KEY_W)) {
+        if(getCharacterState() == CharacterState::SMALL) {
+            characterState = CharacterState::SUPER;
+            setFrames(CharacterSprite::Super::frames);
+        } else if(getCharacterState() == CharacterState::SUPER) {
+            characterState = CharacterState::FIRE;
+            setFrames(CharacterSprite::Fire::frames);
+        } else if(getCharacterState() == CharacterState::FIRE) {
+            characterState = CharacterState::SMALL;
+            setFrames(CharacterSprite::Small::frames);
+        }
+    }
 }
 
 void Character::setBehavior(Behavior newBehavior) {

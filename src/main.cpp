@@ -4,7 +4,10 @@
 #include "core/Variables.hpp"
 
 int main() {
-    Program::getInstance().run();
-
+    try {
+        Program::getInstance().run();
+    } catch(...) {
+        cout << "Catched an error." << endl;
+    }
     return 0;
 }
