@@ -1,4 +1,6 @@
 #include "core/Program.hpp"
+#include "core/Setting.hpp"
+#include "core/BackButton.hpp"
 #include "scenes/LoadGameScene.hpp"
 #include "scenes/PlayScene.hpp"
 #include "scenes/ComingSoonScene.hpp"
@@ -22,6 +24,9 @@ void LoadGameScene::init() {
 }
 
 void LoadGameScene::handleInput() {
+    BackButton::getInstance().handleInput();
+    Setting::getInstance().handleInput();
+
     int playerNum = (int)playerList.size();
     if (playerNum == 0) return;
 

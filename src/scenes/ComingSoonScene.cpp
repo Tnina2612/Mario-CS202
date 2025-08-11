@@ -16,7 +16,7 @@ void ComingSoonScene::init() {
 
 void ComingSoonScene::handleInput() {
     if(IsKeyPressed(KEY_ENTER) || IsKeyPressed(KEY_SPACE)) {
-        Program::getInstance().changeScene(new MapSelectScene());
+        Program::getInstance().pushScene(new MapSelectScene());
     }
 }
 
