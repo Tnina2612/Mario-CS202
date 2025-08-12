@@ -42,6 +42,12 @@ Vector2 EnemyManager::getPlayerPos() const {
 }
 
 void EnemyManager::update() {
+    if(IsKeyPressed(KEY_SPACE)) {
+        oke = !oke;
+    }
+    if(!oke) {
+        return;
+    }
     for(auto& enemy : list) {
         // Check if the enemy is off-screen
         if(enemy->getPos().x < 0 || enemy->getPos().y - enemy->getHitBox().height > Global::ORIGINAL_HEIGHT) {
@@ -73,9 +79,11 @@ void EnemyManager::update() {
         if(CheckCollisionRecs(enemy->getHitBox(), subLevel->player->getRectangle()) && enemy->isAlive()) {
             if(pastPlayerRec.y + pastPlayerRec.height < enemy->getHitBox().y && 
                 enemy->getTypeName().find("Plant") == std::string::npos) {
-                enemy->onStomp();
+                enemy->hitUp();
                 subLevel->player->setVeclocityY(-100);
             } else {
+                int dir = enemy->getPos().x < subLevel->player->getPos().x ? 1 : -1;
+                enemy->hitVertical(dir);
                 subLevel->player->die();
                 if(subLevel->player->getNumLives() > 0) {
                     Program::getInstance().changeScene(new TitleScene());

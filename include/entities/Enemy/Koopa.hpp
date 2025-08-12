@@ -39,6 +39,7 @@ public:
     void hitBlockLeft() override;
     void hitBlockRight() override;
 
+    void hitVertical(int dir) override;
     void changeDirection() override;
     bool onStomp() override;
     bool setInShell(bool inShell);

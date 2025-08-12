@@ -79,6 +79,10 @@ std::shared_ptr<IEnemyStrategy> Enemy::getMovementStrategy() {
     return _movementStrategy;
 }
 
+void Enemy::hitVertical(int dir) {
+    return;
+}
+
 EnemyData& Enemy::getEnemyData() {
     return m_data;
 }
@@ -101,6 +105,10 @@ Rectangle Enemy::getHitBox() {
                         m_data._hitBoxWidth,
                         m_data._hitBoxHeight   
                     };
+}
+
+void Enemy::die() {
+    m_data._hp = 0;
 }
 
 bool Enemy::isAlive() {
