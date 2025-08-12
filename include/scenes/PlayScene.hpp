@@ -10,6 +10,8 @@ class PlayScene : public Scene {
 private:
     Level* level;
     EventManager eventManager;
+    float waitTimer;
+    float waitDuration;
 
 public:
     PlayScene(const std::string& levelName);

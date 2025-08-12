@@ -175,3 +175,7 @@ vector<std::pair<std::string, std::string>> Level::getSavedLevels() {
 Level::~Level() {
     UnloadRenderTexture(renderTexture);
 }
+
+std::shared_ptr<Character> Level::getPlayer() {
+    return player;
+}
