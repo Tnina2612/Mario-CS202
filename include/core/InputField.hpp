@@ -15,6 +15,7 @@ private:
     float scrollOffset = 0.0f;
 
 public:
+    static std::string currentSessionName;
     InputField(float x, float y, float width, float height);
 
     void handleInput();

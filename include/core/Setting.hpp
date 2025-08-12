@@ -2,6 +2,7 @@
 #include "core/Scene.hpp"
 #include "core/GameSession.hpp"
 #include "ui/HUD.hpp"
+#include "level/Level.hpp"
 #include "raylib.h"
 
 class Setting {
@@ -11,8 +12,9 @@ private:
     float x;
     float y;
     bool isOn;
+    Level* level;
 
-    Setting(); 
+    Setting();
 
 public:
     Setting(const Setting&) = delete;
@@ -22,8 +24,8 @@ public:
     ~Setting();
 
     void draw();
-    void handleInput();
+    void handleInput(Level* level);
     bool isHovered();
     bool isClicked();
-    void onClick();
+    void onClick(Level* level);
 };

@@ -25,8 +25,8 @@ void Setting::draw() {
     }
 }
 
-void Setting::handleInput() {
-    if (isClicked()) onClick();
+void Setting::handleInput(Level* level) {
+    if (isClicked()) onClick(level);
 }
 
 bool Setting::isHovered() {
@@ -38,9 +38,9 @@ bool Setting::isClicked() {
            && IsMouseButtonPressed(MOUSE_LEFT_BUTTON);
 }
 
-void Setting::onClick() {
+void Setting::onClick(Level* level) {
     if (!isOn) {
-        Program::getInstance().pushScene(new SettingScene());
+        Program::getInstance().pushScene(new SettingScene(level));
         isOn = true;
     } else {
         Program::getInstance().popScene();

@@ -1,6 +1,7 @@
 #include "core/Variables.hpp"
 #include "core/Program.hpp"
 #include "core/Setting.hpp"
+#include "core/InputField.hpp"
 #include "scenes/SettingScene.hpp"
 #include "scenes/TitleScene.hpp"
 #include "scenes/PlayScene.hpp"
@@ -8,6 +9,10 @@
 #include "core/MusicManager.hpp"
 #include "raylib.h"
 #include "raymath.h"
+
+SettingScene::SettingScene(Level* level) : level(level) {
+
+}
 
 void SettingScene::init() {
     sliderX_Sound = 512.0f;
@@ -19,7 +24,7 @@ void SettingScene::init() {
 }
 
 void SettingScene::handleInput() {
-    Setting::getInstance().handleInput();
+    Setting::getInstance().handleInput(level);
 
     Vector2 mouse = GetMousePosition();
     Vector2 textSize1 = MeasureTextEx(Program::getInstance().getFont(), "SAVE GAME", 34.0f, 1.0f);
@@ -32,6 +37,9 @@ void SettingScene::handleInput() {
     if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
         if (CheckCollisionPointRec(mouse, {x1, 250, textSize1.x, textSize1.y})) {
             // Handle SAVE GAME click
+            if (level != nullptr && !InputField::currentSessionName.empty()) {
+                level->saveGame(InputField::currentSessionName);
+            }
         } else if (CheckCollisionPointRec(mouse, {x2, 330, textSize2.x, textSize2.y})) {
             // Handle RESTART click
         } else if (CheckCollisionPointRec(mouse, {x3, 410, textSize3.x, textSize3.y})) {

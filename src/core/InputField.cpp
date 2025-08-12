@@ -2,6 +2,8 @@
 #include "core/Program.hpp"
 #include <algorithm>
 
+std::string InputField::currentSessionName = ""; 
+
 InputField::InputField(float x, float y, float width, float height) {
     box = { x, y, width, height };
     inputText = "";

@@ -48,7 +48,7 @@ void TitleScene::handleInput() {
         curMode = ((curMode - 1) % 4 >= 0) ? (curMode - 1) % 4 : 3;
     }
 
-    Setting::getInstance().handleInput();
+    Setting::getInstance().handleInput(nullptr);
 }
 
 void TitleScene::update() {

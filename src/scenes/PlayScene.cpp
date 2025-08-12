@@ -52,7 +52,7 @@ void PlayScene::handleInput() {
         Program::getInstance().pushScene(new TitleScene());
     }
 
-    Setting::getInstance().handleInput();
+    Setting::getInstance().handleInput(level);
 }
 
 void PlayScene::update() {

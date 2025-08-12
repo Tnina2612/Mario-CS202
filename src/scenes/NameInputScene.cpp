@@ -21,10 +21,11 @@ void NameInputScene::init() {
 
 void NameInputScene::handleInput() {
     BackButton::getInstance().handleInput();
-    Setting::getInstance().handleInput();
+    Setting::getInstance().handleInput(nullptr);
     inputField->handleInput();
 
     if (IsKeyPressed(KEY_ENTER)) {
+        InputField::currentSessionName = inputField->getText();
         Program::getInstance().pushScene(new DeathScene());
     }
 }
