@@ -15,6 +15,7 @@ public:
 
     void draw();
     void handleInput();
+    bool isHovered();
     bool isClicked();
     void onClick();
 };

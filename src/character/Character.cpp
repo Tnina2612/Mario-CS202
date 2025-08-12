@@ -2,6 +2,8 @@
 #include "core/Program.hpp"
 #include "core/SoundManager.hpp"
 #include "core/MusicManager.hpp"
+#include "scenes/DeathScene.hpp"
+#include "scenes/GameOverScene.hpp"
 
 Character::Character() : Animation(CharacterSprite::Fire::frames), state(nullptr), pos(CharacterVar::position), 
     invincibilityTime(0.0f), score(0), veclocityX(0.0f), veclocityY(50.0f), orientation(RIGHT), characterState(SMALL),
@@ -312,6 +314,14 @@ void Character::die() {
     onGround = false;
     Program::getInstance().getHUD().onNotify(EventType::MARIO_DIED);
     SoundManager::getInstance().playSound(SoundType::MARIO_DIE);
+    Program::getInstance().pushScene(new DeathScene());
+    if (Program::getInstance().getSession().LIVES == 0) {
+        Program::getInstance().pushScene(new GameOverScene());
+        Program::getInstance().getHUD().onNotify(EventType::RESET_TIMER);
+        Program::getInstance().getHUD().onNotify(EventType::RESET_LIVES);
+        Program::getInstance().getHUD().onNotify(EventType::RESET_SCORES);
+    }
+    Program::getInstance().getHUD().onNotify(EventType::RESET_TIMER);
 }
 
 bool Character::getCollideRight()const {

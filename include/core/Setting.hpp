@@ -7,6 +7,7 @@
 class Setting {
 private:
     Texture2D icon;
+    Texture2D iconHovered;
     float x;
     float y;
     bool isOn;
@@ -22,6 +23,7 @@ public:
 
     void draw();
     void handleInput();
+    bool isHovered();
     bool isClicked();
     void onClick();
 };

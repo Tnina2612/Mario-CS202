@@ -61,9 +61,13 @@ void SettingScene::render() {
     float x4 = (Global::WINDOW_WIDTH - textSize4.x) / 2.0f;
     float x5 = (Global::WINDOW_WIDTH - textSize5.x) / 2.0f;
 
-    DrawTextEx(font, "SAVE GAME", {x1, 250}, 34.0f, 1.0f, WHITE);
-    DrawTextEx(font, "RESTART", {x2, 330}, 34.0f, 1.0f, WHITE);
-    DrawTextEx(font, "MAIN MENU", {x3, 410}, 34.0f, 1.0f, WHITE);
+    Color color1 = CheckCollisionPointRec(mouse, {x1, 250, textSize1.x, textSize1.y}) ? Color{151, 77, 4, 255} : WHITE;
+    Color color2 = CheckCollisionPointRec(mouse, {x2, 330, textSize2.x, textSize2.y}) ? Color{151, 77, 4, 255} : WHITE;
+    Color color3 = CheckCollisionPointRec(mouse, {x3, 410, textSize3.x, textSize3.y}) ? Color{151, 77, 4, 255} : WHITE;
+
+    DrawTextEx(font, "SAVE GAME", {x1, 250}, 34.0f, 1.0f, color1);
+    DrawTextEx(font, "RESTART", {x2, 330}, 34.0f, 1.0f, color2);
+    DrawTextEx(font, "MAIN MENU", {x3, 410}, 34.0f, 1.0f, color3);
 
     DrawTextEx(font, "SOUND VOLUME", {x4, 490}, 34.0f, 1.0f, WHITE);
     DrawRectangleRounded({362, 570, 300, 10}, 1.0f, 10, WHITE);
