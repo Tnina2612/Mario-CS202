@@ -56,14 +56,14 @@ std::shared_ptr<Enemy> EnemyFactory::createEnemy(const std::string& name, Vector
         it->setMovementStrategy(std::make_shared<DirectionMove>());
         return it;
     }
-    // else if(name.find("Plant") == 0) {
-    //     auto it = std::make_shared<Plant>(name, pos);
-    //     it->setType(type);
-    //     it->setAllFrames(s_enemyFrames[name]);
-    //     it->setAniFrames(it->getFrames("Walk"));
-    //     it->setMovementStrategy(std::make_shared<PlantMove>());
-    //     return it;
-    // }
+    else if(name.find("Plant") == 0) {
+        auto it = std::make_shared<Plant>(name, pos);
+        it->setType(type);
+        it->setAllFrames(s_enemyFrames[name]);
+        it->setAniFrames(it->getFrames("Walk"));
+        it->setMovementStrategy(std::make_shared<PlantMove>(enemyManager));
+        return it;
+    }
     else if(name.find("Koopa") == 0) {
         auto it = std::make_shared<Koopa>(name, pos);
         it->setType(type);

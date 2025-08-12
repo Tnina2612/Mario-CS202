@@ -61,14 +61,19 @@ bool Goomba::onHit() {
 }
 
 void Goomba::onEnemyCollision(Enemy& enemy) {
+    int oldDir = getDirection();
     changeDirection();
     float overlapX = min(getHitBox().x + getHitBox().width, enemy.getHitBox().x + enemy.getHitBox().width) - max(getHitBox().x, enemy.getHitBox().x);
     if (overlapX <= 0.0f) return;
-    
-    setPos(Vector2{getPos().x + overlapX * getDirection(), getPos().y});
+
+    setPos(Vector2{getPos().x + overlapX * -oldDir, getPos().y});
 }
 
 void Goomba::changeDirection() {
     Enemy::changeDirection();
     setAniFrames(getFrames("Walk"));
+}
+
+bool Goomba::physics() {
+    return true;
 }

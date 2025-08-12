@@ -39,6 +39,10 @@ void Lakitu::hitBlockRight() {
     Enemy::hitBlockRight();
 }
 
+bool Lakitu::physics() {
+    return true;
+}
+
 void Lakitu::spawnSpiny() {
     if (_enemyManager) {
         auto spiny = EnemyFactory::createEnemy("Spiny", {m_data._pos.x -30.f * sinf((float) GetTime()), m_data._pos.y}, _enemyManager);

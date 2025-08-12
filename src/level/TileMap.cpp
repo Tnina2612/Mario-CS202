@@ -115,15 +115,20 @@ void TileMap::update(std::shared_ptr<Enemy> enemy) {
     Rectangle enemyRec = enemy->getHitBox();
     Vector2 dx = enemy->getMovementStrategy()->Execute(enemy->getEnemyData(), deltaTime);
     Rectangle nextFrame = {enemyRec.x, enemyRec.y + dx.y, enemyRec.width, enemyRec.height};
-    Rectangle result = {enemyRec.x, enemyRec.y + dx.y + enemyRec.width, enemyRec.width, enemyRec.height};
+    Rectangle result = {enemyRec.x, enemyRec.y + dx.y + enemyRec.height, enemyRec.width, enemyRec.height};
     
 
-    if(!enemy->isAlive()) {
+    if(!enemy->isAlive() ) {
         enemy->setPos({nextFrame.x, nextFrame.y + nextFrame.height});
         enemy->update(deltaTime);
         return;
     }
 
+    if(!enemy->physics()) {
+        enemy->setPos({result.x + dx.x, result.y});
+        enemy->update(deltaTime);
+        return;
+    }
     // checking collision on Oy 
     for(std::pair<int, int> pii : nearbyCells) {
         int i = pii.first, j = pii.second;

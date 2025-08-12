@@ -192,9 +192,6 @@ std::string Enemy::getTypeName() const {
 
 void Enemy::changeDirection() {
     m_data._dir *= -1; 
-    std::cerr << "Change dir " << std::endl;
-    // m_data._velocity.x *= -1;
-    // m_data._velocity.y *= -1;
 }
 
 void Enemy::hitUp() {

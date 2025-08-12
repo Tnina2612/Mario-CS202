@@ -31,6 +31,10 @@ Podoboo::Podoboo(const std::string& name, Vector2 pos)
         m_data._pos = pos;
 }
 
+bool Podoboo::physics() {
+    return false;
+}
+
 void Podoboo::update(float dt) {
     _curCD += dt;
     if(_curCD < _CD) {

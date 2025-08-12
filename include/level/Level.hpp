@@ -16,9 +16,14 @@ class SubLevel;
 
 class EnemyManager {
     std::vector<std::shared_ptr<Enemy>> list;
+    std::queue<std::shared_ptr<Enemy>> spawnQueue;
     SubLevel* subLevel;
+
+    void processSpawnQueue();
 public:
     EnemyManager(std::string filename, SubLevel* subLevel);
+    void addEnemy(std::shared_ptr<Enemy> enemy);
+    Vector2 getPlayerPos() const;
     void update();
     void draw() const;
     void saveToFile(std::string filename);

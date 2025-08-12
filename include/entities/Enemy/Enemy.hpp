@@ -56,7 +56,7 @@ public:
     virtual bool beHitByFireball();      //< fireball
 
     virtual void onEnemyCollision(Enemy& enemy) = 0; //< collision with other enemies
-    
+    virtual bool physics() = 0;                        //< physics
     Vector2 getVelocity();
     Vector2 getPos();
 

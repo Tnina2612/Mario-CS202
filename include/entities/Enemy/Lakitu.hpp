@@ -17,6 +17,7 @@ public:
     Lakitu(const std::string& name);
     Lakitu(const std::string& name, Vector2 pos, EnemyManager* _enemyManager);
 
+    bool physics() override;
     void onEnemyCollision(Enemy& enemy) override;
     void hitBlockLeft() override;
     void hitBlockRight() override;

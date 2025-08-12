@@ -19,6 +19,7 @@ public:
     void hitBlockLeft() override;
     void hitBlockRight() override;
     
+    bool physics() override;
     void changeDirection() override;
     void onEnemyCollision(Enemy& enemy) override;
     void update(float dt) override;

@@ -27,6 +27,10 @@ Spiny::Spiny(const std::string& name, Vector2 pos)
         //m_data._hitBox = Rectangle{m_data._pos.x, m_data._pos.x, 64, 64};
 }
 
+bool Spiny::physics() {
+    return true;
+}
+
 // bool Spiny::onHit() {
 //     if(!Enemy::onHit()) {
 //         return false;

@@ -12,6 +12,7 @@ public:
     Goomba(const std::string& name);
     Goomba(const std::string& name, Vector2 pos);
 
+    bool physics() override;
     void changeDirection() override;
     bool onHit() override;
     void onEnemyCollision(Enemy& enemy) override;

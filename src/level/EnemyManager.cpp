@@ -54,13 +54,15 @@ void EnemyManager::update() {
             subLevel->blocks->update(enemy);
             for(auto& enemy2 : list) {
                 if(enemy != enemy2 && enemy->isAlive() && enemy2->isAlive() && CheckCollisionRecs(enemy->getHitBox(), enemy2->getHitBox())) {
-                    if(enemy->getPos().x < enemy2->getPos().x) {
-                        enemy->hitBlockRight();
-                        enemy2->hitBlockLeft();
-                    } else {
-                        enemy->hitBlockLeft();
-                        enemy2->hitBlockRight();
-                    }
+                    // if(enemy->getPos().x < enemy2->getPos().x) {
+                    //     enemy->hitBlockRight();
+                    //     enemy2->hitBlockLeft();
+                    // } else {
+                    //     enemy->hitBlockLeft();
+                    //     enemy2->hitBlockRight();
+                    // }
+                    enemy->onEnemyCollision(*enemy2);
+                    enemy2->onEnemyCollision(*enemy);
                 }
             }
         }
