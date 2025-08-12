@@ -1,3 +1,5 @@
+#include<cmath>
+
 #include<level/TileMap.hpp>
 
 TileMap::TileMap(std::string filename) {
@@ -107,11 +109,7 @@ void TileMap::update(std::shared_ptr<Enemy> enemy) {
     std::vector<std::pair<int, int>> nearbyCells = cellsToCheck(enemy->getHitBox());
     float deltaTime = GetFrameTime();
 
-    // if(!enemy->getOnGround()) {
-    //     enemy->applyGravity(deltaTime);
-    // }
     enemy->applyGravity(deltaTime);
-    enemy->setOnGround(false);
     Rectangle enemyRec = enemy->getHitBox();
     Vector2 dx = enemy->getMovementStrategy()->Execute(enemy->getEnemyData(), deltaTime);
     Rectangle nextFrame = {enemyRec.x, enemyRec.y + dx.y, enemyRec.width, enemyRec.height};
@@ -160,7 +158,7 @@ void TileMap::update(std::shared_ptr<Enemy> enemy) {
         okee = true;
         const Rectangle& blockRec = tiles[i][j]->getDrawRec();
 
-        if(CheckCollisionRecs(nextFrame, blockRec) && enemy->getOnGround()) {
+        if(CheckCollisionRecs(nextFrame, blockRec)) {
             if(nextFrame.x <= blockRec.x) {
                 enemy->hitBlockLeft();
             } else {
@@ -171,9 +169,6 @@ void TileMap::update(std::shared_ptr<Enemy> enemy) {
         } 
     }
 
-    if(!okee && enemy->getOnGround()) {
-        nextFrame.x -= dx.x;
-    } 
     result.x = nextFrame.x;
 
     enemy->setPos({result.x, result.y});

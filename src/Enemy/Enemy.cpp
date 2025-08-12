@@ -165,9 +165,10 @@ bool Enemy::getOnGround() {
 }
 
 void Enemy::applyGravity(float dt) {
-    if(!m_data._isOnGround) {
-        m_data._velocity.y += m_data._gravity * dt;
-    }
+    m_data._velocity.y += m_data._gravity * dt;
+    // if(!m_data._isOnGround) {
+    //     m_data._velocity.y += m_data._gravity * dt;
+    // }
 }
 
 void Enemy::draw() {

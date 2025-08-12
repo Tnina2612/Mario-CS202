@@ -67,11 +67,16 @@ bool Spiny::isOnGround() {
 }
 
 void Spiny::onEnemyCollision(Enemy& enemy) {
+    int oldDir = getDirection();
+    int oldDirY = m_data._velocity.y < 0 ? -1 : 1;
     changeDirection();
-    float overlapX = min(getHitBox().x + getHitBox().width, enemy.getHitBox().x + enemy.getHitBox().width) - max(getHitBox().x, enemy.getHitBox().x);
-    if (overlapX <= 0.0f) return;
-    
-    setPos(Vector2{getPos().x + overlapX * getDirection(), getPos().y});
+    float overlapX = min(getHitBox().x + getHitBox().width, enemy.getHitBox().x + enemy.getHitBox().width) 
+                    - max(getHitBox().x, enemy.getHitBox().x);
+    // float overlapY = min(getHitBox().y + getHitBox().height, enemy.getHitBox().y + enemy.getHitBox().height)
+    //                 - max(getHitBox().y, enemy.getHitBox().y);
+    if (overlapX <= 0.0f /*&& overlapY <= 0.0f*/) return;
+
+    setPos(Vector2{getPos().x + overlapX * -oldDir, getPos().y /*+ overlapY * -oldDirY*/});
 }
 
 void Spiny::changeDirection() {
@@ -99,8 +104,7 @@ void Spiny::update(float dt) {
         if (isOnGround()) {
             _state = State::Walking;
             setAniFrames(getFrames("Walk"));
-            m_data._velocity = Vector2{100.f, 0.f};
-            _state = State::Walking;
+            m_data._velocity = Vector2{32.f, 0.f};
 
             if(m_data._dir == 1) {
                 m_animation.setFrames(getFrames("Right"));

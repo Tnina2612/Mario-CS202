@@ -15,14 +15,15 @@ Vector2 DirectionMove::Execute(EnemyData& data, float dt) {
 
 Vector2 JumpMove::Execute(EnemyData& data, float dt) {
     Vector2 res = {0.f, 0.f};
-    data._velocity.y += data._gravity * dt;
-
-    res.x = data._velocity.x * dt;
-    res.y = data._velocity.y * dt;
 
     if(data._isOnGround) {
-        //data._pos.y = ;
+        data._velocity.y = -200.0f;
+        data._isOnGround = false;
     }
+
+    res.x = data._velocity.x * data._dir * dt;
+    res.y = data._velocity.y * dt;
+
     return res;
 }
 
@@ -44,17 +45,17 @@ Vector2 LakituMove::Execute(EnemyData& data, float dt) {
         res.x = 0.f;
     }
 
-    if (movingUp) {
-        res.y = -floatSpeed * dt;
-        if (res.y <= 20.f) {
-            movingUp = false;
-        }
-    } else {
-        res.y = floatSpeed * dt;
-        if (res.y >= 20.f) {
-            movingUp = true;
-        }
-    }
+    // if (movingUp) {
+    //     res.y = -floatSpeed * dt;
+    //     if (data._pos.y - yBase >= 20.f) {
+    //         movingUp = false;
+    //     }
+    // } else {
+    //     res.y = floatSpeed * dt;
+    //     if (data._pos.y - yBase <= 20.f) {
+    //         movingUp = true;
+    //     }
+    // }
 
     return res;
 }
