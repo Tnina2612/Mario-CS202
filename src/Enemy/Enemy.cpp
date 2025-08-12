@@ -111,6 +111,14 @@ void Enemy::die() {
     m_data._hp = 0;
 }
 
+bool Enemy::preventFalling() {
+    return m_data._preventFalling;
+}
+
+void Enemy::setPreventFalling(bool prevent) {
+    m_data._preventFalling = prevent;
+}
+
 bool Enemy::isAlive() {
     return m_data._hp > 0;
 }

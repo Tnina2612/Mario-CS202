@@ -30,11 +30,13 @@ public:
     void setEnemyData(const EnemyData& data);
     void setDirection(int dir);
     void setOnGround(bool onGround);
+    void setPreventFalling(bool prevent);
 
     std::shared_ptr<IEnemyStrategy> getMovementStrategy();
     EnemyData& getEnemyData();
     float getGravity();
     bool getOnGround();
+    bool preventFalling();
 
     int getDirection();
     std::vector<Rectangle> getFrames(const std::string& name);

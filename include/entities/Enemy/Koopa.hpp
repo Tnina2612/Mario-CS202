@@ -13,7 +13,7 @@ public:
     virtual void update(Koopa& koopa, float dt) = 0;
     virtual void handleStomp(Koopa& koopa) = 0;
     virtual void onEnemyCollision(Koopa& koopa, Enemy& other) = 0;
-    virtual void hitBlock(Koopa& koopa) = 0;
+    virtual void changeFrames(Koopa& koopa) = 0;
 };
 
 
@@ -58,7 +58,7 @@ public:
     void update(Koopa& koopa, float dt) override;
     void handleStomp(Koopa& koopa) override;
     void onEnemyCollision(Koopa& koopa, Enemy& other) override;
-    void hitBlock(Koopa& koopa) override;
+    void changeFrames(Koopa& koopa) override;
 };
 
 class NormalKoopa : public IKoopaState {
@@ -67,7 +67,7 @@ public:
     void update(Koopa& koopa, float dt) override;
     void handleStomp(Koopa& koopa) override;
     void onEnemyCollision(Koopa& koopa, Enemy& other) override;
-    void hitBlock(Koopa& koopa) override;
+    void changeFrames(Koopa& koopa) override;
 };
 
 class ShellKoopa : public IKoopaState {
@@ -76,5 +76,5 @@ public:
     void update(Koopa& koopa, float dt) override;
     void handleStomp(Koopa& koopa) override;
     void onEnemyCollision(Koopa& koopa, Enemy& other) override;
-    void hitBlock(Koopa& koopa) override;
+    void changeFrames(Koopa& koopa) override;
 };

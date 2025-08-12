@@ -73,6 +73,7 @@ std::shared_ptr<Enemy> EnemyFactory::createEnemy(const std::string& name, Vector
         it->setMovementStrategy(std::make_shared<DirectionMove>());
         
         if(name == "Koopa2") {
+            it->setPreventFalling(true);
             it->setState(std::make_unique<WingedKoopa>());
         }
         //it->setState();

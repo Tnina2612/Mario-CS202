@@ -20,7 +20,7 @@ struct EnemyData {
     Vector2 _targetPos = Vector2{0.f, 0.f};
 
     float _gravity;
-    bool _preventFall;
+    bool _preventFalling;
     bool _isImuneFire;
     bool _isStompable;
     bool _isActive;
@@ -31,7 +31,7 @@ struct EnemyData {
     int _dir;   // Direction: 1 facing right, -1 left
                 // -1 : up, 1 : down
                 //  0 : stationary
-
+    int _dirY = 1;
     EnemyData(
         float width,
         float height,
@@ -50,7 +50,7 @@ struct EnemyData {
         _pos(pos),
         _velocity(vel),
         _gravity(gra),
-        _preventFall(preventFall),
+        _preventFalling(preventFall),
         _isImuneFire(imuneFire),
         _isStompable(isStompable),
         _isOnGround(isOnGround),

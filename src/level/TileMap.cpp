@@ -125,6 +125,10 @@ void TileMap::update(std::shared_ptr<Enemy> enemy) {
         enemy->update(deltaTime);
         return;
     }
+
+    if (enemy->preventFalling()) {
+        preventFalling(enemy, movement);
+    }
     // checking collision on Oy 
     for(std::pair<int, int> pii : nearbyCells) {
         int i = pii.first, j = pii.second;
@@ -238,4 +242,25 @@ float TileMap::getWidth() {
 
 float TileMap::getHeight() {
     return height;
+}
+
+bool TileMap::preventFalling(std::shared_ptr<Enemy> enemy, Vector2& movement) {
+    Rectangle enemyRec = enemy->getHitBox();
+
+    float nextX = enemyRec.x + movement.x;
+    float footY = enemyRec.y + enemyRec.height + 1;
+
+    int tileBelowRow = (int) (footY / BLOCKSIDE);
+    int tileBelowCol = (int) ((nextX + enemyRec.width / 2) / BLOCKSIDE);
+
+    if (tileBelowRow < 0 || tileBelowRow >= height || tileBelowCol < 0 || tileBelowCol >= width)
+        return false;
+
+    if (tiles[tileBelowRow][tileBelowCol] == nullptr) {
+        enemy->changeDirection();
+        movement.x = 0;
+        return true;
+    }
+
+    return false;
 }
