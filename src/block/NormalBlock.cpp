@@ -4,7 +4,7 @@
 const float scale_screen= 3.0f;
 
 NormalBlock::NormalBlock(Block &block)
-    : m_block(block), jiggle_(false), changeState_(false), velocity_y(0.0f)
+    : m_block(block), jiggle_(false), changeState_(false), velocity_y(0.0f), isBreak(true)
 {
     before_pos = m_block.getPos();
     // rec_ = ItemSprite::;
@@ -14,7 +14,6 @@ NormalBlock::NormalBlock(Block &block)
 
 void NormalBlock::draw_()
 {
-    m_block.animation.draw(m_block.pos_.x, m_block.pos_.y);
 }
 
 void NormalBlock::update_()
@@ -23,37 +22,34 @@ void NormalBlock::update_()
     changeState();
 }
 
-void NormalBlock::onHit(std::vector<Item *> &item, Character& character)
+void NormalBlock::onHit(const std::vector<Item *> &item, Character& character)
 {
-//     if (m_block.getItemCount() > 0)
-//     {
-//         SpawnItem::ItemSpawn(m_block.getTypeItem(), item, m_block.getPos(), character);
-//         m_block.decreaseItem();
-//         jiggle_ = true;
-//         velocity_y = -pushHeight; // đẩy lên
-//         if (m_block.getItemCount() == 0)
-//         {
-//             changeState_ = true;
-//             return;
-//         }
-//     }
-//     else if (m_block.getItemCount() == 0 &&
-//              (character.getForm() == PlayerForm::Small || character.getForm() == PlayerForm::Invincible))
-//     {
-//         jiggle_ = true;
-//         velocity_y = -pushHeight; // đẩy lên
-//     }
-//     else
-//     {
-//         changeState_ = true;
-//     }
+    if (m_block.getItemCount() > 0)
+    {
+        SpawnItem::ItemSpawn(m_block.getTypeItem(), item, m_block.getPos(), character);
+        m_block.decreaseItem();
+        jiggle_ = true;
+        velocity_y = -pushHeight; // đẩy lên
+        if (m_block.getItemCount() == 0)
+        {
+            changeState_ = true;
+            return;
+        }
+    }
+    else if (m_block.getItemCount() == 0 &&
+             (character.getCharacterState() == CharacterState::SMALL/* || character.getCharacterState() == CharacterState::INVINCIBLE*/))
+    {
+        jiggle_ = true;
+        velocity_y = -pushHeight; // đẩy lên
+    }
+    else
+    {
+        changeState_ = true;
+    }
 }
 
 void NormalBlock::jiggle()
 {
-    if (!jiggle_)
-        return;
-
     float dt = GetFrameTime();
     velocity_y += 1000.0f * dt;
 
@@ -95,4 +91,8 @@ Rectangle NormalBlock::getDrawRec() const
 bool NormalBlock::getJiggle()
 {
     return jiggle_ || changeState_;
+}
+
+std::string NormalBlock::getStateName() const {
+    return "Normal";
 }

@@ -43,7 +43,7 @@ void QuestionBlock::update_()
     changeState();
 }
 
-void QuestionBlock::onHit(std::vector<Item *> &item, Character &character)
+void QuestionBlock::onHit(const std::vector<Item *> &item, Character &character)
 {
     if (m_block.getItemCount() > 0)
     {
@@ -51,6 +51,8 @@ void QuestionBlock::onHit(std::vector<Item *> &item, Character &character)
         // SpawnItem::ItemSpawn(m_block.getTypeItem(), item, m_block.getPos(), character);
         jiggle_ = true;
         velocity_y = -pushHeight; // Đẩy lên
+    } else {
+        changeState_ = true;
     }
 }
 
@@ -77,9 +79,10 @@ void QuestionBlock::jiggle()
 
 void QuestionBlock::changeState()
 {
-    if (m_block.getItemCount() == 0 && !jiggle_)
+    if (m_block.getItemCount() == 0 && !jiggle_ && changeState_)
     {
         m_block.setState(make_shared<SolidBlock>(m_block));
+        m_block.animation = AnimationVectorTexture("G4");
     }
 }
 
@@ -95,4 +98,8 @@ Rectangle QuestionBlock::getDrawRec() const
         m_block.getPos().y,
         rec_.x,
         rec_.y};
+}
+
+std::string QuestionBlock::getStateName() const {
+    return "Question";
 }

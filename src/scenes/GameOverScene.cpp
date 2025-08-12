@@ -15,7 +15,7 @@ GameOverScene::GameOverScene() {
 void GameOverScene::init() {
     // Initialize timer variables
     waitTimer = 0.0f;
-    waitDuration = 3.0f;
+    waitDuration = 4.0f;
 
     coin = LoadTexture("assets/images/title-scene/coin.png");
 }
@@ -23,7 +23,7 @@ void GameOverScene::init() {
 void GameOverScene::handleInput() {
     // Allow manual skip with ENTER key
     if (IsKeyPressed(KEY_ENTER)) {
-        Program::getInstance().changeScene(new TitleScene());
+        Program::getInstance().pushScene(new TitleScene());
     }
 }
 
@@ -32,7 +32,7 @@ void GameOverScene::update() {
     
     // Automatically transition after 3 seconds
     if (waitTimer >= waitDuration) {
-        Program::getInstance().changeScene(new TitleScene());
+        Program::getInstance().pushScene(new TitleScene());
     }
 }
 

@@ -24,8 +24,16 @@ void HUD::onNotify(EventType type) {
             break;
         case EventType::MARIO_DIED:
             session->LIVES--;
+            break;
         case EventType::RESET_TIMER:
             session->TIMELEFT = 400;
+            break;
+        case EventType::RESET_LIVES:
+            session->LIVES = 3;
+            break;
+        case EventType::RESET_SCORES:
+            session->SCORE = 0;
+            break;
         default:
             break;
     }
@@ -53,17 +61,17 @@ void HUD::draw() {
     std::string timeText  = std::to_string(session->TIMELEFT);
     std::string livesText = std::to_string(session->LIVES);
 
-    DrawTextEx(font, "MARIO", { 60, 14 }, 24, 1, WHITE);
-    DrawTextEx(font, "COINS", { 290, 14 }, 24, 1, WHITE);
-    DrawTextEx(font, "WORLD", { 498, 14 }, 24, 1, WHITE);
-    DrawTextEx(font, "TIME",  { 702, 14 }, 24, 1, WHITE);
-    DrawTextEx(font, "LIVES", { 878, 14 }, 24, 1, WHITE);
+    DrawTextEx(font, "MARIO", { 20, 14 }, 24, 1, WHITE);
+    DrawTextEx(font, "COINS", { 240, 14 }, 24, 1, WHITE);
+    DrawTextEx(font, "WORLD", { 438, 14 }, 24, 1, WHITE);
+    DrawTextEx(font, "TIME",  { 632, 14 }, 24, 1, WHITE);
+    DrawTextEx(font, "LIVES", { 798, 14 }, 24, 1, WHITE);
 
-    DrawTextEx(font, scoreText, { 60, 35 }, 24, 1, WHITE);
-    DrawTextureEx(coin, {290, 39}, 0.0f, 2.8f, WHITE);
-    DrawText("x", 310, 40, 20, WHITE);
-    DrawTextEx(font, coinText.c_str(), { 330, 35 }, 24, 1, WHITE);
-    DrawTextEx(font, worldText.c_str(), { 498, 35 }, 24, 1, WHITE);
-    DrawTextEx(font, timeText.c_str(),  { 702, 35 }, 24, 1, WHITE);
-    DrawTextEx(font, livesText.c_str(), { 878, 35 }, 24, 1, WHITE);
+    DrawTextEx(font, scoreText, { 20, 35 }, 24, 1, WHITE);
+    DrawTextureEx(coin, {240, 39}, 0.0f, 2.8f, WHITE);
+    DrawText("x", 260, 40, 20, WHITE);
+    DrawTextEx(font, coinText.c_str(), { 280, 35 }, 24, 1, WHITE);
+    DrawTextEx(font, worldText.c_str(), { 460, 35 }, 24, 1, WHITE);
+    DrawTextEx(font, timeText.c_str(),  { 655, 35 }, 24, 1, WHITE);
+    DrawTextEx(font, livesText.c_str(), { 798, 35 }, 24, 1, WHITE);
 }

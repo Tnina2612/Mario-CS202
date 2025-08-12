@@ -12,7 +12,7 @@ private:
     Texture2D logo;
     Texture2D copyright;
     Texture2D cursor;
-    int cursorPos[3] = {550, 610, 670};
+    int cursorPos[4] = {520, 580, 640, 700};
     int curMode = 0;
 
 public:

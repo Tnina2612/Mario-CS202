@@ -123,7 +123,7 @@ class Level {
         std::string folderName;
     public:
         Level(std::string folderName);
-        Level(std::string subLevelFolder, Vector2 playerPosition, int numLives = 3);
+        Level(std::string subLevelFolder, Vector2 playerPosition);
         void changeSubLevel(NextSubLevelScene nextScene);
         void draw(void);
         void update(void);

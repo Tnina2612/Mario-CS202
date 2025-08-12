@@ -10,18 +10,7 @@ SolidBlock::SolidBlock(Block &m_block)
 
 void SolidBlock::draw_()
 {
-//     Rectangle dest_rec = {
-//         m_block.getPos().x,
-//         m_block.getPos().y,
-//         rec_.width * scale_screen,
-//         rec_.height * scale_screen};
-//     DrawTexturePro(
-//         m_block.getSprite().sprite,
-//         rec_,
-//         dest_rec,
-//         {dest_rec.width / 2.0f, dest_rec.height},
-//         0.0f,
-//         WHITE);
+    
 }
 
 bool SolidBlock::getJiggle() { return false; }
@@ -32,4 +21,8 @@ Rectangle SolidBlock::getDrawRec() const {
         m_block.getPos().y,
         rec_.x,
         rec_.y};
+}
+
+std::string SolidBlock::getStateName() const {
+    return "Solid";
 }
