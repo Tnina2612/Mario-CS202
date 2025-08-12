@@ -34,10 +34,27 @@ void Animation::update(float deltaTime, int startFrame, int size) {
     }
 }
 
+bool Animation::update(const vector<float>& scales, int currentFrame, float scaleTime, float deltaTime) {
+    this->currentFrame = currentFrame;
+    if(scales.empty()) return true;
+    if(scaleFrame >= scales.size()) {
+        scaleFrame = 0;
+        scale = 1;
+        return true;
+    }
+    scale = scales[scaleFrame];
+    frameTime -= deltaTime;
+    if(frameTime <= 0.0f) {
+        scaleFrame++;
+        frameTime = scaleTime;
+    }
+    return false;
+}
+
 void Animation::draw(Vector2 position) const {
     if(frames.empty()) return;
     Rectangle sourceRect = frames[currentFrame];
-    DrawTexturePro(sprite, sourceRect, {position.x, position.y, sourceRect.width * scale, sourceRect.height * scale}, {0, 0}, 0.0f, WHITE);
+    DrawTexturePro(sprite, sourceRect, {position.x, position.y, sourceRect.width, sourceRect.height * scale}, {0, 0}, 0.0f, WHITE);
 }
 
 void Animation::reset() {

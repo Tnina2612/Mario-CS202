@@ -115,3 +115,16 @@ enum Behavior {
     DEAD,
     CLIMB
 };
+
+struct Sprite {
+    static Texture2D MarioSprite;
+    static Texture2D LuigiSprite;
+    static void load() {
+        MarioSprite = LoadTexture(CharacterVar::MarioSpritePath.c_str());
+        LuigiSprite = LoadTexture(CharacterVar::LuigiSpritePath.c_str());
+    }
+    static void unload() {
+        UnloadTexture(MarioSprite);
+        UnloadTexture(LuigiSprite);
+    }
+};

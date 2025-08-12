@@ -7,6 +7,7 @@
 #include <vector>
 #include <iostream>
 #include<algorithm>
+#include<entities/Effect.hpp>
 
 class GameObject;
 
@@ -34,8 +35,8 @@ public:
 };
 
 // Now define Character, which can use IntoPipeAnimation
-class Character : public Animation {
-private:
+class Character {
+protected:
     Vector2 pos;
     IState* state;
     float invincibilityTime; // Time in seconds
@@ -59,8 +60,15 @@ private:
     const float brakeAcceleration = 200; //600.0f; // Deceleration when braking
     const float restVeclocity = 50.0f;
     float timeEffect;
+    bool onAnimation;
     
     bool isDebug = false;
+    bool growthUp;
+    bool shrinkDown;
+    bool isThrow;
+    bool isStarMan;
+    Animation mAnimation;
+    vector<Effect*> effects;
 public:
     PlayerLevelAnimationManager playerLevelAnimationManager;
 
@@ -87,6 +95,7 @@ public:
     Orientation getOrientation() const;
 
     CharacterState getCharacterState() const;
+    Animation& getAnimation();
 
     void hitBlockLeft(float vline = 0.0);
     void hitBlockRight(float vline = 0.0);
@@ -103,6 +112,7 @@ public:
     void setPosition(float x, float y);
     float getGravity()const;
     float getRestVeclocity()const;
+    void handleEffect(float deltaTime = GetFrameTime());
     // bool getCollideUp()const;
     // bool getCollideDown()const;
     
