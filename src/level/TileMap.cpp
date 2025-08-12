@@ -52,7 +52,7 @@ void TileMap::update(Character* player) {
     player->resetAttributes();
     float deltaTime = GetFrameTime();
     Rectangle nextFrame = {charRec.x, charRec.y + player->getVeclocityY() * deltaTime, charRec.width, charRec.height};
-
+    
     std::vector<std::pair<int, int>> nearbyCells = cellsToCheck(nextFrame);
 
     for(std::pair<int, int> pii : nearbyCells) {
@@ -111,11 +111,9 @@ void TileMap::update(std::shared_ptr<Enemy> enemy) {
 
     enemy->applyGravity(deltaTime);
     Rectangle enemyRec = enemy->getHitBox();
-    Vector2 dx = enemy->getMovementStrategy()->Execute(enemy->getEnemyData(), deltaTime);
-    Rectangle nextFrame = {enemyRec.x, enemyRec.y + dx.y, enemyRec.width, enemyRec.height};
-    Rectangle result = {enemyRec.x, enemyRec.y + dx.y + enemyRec.height, enemyRec.width, enemyRec.height};
+    Vector2 movement = enemy->getMovementStrategy()->Execute(enemy->getEnemyData(), deltaTime);
+    Rectangle nextFrame = {enemyRec.x, enemyRec.y + movement.y, enemyRec.width, enemyRec.height};
     
-
     if(!enemy->isAlive() ) {
         enemy->setPos({nextFrame.x, nextFrame.y + nextFrame.height});
         enemy->update(deltaTime);
@@ -123,7 +121,7 @@ void TileMap::update(std::shared_ptr<Enemy> enemy) {
     }
 
     if(!enemy->physics()) {
-        enemy->setPos({result.x + dx.x, result.y});
+        enemy->setPos({nextFrame.x, nextFrame.y + nextFrame.height});
         enemy->update(deltaTime);
         return;
     }
@@ -137,41 +135,50 @@ void TileMap::update(std::shared_ptr<Enemy> enemy) {
         if(CheckCollisionRecs(nextFrame, blockRec)) 
         {
             if(nextFrame.y <= blockRec.y) {
-                result.y = blockRec.y;
+                // result.y = blockRec.y;
                 enemy->setOnGround(true);
                 enemy->setVelocityY(enemy->getRestVelocity());
+                nextFrame.y = blockRec.y - enemyRec.height;
             } else {
                 enemy->setVelocityY(enemy->getVelocity().y * -1.0f);
+                nextFrame.y = blockRec.y + blockRec.height;
             }
-            nextFrame.y = enemyRec.y;
+            // nextFrame.y = enemyRec.y;
             break;
         } 
     }
+    enemyRec = nextFrame;
+
+    nextFrame = enemyRec;
+    nextFrame.x += movement.x;
 
     //checking collision on Ox
-    nextFrame.x = enemyRec.x + dx.x;
-    bool okee = false;
+
+    //nextFrame.x = enemyRec.x + movement.x;
+
+    // nextFrame.y = result.y;
+
     for(std::pair<int, int> pii : nearbyCells) {
         int i = pii.first, j = pii.second;
         if(i < 0 || i >= height || j < 0 || j >= width ||
             tiles[i][j] == nullptr) continue;
-        okee = true;
+
         const Rectangle& blockRec = tiles[i][j]->getDrawRec();
 
         if(CheckCollisionRecs(nextFrame, blockRec)) {
             if(nextFrame.x <= blockRec.x) {
+                nextFrame.x = blockRec.x - enemyRec.width;
                 enemy->hitBlockLeft();
             } else {
+                nextFrame.x = blockRec.x + blockRec.width;
                 enemy->hitBlockRight();
             }
-            nextFrame.x = enemyRec.x;
+            // nextFrame.x = enemyRec.x;
             break;
         } 
     }
 
-    result.x = nextFrame.x;
-
-    enemy->setPos({result.x, result.y});
+    enemy->setPos({nextFrame.x, nextFrame.y + nextFrame.height});
     enemy->update(deltaTime);
 }
 
