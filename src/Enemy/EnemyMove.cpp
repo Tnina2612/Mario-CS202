@@ -25,15 +25,40 @@ Vector2 JumpMove::Execute(EnemyData& data, float dt) {
     return res;
 }
 
-Vector2 PatrolMove::Execute(EnemyData& data, float dt) {
+Vector2 LakituMove::Execute(EnemyData& data, float dt) {
     Vector2 res = {0.f, 0.f};
-    // Implement patrol movement logic
+
+    if(yBase == 0.f) {
+        yBase = data._pos.y;
+    }
+
+    Vector2 playerPos = data._targetPos;
+    if (playerPos.x > data._pos.x) {
+        res.x = data._velocity.x * dt;
+    } 
+    else if (playerPos.x < data._pos.x) {
+        res.x = -data._velocity.x * dt;
+    } 
+    else {
+        res.x = 0.f;
+    }
+
+    if (movingUp) {
+        res.y = -floatSpeed * dt;
+        if (res.y <= 20.f) {
+            movingUp = false;
+        }
+    } else {
+        res.y = floatSpeed * dt;
+        if (res.y >= 20.f) {
+            movingUp = true;
+        }
+    }
+
     return res;
 }
 
-Vector2 AngularMove::Execute(EnemyData& data, float dt) {
-    _angle += _rotationSpeed * dt;
-    data._pos.x = _center.x + _radius * cosf(_angle);
-    data._pos.y = _center.y + _radius * sinf(_angle);
-    return data._pos;
-}
+// Vector2 PlantMove::Execute(EnemyData& data, float dt) {
+//     Vector2 res = {data._velocity.x * dt, data._velocity.y * dt};
+//     return res;
+// }

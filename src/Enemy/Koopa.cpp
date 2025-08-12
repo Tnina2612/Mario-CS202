@@ -16,7 +16,7 @@ Koopa::Koopa() : Enemy() {
 Koopa::Koopa(const std::string& name) : Enemy(name) {
     float width = 16.f;
     float height = 24.f;
-    m_data = EnemyData ( width, height, 10, false, true, true, 1, 
+    m_data = EnemyData ( width, height, 10, false, true, true, false, 1, 
                         Vector2{10,0}, Vector2{0,0}, -1);
     m_state = std::make_unique<NormalKoopa>();
     m_data._velocity = LevelVar::KoopaSpeed;
@@ -111,7 +111,7 @@ void NormalKoopa::onEnemyCollision(Koopa& koopa, Enemy& other) {
 
 void NormalKoopa::enter(Koopa& koopa) {
     koopa.setEnemyData(EnemyData (  koopa.getHitBox().width, koopa.getHitBox().height, 10, 
-                                    false, true, true, 1, 
+                                    false, true, true, false, 1, 
                                     koopa.getPos(), Vector2{0,0}, -1));
     koopa.setVelocity(Vector2{-50.f, 0.f});
     koopa.setMovementStrategy(std::make_shared<DirectionMove>());
@@ -133,7 +133,7 @@ void NormalKoopa::handleStomp(Koopa& koopa) {
 }
 
 void ShellKoopa::enter(Koopa& koopa) {
-    koopa.setEnemyData(EnemyData ( koopa.getHitBox().width, koopa.getHitBox().height, 10, false, false, true, 1, 
+    koopa.setEnemyData(EnemyData ( koopa.getHitBox().width, koopa.getHitBox().height, 10, false, false, true, false, 1, 
                         koopa.getPos(), Vector2{0,0}, -1));
     koopa.setRecoveryTime(0.f);
     koopa.setMovementStrategy(std::make_shared<DirectionMove>());
@@ -175,7 +175,7 @@ void ShellKoopa::onEnemyCollision(Koopa& koopa, Enemy& other) {
 }
 
 void WingedKoopa::enter(Koopa& koopa) {
-    koopa.setEnemyData(EnemyData (koopa.getHitBox().width, koopa.getHitBox().height, 10, false, true, true, 1, 
+    koopa.setEnemyData(EnemyData (koopa.getHitBox().width, koopa.getHitBox().height, 10, false, true, true, false, 1, 
                         koopa.getPos(), Vector2{0,0}, -1));
     koopa.setVelocity(Vector2{-100.f, 100.f});
     koopa.setMovementStrategy(std::make_shared<JumpMove>());

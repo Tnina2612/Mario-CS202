@@ -23,7 +23,7 @@ EnemyManager::EnemyManager(std::string filename, SubLevel* subLevel) :
             for(int j = 0; j < numEnemies; j++) {
                 float x, y; 
                 inp >> x >> y;
-                list.push_back(EnemyFactory::createEnemy(enemyType, Vector2{x, y}));
+                list.push_back(EnemyFactory::createEnemy(enemyType, Vector2{x, y}, this));
                 list.back()->setActive(true);
             }
         } else {
@@ -33,13 +33,21 @@ EnemyManager::EnemyManager(std::string filename, SubLevel* subLevel) :
     inp.close();
 }
 
+void EnemyManager::addEnemy(std::shared_ptr<Enemy> enemy) {
+    spawnQueue.push(enemy);
+}
+
+Vector2 EnemyManager::getPlayerPos() const {
+    return subLevel->player->getPos();
+}
+
 void EnemyManager::update() {
-    for(auto& enemy : list){
+    for(auto& enemy : list) {
         // Check if the enemy is off-screen
         if(enemy->getPos().x < 0 || enemy->getPos().y - enemy->getHitBox().height > Global::ORIGINAL_HEIGHT) {
             continue;
         }
-
+        
         // Check if the enemy is alive and within the camera view
         if(enemy->getPos().x < subLevel->camera->target.x + Global::ORIGINAL_WIDTH / 2) {
             enemy->update();
@@ -56,6 +64,7 @@ void EnemyManager::update() {
                 }
             }
         }
+        
 
         // Check for collisions with the player
         Rectangle pastPlayerRec = subLevel->playerManager.gameplayManager.pastPlayerRec;
@@ -74,6 +83,12 @@ void EnemyManager::update() {
                 }
             }
         }
+    }
+
+    while(!spawnQueue.empty()) {
+        auto enemy = spawnQueue.front();
+        spawnQueue.pop();
+        list.push_back(enemy);
     }
 }
 

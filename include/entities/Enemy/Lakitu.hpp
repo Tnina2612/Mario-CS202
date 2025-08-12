@@ -1,0 +1,25 @@
+#pragma once
+
+#include"Enemy.hpp"
+#include"../../include/entities/Character.hpp"
+
+class EnemyManager;
+
+class Lakitu : public Enemy {
+private:
+    EnemyManager* _enemyManager;
+    const float _cd = 6.f;
+    float spawnTimer = 0.f;
+
+    void spawnSpiny();
+public:
+    Lakitu();
+    Lakitu(const std::string& name);
+    Lakitu(const std::string& name, Vector2 pos, EnemyManager* _enemyManager);
+
+    void onEnemyCollision(Enemy& enemy) override;
+    void hitBlockLeft() override;
+    void hitBlockRight() override;
+
+    void update(float dt) override;
+};

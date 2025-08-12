@@ -177,8 +177,6 @@ void Enemy::draw() {
 
     DrawRectangleRec(getHitBox(), BLUE);
     m_animation.draw({m_data._pos.x, m_data._pos.y - m_data._hitBoxHeight});
-    
-    
 }
 
 void Enemy::update(float dt) {
@@ -186,14 +184,6 @@ void Enemy::update(float dt) {
         return;
     }
     m_animation.update(dt);
-    // std::cerr << "Enemy position: " << getPos().x << ", " << getPos().y << std::endl;
-
-    // if(!m_data._isOnGround) {
-    //     applyGravity(dt);
-    // }
-    // if(_movementStrategy) {
-    //     _movementStrategy->Execute(m_data, dt);
-    // }
 }
 
 std::string Enemy::getTypeName() const {
@@ -206,10 +196,6 @@ void Enemy::changeDirection() {
     // m_data._velocity.x *= -1;
     // m_data._velocity.y *= -1;
 }
-
-// void Enemy::hitEnemy() {
-//     this->changeDirection();
-// }
 
 void Enemy::hitUp() {
     onStomp();

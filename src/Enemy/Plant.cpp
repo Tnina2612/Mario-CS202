@@ -19,7 +19,7 @@ Plant::Plant() : Enemy() {
 Plant::Plant(const std::string& name) : Enemy(name) {
     float width = 16.f;
     float height = 16.f;
-    m_data = EnemyData (width, height, 10, false, false, true, 1, 
+    m_data = EnemyData (width, height, 0.f, false, false, true, false, 1, 
                         Vector2{10,0}, Vector2{0,0}, -1);
     m_data._velocity = Vector2{0,-50.f};
     _curHeight = m_data._pos.y;
@@ -66,7 +66,6 @@ void Plant::update(float dt) {
         m_data._dir = _curDir;
         Vector2 d = {0.f, m_data._velocity.y*-1.f};
         m_data._velocity = d;
-        setMovementStrategy(std::make_shared<DirectionMove>());
     }
 
     Enemy::update(dt);
