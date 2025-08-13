@@ -135,15 +135,19 @@ void Character::update() {
     debug();
     handleEffect();
     if(growthUp) {
-        mAnimation.setFrames(CharacterSprite::Super::frames);
-        characterState = SUPER;
         bool doneAnimation;
         if(orientation == LEFT) doneAnimation = mAnimation.update({0.5, 0.75, 1, 0.75, 1}, 6, 0.1);
         else doneAnimation = mAnimation.update({0.5, 0.75, 1, 0.75, 1}, 13, 0.1);
         if(doneAnimation) growthUp = false;
         return;
     }
-
+    if(shrinkDown) {
+        bool doneAnimation;
+        if(orientation == LEFT) doneAnimation = mAnimation.update({2, 1.5, 1, 1.5, 1}, 6, 0.1);
+        else doneAnimation = mAnimation.update({2, 1.5, 1, 1.5, 1}, 13, 0.1);
+        if(doneAnimation) shrinkDown = false;
+        return;
+    }
     switch (behavior) {
         case MOVE:
             if (orientation == RIGHT) {
@@ -234,16 +238,15 @@ void Character::debug() {
         if(getCharacterState() == CharacterState::SMALL) {
             characterState = CharacterState::SUPER;
             mAnimation.setFrames(CharacterSprite::Super::frames);
+            growthUp = true;
         } else if(getCharacterState() == CharacterState::SUPER) {
             characterState = CharacterState::FIRE;
             mAnimation.setFrames(CharacterSprite::Fire::frames);
         } else if(getCharacterState() == CharacterState::FIRE) {
             characterState = CharacterState::SMALL;
             mAnimation.setFrames(CharacterSprite::Small::frames);
+            shrinkDown = true;
         }
-    }
-    if(IsKeyPressed(KEY_X)) {
-        growthUp = true;
     }
 }
 
