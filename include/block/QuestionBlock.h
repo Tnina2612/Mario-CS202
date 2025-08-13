@@ -11,7 +11,7 @@ private:
     int type_;
     Vector2 before_pos;
     float velocity_y;
-    const float pushHeight = 150.0f;
+    const float pushHeight = 100.0f;
     bool jiggle_;
     bool changeState_ = false;
     void animation_();
