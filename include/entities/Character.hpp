@@ -127,4 +127,5 @@ public:
 
 
     Vector2 getPos() const;
+    bool getIsDead() const;
 };
