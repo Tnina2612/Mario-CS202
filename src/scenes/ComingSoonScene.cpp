@@ -21,7 +21,7 @@ void ComingSoonScene::handleInput() {
         Program::getInstance().pushScene(new MapSelectScene());
     }
 
-    Setting::getInstance().handleInput();
+    Setting::getInstance().handleInput(nullptr);
     BackButton::getInstance().handleInput();
 }
 

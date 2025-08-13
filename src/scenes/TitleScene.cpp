@@ -2,7 +2,7 @@
 #include "core/Setting.hpp"
 #include "scenes/TitleScene.hpp"
 #include "scenes/PlayScene.hpp"
-#include "scenes/DeathScene.hpp"
+#include "scenes/NameInputScene.hpp"
 #include "scenes/MapSelectScene.hpp"
 #include "scenes/LoadGameScene.hpp"
 #include "block/Block.h"
@@ -31,7 +31,7 @@ void TitleScene::handleInput() {
         switch (curMode) {
             case 0:
             case 1:
-                Program::getInstance().pushScene(new DeathScene());
+                Program::getInstance().pushScene(new NameInputScene());
                 break;
             case 2:
                 Program::getInstance().pushScene(new LoadGameScene());
@@ -48,7 +48,7 @@ void TitleScene::handleInput() {
         curMode = ((curMode - 1) % 4 >= 0) ? (curMode - 1) % 4 : 3;
     }
 
-    Setting::getInstance().handleInput();
+    Setting::getInstance().handleInput(nullptr);
 }
 
 void TitleScene::update() {

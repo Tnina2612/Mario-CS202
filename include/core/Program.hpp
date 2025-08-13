@@ -35,4 +35,5 @@ public:
     Font getFont();
     GameSession& getSession();
     HUD& getHUD();
+    Scene* getCurrentScene();
 };

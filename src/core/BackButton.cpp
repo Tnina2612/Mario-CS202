@@ -11,11 +11,20 @@ BackButton& BackButton::getInstance() {
 }
 
 void BackButton::draw() {
-    DrawTextEx(Program::getInstance().getFont(), "BACK", {x, y}, 34.0f, 1.0f, WHITE);
+    if (!isHovered()) {
+        DrawTextEx(Program::getInstance().getFont(), "BACK", {x, y}, 34.0f, 1.0f, WHITE);
+    } else {
+        DrawTextEx(Program::getInstance().getFont(), "BACK", {x, y}, 34.0f, 1.0f, Color{151, 77, 4, 255});
+    }
 }
 
 void BackButton::handleInput() {
     if (isClicked()) onClick();
+}
+
+bool BackButton::isHovered() {
+    Vector2 rec = MeasureTextEx(Program::getInstance().getFont(), "BACK", 34.0f, 1.0f);
+    return CheckCollisionPointRec(GetMousePosition(), {x, y, rec.x, rec.y});
 }
 
 bool BackButton::isClicked() {

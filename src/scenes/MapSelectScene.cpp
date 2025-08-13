@@ -39,7 +39,7 @@ void MapSelectScene::handleInput() {
         curModeCol = ((curModeCol - 1) % 4 >= 0) ? (curModeCol - 1) % 4 : 3;
     }
 
-    Setting::getInstance().handleInput();
+    Setting::getInstance().handleInput(nullptr);
     BackButton::getInstance().handleInput();
 }
 
