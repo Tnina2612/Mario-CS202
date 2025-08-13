@@ -18,7 +18,7 @@ Podoboo::Podoboo() : Enemy() {
 Podoboo::Podoboo(const std::string& name) : Enemy(name) {
     float width = 16.f;
     float height = 16.f;
-    m_data = EnemyData (width, height, 20, true, false, true, 1, 
+    m_data = EnemyData (width, height, 20, true, false, true, false, 1, 
                         Vector2{10,0}, Vector2{0,0}, -1);
     m_data._velocity = Vector2{0.f, -100.f};
     _curCD = 0.f;
@@ -29,6 +29,10 @@ Podoboo::Podoboo(const std::string& name) : Enemy(name) {
 Podoboo::Podoboo(const std::string& name, Vector2 pos)
     : Podoboo(name) {
         m_data._pos = pos;
+}
+
+bool Podoboo::physics() {
+    return false;
 }
 
 void Podoboo::update(float dt) {

@@ -18,6 +18,8 @@ class TileMap {
         bool debug = false;
         std::vector<Rectangle> debugBlocks;
         std::vector<Rectangle> mergeBlock;
+
+        bool preventFalling(std::shared_ptr<Enemy> enemy, Vector2& movement);
     public:
         TileMap(std::string filename);
         void draw(void);

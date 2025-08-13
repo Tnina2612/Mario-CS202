@@ -30,17 +30,20 @@ public:
     void setEnemyData(const EnemyData& data);
     void setDirection(int dir);
     void setOnGround(bool onGround);
+    void setPreventFalling(bool prevent);
 
     std::shared_ptr<IEnemyStrategy> getMovementStrategy();
     EnemyData& getEnemyData();
     float getGravity();
     bool getOnGround();
+    bool preventFalling();
 
     int getDirection();
     std::vector<Rectangle> getFrames(const std::string& name);
     
     void applyGravity(float dt);
     bool isAlive();
+    void die();
     int isOffScreen(); //-1 : up, 1 : down, 2 : right, -2 : left 
 
     virtual bool onHit();
@@ -52,11 +55,14 @@ public:
     virtual void hitBlockLeft();         //< hit by block on the left
     virtual void hitBlockRight();        //< hit by block on the right
     virtual void hitBlockDown();         //< hit by block beneath
+
+    virtual void hitVertical(int dir);           //< hit by character from the side
     virtual void hitUp();                //< hit by character from above
+    
     virtual bool beHitByFireball();      //< fireball
 
     virtual void onEnemyCollision(Enemy& enemy) = 0; //< collision with other enemies
-    
+    virtual bool physics() = 0;                        //< physics
     Vector2 getVelocity();
     Vector2 getPos();
 
