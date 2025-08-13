@@ -13,6 +13,7 @@ SubLevel::SubLevel(Level* level, std::string folderName, Character* player, Vect
     player(player), 
     initPlayerPosition(initPlayerPosition),
     playerManager(this, inputManager),
+    itemManager(folderName + "/items.txt"),
     camera(camera),
     folderName(folderName)
 {
@@ -25,6 +26,7 @@ void SubLevel::draw() {
     enemies->draw();
     player->draw();
     blocks->draw();
+    itemManager.draw();
 
     // Debug
     if(debug) {
@@ -37,6 +39,7 @@ void SubLevel::update() {
     blocks->updateBlocks();
     playerManager.update();
     enemies->update();
+    itemManager.update();
 
     // Debug
     if(IsKeyPressed(KEY_Q)) {

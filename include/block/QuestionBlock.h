@@ -22,7 +22,7 @@ public:
     QuestionBlock(Block &m_block);
     void draw_() override;
     void update_() override;
-    void onHit(const std::vector<Item*> &item, Character &character) override;
+    void onHit(Character &character) override;
     bool getJiggle() override;
     Rectangle getDrawRec() const override;
     std::string getStateName() const override;

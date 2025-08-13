@@ -17,4 +17,5 @@ public:
     void appear() override;
     void activate(Character&character) override;
     bool canMove() const override;
+    std::string getType() const override;
 };

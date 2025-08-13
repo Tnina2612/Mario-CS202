@@ -16,7 +16,7 @@ Koopa::Koopa() : Enemy() {
 Koopa::Koopa(const std::string& name) : Enemy(name) {
     float width = 16.f;
     float height = 24.f;
-    m_data = EnemyData ( width, height, 10, false, true, true, 1, 
+    m_data = EnemyData ( width, height, 10, false, true, true, false, 1, 
                         Vector2{10,0}, Vector2{0,0}, -1);
     m_state = std::make_unique<NormalKoopa>();
     m_data._velocity = LevelVar::KoopaSpeed;
@@ -34,6 +34,10 @@ void Koopa::setState(std::unique_ptr<IKoopaState> state) {
 
 void Koopa::setRecoveryTime(float t) {
     _recoveryTime = t;
+}
+
+bool Koopa::physics() {
+    return true;
 }
 
 float Koopa::getRecoveryTime() {
@@ -71,9 +75,27 @@ void Koopa::update(float dt) {
 
 // }
 
-void Koopa::changeDirection() {
-    
+void Koopa::hitBlockLeft() {
+    Enemy::hitBlockLeft();
+    m_state->changeFrames(*this);
 }
+
+void Koopa::hitBlockRight() {
+    Enemy::hitBlockRight();
+    m_state->changeFrames(*this);
+}
+
+void Koopa::changeDirection() {
+    Enemy::changeDirection();
+    m_state->changeFrames(*this);
+    // if(getDirection() == 1) {
+    //     setAniFrames(getFrames("RWalk"));
+    // }
+    // else if(getDirection() == -1) {
+    //     setAniFrames(getFrames("LWalk"));
+    // }
+}
+
 
 bool Koopa::setInShell(bool inShell) {
     _inShell = inShell;
@@ -98,9 +120,14 @@ void Koopa::onEnemyCollision(Enemy& enemy) {
 //     }
 //     Enemy::draw();
 // }
+void Koopa::hitVertical(int dir) {
+    if(dynamic_cast<ShellKoopa*>(m_state.get())) {
+        
+        setDirection(dir);
+    }
+}
 
-void NormalKoopa::onEnemyCollision(Koopa& koopa, Enemy& other) {
-    koopa.changeDirection();
+void NormalKoopa::changeFrames(Koopa& koopa) {
     if(koopa.getDirection() == 1) {
         koopa.setAniFrames(koopa.getFrames("RWalk"));
     }
@@ -109,11 +136,27 @@ void NormalKoopa::onEnemyCollision(Koopa& koopa, Enemy& other) {
     }
 }
 
+void NormalKoopa::onEnemyCollision(Koopa& koopa, Enemy& other) {
+    int oldDir = koopa.getDirection();
+
+    koopa.changeDirection();
+
+    float overlapX = std::min(koopa.getHitBox().x + koopa.getHitBox().width,
+                              other.getHitBox().x + other.getHitBox().width)
+                   - std::max(koopa.getHitBox().x, other.getHitBox().x);
+
+    if (overlapX <= 0.0f) return;
+
+    koopa.setPos(Vector2{koopa.getPos().x + overlapX * -oldDir, koopa.getPos().y});
+}
+
 void NormalKoopa::enter(Koopa& koopa) {
-    koopa.setEnemyData(EnemyData (  koopa.getHitBox().width, koopa.getHitBox().height, 10, 
-                                    false, true, true, 1, 
-                                    koopa.getPos(), Vector2{0,0}, -1));
-    koopa.setVelocity(Vector2{-50.f, 0.f});
+    std::cerr << "ENTER: NORMAL" << std::endl;
+    auto f = koopa.getFrames("RWalk")[0];
+    koopa.setEnemyData(EnemyData (  f.width, f.height, 1000.f, 
+                                    false, true, true, false, 1, 
+                                    koopa.getPos(), Vector2{0,0}, koopa.getDirection()));
+    koopa.setVelocity(LevelVar::KoopaSpeed);
     koopa.setMovementStrategy(std::make_shared<DirectionMove>());
     koopa.setInShell(false);
     if(koopa.getDirection() == 1) {
@@ -132,13 +175,18 @@ void NormalKoopa::handleStomp(Koopa& koopa) {
     koopa.setState(std::make_unique<ShellKoopa>());
 }
 
+void ShellKoopa::changeFrames(Koopa& koopa) {
+    koopa.setAniFrames(koopa.getFrames("Shell1"));
+}
+
 void ShellKoopa::enter(Koopa& koopa) {
-    koopa.setEnemyData(EnemyData ( koopa.getHitBox().width, koopa.getHitBox().height, 10, false, false, true, 1, 
-                        koopa.getPos(), Vector2{0,0}, -1));
+    auto f = koopa.getFrames("Shell1")[0];
+    koopa.setEnemyData(EnemyData ( f.width, f.height, 1000.f, false, false, true, false, 1, 
+                        koopa.getPos(), Vector2{0,0}, koopa.getDirection()));
     koopa.setRecoveryTime(0.f);
     koopa.setMovementStrategy(std::make_shared<DirectionMove>());
     koopa.setVelocity(Vector2{0.f, 0.f});
-    koopa.setAniFrames(koopa.getFrames("Shell1"));
+    koopa.setAniFrames(koopa.getFrames("Shell2"));
     koopa.setInShell(true);
 }
 
@@ -150,20 +198,19 @@ void ShellKoopa::update(Koopa& koopa, float dt) {
         koopa.setState(std::make_unique<NormalKoopa>());
     }
     else if(koopa.getRecoveryTime() > koopa.TIME - 1.f) {
-        koopa.setAniFrames(koopa.getFrames("Shell2"));
+        koopa.setAniFrames(koopa.getFrames("Shell1"));
     }
 }
 
 void ShellKoopa::handleStomp(Koopa& koopa) {
     if(abs(koopa.getVelocity().x) <= pow(10,-5)) {
-        Vector2 temp = {-150.f*koopa.getDirection(), 0.f};
+        Vector2 temp = {150.f*koopa.getDirection(), 0.f};
         koopa.setVelocity(temp);
-        koopa.setMovementStrategy(std::make_shared<DirectionMove>());
+        koopa.setAniFrames(koopa.getFrames("Shell2"));
         koopa.setRecoveryTime(0);
     }
     else {
         koopa.setVelocity(Vector2{0.f,0.f});
-        koopa.setMovementStrategy(std::make_shared<DirectionMove>());
     }
 }
 
@@ -171,13 +218,24 @@ void ShellKoopa::onEnemyCollision(Koopa& koopa, Enemy& other) {
     if(koopa.getVelocity().x < pow(10, -3)) {
         return;
     }
-    other.onHit();
+    other.die();
+}
+
+void WingedKoopa::changeFrames(Koopa& koopa) {
+    if(koopa.getDirection() == 1) {
+        koopa.setAniFrames(koopa.getFrames("RWWalk"));
+    }
+    else if(koopa.getDirection() == -1) {
+        koopa.setAniFrames(koopa.getFrames("LWWalk"));
+    }
 }
 
 void WingedKoopa::enter(Koopa& koopa) {
-    koopa.setEnemyData(EnemyData (koopa.getHitBox().width, koopa.getHitBox().height, 10, false, true, true, 1, 
-                        koopa.getPos(), Vector2{0,0}, -1));
-    koopa.setVelocity(Vector2{-100.f, 100.f});
+    auto f = koopa.getFrames("RWWalk")[0];
+
+    koopa.setEnemyData(EnemyData (f.width, f.height, 1000.f, false, true, true, false, 1, 
+                        koopa.getPos(), Vector2{0,0}, koopa.getDirection()));
+    koopa.setVelocity(LevelVar::KoopaSpeed);
     koopa.setMovementStrategy(std::make_shared<JumpMove>());
     koopa.setInShell(false);
     if(koopa.getDirection() == 1) {
@@ -197,11 +255,15 @@ void WingedKoopa::handleStomp(Koopa& koopa) {
 }
 
 void WingedKoopa::onEnemyCollision(Koopa& koopa, Enemy& other) {
+    int oldDir = koopa.getDirection();
+
     koopa.changeDirection();
-    if(koopa.getDirection() == 1) {
-        koopa.setAniFrames(koopa.getFrames("RWWalk"));
-    }
-    else if(koopa.getDirection() == -1) {
-        koopa.setAniFrames(koopa.getFrames("LWWalk"));
-    }
+
+    float overlapX = std::min(koopa.getHitBox().x + koopa.getHitBox().width,
+                              other.getHitBox().x + other.getHitBox().width)
+                   - std::max(koopa.getHitBox().x, other.getHitBox().x);
+
+    if (overlapX <= 0.0f) return;
+
+    koopa.setPos(Vector2{koopa.getPos().x + overlapX * -oldDir, koopa.getPos().y});
 }

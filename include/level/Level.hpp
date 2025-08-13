@@ -16,9 +16,14 @@ class SubLevel;
 
 class EnemyManager {
     std::vector<std::shared_ptr<Enemy>> list;
+    std::queue<std::shared_ptr<Enemy>> spawnQueue;
     SubLevel* subLevel;
+
+    void processSpawnQueue();
 public:
     EnemyManager(std::string filename, SubLevel* subLevel);
+    void addEnemy(std::shared_ptr<Enemy> enemy);
+    Vector2 getPlayerPos() const;
     void update();
     void draw() const;
     void saveToFile(std::string filename);
@@ -86,6 +91,15 @@ class LevelPlayerManager {
         void addAnimation(unique_ptr<LevelPlayerAnimationManager> nextSceneManager);
 };
 
+class ItemManager {
+    private:
+        std::vector<shared_ptr<Item>> items;
+    public:
+        ItemManager(std::string filename);
+        void draw(void);
+        void update(void);
+};
+
 class SubLevel {
         friend class Level;
         friend class EnemyManager;
@@ -99,11 +113,13 @@ class SubLevel {
         std::shared_ptr<EnemyManager> enemies;
         std::shared_ptr<ChangeSubLevelManager> changeSubLevelManager;
         LevelPlayerManager playerManager;
+        ItemManager itemManager;
         Camera2D* camera;
         std::string folderName;
         Vector2 initPlayerPosition;
 
         bool debug = false;
+        bool oke =false;
     public:
         SubLevel(Level* level, std::string folderName, Character* player, Vector2 initPlayerPosition, InputManager& inputManager, Camera2D* camera);
         void draw();

@@ -9,14 +9,14 @@ void PlayerLevelAnimationManager::goDownward() {
 }
 
 void PlayerLevelAnimationManager::goLeftward() {
-    character->Animation::update(GetFrameTime(), 3, 3);
+    character->getAnimation().update(GetFrameTime(), 3, 3);
     float x = character->getPos().x - GetFrameTime() * LevelVar::animationSpeed;
     float y = character->getPos().y;
     character->setPosition(x, y);
 }
 
 void PlayerLevelAnimationManager::goRightward() {
-    character->Animation::update(GetFrameTime(), 10, 3);
+    character->getAnimation().update(GetFrameTime(), 10, 3);
     float x = character->getPos().x + GetFrameTime() * LevelVar::animationSpeed;
     float y = character->getPos().y;
     character->setPosition(x, y);
@@ -36,11 +36,11 @@ void PlayerLevelAnimationManager::climbDown(float pivotX) {
 }
 
 void PlayerLevelAnimationManager::disappear() {
-    character->Animation::setScale(0.0f);
+    character->getAnimation().setScale(0.0f);
 }
 
 void PlayerLevelAnimationManager::appear() {
-    character->Animation::setScale(1.0f);
+    character->getAnimation().setScale(1.0f);
 }
 
 void PlayerDownPipeAnimation::initialize(Character* player) {
@@ -139,10 +139,10 @@ bool PlayerClimbDownAnimation::isDone() {
 
 void PlayerClimbDownAnimation::update() {
     if(player->getOrientation() == LEFT) {
-        player->Animation::update(GetFrameTime(), 14, 2);
+        player->getAnimation().update(GetFrameTime(), 14, 2);
     }
     else {
-        player->Animation::update(GetFrameTime(), 16, 2);
+        player->getAnimation().update(GetFrameTime(), 16, 2);
     }
     player->playerLevelAnimationManager.climbDown(pivotX);
 }
@@ -219,7 +219,7 @@ bool PlayerExitDoorAnimation::isDone() {
 
 void PlayerExitDoorAnimation::update() {
     elapsedTime += GetFrameTime();
-    player->Animation::update(GetFrameTime(), 6, 1);
+    player->getAnimation().update(GetFrameTime(), 6, 1);
     player->playerLevelAnimationManager.appear();
 }
 

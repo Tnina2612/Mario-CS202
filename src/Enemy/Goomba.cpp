@@ -18,7 +18,7 @@ Goomba::Goomba(const std::string& name) : Enemy(name) {
     _deadAni = 0;
     float width = 16.f;
     float height = 16.f;
-    m_data = EnemyData (width, height, 1000.f, false, true, true, 1, 
+    m_data = EnemyData (width, height, 1000.f, false, true, true, false, 1, 
                         Vector2{10,0}, Vector2{0,0}, -1);
     m_data._velocity = LevelVar::GoombaSpeed;
     
@@ -61,14 +61,19 @@ bool Goomba::onHit() {
 }
 
 void Goomba::onEnemyCollision(Enemy& enemy) {
+    int oldDir = getDirection();
     changeDirection();
     float overlapX = min(getHitBox().x + getHitBox().width, enemy.getHitBox().x + enemy.getHitBox().width) - max(getHitBox().x, enemy.getHitBox().x);
     if (overlapX <= 0.0f) return;
-    
-    setPos(Vector2{getPos().x + overlapX * getDirection(), getPos().y});
+
+    setPos(Vector2{getPos().x + overlapX * -oldDir, getPos().y});
 }
 
 void Goomba::changeDirection() {
     Enemy::changeDirection();
     setAniFrames(getFrames("Walk"));
+}
+
+bool Goomba::physics() {
+    return true;
 }

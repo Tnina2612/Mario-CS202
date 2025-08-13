@@ -56,3 +56,7 @@ bool HiddenCoin::canMove() const
 {
     return false;
 }
+
+std::string HiddenCoin::getType() const {
+    return "hiddencoin";
+}

@@ -120,3 +120,7 @@ bool Star::canMove() const
 {
     return true;
 }
+
+std::string Star::getType() const {
+    return "star";
+}

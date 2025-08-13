@@ -11,7 +11,6 @@
 
 void TitleScene::init() {
     background = new TileMap("world-maps/titleScene/titleScene.txt");
-
     renderTexture = LoadRenderTexture(Global::ORIGINAL_WIDTH, Global::ORIGINAL_HEIGHT);
     coin = LoadTexture("assets/images/title-scene/coin.png");
     logo = LoadTexture("assets/images/title-scene/logo.png");

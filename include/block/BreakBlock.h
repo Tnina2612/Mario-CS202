@@ -23,7 +23,7 @@ public:
     BreakBlock(Block &block);
     void draw_() override;
     void update_() override;
-    void onHit(const std::vector<Item*> &item, Character & character) override {}
+    void onHit(Character & character) override {}
     bool getJiggle() override;
     bool getIsDelete() const override;
     Rectangle getDrawRec() const override;

@@ -1,3 +1,5 @@
+#include<cmath>
+
 #include<level/TileMap.hpp>
 
 TileMap::TileMap(std::string filename) {
@@ -12,16 +14,11 @@ TileMap::TileMap(std::string filename) {
     }
     for(int i = 0; i < height; i++) {
         for(int j = 0; j < width; j++) {
-            string blockName;
-            inp >> blockName;
-
+            string blockData;
+            inp >> blockData;
             Vector2 pos = Vector2{j * BLOCKSIDE, i * BLOCKSIDE};
-            if(blockName.find("coin") == 0) {
-                tiles[i][j] = make_shared<Block>(pos, 0, "", "question", blockName);
-            } else if(blockName.find("brick") == 0) {
-                tiles[i][j] = make_shared<Block>(pos, 0, "", "normal", blockName);
-            } else if(blockName != "A") {
-                tiles[i][j] = make_shared<Block>(pos, 0, "", "solid", blockName);
+            if(blockData != "A") {
+                tiles[i][j] = make_shared<Block>(pos, blockData);
             } else {
                 tiles[i][j].reset();
             }
@@ -66,7 +63,7 @@ void TileMap::update(Character* player) {
     player->resetAttributes();
     float deltaTime = GetFrameTime();
     Rectangle nextFrame = {charRec.x, charRec.y + player->getVeclocityY() * deltaTime, charRec.width, charRec.height};
-
+    
     std::vector<std::pair<int, int>> nearbyCells = cellsToCheck(nextFrame);
 
     for(std::pair<int, int> pii : nearbyCells) {
@@ -79,7 +76,7 @@ void TileMap::update(Character* player) {
                 player->hitBlockBottom(blockRec.y);
             } else {
                 player->hitBlockTop(blockRec.y + blockRec.height);
-                tiles[i][j]->onHit({}, *player);
+                tiles[i][j]->onHit(*player);
             }
             nextFrame.y = charRec.y;
         }
@@ -124,23 +121,26 @@ void TileMap::update(std::shared_ptr<Enemy> enemy) {
     std::vector<std::pair<int, int>> nearbyCells = cellsToCheck(enemy->getHitBox());
     float deltaTime = GetFrameTime();
 
-    // if(!enemy->getOnGround()) {
-    //     enemy->applyGravity(deltaTime);
-    // }
     enemy->applyGravity(deltaTime);
-    enemy->setOnGround(false);
     Rectangle enemyRec = enemy->getHitBox();
-    Vector2 dx = enemy->getMovementStrategy()->Execute(enemy->getEnemyData(), deltaTime);
-    Rectangle nextFrame = {enemyRec.x, enemyRec.y + dx.y, enemyRec.width, enemyRec.height};
-    Rectangle result = {enemyRec.x, enemyRec.y + dx.y + enemyRec.width, enemyRec.width, enemyRec.height};
+    Vector2 movement = enemy->getMovementStrategy()->Execute(enemy->getEnemyData(), deltaTime);
+    Rectangle nextFrame = {enemyRec.x, enemyRec.y + movement.y, enemyRec.width, enemyRec.height};
     
-
-    if(!enemy->isAlive()) {
+    if(!enemy->isAlive() ) {
         enemy->setPos({nextFrame.x, nextFrame.y + nextFrame.height});
         enemy->update(deltaTime);
         return;
     }
 
+    if(!enemy->physics()) {
+        enemy->setPos({nextFrame.x, nextFrame.y + nextFrame.height});
+        enemy->update(deltaTime);
+        return;
+    }
+
+    if (enemy->preventFalling()) {
+        preventFalling(enemy, movement);
+    }
     // checking collision on Oy 
     for(std::pair<int, int> pii : nearbyCells) {
         int i = pii.first, j = pii.second;
@@ -151,44 +151,50 @@ void TileMap::update(std::shared_ptr<Enemy> enemy) {
         if(CheckCollisionRecs(nextFrame, blockRec)) 
         {
             if(nextFrame.y <= blockRec.y) {
-                result.y = blockRec.y;
+                // result.y = blockRec.y;
                 enemy->setOnGround(true);
                 enemy->setVelocityY(enemy->getRestVelocity());
+                nextFrame.y = blockRec.y - enemyRec.height;
             } else {
                 enemy->setVelocityY(enemy->getVelocity().y * -1.0f);
+                nextFrame.y = blockRec.y + blockRec.height;
             }
-            nextFrame.y = enemyRec.y;
+            // nextFrame.y = enemyRec.y;
             break;
         } 
     }
+    enemyRec = nextFrame;
+
+    nextFrame = enemyRec;
+    nextFrame.x += movement.x;
 
     //checking collision on Ox
-    nextFrame.x = enemyRec.x + dx.x;
-    bool okee = false;
+
+    //nextFrame.x = enemyRec.x + movement.x;
+
+    // nextFrame.y = result.y;
+
     for(std::pair<int, int> pii : nearbyCells) {
         int i = pii.first, j = pii.second;
         if(i < 0 || i >= height || j < 0 || j >= width ||
             tiles[i][j] == nullptr) continue;
-        okee = true;
+
         const Rectangle& blockRec = tiles[i][j]->getDrawRec();
 
-        if(CheckCollisionRecs(nextFrame, blockRec) && enemy->getOnGround()) {
+        if(CheckCollisionRecs(nextFrame, blockRec)) {
             if(nextFrame.x <= blockRec.x) {
+                nextFrame.x = blockRec.x - enemyRec.width;
                 enemy->hitBlockLeft();
             } else {
+                nextFrame.x = blockRec.x + blockRec.width;
                 enemy->hitBlockRight();
             }
-            nextFrame.x = enemyRec.x;
+            // nextFrame.x = enemyRec.x;
             break;
         } 
     }
 
-    if(!okee && enemy->getOnGround()) {
-        nextFrame.x -= dx.x;
-    } 
-    result.x = nextFrame.x;
-
-    enemy->setPos({result.x, result.y});
+    enemy->setPos({nextFrame.x, nextFrame.y + nextFrame.height});
     enemy->update(deltaTime);
 }
 
@@ -248,4 +254,25 @@ float TileMap::getWidth() {
 
 float TileMap::getHeight() {
     return height;
+}
+
+bool TileMap::preventFalling(std::shared_ptr<Enemy> enemy, Vector2& movement) {
+    Rectangle enemyRec = enemy->getHitBox();
+
+    float nextX = enemyRec.x + movement.x;
+    float footY = enemyRec.y + enemyRec.height + 1;
+
+    int tileBelowRow = (int) (footY / BLOCKSIDE);
+    int tileBelowCol = (int) ((nextX + enemyRec.width / 2) / BLOCKSIDE);
+
+    if (tileBelowRow < 0 || tileBelowRow >= height || tileBelowCol < 0 || tileBelowCol >= width)
+        return false;
+
+    if (tiles[tileBelowRow][tileBelowCol] == nullptr) {
+        enemy->changeDirection();
+        movement.x = 0;
+        return true;
+    }
+
+    return false;
 }
