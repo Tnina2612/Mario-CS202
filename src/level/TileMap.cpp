@@ -281,3 +281,19 @@ bool TileMap::preventFalling(std::shared_ptr<Enemy> enemy, Vector2& movement) {
 
     return false;
 }
+
+void TileMap::update(std::shared_ptr<MovingPlatform> platform, Character* player) {
+    const Rectangle& charRec = player->getRectangle();
+    const Rectangle& platformRec = platform->getRect();
+    
+    if(CheckCollisionRecs(charRec, platformRec)) {
+        if(charRec.y <= platformRec.y) {
+            player->setPosition(charRec.x, platformRec.y);
+            player->hitBlockBottom(platformRec.y);
+        }
+        else if(charRec.y > platformRec.y)  {
+            player->setPosition(charRec.x, platformRec.y + charRec.height + platformRec.height);
+            player->hitBlockTop(platformRec.y + platformRec.height);
+        }
+    }
+}

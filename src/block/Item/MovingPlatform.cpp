@@ -76,13 +76,12 @@ void MovingPlatform::move(float dt) {
         targetPos = (targetPos.x == _startPos.x && targetPos.y == _startPos.y) 
                     ? _endPos : _startPos;
         _curVelocity = Vector2{0.f, 0.f};
-        std::cerr << "NOT IN" << std::endl;
         return;
     }
 
     float disTarget = sqrt(pow(targetPos.x - _pos.x, 2) + pow(targetPos.y - _pos.y, 2));
     float distance = sqrt(pow(_startPos.x - _endPos.x, 2) + pow(_startPos.y - _endPos.y, 2));
-    
+
     if(disTarget < pow(10, -3)) {
         _pos = targetPos;
         targetPos = (targetPos.x == _startPos.x && targetPos.y == _startPos.y) 
@@ -116,11 +115,8 @@ void MovingPlatform::move(float dt) {
         _curVelocity.y = _velocity.y * dir.y;
     }
 
-    std::cerr << "CURVELOCITY: " << _curVelocity.x << " " << _curVelocity.y << std::endl;
     _pos.x += _curVelocity.x * dt;
     _pos.y += _curVelocity.y * dt;
-
-    std::cerr << "POS: " << _pos.x << " " << _pos.y << std::endl;
 }
 
 void MovingPlatform::draw() {
