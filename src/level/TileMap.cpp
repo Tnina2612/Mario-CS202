@@ -55,7 +55,7 @@ void TileMap::updateBlocks() {
 }
 
 void TileMap::update(Character* player) {
-    if(player->getPos().y >= Global::ORIGINAL_HEIGHT) player->die();
+    if(player->getPos().y >= Global::ORIGINAL_HEIGHT + 64.0f) player->die();
     
     const Rectangle& charRec = player->getRectangle();
     player->resetAttributes();

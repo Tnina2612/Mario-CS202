@@ -75,14 +75,6 @@ void EnemyManager::update() {
                 //     cout << "Game Over! You have no lives left." << endl;
                 //     Program::getInstance().pushScene(new GameOverScene());
                 // }
-                Program::getInstance().pushScene(new DeathScene());
-                if (Program::getInstance().getSession().LIVES == 0) {
-                    Program::getInstance().pushScene(new GameOverScene());
-                    Program::getInstance().getHUD().onNotify(EventType::RESET_TIMER);
-                    Program::getInstance().getHUD().onNotify(EventType::RESET_LIVES);
-                    Program::getInstance().getHUD().onNotify(EventType::RESET_SCORES);
-                }
-                Program::getInstance().getHUD().onNotify(EventType::RESET_TIMER);
             }
         }
     }

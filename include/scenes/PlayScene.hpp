@@ -10,6 +10,9 @@ class PlayScene : public Scene {
 private:
     Level* level;
     EventManager eventManager;
+    float waitTimer;
+    float waitDuration;
+    string sessionName;
 
 public:
     PlayScene(const std::string& levelName);
@@ -20,4 +23,8 @@ public:
     void handleInput() override;
     void update() override;
     void render() override;
+
+    string getSessionName() const {
+        return sessionName;
+    }
 };

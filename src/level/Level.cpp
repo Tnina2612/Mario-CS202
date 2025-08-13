@@ -146,7 +146,7 @@ void Level::saveGame(std::string folderName) {
     // Create save folder
     std::string saveFolder = "./savedMaps/" + folderName;
     if(!std::filesystem::exists(saveFolder)) {
-        std::filesystem::create_directory(saveFolder);
+        std::filesystem::create_directories(saveFolder);
     }
     subLevel->background->saveToFile(saveFolder + "/background.txt");
     subLevel->blocks->saveToFile(saveFolder + "/blocks.txt");
@@ -177,4 +177,8 @@ vector<std::pair<std::string, std::string>> Level::getSavedLevels() {
 
 Level::~Level() {
     UnloadRenderTexture(renderTexture);
+}
+
+std::shared_ptr<Character> Level::getPlayer() {
+    return player;
 }

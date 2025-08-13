@@ -103,6 +103,7 @@ public:
     void setPosition(float x, float y);
     float getGravity()const;
     float getRestVeclocity()const;
+    bool getIsDead()const;
     // bool getCollideUp()const;
     // bool getCollideDown()const;
     

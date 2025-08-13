@@ -310,7 +310,9 @@ void Character::die() {
     veclocityX = 0.0f;
     veclocityY = -jumpVeclocity; // Mario sẽ bật lên một chút khi chết (tùy chọn)
     onGround = false;
+
     Program::getInstance().getHUD().onNotify(EventType::MARIO_DIED);
+    MusicManager::getInstance().stopMusic();
     SoundManager::getInstance().playSound(SoundType::MARIO_DIE);
 }
 
@@ -343,4 +345,8 @@ float Character::getGravity()const {
 
 float Character::getRestVeclocity()const {
     return restVeclocity;
+}
+
+bool Character::getIsDead()const {
+    return isDead;
 }

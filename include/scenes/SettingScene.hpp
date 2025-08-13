@@ -1,5 +1,6 @@
 #pragma once
 #include "core/Scene.hpp"
+#include "level/Level.hpp"
 
 class SettingScene : public Scene {
 private:
@@ -9,8 +10,10 @@ private:
     float sliderX_Music;
     float sliderY_Music;
     float sliderValue_Music;
+    Level* level;
 
 public:
+    SettingScene(Level* level);
     void init() override;
     void handleInput() override;
     void update() override;

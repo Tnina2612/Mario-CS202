@@ -139,4 +139,5 @@ class Level {
         void saveGame(std::string folderName);
         static vector<std::pair<std::string, std::string>> getSavedLevels();
         ~Level();
+        std::shared_ptr<Character> getPlayer();
 };

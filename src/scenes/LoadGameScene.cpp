@@ -25,7 +25,7 @@ void LoadGameScene::init() {
 
 void LoadGameScene::handleInput() {
     BackButton::getInstance().handleInput();
-    Setting::getInstance().handleInput();
+    Setting::getInstance().handleInput(nullptr);
 
     int playerNum = (int)playerList.size();
     if (playerNum == 0) return;
@@ -38,7 +38,7 @@ void LoadGameScene::handleInput() {
         curRow = ((curRow - 1) % playerNum >= 0) ? (curRow - 1) % playerNum : playerNum - 1;
     }
 
-    Setting::getInstance().handleInput();
+    Setting::getInstance().handleInput(nullptr);
     BackButton::getInstance().handleInput();
 }
 

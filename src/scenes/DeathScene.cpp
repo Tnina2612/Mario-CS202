@@ -16,7 +16,7 @@ void DeathScene::init() {
     coin = LoadTexture("assets/images/title-scene/coin.png");
 
     waitTimer = 0.0f;
-    waitDuration = 4.0f;
+    waitDuration = 3.0f;
 }
 
 void DeathScene::handleInput() {
