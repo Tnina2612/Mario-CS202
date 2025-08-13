@@ -1,6 +1,7 @@
 #include<level/Level.hpp>
+#include<cassert>
 
-ItemManager::ItemManager(std::string filename) {
+ItemManager::ItemManager(std::string filename, SubLevel* subLevel) : subLevel(subLevel) {
     ifstream inp(filename);
     if(inp.is_open() == false) {
         throw std::runtime_error("ItemManager::ItemManager(filename) cannot open file: " + filename);
@@ -28,7 +29,24 @@ void ItemManager::draw() {
 }
 
 void ItemManager::update() {
-    for(const shared_ptr<Item>& item : items) {
-        item->update();
+    for(int i = 0; i < items.size(); i++) {
+        if(items[i]->isDelete()) {
+            items.erase(items.begin() + i);
+            i--;
+        }
     }
+    for(shared_ptr<Item>& item : items) {
+        if (subLevel && subLevel->blocks && item->isAppearAnimation() == false) {
+            subLevel->blocks->update(item);
+        }
+        item->update();
+        if(CheckCollisionRecs(subLevel->player->getRectangle(), item->getDrawRec())) {
+            item->activate(*subLevel->player);
+        }
+    }
+}
+
+void ItemManager::addItem(shared_ptr<Item> item) {
+    items.push_back(item);
+    std::cout << "Item added: " << item->getType() << " at position (" << item->getPos().x << ", " << item->getPos().y << ")" << endl;
 }

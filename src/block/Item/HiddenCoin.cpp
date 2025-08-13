@@ -60,3 +60,7 @@ bool HiddenCoin::canMove() const
 std::string HiddenCoin::getType() const {
     return "hiddencoin";
 }
+
+Vector2 HiddenCoin::getVelocity() const {
+    return velocity_;
+}

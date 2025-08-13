@@ -1,8 +1,8 @@
 #include<cmath>
-
 #include<level/TileMap.hpp>
+#include<level/Level.hpp>
 
-TileMap::TileMap(std::string filename) {
+TileMap::TileMap(std::string filename, SubLevel* subLevel) : subLevel(subLevel) {
     std::ifstream inp(filename);
     if(inp.is_open() == false) {
         throw runtime_error("Cannot open file " + filename);
@@ -37,7 +37,6 @@ void TileMap::draw(void) {
     }
 
     if(debug) {
-        // cout << "DEBUG IS ON\n";
         for(const Rectangle& block : debugBlocks) {
             DrawRectangleRec(block, Color{100, 255, 100, 50});
         }
@@ -77,6 +76,10 @@ void TileMap::update(Character* player) {
             } else {
                 player->hitBlockTop(blockRec.y + blockRec.height);
                 tiles[i][j]->onHit(*player);
+                std::shared_ptr<Item> item = tiles[i][j]->popAppearingItem();
+                if(item != nullptr) {
+                    subLevel->itemManager.addItem(item);
+                }
             }
             nextFrame.y = charRec.y;
         }
@@ -195,7 +198,69 @@ void TileMap::update(std::shared_ptr<Enemy> enemy) {
     }
 
     enemy->setPos({nextFrame.x, nextFrame.y + nextFrame.height});
-    enemy->update(deltaTime);
+}
+
+void TileMap::update(std::shared_ptr<Item> item) {
+    if(item->getType().find("mushroom") == std::string::npos) {
+        return;
+    }
+
+    Rectangle itemRec = item->getDrawRec();
+    Vector2 movement = item->getVelocity();
+    Rectangle nextFrame = {itemRec.x, itemRec.y + movement.y * GetFrameTime(), itemRec.width, itemRec.height};
+
+    item->checkFall();
+
+    std::vector<std::pair<int, int>> nearbyCells = cellsToCheck(itemRec);
+    for(std::pair<int, int> pii : nearbyCells) {
+        int i = pii.first, j = pii.second;
+        if(i < 0 || i >= height || j < 0 || j >= width ||
+            tiles[i][j] == nullptr) continue;
+        if(CheckCollisionRecs(nextFrame, tiles[i][j]->getDrawRec())) {
+            if(nextFrame.y <= tiles[i][j]->getDrawRec().y) {
+                item->checkOnGround();
+                nextFrame.y = tiles[i][j]->getDrawRec().y - itemRec.height;
+            } else {
+                item->checkFall();
+                nextFrame.y = tiles[i][j]->getDrawRec().y + tiles[i][j]->getDrawRec().height;
+            }
+        }
+    }
+
+    itemRec = nextFrame;
+    nextFrame.x += movement.x * GetFrameTime();
+    bool changeDirection = false;
+    for(std::pair<int, int> pii : nearbyCells) {
+        int i = pii.first, j = pii.second;
+        if(i < 0 || i >= height || j < 0 || j >= width ||
+            tiles[i][j] == nullptr) continue;
+        if(CheckCollisionRecs(nextFrame, tiles[i][j]->getDrawRec())) {
+            if(nextFrame.x <= tiles[i][j]->getDrawRec().x) {
+                if(movement.x > 0) {
+                    changeDirection = true;
+                    cout << "Collision on right side at block: " << i << ", " << j << std::endl;
+                    cout << "Item rec: " << nextFrame.x << ", " << nextFrame.y << ", " << nextFrame.width << ", " << nextFrame.height << std::endl;
+                    cout << "Block rec: " << tiles[i][j]->getDrawRec().x << ", " << tiles[i][j]->getDrawRec().y << ", " << tiles[i][j]->getDrawRec().width << ", " << tiles[i][j]->getDrawRec().height << std::endl;
+                }
+                nextFrame.x = tiles[i][j]->getDrawRec().x - itemRec.width;
+            } else {
+                if(movement.x < 0) {
+                    changeDirection = true;
+                    cout << "Collision on left side at block: " << i << ", " << j << std::endl;
+                    cout << "Item rec: " << nextFrame.x << ", " << nextFrame.y << ", " << nextFrame.width << ", " << nextFrame.height << std::endl;
+                    cout << "Block rec: " << tiles[i][j]->getDrawRec().x << ", " << tiles[i][j]->getDrawRec().y << ", " << tiles[i][j]->getDrawRec().width << ", " << tiles[i][j]->getDrawRec().height << std::endl;
+                }
+                nextFrame.x = tiles[i][j]->getDrawRec().x + tiles[i][j]->getDrawRec().width;
+            }
+        }
+    }
+
+    if(changeDirection) {
+        item->checkChangeDirect();
+    }
+
+    itemRec = nextFrame;
+    item->setPos({itemRec.x + itemRec.width / 2.f, itemRec.y + nextFrame.height});
 }
 
 std::vector<std::pair<int, int>> TileMap::cellsToCheck(const Rectangle& rec) {

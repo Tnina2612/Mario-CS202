@@ -1,39 +1,33 @@
 #include "../include/Block/Item/Flower.h"
 
 Flower::Flower(Vector2 pos)
-    : Item(pos), isAppear(0), beforePos(pos)
+    : Item(pos), isAppear(0), beforePos(pos), 
+    m_rec(ItemSprite::FIREFLOWER1), frameTime(1.0f / 60.0f) 
 {
-    rec_ = ItemSprite::FIREFLOWER1[0];
 }
 
 void Flower::update()
 {
     appear();
+    frame_ += GetFrameTime();
+    if (frame_ >= frameTime)
+    {
+        type_ = (type_ + 1) % m_rec.size();
+        frame_ = 0.0f;
+    }
+    rec_ = m_rec[type_];
 }
 
 void Flower::activate(Character &character){
 //     if (isDelete())
 //         return;
 
-//     if (character.getCharacterState() == CharacterState::Fire)
-//     {
-//         character.setState(new FireState(character));
-//     }
-//     else
-//     {
-//         character.setState(new SuperState(character));
-//     }
-
-//     appearAnimation = 0;
-//     beforePos = pos_;
-//     pos_.y -= tileSize;
-// }
-// {
+    character.powerUp();
 //     Score_Manager &score_manager = Score_Manager::GetInstance();
 //     score_manager.AddScore({character.getPosition().x + character.get_draw_rec().width, character.getPosition().y}, Score_Flower);
 //     character.getFlower();
 //     info.UpdateScore(ScoreFlower);
-//     isDelete = 1;
+    isDelete_ = 1;
 }
 
 void Flower::appear()
@@ -53,4 +47,8 @@ bool Flower::canMove() const { return false; }
 
 std::string Flower::getType() const {
     return "flower";
+}
+
+Vector2 Flower::getVelocity() const {
+    return {0.0f, 0.0f};
 }

@@ -7,6 +7,8 @@ private:
     bool isAppear;
     Vector2 beforePos;
     const int ScoreFlower = 1000;
+    std::vector<Rectangle> m_rec;
+    const float frameTime;
 
 public:
     Flower(Vector2 pos);
@@ -15,4 +17,5 @@ public:
     void activate(Character &character) override;
     bool canMove() const override;
     std::string getType() const override;
+    Vector2 getVelocity() const override;
 };

@@ -1,7 +1,7 @@
 #pragma once
 
 #include"Enemy.hpp"
-#include"../../include/entities/Character.hpp"
+#include"entities/Character.hpp"
 
 class EnemyManager;
 

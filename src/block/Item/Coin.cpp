@@ -30,3 +30,7 @@ bool Coin::canMove() const { return false; }
 std::string Coin::getType() const {
     return "coin";
 }
+
+Vector2 Coin::getVelocity() const {
+    return {0.0f, velocityY};
+}

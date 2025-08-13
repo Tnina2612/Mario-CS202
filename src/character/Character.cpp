@@ -254,6 +254,17 @@ void Character::setBehavior(Behavior newBehavior) {
     behavior = newBehavior;
 }
 
+void Character::powerUp() {
+    if(getCharacterState() == CharacterState::SMALL) {
+        characterState = CharacterState::SUPER;
+        mAnimation.setFrames(CharacterSprite::Super::frames);
+        growthUp = true;
+    } else if(getCharacterState() == CharacterState::SUPER) {
+        characterState = CharacterState::FIRE;
+        mAnimation.setFrames(CharacterSprite::Fire::frames);
+    }
+}
+
 Behavior Character::getBehavior() const {
     return behavior;
 }

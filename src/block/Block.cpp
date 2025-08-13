@@ -12,7 +12,7 @@
 Block::Block(Vector2 pos, const std::string &blockData)
     : pos_(pos), animation(strsplit(blockData,':')[0]), nameBlock(strsplit(blockData,':')[0]), 
     nextState_(nullptr),
-    items(Item::stringToVectorItem(blockData, pos.x + 8, pos.y))
+    items(Item::stringToVectorItem(blockData, pos.x + 8, pos.y + 16))
 {
     // Constructor
     currentState_ = (getBlockState(blockData));
@@ -27,9 +27,6 @@ void Block::draw_()
 {
     currentState_->draw_();
     animation.draw(pos_.x, pos_.y);
-    if(appearingItem != nullptr) {
-        appearingItem->draw();
-    }  
 }
 
 void Block::update_()
@@ -39,13 +36,7 @@ void Block::update_()
         nextState_.reset();
     }
     currentState_->update_();
-    animation.update();
-    if(appearingItem != nullptr) {
-        appearingItem->update();
-        if(appearingItem->isDelete()) {
-            appearingItem = nullptr;
-        }
-    }    
+    animation.update(); 
 }
 
 void Block::onHit(Character & character)
@@ -88,9 +79,9 @@ std::string Block::getBlockName() const { return nameBlock; }
 void Block::appearItem(Character& player)
 {
     appearingItem = items.back();
-    if(appearingItem->getType() == "mushroom" + to_string(StateMushroom::one_up) || appearingItem->getType() == "flower") {
+    if(appearingItem->getType() == "mushroom" + to_string(StateMushroom::super_) || appearingItem->getType() == "flower") {
         if(player.getCharacterState() == CharacterState::SMALL) {
-            appearingItem = make_shared<Mushroom>(items.back()->getPos(), StateMushroom::one_up);
+            appearingItem = make_shared<Mushroom>(items.back()->getPos(), StateMushroom::super_);
         } else {
             appearingItem = make_shared<Flower>(items.back()->getPos());
         }
@@ -107,4 +98,9 @@ std::shared_ptr<BlockState> Block::getBlockState(const std::string& blockData) {
         return std::make_shared<NormalBlock>(*this);
     } 
     return std::make_shared<SolidBlock>(*this);
+}
+
+std::shared_ptr<Item> Block::popAppearingItem() {
+    std::shared_ptr<Item> ret = move(appearingItem);
+    return ret;
 }

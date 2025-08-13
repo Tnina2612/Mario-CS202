@@ -18,4 +18,5 @@ public:
     void activate(Character&character) override;
     bool canMove() const override;
     std::string getType() const override;
+    Vector2 getVelocity() const override;
 };

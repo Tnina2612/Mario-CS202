@@ -44,12 +44,12 @@ Vector2 EnemyManager::getPlayerPos() const {
 }
 
 void EnemyManager::update() {
-    if(IsKeyPressed(KEY_SPACE)) {
-        oke = !oke;
-    }
-    if(!oke) {
-        return;
-    }
+    // if(IsKeyPressed(KEY_SPACE)) {
+    //     oke = !oke;
+    // }
+    // if(!oke) {
+    //     return;
+    // }
     for(auto& enemy : list) {
         // Check if the enemy is off-screen
         if(enemy->getPos().x < 0 || enemy->getPos().y - enemy->getHitBox().height > Global::ORIGINAL_HEIGHT) {
@@ -58,8 +58,8 @@ void EnemyManager::update() {
         
         // Check if the enemy is alive and within the camera view
         if(enemy->getPos().x < subLevel->camera->target.x + Global::ORIGINAL_WIDTH / 2) {
-            enemy->update();
             subLevel->blocks->update(enemy);
+            enemy->update();
             for(auto& enemy2 : list) {
                 if(enemy != enemy2 && enemy->isAlive() && enemy2->isAlive() && CheckCollisionRecs(enemy->getHitBox(), enemy2->getHitBox())) {
                     // if(enemy->getPos().x < enemy2->getPos().x) {

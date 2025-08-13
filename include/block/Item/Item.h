@@ -6,9 +6,9 @@
 #include <vector>
 #include <memory>
 
-const float MushroomAndStarSpeed = 120.0f;
+const float MushroomAndStarSpeed = 70.0f;
 const float appearAnimation = 0.75f;
-const float tileSize = 16.0f * 3.0f;
+const float tileSize = 16.0f;
 
 class Item
 {
@@ -43,6 +43,7 @@ public:
     virtual void checkOnGround() {}
     virtual void checkChangeDirect() {}
     virtual std::string getType() const = 0;
+    virtual Vector2 getVelocity() const = 0;
 
     static std::shared_ptr<Item> stringToItem(std::string itemData, float x, float y);
     static std::vector<std::shared_ptr<Item>> stringToVectorItem(std::string itemData, float x, float y);

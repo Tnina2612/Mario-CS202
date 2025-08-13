@@ -90,6 +90,7 @@ public:
     void draw();
     void debug();
     void setBehavior(Behavior newBehavior);
+    void powerUp();
     Behavior getBehavior()const;
     void setOrientation(Orientation newOrientation);
     Orientation getOrientation() const;
@@ -127,4 +128,5 @@ public:
 
 
     Vector2 getPos() const;
+    bool getIsDead() const;
 };

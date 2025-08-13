@@ -93,11 +93,13 @@ class LevelPlayerManager {
 
 class ItemManager {
     private:
-        std::vector<shared_ptr<Item>> items;
+        SubLevel* subLevel;
+        std::vector<std::shared_ptr<Item>> items;
     public:
-        ItemManager(std::string filename);
+        ItemManager(std::string filename, SubLevel* subLevel);
         void draw(void);
-        void update(void);
+        void update();
+        void addItem(std::shared_ptr<Item> item);
 };
 
 class SubLevel {
@@ -106,6 +108,8 @@ class SubLevel {
         friend class ChangeSubLevelManager;
         friend class LevelGameplayManager;
         friend class LevelPlayerAnimationManager;
+        friend class TileMap;
+        friend class ItemManager;
         Level* level;
         Character* player;
         std::shared_ptr<TileMap> background;

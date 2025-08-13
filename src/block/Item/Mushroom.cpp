@@ -2,7 +2,7 @@
 #include <iostream>
 const float scale_screen = 3.0f;
 Mushroom::Mushroom(Vector2 pos, StateMushroom state)
-    : Item(pos), state_(state), direct_(1), fall_(false), isAppear(false), jump_(false), beforePos_({pos.x, pos.y - tileSize})
+    : Item(pos), state_(state), direct_(1), fall_(false), isAppear(false), jump_(false), beforePos_({pos.x, pos.y})
 {
     velocity_ = {0.0f, 0.0f};
     previousFramePos = pos_;
@@ -39,7 +39,9 @@ void Mushroom::checkOnGround()
     velocity_.y = 0.0f;
 }
 
-void Mushroom::checkChangeDirect() { direct_ = !direct_; }
+void Mushroom::checkChangeDirect() { 
+    direct_ = !direct_; 
+}
 
 void Mushroom::checkJump()
 {
@@ -52,32 +54,29 @@ void Mushroom::jump()
 {
     if (!isAppear || !jump_)
         return;
-
     float dt = GetFrameTime();
     velocity_.y += 1000.0f * dt;
     pos_.y += velocity_.y * dt;
-
-    float move = MushroomAndStarSpeed * dt;
-    pos_.x += direct_ ? move : -move;
+    velocity_.x = direct_ * MushroomAndStarSpeed * dt;
+    pos_.x += velocity_.x * dt;
 }
 
 void Mushroom::fall()
 {
     if (!isAppear || !fall_)
         return;
-
     float dt = GetFrameTime();
     velocity_.y += 1000.0f * dt;
     pos_.y += velocity_.y * dt;
+    velocity_.x = direct_ * MushroomAndStarSpeed * dt;
+    pos_.x += velocity_.x * dt;
 }
 
 void Mushroom::move() {
     if (!isAppear || fall_ || jump_)
         return;
-
     velocity_.x = (direct_ ? 1 : -1) * MushroomAndStarSpeed;
     velocity_.y = 0.0f;
-
     pos_.x += velocity_.x * GetFrameTime();
 
 
@@ -97,13 +96,12 @@ void Mushroom::appear()
 {
     if (isAppear)
         return;
-
     pos_.y -= appearAnimation;
-    if (pos_.y <= beforePos_.y)
+    if (pos_.y <= beforePos_.y - tileSize)
     {
         appearAnimation = 0;
         isAppear = true;
-        pos_.y = beforePos_.y;
+        pos_.y = beforePos_.y - tileSize;
         previousFramePos = pos_;
     }
 }
@@ -126,15 +124,17 @@ void Mushroom::update()
 
 void Mushroom::activate(Character& character)
 {
-//     if (state_ == State_MushRoom::super_)
-//     {
-//         Score_Manager &score_manager = Score_Manager::GetInstance();
-//         score_manager.AddScore(player.getPosition(), Score_One_Up_Super);
-//         player.getMushroom();
-//     }
+    if (state_ == StateMushroom::super_)
+    {
+        // Score_Manager &score_manager = Score_Manager::GetInstance();
+        // score_manager.AddScore(player.getPosition(), Score_One_Up_Super);
+        character.powerUp();
+    } else {
+        // character.addLife();
+    }
 //     info.UpdateScore(Score_One_Up_Super);
 
-//     isDelete_ = true;
+    isDelete_ = true;
 }
 
 // Vector2 Mushroom::getPreviousFramePos() { return previousFramePos; }
@@ -145,4 +145,8 @@ bool Mushroom::canMove() const { return true; }
 
 std::string Mushroom::getType() const {
     return "mushroom" + to_string(state_);
+}
+
+Vector2 Mushroom::getVelocity() const {
+    return velocity_;
 }

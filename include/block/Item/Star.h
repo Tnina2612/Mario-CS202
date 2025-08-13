@@ -29,4 +29,5 @@ public:
     bool getDirect() const;
     bool canMove() const override;
     std::string getType() const override;
+    Vector2 getVelocity() const override;
 };

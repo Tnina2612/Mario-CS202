@@ -38,5 +38,6 @@ public:
     std::string getBlockName() const;
     void appearItem(Character& player);
     std::shared_ptr<BlockState> getBlockState(const std::string& blockData);
+    std::shared_ptr<Item> popAppearingItem();
     // std::vector<Item> to_items(const std::string& blockData);
 };

@@ -22,7 +22,7 @@ void Item::setPos(Vector2 pos) { pos_ = pos; }
 
 Rectangle Item::getSourceRec() const { return rec_; }
 
-Rectangle Item::getDrawRec() const { return {pos_.x - rec_.width * 3.0f / 2.0f, pos_.y - rec_.height, rec_.width, rec_.height}; }
+Rectangle Item::getDrawRec() const { return {pos_.x - rec_.width / 2.0f, pos_.y - rec_.height, rec_.width, rec_.height}; }
 
 bool Item::isAppearAnimation() const { return appearAnimation; }
 
@@ -30,7 +30,6 @@ bool Item::isDelete() const { return isDelete_; }
 
 void Item::draw()
 {
-    if(appearAnimation == false) return;
     Rectangle dest_rec = {pos_.x, pos_.y, rec_.width, rec_.height};
     DrawTexturePro(itemTexture, rec_, dest_rec, {dest_rec.width / 2.0f, dest_rec.height}, 0.0f, WHITE);
 }
