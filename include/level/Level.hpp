@@ -114,6 +114,7 @@ class SubLevel {
         Vector2 initPlayerPosition;
 
         bool debug = false;
+        bool oke =false;
     public:
         SubLevel(Level* level, std::string folderName, Character* player, Vector2 initPlayerPosition, InputManager& inputManager, Camera2D* camera);
         void draw();

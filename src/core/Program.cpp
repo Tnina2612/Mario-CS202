@@ -5,6 +5,9 @@
 #include "scenes/TitleScene.hpp"
 #include "scenes/PlayScene.hpp"
 
+Texture2D Sprite::LuigiSprite;
+Texture2D Sprite::MarioSprite;
+
 Program::Program() : running(true), nextScene(nullptr) {
     // Khởi tạo Raylib
     SetConfigFlags(FLAG_MSAA_4X_HINT);  
@@ -56,7 +59,7 @@ void Program::popScene() {
 
 void Program::run() { // Game loop
     pushScene(new TitleScene());
-
+    Sprite::load();
     while (!WindowShouldClose() && running) {
         // Handle immediate scene changes at the start of each frame
         if (nextScene != nullptr) {
@@ -83,6 +86,7 @@ void Program::run() { // Game loop
             EndDrawing();
         }
     }
+    Sprite::unload();
 }
 
 Font Program::getFont() {

@@ -75,7 +75,7 @@ bool ChangeSubLevelManager::okToChange(int id) {
     if(list[id].key == "Right" && CheckCollisionRecs(subLevel->player->getRectangle(), list[id].detectRec) && IsKeyPressed(KEY_RIGHT)) return true;
     if(list[id].key == "Up" && CheckCollisionRecs(subLevel->player->getRectangle(), list[id].detectRec) && IsKeyPressed(KEY_UP)) return true;
     if(list[id].key == "Touch" && CheckCollisionRecs(subLevel->player->getRectangle(), list[id].detectRec)) return true;
-    if(list[id].key == "Disappear" && CheckCollisionPointRec(subLevel->player->getPos(), list[id].detectRec) && subLevel->player->getScale() <= 0.1f) return true;
+    if(list[id].key == "Disappear" && CheckCollisionPointRec(subLevel->player->getPos(), list[id].detectRec) && subLevel->player->getAnimation().getScale() <= 0.1f) return true;
     return false;
 }
 

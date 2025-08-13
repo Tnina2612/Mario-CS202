@@ -127,7 +127,7 @@ void TileMap::update(std::shared_ptr<Enemy> enemy) {
     Rectangle enemyRec = enemy->getHitBox();
     Vector2 dx = enemy->getMovementStrategy()->Execute(enemy->getEnemyData(), deltaTime);
     Rectangle nextFrame = {enemyRec.x, enemyRec.y + dx.y, enemyRec.width, enemyRec.height};
-    Rectangle result = {enemyRec.x, enemyRec.y + dx.y + enemyRec.width, enemyRec.width, enemyRec.height};
+    Rectangle result = {enemyRec.x, enemyRec.y + dx.y + enemyRec.height, enemyRec.width, enemyRec.height};
     
 
     if(!enemy->isAlive()) {
