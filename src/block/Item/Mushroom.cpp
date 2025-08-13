@@ -81,17 +81,6 @@ void Mushroom::move()
 
     pos_.x += velocity_.x * GetFrameTime();
 
-
-    if (pos_.x >= 214 * 48.0f - rec_.width * scale_screen / 2.0f)
-    {
-        pos_.x = 214 * 48.0f - rec_.width * scale_screen / 2.0f;
-        direct_ = !direct_;
-    }
-    else if (pos_.x <= rec_.width * scale_screen / 2.0f)
-    {
-        pos_.x = rec_.width * scale_screen / 2.0f;
-        direct_ = !direct_;
-    }
 }
 
 void Mushroom::appear()
@@ -99,7 +88,7 @@ void Mushroom::appear()
     if (isAppear)
         return;
 
-    pos_.y -= appearAnimation;
+    pos_.y -= AppearAnimation;
     if (pos_.y <= beforePos_.y)
     {
         appearAnimation = 0;

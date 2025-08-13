@@ -5,7 +5,7 @@
 #include <vector>
 
 const float MushroomAndStarSpeed = 120.0f;
-const float appearAnimation = 0.75f;
+const float AppearAnimation = 0.75f;
 const float tileSize = 16.0f * 3.0f;
 
 class Item

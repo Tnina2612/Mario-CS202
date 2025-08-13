@@ -40,7 +40,7 @@ void Flower::appear()
 {
     if (isAppear)
         return;
-    pos_.y -= appearAnimation;
+    pos_.y -= AppearAnimation;
     if (pos_.y <= beforePos.y - tileSize)
     {
         isAppear = 1;
