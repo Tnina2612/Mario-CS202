@@ -8,6 +8,7 @@
 #include<fstream>
 #include<iostream>
 #include<entities/Character.hpp>
+#include<block/Item/MovingPlatform.h>
 
 class SubLevel;
 

@@ -137,6 +137,7 @@ void NormalKoopa::changeFrames(Koopa& koopa) {
 }
 
 void NormalKoopa::onEnemyCollision(Koopa& koopa, Enemy& other) {
+    std::cerr << "NORMAL " << std::endl;
     int oldDir = koopa.getDirection();
 
     koopa.changeDirection();
@@ -215,10 +216,10 @@ void ShellKoopa::handleStomp(Koopa& koopa) {
 }
 
 void ShellKoopa::onEnemyCollision(Koopa& koopa, Enemy& other) {
-    if(koopa.getVelocity().x < pow(10, -3)) {
+    if(abs(koopa.getVelocity().x) < pow(10, -3)) {
         return;
     }
-    other.die();
+    other.onHit();
 }
 
 void WingedKoopa::changeFrames(Koopa& koopa) {
@@ -255,6 +256,7 @@ void WingedKoopa::handleStomp(Koopa& koopa) {
 }
 
 void WingedKoopa::onEnemyCollision(Koopa& koopa, Enemy& other) {
+    std::cerr << "WINGED " << std::endl;
     int oldDir = koopa.getDirection();
 
     koopa.changeDirection();

@@ -142,7 +142,9 @@ void TileMap::update(std::shared_ptr<Enemy> enemy) {
     }
 
     if (enemy->preventFalling()) {
-        preventFalling(enemy, movement);
+        if(preventFalling(enemy, movement)) {
+            return;
+        }
     }
     // checking collision on Oy 
     for(std::pair<int, int> pii : nearbyCells) {
@@ -328,16 +330,35 @@ bool TileMap::preventFalling(std::shared_ptr<Enemy> enemy, Vector2& movement) {
     float footY = enemyRec.y + enemyRec.height + 1;
 
     int tileBelowRow = (int) (footY / BLOCKSIDE);
-    int tileBelowCol = (int) ((nextX + enemyRec.width / 2) / BLOCKSIDE);
+    int tileBelowCol = (int) ((nextX + enemyRec.width / 2.f) / BLOCKSIDE);
 
-    if (tileBelowRow < 0 || tileBelowRow >= height || tileBelowCol < 0 || tileBelowCol >= width)
-        return false;
-
-    if (tiles[tileBelowRow][tileBelowCol] == nullptr) {
+    if (tileBelowRow < 0 || tileBelowRow >= height || tileBelowCol < 0 || tileBelowCol >= width) {
         enemy->changeDirection();
         movement.x = 0;
         return true;
     }
 
+    if (tiles[tileBelowRow][tileBelowCol] == nullptr) {
+        enemy->changeDirection();   
+        movement.x = 0;
+        return true;
+    }
+
     return false;
+}
+
+void TileMap::update(std::shared_ptr<MovingPlatform> platform, Character* player) {
+    const Rectangle& charRec = player->getRectangle();
+    const Rectangle& platformRec = platform->getRect();
+    
+    if(CheckCollisionRecs(charRec, platformRec)) {
+        if(charRec.y <= platformRec.y) {
+            player->setPosition(charRec.x, platformRec.y);
+            player->hitBlockBottom(platformRec.y);
+        }
+        else if(charRec.y > platformRec.y)  {
+            player->setPosition(charRec.x, platformRec.y + charRec.height + platformRec.height);
+            player->hitBlockTop(platformRec.y + platformRec.height);
+        }
+    }
 }
