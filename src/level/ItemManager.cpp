@@ -36,7 +36,7 @@ void ItemManager::update() {
         }
     }
     for(shared_ptr<Item>& item : items) {
-        if (subLevel && subLevel->blocks && item->isAppearAnimation() == false) {
+        if (subLevel && item->isAppearAnimation() == false) {
             subLevel->blocks->update(item);
         }
         item->update();
@@ -44,9 +44,19 @@ void ItemManager::update() {
             item->activate(*subLevel->player);
         }
     }
+    if(subLevel && subLevel->player->getGrowthUp()) {
+        subLevel->playerManager.addAnimation(make_unique<LevelPlayerAnimationManager>
+        (subLevel, 
+        vector<shared_ptr<SubLevelAnimation>>{make_shared<PlayerGrowAnimation>()}, 
+        nullptr));
+    } else if(subLevel && subLevel->player->getShrinkDown()) {
+        subLevel->playerManager.addAnimation(make_unique<LevelPlayerAnimationManager>
+        (subLevel, 
+        vector<shared_ptr<SubLevelAnimation>>{make_shared<PlayerShrinkAnimation>()}, 
+        nullptr));
+    }
 }
 
 void ItemManager::addItem(shared_ptr<Item> item) {
     items.push_back(item);
-    std::cout << "Item added: " << item->getType() << " at position (" << item->getPos().x << ", " << item->getPos().y << ")" << endl;
 }

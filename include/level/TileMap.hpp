@@ -30,6 +30,7 @@ class TileMap {
         void update(Character* character);
         void update(std::shared_ptr<Enemy> enemy);
         void update(std::shared_ptr<Item> item);
+        void update(std::shared_ptr<MovingPlatform> platform, Character* player);
         static std::vector<std::pair<int, int>> cellsToCheck(const Rectangle& rec);
         void saveToFile(const std::string& filename) const;
 

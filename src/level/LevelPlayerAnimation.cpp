@@ -43,6 +43,21 @@ void PlayerLevelAnimationManager::appear() {
     character->getAnimation().setScale(1.0f);
 }
 
+void PlayerLevelAnimationManager::grow() {
+    bool doneAnimation;
+    if(character->getOrientation() == LEFT) doneAnimation = character->getAnimation().update({0.5, 0.75, 1, 0.75, 1}, 6, 0.1);
+    else doneAnimation = character->getAnimation().update({0.5, 0.75, 1, 0.75, 1}, 13, 0.1);
+    if(doneAnimation) character->growthUp = false;
+}
+
+void PlayerLevelAnimationManager::shrink() {
+    bool doneAnimation;
+    if(character->getOrientation() == LEFT) doneAnimation = character->getAnimation().update({2, 1.5, 1, 1.5, 1}, 6, 0.1);
+    else doneAnimation = character->getAnimation().update({2, 1.5, 1, 1.5, 1}, 13, 0.1);
+    if(doneAnimation) character->shrinkDown = false;
+    return;
+}
+
 void PlayerDownPipeAnimation::initialize(Character* player) {
     this->player = player;
     targetY = player->getPos().y + player->getRectangle().height;
@@ -228,5 +243,45 @@ string PlayerExitDoorAnimation::getType() const {
 }
 
 void PlayerExitDoorAnimation::saveToFile(std::ofstream& out) const {
+    out << getType() << '\n';
+}
+
+void PlayerGrowAnimation::initialize(Character* player) {
+    this->player = player;
+}
+
+bool PlayerGrowAnimation::isDone() {
+    return !player->getGrowthUp();
+}
+
+void PlayerGrowAnimation::update() {
+    player->playerLevelAnimationManager.grow();
+}
+
+string PlayerGrowAnimation::getType() const {
+    return "Grow";
+}
+
+void PlayerGrowAnimation::saveToFile(std::ofstream& out) const {
+    out << getType() << '\n';
+}
+
+void PlayerShrinkAnimation::initialize(Character* player) {
+    this->player = player;
+}
+
+bool PlayerShrinkAnimation::isDone() {
+    return !player->getShrinkDown();
+}
+
+void PlayerShrinkAnimation::update() {
+    player->playerLevelAnimationManager.shrink();
+}
+
+string PlayerShrinkAnimation::getType() const {
+    return "Shrink";
+}
+
+void PlayerShrinkAnimation::saveToFile(std::ofstream& out) const {
     out << getType() << '\n';
 }

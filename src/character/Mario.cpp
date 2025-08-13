@@ -11,11 +11,3 @@ Mario::~Mario() {
 CharacterType Mario::getType()const {
     return MARIO;
 }
-
-Vector2 Character::getPos() const {
-    return pos;
-}
-
-bool Character::getIsDead() const {
-    return this->isDead;
-}

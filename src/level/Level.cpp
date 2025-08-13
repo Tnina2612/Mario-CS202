@@ -36,7 +36,9 @@ void SubLevel::draw() {
 
 void SubLevel::update() {
     background->updateBlocks();
-    enemies->update();
+    if(player->getGrowthUp() == false && player->getShrinkDown() == false) {
+        enemies->update();
+    }
     itemManager.update();
     playerManager.update();
     blocks->updateBlocks();

@@ -89,6 +89,7 @@ class LevelPlayerManager {
         LevelPlayerManager(SubLevel* subLevel, InputManager& inputManager);
         void update();
         void addAnimation(unique_ptr<LevelPlayerAnimationManager> nextSceneManager);
+        bool hasAnimation() const;
 };
 
 class ItemManager {

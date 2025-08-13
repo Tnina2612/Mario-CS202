@@ -114,3 +114,25 @@ class PlayerExitDoorAnimation : public SubLevelAnimation {
         string getType() const override;
         void saveToFile(std::ofstream& out) const override;
 };
+
+class PlayerGrowAnimation : public SubLevelAnimation {
+    private:
+        Character* player;
+    public:
+        void initialize(Character* player) override;
+        bool isDone() override;
+        void update() override;
+        string getType() const override;
+        void saveToFile(std::ofstream& out) const override;
+};
+
+class PlayerShrinkAnimation : public SubLevelAnimation {
+    private:
+        Character* player;
+    public:
+        void initialize(Character* player) override;
+        bool isDone() override;
+        void update() override;
+        string getType() const override;
+        void saveToFile(std::ofstream& out) const override;
+};

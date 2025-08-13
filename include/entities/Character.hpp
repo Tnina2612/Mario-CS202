@@ -32,10 +32,13 @@ public:
     void climbDown(float pivotX);
     void disappear();
     void appear();
+    void grow();
+    void shrink();
 };
 
 // Now define Character, which can use IntoPipeAnimation
 class Character {
+    friend class PlayerLevelAnimationManager;
 protected:
     Vector2 pos;
     IState* state;
@@ -91,6 +94,8 @@ public:
     void debug();
     void setBehavior(Behavior newBehavior);
     void powerUp();
+    bool getGrowthUp() const;
+    bool getShrinkDown() const;
     Behavior getBehavior()const;
     void setOrientation(Orientation newOrientation);
     Orientation getOrientation() const;
