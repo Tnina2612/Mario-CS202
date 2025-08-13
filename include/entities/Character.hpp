@@ -39,7 +39,6 @@ private:
     Vector2 pos;
     IState* state;
     float invincibilityTime; // Time in seconds
-    int lives; // Number of lives
     int score;
     float veclocityX;
     float veclocityY;
@@ -61,6 +60,7 @@ private:
     const float restVeclocity = 50.0f;
     float timeEffect;
     
+    bool isDebug = false;
 public:
     PlayerLevelAnimationManager playerLevelAnimationManager;
 
@@ -73,8 +73,6 @@ public:
     void brakeRight();
     void jump();
     void die();
-    void setNumLives(int numLives);
-    int getNumLives() const;
     void setVelocityX(float velocity);
     void setVeclocityY(float velocity);
     float getJumpVelocity() const;
@@ -82,6 +80,7 @@ public:
     void resetAttributes();
     void update();
     void draw();
+    void debug();
     void setBehavior(Behavior newBehavior);
     Behavior getBehavior()const;
     void setOrientation(Orientation newOrientation);
@@ -104,6 +103,7 @@ public:
     void setPosition(float x, float y);
     float getGravity()const;
     float getRestVeclocity()const;
+    bool getIsDead()const;
     // bool getCollideUp()const;
     // bool getCollideDown()const;
     

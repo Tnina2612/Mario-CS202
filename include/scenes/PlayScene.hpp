@@ -10,14 +10,21 @@ class PlayScene : public Scene {
 private:
     Level* level;
     EventManager eventManager;
+    float waitTimer;
+    float waitDuration;
+    string sessionName;
 
 public:
     PlayScene(const std::string& levelName);
-    PlayScene(std::string subLevelFolder, Vector2 playerPosition, int numLives = 3);
+    PlayScene(std::string subLevelFolder, Vector2 playerPosition);
     ~PlayScene();
 
     void init() override;
     void handleInput() override;
     void update() override;
     void render() override;
+
+    string getSessionName() const {
+        return sessionName;
+    }
 };

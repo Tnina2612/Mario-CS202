@@ -10,6 +10,7 @@ class Block
 {
     friend class BlockState;
     friend class NormalBlock;
+    friend class QuestionBlock;
 private:
     std::shared_ptr<BlockState> currentState_;
     std::shared_ptr<BlockState> nextState_;
@@ -25,9 +26,10 @@ public:
     std::vector<bool> surroundedBlock{0, 0, 0, 0}; 
     void update_();
     void draw_();
-    void onHit(std::vector<Item *> &item, Character & character);
+    void onHit(const std::vector<Item*> &item, Character & character);
 
     void setState(std::shared_ptr<BlockState> new_state);
+    std::string getStateName(void) const;
 
     Vector2 getPos() const;
     void setPos(Vector2 pos);

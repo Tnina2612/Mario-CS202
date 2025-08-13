@@ -18,8 +18,12 @@ TileMap::TileMap(std::string filename) {
             inp >> blockName;
 
             Vector2 pos = Vector2{j * BLOCKSIDE, i * BLOCKSIDE};
-            if(blockName != "A") {
+            if(blockName.find("coin") == 0) {
+                tiles[i][j] = make_shared<Block>(pos, 0, "", "question", blockName);
+            } else if(blockName.find("brick") == 0) {
                 tiles[i][j] = make_shared<Block>(pos, 0, "", "normal", blockName);
+            } else if(blockName != "A") {
+                tiles[i][j] = make_shared<Block>(pos, 0, "", "solid", blockName);
             } else {
                 tiles[i][j].reset();
             }
@@ -45,8 +49,20 @@ void TileMap::draw(void) {
     }
 }
 
+void TileMap::updateBlocks() {
+    for(int i = 0; i < height; i++) {
+        for(int j = 0; j < width; j++) {
+            if(tiles[i][j] == nullptr) continue;
+            tiles[i][j]->update_();
+            if(tiles[i][j]->getIsDelete() == true) {
+                tiles[i][j].reset();
+            }
+        }
+    }
+}
+
 void TileMap::update(Character* player) {
-    if(player->getPos().y >= Global::ORIGINAL_HEIGHT) player->die();
+    if(player->getPos().y >= Global::ORIGINAL_HEIGHT + 64.0f) player->die();
     
     const Rectangle& charRec = player->getRectangle();
     player->resetAttributes();
@@ -65,6 +81,7 @@ void TileMap::update(Character* player) {
                 player->hitBlockBottom(blockRec.y);
             } else {
                 player->hitBlockTop(blockRec.y + blockRec.height);
+                tiles[i][j]->onHit({}, *player);
             }
             nextFrame.y = charRec.y;
         }
@@ -74,7 +91,7 @@ void TileMap::update(Character* player) {
     for(std::pair<int, int> pii : nearbyCells) {
         int i = pii.first, j = pii.second;
         if(i < 0 || i >= height || j < 0 || j >= width ||
-            tiles[i][j] == nullptr) continue;
+            tiles[i][j] == nullptr || tiles[i][j]->getStateName() == "Break") continue;
         const Rectangle& blockRec = tiles[i][j]->getDrawRec();
         if(CheckCollisionRecs(nextFrame, blockRec)) {
             if(nextFrame.x <= blockRec.x) {

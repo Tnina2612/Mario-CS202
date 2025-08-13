@@ -14,9 +14,13 @@ AnimationVectorTextureFlyweight::AnimationVectorTextureFlyweight(std::vector<std
     }
 }
 
-void AnimationVectorTextureFlyweight::draw(int posX, int posY, int id) {
+void AnimationVectorTextureFlyweight::draw(float posX, float posY, float rotation, int id) {
     if(id < 0 || id >= textures.size()) __throw_runtime_error("ID is out of bound.");
-    DrawTexture(textures[id], posX, posY, WHITE);
+    DrawTextureEx(textures[id], Vector2{posX, posY}, rotation, 1.f, WHITE);
+}
+
+int AnimationVectorTextureFlyweight::getNumFrames() const {
+    return textures.size();
 }
 
 AnimationVectorTextureFlyweight::~AnimationVectorTextureFlyweight() {
@@ -38,10 +42,17 @@ AnimationVectorTextureFlyweight* AnimationVectorTextureFlyweightFactory::getFlyw
     string storedName = name + to_string(LevelVar::ThemeID);
     if(storage.find(storedName) == storage.end()) {
         std::vector<std::string> filenames;
-        filenames = {name};
+
+        if(name.find("coin") == 0) {
+            filenames = {"coin1", "coin2", "coin3", "coin1"};
+        } else {
+            filenames = {name};
+        }
+
         for(std::string& name : filenames) {
             name = folderName + name + ".png";
         }
+
         storage.emplace(storedName, filenames);
     }
 
@@ -51,16 +62,17 @@ AnimationVectorTextureFlyweight* AnimationVectorTextureFlyweightFactory::getFlyw
 AnimationVectorTexture::AnimationVectorTexture(std::string name) :
     flyweight(AnimationVectorTextureFlyweightFactory::getFlyweight(name))
 {
-    // Constructor
+    setTextureRange(0, flyweight->getNumFrames() - 1);
 }
 
-void AnimationVectorTexture::draw(float posX, float posY) {
-    flyweight->draw(posX, posY, currentTexture);
+void AnimationVectorTexture::draw(float posX, float posY, float rotation) {
+    flyweight->draw(posX, posY, rotation, currentTexture);
 }
 
 void AnimationVectorTexture::update() {
     elaspedTime += GetFrameTime();
     if(elaspedTime >= textureTime) {
+        elaspedTime = 0;
         currentTexture++;
         if(currentTexture < startID || currentTexture > endID) {
             currentTexture = startID;

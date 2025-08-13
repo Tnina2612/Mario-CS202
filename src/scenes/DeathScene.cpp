@@ -13,6 +13,7 @@ DeathScene::DeathScene() {
 
 void DeathScene::init() {
     marioIcon = LoadTexture("assets/images/sprite-sheets/mario.png");
+    coin = LoadTexture("assets/images/title-scene/coin.png");
 
     waitTimer = 0.0f;
     waitDuration = 3.0f;
@@ -20,7 +21,7 @@ void DeathScene::init() {
 
 void DeathScene::handleInput() {
     if (IsKeyPressed(KEY_ENTER)) {
-        Program::getInstance().changeScene(new PlayScene("1-1"));
+        Program::getInstance().pushScene(new PlayScene("1-1"));
     }
 }
 
@@ -29,7 +30,7 @@ void DeathScene::update() {
     
     // Automatically transition after 3 seconds
     if (waitTimer >= waitDuration) {
-        Program::getInstance().changeScene(new PlayScene("1-1"));
+        Program::getInstance().pushScene(new PlayScene("1-1"));
     }
 }
 

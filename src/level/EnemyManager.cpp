@@ -6,7 +6,9 @@
 #include<core/Program.hpp>
 #include<scenes/PlayScene.hpp>
 #include<scenes/DeathScene.hpp>
+#include<scenes/GameOverScene.hpp>
 #include<scenes/TitleScene.hpp>
+#include<scenes/TimeUpScene.hpp>
 
 EnemyManager::EnemyManager(std::string filename, SubLevel* subLevel) :
     subLevel(subLevel) {
@@ -81,16 +83,17 @@ void EnemyManager::update() {
                 enemy->getTypeName().find("Plant") == std::string::npos) {
                 enemy->hitUp();
                 subLevel->player->setVeclocityY(-100);
+                Program::getInstance().getHUD().onNotify(EventType::ADDSCORE);
             } else {
                 int dir = enemy->getPos().x < subLevel->player->getPos().x ? 1 : -1;
                 enemy->hitVertical(dir);
                 subLevel->player->die();
-                if(subLevel->player->getNumLives() > 0) {
-                    Program::getInstance().changeScene(new TitleScene());
-                } else {
-                    cout << "Game Over! You have no lives left." << endl;
-                    Program::getInstance().changeScene(new DeathScene());
-                }
+                // if(subLevel->player->getNumLives() > 0) {
+                //     Program::getInstance().pushScene(new DeathScene());
+                // } else {
+                //     cout << "Game Over! You have no lives left." << endl;
+                //     Program::getInstance().pushScene(new GameOverScene());
+                // }
             }
         }
     }

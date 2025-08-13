@@ -23,6 +23,7 @@ class TileMap {
     public:
         TileMap(std::string filename);
         void draw(void);
+        void updateBlocks();
         void update(Character* character);
         void update(std::shared_ptr<Enemy> enemy);
         std::vector<std::pair<int, int>> cellsToCheck(const Rectangle& rec);

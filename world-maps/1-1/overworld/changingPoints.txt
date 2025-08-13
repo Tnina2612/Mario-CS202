@@ -7,7 +7,7 @@ Down
 underground
 24 32
 
-2608 176 32 32 Disappear
+2608 176 32 48 Disappear
 2
 ExitDoor
 Up 176

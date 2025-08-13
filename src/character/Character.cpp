@@ -1,9 +1,10 @@
 #include "../../include/entities/Character.hpp"
+#include "core/Program.hpp"
 #include "core/SoundManager.hpp"
 #include "core/MusicManager.hpp"
 
 Character::Character() : Animation(CharacterSprite::Fire::frames), state(nullptr), pos(CharacterVar::position), 
-    invincibilityTime(0.0f), lives(3), score(0), veclocityX(0.0f), veclocityY(50.0f), orientation(RIGHT), characterState(SMALL),
+    invincibilityTime(0.0f), score(0), veclocityX(0.0f), veclocityY(50.0f), orientation(RIGHT), characterState(SMALL),
     isInvincible(false), isDead(false), behavior(IDLE), onGround(true), playerLevelAnimationManager(this) {
         accelerationX = 0.0f;
         accelerationY = 0.0f;
@@ -12,7 +13,7 @@ Character::Character() : Animation(CharacterSprite::Fire::frames), state(nullptr
 
 Character::Character(const vector<Rectangle>& frames, const Texture2D& sprite)
     : Animation(frames, sprite), state(nullptr), pos(CharacterVar::position), 
-    invincibilityTime(0.0f), lives(3), score(0), veclocityX(0.0f), veclocityY(50.0f), orientation(RIGHT), characterState(SMALL),
+    invincibilityTime(0.0f), score(0), veclocityX(0.0f), veclocityY(50.0f), orientation(RIGHT), characterState(SMALL),
     isInvincible(false), isDead(false),behavior(IDLE), onGround(true), playerLevelAnimationManager(this) {
         accelerationX = 0.0f;
         accelerationY = 0.0f;
@@ -198,10 +199,26 @@ void Character::update() {
     // cout << "on ground" << onGround << endl;
     // cout << "veclocity X: " << veclocityX <<  endl;
     // cout << "is Brake: " << (behavior == BRAKE) << endl;
+    debug();
 }
 
 void Character::draw() {
     Animation::draw({pos.x, pos.y - getRectangle().height});
+}
+
+void Character::debug() {
+    if(IsKeyPressed(KEY_W)) {
+        if(getCharacterState() == CharacterState::SMALL) {
+            characterState = CharacterState::SUPER;
+            setFrames(CharacterSprite::Super::frames);
+        } else if(getCharacterState() == CharacterState::SUPER) {
+            characterState = CharacterState::FIRE;
+            setFrames(CharacterSprite::Fire::frames);
+        } else if(getCharacterState() == CharacterState::FIRE) {
+            characterState = CharacterState::SMALL;
+            setFrames(CharacterSprite::Small::frames);
+        }
+    }
 }
 
 void Character::setBehavior(Behavior newBehavior) {
@@ -293,15 +310,10 @@ void Character::die() {
     veclocityX = 0.0f;
     veclocityY = -jumpVeclocity; // Mario sẽ bật lên một chút khi chết (tùy chọn)
     onGround = false;
-    lives--;
-}
 
-void Character::setNumLives(int numLives) {
-    lives = numLives;
-}
-
-int Character::getNumLives() const {   
-    return lives;
+    Program::getInstance().getHUD().onNotify(EventType::MARIO_DIED);
+    MusicManager::getInstance().stopMusic();
+    SoundManager::getInstance().playSound(SoundType::MARIO_DIE);
 }
 
 bool Character::getCollideRight()const {
@@ -333,4 +345,8 @@ float Character::getGravity()const {
 
 float Character::getRestVeclocity()const {
     return restVeclocity;
+}
+
+bool Character::getIsDead()const {
+    return isDead;
 }

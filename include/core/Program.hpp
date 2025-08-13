@@ -5,17 +5,18 @@
 #include "core/Scene.hpp"
 #include "core/GameSession.hpp"
 #include "ui/HUD.hpp"
+#include <stack>
 
 class Program
 {
 private:
     bool running;
-    Scene* currentScene;
     Scene* nextScene;
     Font font;
     GameSession session;
     HUD* hud;
     Image icon;
+    std::stack<Scene*> sceneStack;
 
     // Singleton Design Pattern
     Program();
@@ -27,10 +28,12 @@ public:
     ~Program();
 
     static Program& getInstance(); 
-    void changeScene(Scene* scene);
+    void pushScene(Scene* scene);
+    void popScene();
     void run();
 
     Font getFont();
     GameSession& getSession();
     HUD& getHUD();
+    Scene* getCurrentScene();
 };

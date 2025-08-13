@@ -1,4 +1,6 @@
 #include "core/Program.hpp"
+#include "core/Setting.hpp"
+#include "core/BackButton.hpp"
 #include "scenes/ComingSoonScene.hpp"
 #include "level/TileMap.hpp"
 #include "raylib.h"
@@ -16,8 +18,11 @@ void ComingSoonScene::init() {
 
 void ComingSoonScene::handleInput() {
     if(IsKeyPressed(KEY_ENTER) || IsKeyPressed(KEY_SPACE)) {
-        Program::getInstance().changeScene(new MapSelectScene());
+        Program::getInstance().pushScene(new MapSelectScene());
     }
+
+    Setting::getInstance().handleInput(nullptr);
+    BackButton::getInstance().handleInput();
 }
 
 void ComingSoonScene::update() {
@@ -37,4 +42,7 @@ void ComingSoonScene::render() {
     float y = (Global::WINDOW_HEIGHT - textSize.y) / 2.0f;
     
     DrawTextEx(Program::getInstance().getFont(), "COMING SOON...", {x, y}, 40, 1, WHITE);
+
+    Setting::getInstance().draw();
+    BackButton::getInstance().draw();
 }

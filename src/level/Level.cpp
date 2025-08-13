@@ -1,6 +1,7 @@
 #include "level/Level.hpp"
 #include "core/Program.hpp"
 #include "scenes/GameOverScene.hpp"
+#include "scenes/TimeUpScene.hpp"
 #include <filesystem>
 
 SubLevel::SubLevel(Level* level, std::string folderName, Character* player, Vector2 initPlayerPosition, InputManager& inputManager, Camera2D* camera) : // Initializer
@@ -32,6 +33,8 @@ void SubLevel::draw() {
 }
 
 void SubLevel::update() {
+    background->updateBlocks();
+    blocks->updateBlocks();
     playerManager.update();
     enemies->update();
 
@@ -76,7 +79,7 @@ Level::Level(std::string folderName) :
     inp.close();
 }
 
-Level::Level(std::string subLevelFolder, Vector2 playerPosition, int numLives) :
+Level::Level(std::string subLevelFolder, Vector2 playerPosition) :
     player(make_shared<Mario>()),
     renderTexture(LoadRenderTexture(Global::ORIGINAL_WIDTH, Global::ORIGINAL_HEIGHT)),
     camera(Camera2D{Vector2{Global::ORIGINAL_WIDTH / 2.f, Global::ORIGINAL_HEIGHT / 2.f}, Vector2{Global::ORIGINAL_WIDTH / 2.f, Global::ORIGINAL_HEIGHT / 2.f}, 0.f, 1.f}),
@@ -94,7 +97,6 @@ Level::Level(std::string subLevelFolder, Vector2 playerPosition, int numLives) :
     inputManager.addListener(new rightListener());
 
     // Level configurations
-    player->setNumLives(numLives);
     subLevel = make_shared<SubLevel>(this, subLevelFolder, player.get(), playerPosition, inputManager, &camera);
     nextSubLevel.reset();
 }
@@ -141,7 +143,7 @@ void Level::saveGame(std::string folderName) {
     // Create save folder
     std::string saveFolder = "./savedMaps/" + folderName;
     if(!std::filesystem::exists(saveFolder)) {
-        std::filesystem::create_directory(saveFolder);
+        std::filesystem::create_directories(saveFolder);
     }
     subLevel->background->saveToFile(saveFolder + "/background.txt");
     subLevel->blocks->saveToFile(saveFolder + "/blocks.txt");
@@ -172,4 +174,8 @@ vector<std::pair<std::string, std::string>> Level::getSavedLevels() {
 
 Level::~Level() {
     UnloadRenderTexture(renderTexture);
+}
+
+std::shared_ptr<Character> Level::getPlayer() {
+    return player;
 }
