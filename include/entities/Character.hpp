@@ -47,7 +47,7 @@ private:
     Orientation orientation;
     CharacterState characterState;
     const float gravity = 1000; //3900.0f;
-    const float maxVeclocityX = 100; //300.f;
+    const float maxVeclocityX = 90; //300.f;
     Behavior behavior;
     bool isInvincible;
     bool isDead;

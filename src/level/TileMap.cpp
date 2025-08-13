@@ -12,16 +12,11 @@ TileMap::TileMap(std::string filename) {
     }
     for(int i = 0; i < height; i++) {
         for(int j = 0; j < width; j++) {
-            string blockName;
-            inp >> blockName;
-
+            string blockData;
+            inp >> blockData;
             Vector2 pos = Vector2{j * BLOCKSIDE, i * BLOCKSIDE};
-            if(blockName.find("coin") == 0) {
-                tiles[i][j] = make_shared<Block>(pos, 0, "", "question", blockName);
-            } else if(blockName.find("brick") == 0) {
-                tiles[i][j] = make_shared<Block>(pos, 0, "", "normal", blockName);
-            } else if(blockName != "A") {
-                tiles[i][j] = make_shared<Block>(pos, 0, "", "solid", blockName);
+            if(blockData != "A") {
+                tiles[i][j] = make_shared<Block>(pos, blockData);
             } else {
                 tiles[i][j].reset();
             }
@@ -79,7 +74,7 @@ void TileMap::update(Character* player) {
                 player->hitBlockBottom(blockRec.y);
             } else {
                 player->hitBlockTop(blockRec.y + blockRec.height);
-                tiles[i][j]->onHit({}, *player);
+                tiles[i][j]->onHit(*player);
             }
             nextFrame.y = charRec.y;
         }

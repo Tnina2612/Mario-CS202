@@ -1,8 +1,10 @@
 #pragma once
 #include "../include/entities/Character.hpp"
 #include "../assets/images/Coordinate.h"
+#include <entities/Animation.hpp>
 #include <raylib.h>
 #include <vector>
+#include <memory>
 
 const float MushroomAndStarSpeed = 120.0f;
 const float appearAnimation = 0.75f;
@@ -11,7 +13,7 @@ const float tileSize = 16.0f * 3.0f;
 class Item
 {
 private:
-    Texture2D itemTexture;
+    static Texture2D itemTexture;
 protected:
     Vector2 pos_;
     Rectangle rec_;
@@ -40,4 +42,8 @@ public:
     virtual void checkFall() {}
     virtual void checkOnGround() {}
     virtual void checkChangeDirect() {}
+    virtual std::string getType() const = 0;
+
+    static std::shared_ptr<Item> stringToItem(std::string itemData, float x, float y);
+    static std::vector<std::shared_ptr<Item>> stringToVectorItem(std::string itemData, float x, float y);
 };

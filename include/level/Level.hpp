@@ -86,6 +86,15 @@ class LevelPlayerManager {
         void addAnimation(unique_ptr<LevelPlayerAnimationManager> nextSceneManager);
 };
 
+class ItemManager {
+    private:
+        std::vector<shared_ptr<Item>> items;
+    public:
+        ItemManager(std::string filename);
+        void draw(void);
+        void update(void);
+};
+
 class SubLevel {
         friend class Level;
         friend class EnemyManager;
@@ -99,6 +108,7 @@ class SubLevel {
         std::shared_ptr<EnemyManager> enemies;
         std::shared_ptr<ChangeSubLevelManager> changeSubLevelManager;
         LevelPlayerManager playerManager;
+        ItemManager itemManager;
         Camera2D* camera;
         std::string folderName;
         Vector2 initPlayerPosition;

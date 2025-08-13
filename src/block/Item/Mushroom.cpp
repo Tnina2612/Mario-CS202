@@ -2,7 +2,7 @@
 #include <iostream>
 const float scale_screen = 3.0f;
 Mushroom::Mushroom(Vector2 pos, StateMushroom state)
-    : Item(pos), state_(state), direct_(1), fall_(false), isAppear(false), jump_(true), beforePos_({pos.x, pos.y - tileSize})
+    : Item(pos), state_(state), direct_(1), fall_(false), isAppear(false), jump_(false), beforePos_({pos.x, pos.y - tileSize})
 {
     velocity_ = {0.0f, 0.0f};
     previousFramePos = pos_;
@@ -71,8 +71,7 @@ void Mushroom::fall()
     pos_.y += velocity_.y * dt;
 }
 
-void Mushroom::move()
-{
+void Mushroom::move() {
     if (!isAppear || fall_ || jump_)
         return;
 
@@ -143,3 +142,7 @@ void Mushroom::activate(Character& character)
 bool Mushroom::getDirect() const { return direct_; }
 
 bool Mushroom::canMove() const { return true; }
+
+std::string Mushroom::getType() const {
+    return "mushroom" + to_string(state_);
+}

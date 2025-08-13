@@ -9,7 +9,11 @@ Animation::Animation(const vector<Rectangle>& frames) : Animation() {
 }
 
 Animation::Animation(const vector<Rectangle>& frames, const Texture2D& sprite, float frameTime, float scale)
-    : frames(frames), currentFrame(0), sprite(sprite), frameTime(frameTime), scale(scale) {}
+    : frames(frames), currentFrame(0), sprite(sprite), frameTime(frameTime), scale(scale) {
+    if(sprite.id == 0) {
+        throw std::runtime_error("Animation::Animation: Uninitializeds Texture2D");
+    }
+}
 
 void Animation::setFrames(const vector<Rectangle>& newFrames) {
     frames = newFrames;

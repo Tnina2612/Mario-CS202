@@ -50,3 +50,7 @@ void Flower::appear()
 }
 
 bool Flower::canMove() const { return false; }
+
+std::string Flower::getType() const {
+    return "flower";
+}
