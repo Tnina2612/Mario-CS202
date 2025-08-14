@@ -10,6 +10,8 @@ private:
     float sliderX_Music;
     float sliderY_Music;
     float sliderValue_Music;
+    bool isReleaseSound;
+    bool isReleaseMusic;
     Level* level;
 
 public:
