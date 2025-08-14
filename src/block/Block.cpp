@@ -10,7 +10,7 @@
 #include <diy_functions/strsplit.h>
 
 Block::Block(Vector2 pos, const std::string &blockData)
-    : pos_(pos), animation(strsplit(blockData,':')[0]), nameBlock(strsplit(blockData,':')[0]), 
+    : pos_(pos), animation(strsplit(blockData,':')[0]), nameBlock(blockData), 
     nextState_(nullptr),
     items(Item::stringToVectorItem(blockData, pos.x + 8, pos.y + 16))
 {
@@ -88,11 +88,15 @@ void Block::appearItem(Character& player)
     }
     appearingItem->appear();
     items.pop_back();
+
+    if(appearingItem->getType() == "coin") {
+        // player.addCoin();
+    }
 }
 
 std::shared_ptr<BlockState> Block::getBlockState(const std::string& blockData) {
     std::string name = strsplit(blockData, ':')[0];
-    if(name.find("coin") != std::string::npos) {
+    if(name.find("question") != std::string::npos) {
         return std::make_shared<QuestionBlock>(*this);
     } else if(name.find("brick") != std::string::npos) {
         return std::make_shared<NormalBlock>(*this);

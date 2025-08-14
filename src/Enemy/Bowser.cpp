@@ -29,7 +29,7 @@ Bowser::Bowser(const std::string& name) {
 
 }
 
-Bowser::Bowser(const std::string& name, Vector2 pos, std::shared_ptr<Character> character) 
+Bowser::Bowser(const std::string& name, Vector2 pos, Character* character) 
     : Bowser(name)
 {  
     m_data._pos = pos;
@@ -67,7 +67,7 @@ int Bowser::getDir() {
     return m_data._dir;
 }
 
-std::shared_ptr<Character> Bowser::getTarget() {
+Character* Bowser::getTarget() {
     return m_target;
 }
 

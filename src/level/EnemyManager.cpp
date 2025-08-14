@@ -29,7 +29,12 @@ EnemyManager::EnemyManager(std::string filename, SubLevel* subLevel) :
                 list.back()->setActive(true);
             }
         } else {
-            
+            for(int j = 0; j < numEnemies; j++) {
+                float x, y;
+                inp >> x >> y;
+                listBowsers.push_back(make_shared<Bowser>("Bowser", Vector2{x, y}, subLevel->player));
+                listBowsers.back()->setActive(true);
+            }
         }
     }
     inp.close();
@@ -87,7 +92,7 @@ void EnemyManager::update() {
             } else {
                 int dir = enemy->getPos().x < subLevel->player->getPos().x ? 1 : -1;
                 enemy->hitVertical(dir);
-                subLevel->player->die();
+                // subLevel->player->die();
                 // if(subLevel->player->getNumLives() > 0) {
                 //     Program::getInstance().pushScene(new DeathScene());
                 // } else {
@@ -96,6 +101,10 @@ void EnemyManager::update() {
                 // }
             }
         }
+    }
+
+    for(auto& bowser : listBowsers) {
+        bowser->update();
     }
 
     while(!spawnQueue.empty()) {
@@ -108,6 +117,10 @@ void EnemyManager::update() {
 void EnemyManager::draw() const {
     for(const auto& enemy : list) {
         enemy->draw();
+    }
+
+    for(const auto& bowser : listBowsers) {
+        bowser->draw();
     }
 }
 

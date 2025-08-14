@@ -35,7 +35,7 @@ class AnimationVectorTexture {
 private:
     AnimationVectorTextureFlyweight* flyweight;
     float textureTime = 0.20f;
-    float elaspedTime = 0;
+    float elapsedTime = 0;
     int currentTexture = 0;
     int startID = 0;
     int endID = 0;

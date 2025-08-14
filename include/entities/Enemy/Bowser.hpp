@@ -18,7 +18,7 @@ private:
     std::unordered_map<std::string, std::vector<Rectangle>> allFrames;
     std::queue<std::shared_ptr<ICommand>> _commandsQueue;
     std::shared_ptr<ICommand> _curCommand   = nullptr;
-    std::shared_ptr<Character> m_target   = nullptr;
+    Character* m_target   = nullptr;
 
     std::vector<shared_ptr<Fireball>> fireballs;
 
@@ -42,7 +42,7 @@ private:
 public:
     Bowser();
     Bowser(const std::string& name);
-    Bowser(const std::string& name, Vector2 pos, std::shared_ptr<Character> character);
+    Bowser(const std::string& name, Vector2 pos, Character* character);
 
     // void respawn();
     bool beHitByFireball();
@@ -52,7 +52,7 @@ public:
     int getDir();
     std::vector<Rectangle> getFrames(const std::string& name);
     Vector2 getPos();
-    std::shared_ptr<Character> getTarget();
+    Character* getTarget();
 
     void setActive(bool isActive);
     void setPosition(Vector2 pos);

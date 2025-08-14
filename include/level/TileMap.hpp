@@ -19,7 +19,8 @@ class TileMap {
         std::vector<std::vector<std::shared_ptr<Block>>> tiles;
         SubLevel* subLevel;
         bool debug = false;
-        std::vector<Rectangle> debugBlocks;
+        std::vector<Rectangle> debugPlayerBlocks;
+        std::vector<Rectangle> debugItemBlocks;
         std::vector<Rectangle> mergeBlock;
 
         bool preventFalling(std::shared_ptr<Enemy> enemy, Vector2& movement);

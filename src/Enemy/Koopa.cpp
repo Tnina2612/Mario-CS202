@@ -1,5 +1,6 @@
 #include<vector>
 #include<cmath>
+#include<unordered_map>
 
 #include"../../include/entities/Enemy/EnemyType.hpp"
 #include"../../include/entities/Enemy/EnemyData.hpp"

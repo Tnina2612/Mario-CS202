@@ -10,6 +10,7 @@
 #include<core/InputManager.hpp>
 #include<core/Global.hpp>
 #include<queue>
+#include<entities/Enemy/Bowser.hpp>
 
 class Level;
 class SubLevel;
@@ -18,6 +19,7 @@ class EnemyManager {
     std::vector<std::shared_ptr<Enemy>> list;
     std::queue<std::shared_ptr<Enemy>> spawnQueue;
     SubLevel* subLevel;
+    std::vector<std::shared_ptr<Bowser>> listBowsers;
 
     void processSpawnQueue();
 public:

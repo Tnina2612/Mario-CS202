@@ -20,4 +20,4 @@ WalkToX 3264
 EnterDoor
 ./world-maps/1-2/overworld1
 overworld
-32 208
+32 204

@@ -56,9 +56,7 @@ void Mushroom::jump()
         return;
     float dt = GetFrameTime();
     velocity_.y += 1000.0f * dt;
-    pos_.y += velocity_.y * dt;
     velocity_.x = direct_ * MushroomAndStarSpeed * dt;
-    pos_.x += velocity_.x * dt;
 }
 
 void Mushroom::fall()
@@ -67,9 +65,7 @@ void Mushroom::fall()
         return;
     float dt = GetFrameTime();
     velocity_.y += 1000.0f * dt;
-    pos_.y += velocity_.y * dt;
     velocity_.x = direct_ * MushroomAndStarSpeed * dt;
-    pos_.x += velocity_.x * dt;
 }
 
 void Mushroom::move() {
@@ -77,19 +73,6 @@ void Mushroom::move() {
         return;
     velocity_.x = (direct_ ? 1 : -1) * MushroomAndStarSpeed;
     velocity_.y = 0.0f;
-    pos_.x += velocity_.x * GetFrameTime();
-
-
-    if (pos_.x >= 214 * 48.0f - rec_.width * scale_screen / 2.0f)
-    {
-        pos_.x = 214 * 48.0f - rec_.width * scale_screen / 2.0f;
-        direct_ = !direct_;
-    }
-    else if (pos_.x <= rec_.width * scale_screen / 2.0f)
-    {
-        pos_.x = rec_.width * scale_screen / 2.0f;
-        direct_ = !direct_;
-    }
 }
 
 void Mushroom::appear()
@@ -108,8 +91,12 @@ void Mushroom::appear()
 
 void Mushroom::beDelete()
 {
-    if (pos_.y - rec_.height * scale_screen >= 240)
+    if (pos_.y - rec_.height >= Global::ORIGINAL_HEIGHT) {
         isDelete_ = true;
+    }
+    if(pos_.x < 0) {
+        isDelete_ = true;
+    }
 }
 
 void Mushroom::update()

@@ -43,7 +43,9 @@ AnimationVectorTextureFlyweight* AnimationVectorTextureFlyweightFactory::getFlyw
     if(storage.find(storedName) == storage.end()) {
         std::vector<std::string> filenames;
 
-        if(name.find("coin") == 0) {
+        if(name.find("question") == 0) {
+            filenames = {"question1", "question2", "question3", "question1"};
+        } else if(name.find("coin") == 0) {
             filenames = {"coin1", "coin2", "coin3", "coin1"};
         } else {
             filenames = {name};
@@ -70,9 +72,9 @@ void AnimationVectorTexture::draw(float posX, float posY, float rotation) {
 }
 
 void AnimationVectorTexture::update() {
-    elaspedTime += GetFrameTime();
-    if(elaspedTime >= textureTime) {
-        elaspedTime = 0;
+    elapsedTime += GetFrameTime();
+    if(elapsedTime >= textureTime) {
+        elapsedTime = 0;
         currentTexture++;
         if(currentTexture < startID || currentTexture > endID) {
             currentTexture = startID;
