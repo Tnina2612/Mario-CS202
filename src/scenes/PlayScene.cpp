@@ -10,8 +10,8 @@
 #include "core/Setting.hpp"
 #include "entities/Character.hpp"
 
-PlayScene::PlayScene(const std::string& levelName) : 
-    level(new Level("./world-maps/" + levelName)) {
+PlayScene::PlayScene(const std::string& levelPath) : 
+    level(new Level(levelPath)) {
 }
 
 PlayScene::PlayScene(std::string subLevelFolder, Vector2 playerPosition) :

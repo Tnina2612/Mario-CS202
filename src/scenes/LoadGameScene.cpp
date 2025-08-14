@@ -7,6 +7,7 @@
 #include "level/TileMap.hpp"
 #include "raylib.h"
 #include <string>
+#include <filesystem>
 
 void LoadGameScene::init() {
     background = new TileMap("world-maps/titleScene/titleScene.txt");
@@ -20,7 +21,7 @@ void LoadGameScene::init() {
         background->draw();
     EndTextureMode();
 
-    // playerList = ???;
+    playerList = Level::getSavedLevels();
 }
 
 void LoadGameScene::handleInput() {
@@ -31,15 +32,12 @@ void LoadGameScene::handleInput() {
     if (playerNum == 0) return;
 
     if (IsKeyPressed(KEY_ENTER)) {
-        
+        Program::getInstance().pushScene(new PlayScene(playerList[curRow].second));
     } else if (IsKeyPressed(KEY_DOWN)) {
         curRow = (curRow + 1) % playerNum;
     } else if (IsKeyPressed(KEY_UP)) {
         curRow = ((curRow - 1) % playerNum >= 0) ? (curRow - 1) % playerNum : playerNum - 1;
     }
-
-    Setting::getInstance().handleInput(nullptr);
-    BackButton::getInstance().handleInput();
 }
 
 void LoadGameScene::update() {
@@ -52,24 +50,25 @@ void LoadGameScene::render() {
             Rectangle{0, 0, Global::WINDOW_WIDTH, Global::WINDOW_HEIGHT},
             Vector2{0, 0}, 0, WHITE);
 
+    Setting::getInstance().draw();
+    BackButton::getInstance().draw();
     Font font = Program::getInstance().getFont();
     
-    DrawTextEx(font, "PLAYERS", {100, initialPos - 35}, 40, 1, WHITE);
-    DrawTextEx(font, "POINTS", {445, initialPos - 35}, 40, 1, WHITE);
-    DrawTextEx(font, "WOLRD", {750, initialPos - 35}, 40, 1, WHITE);
+    DrawTextEx(font, "PLAYERS", {120, initialPos - 65}, 40, 1, WHITE);
+    DrawTextEx(font, "POINTS", {445, initialPos - 65}, 40, 1, WHITE);
+    DrawTextEx(font, "WOLRD", {730, initialPos - 65}, 40, 1, WHITE);
 
     if (!playerList.empty()) {
-        DrawTextureEx(cursor, {100, initialPos + curRow * 40}, 0.0f, 4.0f, WHITE);
+        DrawTextureEx(cursor, {50, initialPos + curRow * 50}, 0.0f, 4.0f, WHITE);
     }
 
     float cursorPos = initialPos;
     for (auto player : playerList) {
-        DrawTextEx(font, player.first.c_str(), {170, cursorPos}, 34, 1, WHITE);
-        cursorPos += 40;
+        DrawTextEx(font, player.first.c_str(), {120, cursorPos}, 34, 1, WHITE);
+        cursorPos += 50;
     }
 
-    Setting::getInstance().draw();
-    BackButton::getInstance().draw();
+
 }
 
 LoadGameScene::~LoadGameScene() {
