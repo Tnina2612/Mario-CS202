@@ -1,12 +1,11 @@
 #include"../../include/entities/Mario.hpp"
 
 Mario::Mario() : Character() {
-    sprite = LoadTexture(CharacterVar::MarioSpritePath.c_str());
-    frames = CharacterSprite::Small::frames; // Use Fire frames for Mario
+    mAnimation.setSprite(Sprite::MarioSprite);
 }
 
 Mario::~Mario() {
-    UnloadTexture(sprite);
+
 }
 
 CharacterType Mario::getType()const {
@@ -15,4 +14,8 @@ CharacterType Mario::getType()const {
 
 Vector2 Character::getPos() const {
     return pos;
+}
+
+bool Character::getIsDead() const {
+    return this->isDead;
 }

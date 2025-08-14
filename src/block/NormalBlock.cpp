@@ -4,12 +4,12 @@
 const float scale_screen= 3.0f;
 
 NormalBlock::NormalBlock(Block &block)
-    : m_block(block), jiggle_(false), changeState_(false), velocity_y(0.0f), isBreak(true)
+    : m_block(block), jiggle_(false), changeState_(false), velocity_y(0.0f), isBreak(m_block.items.empty())
 {
     before_pos = m_block.getPos();
     // rec_ = ItemSprite::;
 
-    isBreak = (m_block.getTypeItem() == "");
+    // isBreak = (m_block.getTypeItem() == "");
 }
 
 void NormalBlock::draw_()
@@ -22,12 +22,11 @@ void NormalBlock::update_()
     changeState();
 }
 
-void NormalBlock::onHit(const std::vector<Item *> &item, Character& character)
+void NormalBlock::onHit(Character& character)
 {
     if (m_block.getItemCount() > 0)
     {
-        SpawnItem::ItemSpawn(m_block.getTypeItem(), item, m_block.getPos(), character);
-        m_block.decreaseItem();
+        m_block.appearItem(character);
         jiggle_ = true;
         velocity_y = -pushHeight; // đẩy lên
         if (m_block.getItemCount() == 0)
@@ -76,6 +75,7 @@ void NormalBlock::changeState()
     else if (changeState_ && !isBreak && !jiggle_)
     {
         m_block.setState(make_shared<SolidBlock>(m_block));
+        m_block.animation = AnimationVectorTexture("G4");
     }
 }
 

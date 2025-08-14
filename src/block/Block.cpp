@@ -7,16 +7,15 @@
 #include "../include/Block/SolidBlock.h"
 #include "../include/entities/Character.hpp"
 #include "../assets/images/Coordinate.h"
-Block::Block(Vector2 pos, int item_count, const std::string &type_item, const std::string &type_block, const std::string &name_block)
-    : pos_(pos), itemCount(item_count), typeItem(type_item), 
-    animation(name_block), name_block(name_block), nextState_(nullptr)
+#include <diy_functions/strsplit.h>
+
+Block::Block(Vector2 pos, const std::string &blockData)
+    : pos_(pos), animation(strsplit(blockData,':')[0]), nameBlock(strsplit(blockData,':')[0]), 
+    nextState_(nullptr),
+    items(Item::stringToVectorItem(blockData, pos.x + 8, pos.y + 16))
 {
-    if (type_block == "question")
-        currentState_ = make_shared<QuestionBlock>(*this);
-    else if (type_block == "normal")
-        currentState_ = make_shared<NormalBlock>(*this);
-    else if (type_block == "solid") 
-        currentState_ = make_shared<SolidBlock>(*this);
+    // Constructor
+    currentState_ = (getBlockState(blockData));
 }
 
 Block::~Block()
@@ -37,12 +36,12 @@ void Block::update_()
         nextState_.reset();
     }
     currentState_->update_();
-    animation.update();
+    animation.update(); 
 }
 
-void Block::onHit(const std::vector<Item*> &item, Character & character)
+void Block::onHit(Character & character)
 {
-    currentState_->onHit(item, character);
+    currentState_->onHit(character);
 }
 
 void Block::setState(std::shared_ptr<BlockState> new_state)
@@ -66,7 +65,7 @@ void Block::setPos(Vector2 pos)
 
 int Block::getItemCount() const
 {
-    return itemCount;
+    return items.size();
 }
 
 Rectangle Block::getDrawRec() const { return currentState_->getDrawRec(); }
@@ -75,36 +74,33 @@ bool Block::getJiggle() const { return currentState_->getJiggle(); }
 
 bool Block::getIsDelete() const { return currentState_->getIsDelete(); }
 
-std::string Block::getTypeItem() const { return typeItem; }
+std::string Block::getBlockName() const { return nameBlock; }
 
-std::string Block::getBlockName() const { return name_block; }
-
-void Block::decreaseItem()
+void Block::appearItem(Character& player)
 {
-    itemCount--;
+    appearingItem = items.back();
+    if(appearingItem->getType() == "mushroom" + to_string(StateMushroom::super_) || appearingItem->getType() == "flower") {
+        if(player.getCharacterState() == CharacterState::SMALL) {
+            appearingItem = make_shared<Mushroom>(items.back()->getPos(), StateMushroom::super_);
+        } else {
+            appearingItem = make_shared<Flower>(items.back()->getPos());
+        }
+    }
+    appearingItem->appear();
+    items.pop_back();
 }
 
-// const SpriteSheet &Block::getSprite()
-// {
-//     return sprite_;
-// }
+std::shared_ptr<BlockState> Block::getBlockState(const std::string& blockData) {
+    std::string name = strsplit(blockData, ':')[0];
+    if(name.find("coin") != std::string::npos) {
+        return std::make_shared<QuestionBlock>(*this);
+    } else if(name.find("brick") != std::string::npos) {
+        return std::make_shared<NormalBlock>(*this);
+    } 
+    return std::make_shared<SolidBlock>(*this);
+}
 
-// BlockState *Block::getQuestionState() const
-// {
-//     return questionState_;
-// }
-
-// NormalBlock *Block::getNormalState() const
-// {
-//     return normalState_;
-// }
-
-// BlockState *Block::GetSolidState() const
-// {
-//     return solidState_;
-// }
-
-// BlockState *Block::GetBreakState() const
-// {
-//     return breakState_;
-// }
+std::shared_ptr<Item> Block::popAppearingItem() {
+    std::shared_ptr<Item> ret = move(appearingItem);
+    return ret;
+}

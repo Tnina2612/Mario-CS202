@@ -326,6 +326,24 @@ namespace EnemySprite {
                         Rectangle{190.f, 250.f, 25.f, 10.f}}}
         };
     }
+    namespace Lakitu {
+        const std::unordered_map<std::string, std::vector<Rectangle>> Frames = {
+            {"Left", {Rectangle{0.f, 90.f, 16.f, 25.f} }},
+            {"Right", {Rectangle{60.f, 90.f, 16.f, 25.f}}}, 
+            {"Skill", {Rectangle{30.f, 90.f, 16.f, 25.f}} }
+        };
+    }
+
+    namespace Spiny {
+        const std::unordered_map<std::string, std::vector<Rectangle>> Frames = {
+            {"Left", {Rectangle{90.f, 153.f, 16.f, 16.f},
+                        Rectangle{120.f, 153.f, 16.f, 16.f}}},
+            {"Right", {Rectangle{150.f, 153.f, 16.f, 16.f},
+                        Rectangle{180.f, 153.f, 16.f, 16.f}}},
+            {"Egg", {Rectangle{210.f, 153.f, 16.f, 16.f},
+                        Rectangle{240.f, 153.f, 16.f, 16.f}} }
+        };
+    }
 };
 
 namespace ItemSprite

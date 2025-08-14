@@ -8,6 +8,7 @@ protected:
     float scale;
     vector<Rectangle> frames;
     int currentFrame;
+    int scaleFrame = 0;
     
     float frameTime;
     const float defaultFrameTime = 0.1f; // Default frame time if not specified
@@ -16,8 +17,12 @@ public:
     Animation();
     Animation(const vector<Rectangle>& frames);
     Animation(const vector<Rectangle>& frames, const Texture2D& sprite, float frameTime = 0.2f, float scale = 1.0f);
+    int getCurrentFrame()const {
+        return currentFrame;
+    }
     void setFrames(const vector<Rectangle>& newFrames);
     void update(float deltaTime, int startFrame = 0, int size = -1);
+    bool update(const vector<float>& scales, int currentFrame, float scaleTime = 0.2, float deltaTime = GetFrameTime());
     void draw(Vector2 position) const;
     void reset();
     void setScale(float scale);

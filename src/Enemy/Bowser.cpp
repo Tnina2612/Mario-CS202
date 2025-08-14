@@ -18,7 +18,7 @@ Bowser::Bowser(const std::string& name) {
 
     float width = 35.f;
     float height = 35.f;
-    m_data = EnemyData (width, height, 10, false, true, true, 3, 
+    m_data = EnemyData (width, height, 10, false, true, true, false, 3, 
                         Vector2{10,0}, Vector2{0,0}, -1);
 
     m_data._velocity = Vector2{0.f, 0.f};

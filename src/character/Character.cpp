@@ -3,21 +3,39 @@
 #include "core/SoundManager.hpp"
 #include "core/MusicManager.hpp"
 
-Character::Character() : Animation(CharacterSprite::Fire::frames), state(nullptr), pos(CharacterVar::position), 
+Character::Character() : mAnimation(CharacterSprite::Small::frames), state(nullptr), pos(CharacterVar::position), 
     invincibilityTime(0.0f), score(0), veclocityX(0.0f), veclocityY(50.0f), orientation(RIGHT), characterState(SMALL),
     isInvincible(false), isDead(false), behavior(IDLE), onGround(true), playerLevelAnimationManager(this) {
         accelerationX = 0.0f;
         accelerationY = 0.0f;
         timeEffect = 0.0f;
+        onAnimation = true;
+        growthUp = false;
+        shrinkDown = false;
+        isStarMan = false;
+        isThrow = false;
+        effects.push_back(new ChangeStateEffect(0.5f, &growthUp));
+        effects.push_back(new ChangeStateEffect(0.5f, &shrinkDown));
+        effects.push_back(new ThrowEffect(0.1f, &isThrow));
+        effects.push_back(new StarManEffect(10.0f, &isStarMan));
     }
 
 Character::Character(const vector<Rectangle>& frames, const Texture2D& sprite)
-    : Animation(frames, sprite), state(nullptr), pos(CharacterVar::position), 
+    : mAnimation(frames, sprite), state(nullptr), pos(CharacterVar::position), 
     invincibilityTime(0.0f), score(0), veclocityX(0.0f), veclocityY(50.0f), orientation(RIGHT), characterState(SMALL),
     isInvincible(false), isDead(false),behavior(IDLE), onGround(true), playerLevelAnimationManager(this) {
         accelerationX = 0.0f;
         accelerationY = 0.0f;
         timeEffect = 0.0f;
+        onAnimation = true;
+        growthUp = false;
+        shrinkDown = false;
+        isStarMan = false;
+        isThrow = false;
+        effects.push_back(new ChangeStateEffect(1.0f, &growthUp));
+        effects.push_back(new ChangeStateEffect(1.0f, &shrinkDown));
+        effects.push_back(new ThrowEffect(0.1f, &isThrow));
+        effects.push_back(new StarManEffect(10.0f, &isStarMan));
     }
 
 void Character::setState(IState* newState) {
@@ -91,6 +109,10 @@ Character::~Character() {
     if(state) {
         delete state;
     }
+    for (auto& effect : effects) {
+        if(effect) delete effect;
+    }
+    effects.clear();
 }
 
 void Character::resetAttributes() {
@@ -110,62 +132,67 @@ void Character::climb(float timeEffect) {
 }
 
 void Character::update() {
-    // if(!onGround) {
-    //     behavior = JUMP;
-    // }
-    // else if(behavior != BRAKE){
-    //     if(IsKeyDown(KEY_LEFT) == false && IsKeyDown(KEY_RIGHT) == false) {
-    //         setBehavior(IDLE);
-    //     }
-    //     else {
-    //         setBehavior(MOVE);
-    //     }
-    // }
+    debug();
+    handleEffect();
+    if(growthUp) {
+        bool doneAnimation;
+        if(orientation == LEFT) doneAnimation = mAnimation.update({0.5, 0.75, 1, 0.75, 1}, 6, 0.1);
+        else doneAnimation = mAnimation.update({0.5, 0.75, 1, 0.75, 1}, 13, 0.1);
+        if(doneAnimation) growthUp = false;
+        return;
+    }
+    if(shrinkDown) {
+        bool doneAnimation;
+        if(orientation == LEFT) doneAnimation = mAnimation.update({2, 1.5, 1, 1.5, 1}, 6, 0.1);
+        else doneAnimation = mAnimation.update({2, 1.5, 1, 1.5, 1}, 13, 0.1);
+        if(doneAnimation) shrinkDown = false;
+        return;
+    }
     switch (behavior) {
         case MOVE:
             if (orientation == RIGHT) {
                 moveRight();
-                Animation::update(GetFrameTime(), 10, 3);
+                mAnimation.update(GetFrameTime(), 10, 3);
             } 
             else if (orientation == LEFT) {
                 moveLeft();
-                Animation::update(GetFrameTime(), 3, 3);
+                mAnimation.update(GetFrameTime(), 3, 3);
             }
             break;
         case JUMP:
             jump();
             if (orientation == RIGHT) {
-                Animation::update(GetFrameTime(), 8, 1);
+                mAnimation.update(GetFrameTime(), 8, 1);
             } 
             else if (orientation == LEFT) {
-                Animation::update(GetFrameTime(), 1, 1);
+                mAnimation.update(GetFrameTime(), 1, 1);
             }
             break;
         case DUCK:
             if (orientation == LEFT) {
-                Animation::update(GetFrameTime(), 0, 1);
+                mAnimation.update(GetFrameTime(), 0, 1);
             } 
             else if (orientation == RIGHT) {
-                Animation::update(GetFrameTime(), 7, 1);
+                mAnimation.update(GetFrameTime(), 7, 1);
             }           
             break;
         case IDLE:
             accelerationX = 0.0f; // Reset acceleration when idle
             if (orientation == LEFT) {
-                Animation::update(GetFrameTime(), 6, 1);
+                mAnimation.update(GetFrameTime(), 6, 1);
             } 
             else if (orientation == RIGHT) {
-                Animation::update(GetFrameTime(), 13, 1);
+                mAnimation.update(GetFrameTime(), 13, 1);
             }
             break;
         case BRAKE:
             if (orientation == RIGHT) {
                 brakeRight();
-                Animation::update(GetFrameTime(), 9, 1);
+                mAnimation.update(GetFrameTime(), 9, 1);
             } 
             else if (orientation == LEFT) {
                 brakeLeft();
-                Animation::update(GetFrameTime(), 2, 1);
+                mAnimation.update(GetFrameTime(), 2, 1);
             }
             break;
         case THROW:
@@ -175,15 +202,15 @@ void Character::update() {
             veclocityX = 0.0f;
             // Nếu muốn Mario rơi xuống khi chết:
             characterState = SMALL;
-            Animation::update(GetFrameTime(), 0, 1);
+            mAnimation.update(GetFrameTime(), 0, 1);
             // Có thể thêm điều kiện để reset game hoặc respawn ở đây
             break;
         case CLIMB:
             if(orientation == LEFT) {
-                Animation::update(GetFrameTime(), 14, 2);
+                mAnimation.update(GetFrameTime(), 14, 2);
             }
             else {
-                Animation::update(GetFrameTime(), 16, 2);
+                mAnimation.update(GetFrameTime(), 16, 2);
             }
             break;
         default:
@@ -199,30 +226,43 @@ void Character::update() {
     // cout << "on ground" << onGround << endl;
     // cout << "veclocity X: " << veclocityX <<  endl;
     // cout << "is Brake: " << (behavior == BRAKE) << endl;
-    debug();
 }
 
 void Character::draw() {
-    Animation::draw({pos.x, pos.y - getRectangle().height});
+    if(!onAnimation) return;
+    mAnimation.draw({pos.x, pos.y - getRectangle().height});
 }
 
 void Character::debug() {
     if(IsKeyPressed(KEY_W)) {
         if(getCharacterState() == CharacterState::SMALL) {
             characterState = CharacterState::SUPER;
-            setFrames(CharacterSprite::Super::frames);
+            mAnimation.setFrames(CharacterSprite::Super::frames);
+            growthUp = true;
         } else if(getCharacterState() == CharacterState::SUPER) {
             characterState = CharacterState::FIRE;
-            setFrames(CharacterSprite::Fire::frames);
+            mAnimation.setFrames(CharacterSprite::Fire::frames);
         } else if(getCharacterState() == CharacterState::FIRE) {
             characterState = CharacterState::SMALL;
-            setFrames(CharacterSprite::Small::frames);
+            mAnimation.setFrames(CharacterSprite::Small::frames);
+            shrinkDown = true;
         }
     }
 }
 
 void Character::setBehavior(Behavior newBehavior) {
     behavior = newBehavior;
+}
+
+void Character::powerUp() {
+    if(getCharacterState() == CharacterState::SMALL) {
+        characterState = CharacterState::SUPER;
+        mAnimation.setFrames(CharacterSprite::Super::frames);
+        growthUp = true;
+    } else if(getCharacterState() == CharacterState::SUPER) {
+        characterState = CharacterState::FIRE;
+        mAnimation.setFrames(CharacterSprite::Fire::frames);
+    }
 }
 
 Behavior Character::getBehavior() const {
@@ -267,11 +307,15 @@ Rectangle Character::getRectangle() const {
         width = 16;
         height = 31;
     }
-    return Rectangle{pos.x, pos.y - height * scale, /*frames[currentFrame].width * scale*/width * scale, height * scale};
+    return Rectangle{pos.x, pos.y - height * mAnimation.getScale(), /*frames[currentFrame].width * scale*/width * mAnimation.getScale(), height * mAnimation.getScale()};
 }
 
 CharacterState Character::getCharacterState() const {
     return characterState;
+}
+
+Animation& Character::getAnimation() {
+    return mAnimation;
 }
 
 void Character::hitBlockLeft(float vline) {
@@ -347,6 +391,11 @@ float Character::getRestVeclocity()const {
     return restVeclocity;
 }
 
-bool Character::getIsDead()const {
-    return isDead;
+void Character::handleEffect(float deltaTime) {
+    for(auto& effect : effects) {
+        if(effect) {
+            effect->handleEffect(deltaTime);
+        }
+    }
+
 }

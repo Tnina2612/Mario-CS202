@@ -8,7 +8,7 @@
 #include <string>
 
 void NameInputScene::init() {
-    background = new TileMap("world-maps/titleScene/titleScene.txt");
+    background = new TileMap("world-maps/titleScene/titleScene.txt", nullptr);
     renderTexture = LoadRenderTexture(Global::ORIGINAL_WIDTH, Global::ORIGINAL_HEIGHT);
 
     inputField = new InputField(300.0f, 350.0f, 400.0f, 50.0f);

@@ -10,7 +10,7 @@
 #include <filesystem>
 
 void LoadGameScene::init() {
-    background = new TileMap("world-maps/titleScene/titleScene.txt");
+    background = new TileMap("world-maps/titleScene/titleScene.txt", nullptr);
 
     renderTexture = LoadRenderTexture(Global::ORIGINAL_WIDTH, Global::ORIGINAL_HEIGHT);
     coin = LoadTexture("assets/images/title-scene/coin.png");

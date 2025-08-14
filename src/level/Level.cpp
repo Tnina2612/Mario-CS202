@@ -6,13 +6,14 @@
 
 SubLevel::SubLevel(Level* level, std::string folderName, Character* player, Vector2 initPlayerPosition, InputManager& inputManager, Camera2D* camera) : // Initializer
     level(level),
-    background(make_shared<TileMap>(folderName + "/background.txt")), 
-    blocks(make_shared<TileMap>(folderName + "/blocks.txt")),
+    background(make_shared<TileMap>(folderName + "/background.txt", this)), 
+    blocks(make_shared<TileMap>(folderName + "/blocks.txt", this)),
     enemies(make_shared<EnemyManager>(folderName + "/enemies.txt", this)),
     changeSubLevelManager(make_shared<ChangeSubLevelManager>(folderName + "/changingPoints.txt", this)),
     player(player), 
     initPlayerPosition(initPlayerPosition),
     playerManager(this, inputManager),
+    itemManager(folderName + "/items.txt", this),
     camera(camera),
     folderName(folderName)
 {
@@ -23,6 +24,7 @@ void SubLevel::draw() {
     ClearBackground(LevelVar::BackGroundColor);
     background->draw();
     enemies->draw();
+    itemManager.draw();
     player->draw();
     blocks->draw();
 
@@ -34,9 +36,10 @@ void SubLevel::draw() {
 
 void SubLevel::update() {
     background->updateBlocks();
-    blocks->updateBlocks();
-    playerManager.update();
     enemies->update();
+    itemManager.update();
+    playerManager.update();
+    blocks->updateBlocks();
 
     // Debug
     if(IsKeyPressed(KEY_Q)) {

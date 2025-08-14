@@ -79,6 +79,10 @@ std::shared_ptr<IEnemyStrategy> Enemy::getMovementStrategy() {
     return _movementStrategy;
 }
 
+void Enemy::hitVertical(int dir) {
+    return;
+}
+
 EnemyData& Enemy::getEnemyData() {
     return m_data;
 }
@@ -101,6 +105,18 @@ Rectangle Enemy::getHitBox() {
                         m_data._hitBoxWidth,
                         m_data._hitBoxHeight   
                     };
+}
+
+void Enemy::die() {
+    m_data._hp = 0;
+}
+
+bool Enemy::preventFalling() {
+    return m_data._preventFalling;
+}
+
+void Enemy::setPreventFalling(bool prevent) {
+    m_data._preventFalling = prevent;
 }
 
 bool Enemy::isAlive() {
@@ -165,9 +181,10 @@ bool Enemy::getOnGround() {
 }
 
 void Enemy::applyGravity(float dt) {
-    if(!m_data._isOnGround) {
-        m_data._velocity.y += m_data._gravity * dt;
-    }
+    m_data._velocity.y += m_data._gravity * dt;
+    // if(!m_data._isOnGround) {
+    //     m_data._velocity.y += m_data._gravity * dt;
+    // }
 }
 
 void Enemy::draw() {
@@ -177,8 +194,6 @@ void Enemy::draw() {
 
     DrawRectangleRec(getHitBox(), BLUE);
     m_animation.draw({m_data._pos.x, m_data._pos.y - m_data._hitBoxHeight});
-    
-    
 }
 
 void Enemy::update(float dt) {
@@ -186,14 +201,6 @@ void Enemy::update(float dt) {
         return;
     }
     m_animation.update(dt);
-    // std::cerr << "Enemy position: " << getPos().x << ", " << getPos().y << std::endl;
-
-    // if(!m_data._isOnGround) {
-    //     applyGravity(dt);
-    // }
-    // if(_movementStrategy) {
-    //     _movementStrategy->Execute(m_data, dt);
-    // }
 }
 
 std::string Enemy::getTypeName() const {
@@ -202,14 +209,7 @@ std::string Enemy::getTypeName() const {
 
 void Enemy::changeDirection() {
     m_data._dir *= -1; 
-    std::cerr << "Change dir " << std::endl;
-    // m_data._velocity.x *= -1;
-    // m_data._velocity.y *= -1;
 }
-
-// void Enemy::hitEnemy() {
-//     this->changeDirection();
-// }
 
 void Enemy::hitUp() {
     onStomp();
