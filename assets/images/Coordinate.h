@@ -427,3 +427,11 @@ namespace ItemSprite
     const Rectangle PRINCESS_PEACH =     {245, 90, 14,24};
     
 } 
+// namespace EnemySprite {
+//     namespace Fireball {
+//         const Rectangle Frame1 = {364, 188, 8, 8};
+//         const Rectangle Frame2 = {392, 184, 12, 14};
+//         const Rectangle Frame3 = {420, 184, 16, 16};
+//         const std::vector<Rectangle> Frames = {Frame1, Frame2, Frame3};
+//     }
+// }
