@@ -8,6 +8,7 @@
 #include <iostream>
 #include<algorithm>
 #include<entities/Effect.hpp>
+#include<entities/Enemy/CharacterFireball.hpp>
 
 class GameObject;
 
@@ -69,6 +70,8 @@ protected:
     bool isStarMan;
     Animation mAnimation;
     vector<Effect*> effects;
+    vector<CharacterFireball*> fireballs;
+
 public:
     PlayerLevelAnimationManager playerLevelAnimationManager;
 
@@ -102,8 +105,7 @@ public:
     void hitBlockRight(float vline = 0.0);
     void hitBlockTop(float hline = 0.0);
     void hitBlockBottom(float hline = 0.0);
-    void climb(float TimeEffect = -1);
-    void Growth(float TimeEffect = -1);
+    void createFireball();
     bool getOnGround() const;
     void setOnGround(bool onGround);
     bool getCollideRight()const;
@@ -114,6 +116,8 @@ public:
     float getGravity()const;
     float getRestVeclocity()const;
     void handleEffect(float deltaTime = GetFrameTime());
+    void handleFireballEffect(float deltaTime = GetFrameTime());
+    vector<CharacterFireball*>& getFireballs();
     // bool getCollideUp()const;
     // bool getCollideDown()const;
     

@@ -35,6 +35,10 @@ public:
     void onkey(KeyboardKey key, bool pressed, bool down, Character* character) override;
 };
 
+class LeftShiftListener : public InputListener {
+public:
+    void onkey(KeyboardKey key, bool pressed, bool down, Character* character) override;
+};
 
 class InputManager {
     template<class T>

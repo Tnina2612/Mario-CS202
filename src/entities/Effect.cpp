@@ -12,5 +12,11 @@ void Effect::handleEffect(float deltaTime) {
         return;
     }
     counterTime -= deltaTime;
-    cout << counterTime << endl;
+}
+
+void Effect::addEffect(float effectTime, bool* inEffect) {
+    this->effectTime = effectTime;
+    this->inEffect = inEffect;
+    *inEffect = true;
+    counterTime = effectTime;
 }
