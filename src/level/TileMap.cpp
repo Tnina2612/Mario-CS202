@@ -132,6 +132,46 @@ void TileMap::update(Character* player) {
         player->setVeclocityY(player->getVeclocityY() + player->getGravity() * deltaTime);
     }
 
+    // update fireballs of player
+    vector<CharacterFireball*> fireballs = player->getFireballs();
+    for(auto& fireball : fireballs) {
+        if(fireball == nullptr) continue;
+        fireball->update(deltaTime);
+        if(fireball->getActive() == false) continue;
+        const Rectangle fireballRec = fireball->getHitBox();
+        Rectangle fireNextFrame = {fireballRec.x, fireballRec.y + fireball->getVelocity().y * deltaTime, fireballRec.width, fireballRec.height};
+        vector<pair<int, int>> fbnearbyCells = cellsToCheck(fireNextFrame);
+        for(std::pair<int, int> pii : fbnearbyCells) {
+            int i = pii.first, j = pii.second;
+            if(i < 0 || i >= height || j < 0 || j >= width ||
+                tiles[i][j] == nullptr || tiles[i][j]->getStateName() == "Break") continue;
+            const Rectangle blockRec = tiles[i][j]->getDrawRec();
+            if(CheckCollisionRecs(fireNextFrame, blockRec)) {
+                if(fireNextFrame.y <= blockRec.y) {
+                    fireball->hitBlockVertical(false);
+                } else {
+                    fireball->hitBlockVertical(true);
+                }
+                fireNextFrame.y = fireballRec.y;
+                break;
+            }
+        }
+        fireNextFrame.x = fireballRec. x + fireball->getVelocity().x * deltaTime;
+        fbnearbyCells = cellsToCheck(fireNextFrame);
+        for(std::pair<int, int> pii : fbnearbyCells) {
+            int i = pii.first, j = pii.second;
+            if(i < 0 || i >= height || j < 0 || j >= width ||
+                tiles[i][j] == nullptr || tiles[i][j]->getStateName() == "Break") continue;
+            const Rectangle blockRec = tiles[i][j]->getDrawRec();
+            if(CheckCollisionRecs(fireNextFrame, blockRec)) {
+                fireball->hitBlockHorizontal();
+                fireNextFrame.x = fireballRec.x;
+                break;
+            }
+        }
+        fireball->setPosition({fireNextFrame.x, fireNextFrame.y});
+    }
+
     // Debug
     debugPlayerBlocks.clear();
     for(std::pair<int, int> pos : nearbyCells) {

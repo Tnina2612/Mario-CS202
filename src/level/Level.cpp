@@ -62,11 +62,13 @@ Level::Level(std::string folderName) :
     inputManager.addKey(KEY_RIGHT);
     inputManager.addKey(KEY_UP);
     inputManager.addKey(KEY_DOWN);
+    inputManager.addKey(KEY_LEFT_SHIFT);
 
     inputManager.addListener(new upListener());
     inputManager.addListener(new downListener());
     inputManager.addListener(new leftListener());
     inputManager.addListener(new rightListener());
+    inputManager.addListener(new LeftShiftListener());
 
     // Level configurations
     LevelVar::ThemeID = LevelVar::Overworld;
@@ -154,6 +156,7 @@ void Level::saveGame(std::string folderName) {
     subLevel->blocks->saveToFile(saveFolder + "/blocks.txt");
     subLevel->enemies->saveToFile(saveFolder + "/enemies.txt");
     subLevel->changeSubLevelManager->saveToFile(saveFolder + "/changingPoints.txt");
+    subLevel->itemManager.saveToFile(saveFolder + "/items.txt");
     // Initialize instructor file
     ofstream outFile(saveFolder + "/InitializeInstructor.txt");
     if(outFile.is_open()) {

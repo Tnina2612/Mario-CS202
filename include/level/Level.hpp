@@ -103,6 +103,7 @@ class ItemManager {
         void draw(void);
         void update();
         void addItem(std::shared_ptr<Item> item);
+        void saveToFile(std::string filename);
 };
 
 class SubLevel {

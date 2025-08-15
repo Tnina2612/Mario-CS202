@@ -139,7 +139,7 @@ string PlayerUpPipeAnimation::getType() const {
 }
 
 void PlayerUpPipeAnimation::saveToFile(std::ofstream& out) const {
-    out << getType() << ' ' << targetY << '\n';
+    out << getType() << ' ' << targetY;
 }
 
 PlayerClimbDownAnimation::PlayerClimbDownAnimation(float pivotX, float targetY) : pivotX(pivotX), targetY(targetY) {}
@@ -167,7 +167,7 @@ string PlayerClimbDownAnimation::getType() const {
 }
 
 void PlayerClimbDownAnimation::saveToFile(std::ofstream& out) const {
-    out << getType() << ' ' << pivotX << ' ' << targetY << '\n';
+    out << getType() << ' ' << targetY;
 }
 
 PlayerWalkToXAnimation::PlayerWalkToXAnimation(float targetX, TileMap* blocks) : targetX(targetX), blocks(blocks) {}
@@ -196,7 +196,7 @@ string PlayerWalkToXAnimation::getType() const {
 }
 
 void PlayerWalkToXAnimation::saveToFile(std::ofstream& out) const {
-    out << getType() << ' ' << targetX << '\n';
+    out << getType() << ' ' << targetX;
 }
 
 void PlayerEnterDoorAnimation::initialize(Character* player) {
@@ -219,7 +219,7 @@ string PlayerEnterDoorAnimation::getType() const {
 }
 
 void PlayerEnterDoorAnimation::saveToFile(std::ofstream& out) const {
-    out << getType() << '\n';
+    out << getType();
 }
 
 void PlayerExitDoorAnimation::initialize(Character* player) {
@@ -243,7 +243,7 @@ string PlayerExitDoorAnimation::getType() const {
 }
 
 void PlayerExitDoorAnimation::saveToFile(std::ofstream& out) const {
-    out << getType() << '\n';
+    out << getType();
 }
 
 void PlayerGrowAnimation::initialize(Character* player) {
@@ -263,7 +263,7 @@ string PlayerGrowAnimation::getType() const {
 }
 
 void PlayerGrowAnimation::saveToFile(std::ofstream& out) const {
-    out << getType() << '\n';
+    out << getType();
 }
 
 void PlayerShrinkAnimation::initialize(Character* player) {
@@ -283,5 +283,5 @@ string PlayerShrinkAnimation::getType() const {
 }
 
 void PlayerShrinkAnimation::saveToFile(std::ofstream& out) const {
-    out << getType() << '\n';
+    out << getType();
 }

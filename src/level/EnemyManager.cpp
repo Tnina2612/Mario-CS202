@@ -92,7 +92,7 @@ void EnemyManager::update() {
             } else {
                 int dir = enemy->getPos().x < subLevel->player->getPos().x ? 1 : -1;
                 enemy->hitVertical(dir);
-                // subLevel->player->die();
+                subLevel->player->takeDamage();
                 // if(subLevel->player->getNumLives() > 0) {
                 //     Program::getInstance().pushScene(new DeathScene());
                 // } else {

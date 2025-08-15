@@ -141,7 +141,7 @@ namespace CharacterSprite {
             Left::Throw, //18
             Right::Throw //19
         };
-        namespace Fireball {
+        namespace FireballSprite {
         const std::unordered_map<std::string, std::vector<Rectangle>> Frames = {
             {"Normal", {Rectangle{25.f, 150.f, 10.f, 10.f}, 
                         Rectangle{40.f, 150.f, 10.f, 10.f}, 
@@ -325,6 +325,10 @@ namespace EnemySprite {
             {"Right", {Rectangle{160.f, 250.f, 25.f, 10.f}, 
                         Rectangle{190.f, 250.f, 25.f, 10.f}}}
         };
+        const Rectangle Frame1 = {364, 188, 8, 8};
+        const Rectangle Frame2 = {392, 184, 12, 14};
+        const Rectangle Frame3 = {420, 184, 16, 16};
+        const std::vector<Rectangle> CharacterFireballFrames = {Frame1, Frame2, Frame3};
     }
     namespace Lakitu {
         const std::unordered_map<std::string, std::vector<Rectangle>> Frames = {

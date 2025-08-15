@@ -14,29 +14,18 @@ Character::Character() : mAnimation(CharacterSprite::Small::frames), state(nullp
         shrinkDown = false;
         isStarMan = false;
         isThrow = false;
-        effects.push_back(new ChangeStateEffect(0.5f, &growthUp));
-        effects.push_back(new ChangeStateEffect(0.5f, &shrinkDown));
-        effects.push_back(new ThrowEffect(0.1f, &isThrow));
-        effects.push_back(new StarManEffect(10.0f, &isStarMan));
+        effects.push_back(new Effect(0.5f, &growthUp));
+        effects.push_back(new Effect(0.5f, &shrinkDown));
+        effects.push_back(new Effect(0.1f, &isThrow));
+        effects.push_back(new Effect(10.0f, &isStarMan));
+        effects.push_back(new Effect(2.0f, &isInvicinbleBlinking));
     }
 
 Character::Character(const vector<Rectangle>& frames, const Texture2D& sprite)
-    : mAnimation(frames, sprite), state(nullptr), pos(CharacterVar::position), 
-    invincibilityTime(0.0f), score(0), veclocityX(0.0f), veclocityY(50.0f), orientation(RIGHT), characterState(SMALL),
-    isInvincible(false), isDead(false),behavior(IDLE), onGround(true), playerLevelAnimationManager(this) {
-        accelerationX = 0.0f;
-        accelerationY = 0.0f;
-        timeEffect = 0.0f;
-        onAnimation = true;
-        growthUp = false;
-        shrinkDown = false;
-        isStarMan = false;
-        isThrow = false;
-        effects.push_back(new ChangeStateEffect(1.0f, &growthUp));
-        effects.push_back(new ChangeStateEffect(1.0f, &shrinkDown));
-        effects.push_back(new ThrowEffect(0.1f, &isThrow));
-        effects.push_back(new StarManEffect(10.0f, &isStarMan));
-    }
+    : Character() {
+    mAnimation.setFrames(frames);
+    mAnimation.setSprite(sprite);
+}
 
 void Character::setState(IState* newState) {
     if(state) {
@@ -112,6 +101,9 @@ Character::~Character() {
     for (auto& effect : effects) {
         if(effect) delete effect;
     }
+    for (auto& fireball : fireballs) {
+        if(fireball) delete fireball;
+    }
     effects.clear();
 }
 
@@ -121,78 +113,88 @@ void Character::resetAttributes() {
     collideRight = false;
 }
 
-void Character::climb(float timeEffect) {
-    if(this->timeEffect > timeEffect) {
-        this->timeEffect = 0;
-        behavior = IDLE;
-        return;
-    }
-    this->timeEffect += GetFrameTime();
-    veclocityX = 0.0f;
-}
-
 void Character::update() {
+    float deltaTime = GetFrameTime();
     debug();
     handleEffect();
-    // if(growthUp) {
-    //     bool doneAnimation;
-    //     if(orientation == LEFT) doneAnimation = mAnimation.update({0.5, 0.75, 1, 0.75, 1}, 6, 0.1);
-    //     else doneAnimation = mAnimation.update({0.5, 0.75, 1, 0.75, 1}, 13, 0.1);
-    //     if(doneAnimation) growthUp = false;
-    //     return;
-    // }
-    // if(shrinkDown) {
-    //     bool doneAnimation;
-    //     if(orientation == LEFT) doneAnimation = mAnimation.update({2, 1.5, 1, 1.5, 1}, 6, 0.1);
-    //     else doneAnimation = mAnimation.update({2, 1.5, 1, 1.5, 1}, 13, 0.1);
-    //     if(doneAnimation) shrinkDown = false;
-    //     return;
-    // }
+    handleFireballEffect();
+    if(growthUp) {
+        bool doneAnimation;
+        if(orientation == LEFT) doneAnimation = mAnimation.update({0.5, 0.75, 1, 0.75, 1}, 6, 0.1);
+        else doneAnimation = mAnimation.update({0.5, 0.75, 1, 0.75, 1}, 13, 0.1);
+        if(doneAnimation) growthUp = false;
+        return;
+    }
+    if(shrinkDown) {
+        bool doneAnimation;
+        if(orientation == LEFT) doneAnimation = mAnimation.update({2, 1.5, 1, 1.5, 1}, 6, 0.1);
+        else doneAnimation = mAnimation.update({2, 1.5, 1, 1.5, 1}, 13, 0.1);
+        if(doneAnimation) {
+            isInvicinbleBlinking = true;
+            shrinkDown = false;
+            invincibilityTime = 2.0f; // Set invincibility time
+        }
+        return;
+    }
+    if(isThrow) {
+        if(orientation == LEFT) mAnimation.update(deltaTime, 18, 1);
+        else mAnimation.update(deltaTime, 19, 1);
+        return;
+    }
+    if(isInvicinbleBlinking) {
+        mAnimation.updateBlinking(deltaTime, onAnimation);
+    }
+    if(invincibilityTime > 0.0f) {
+        invincibilityTime -= deltaTime;
+        if(invincibilityTime <= 0.0f) {
+            isInvincible = false;
+        }
+    }
     switch (behavior) {
         case MOVE:
             if (orientation == RIGHT) {
                 moveRight();
-                mAnimation.update(GetFrameTime(), 10, 3);
+                mAnimation.update(deltaTime, 10, 3);
             } 
             else if (orientation == LEFT) {
                 moveLeft();
-                mAnimation.update(GetFrameTime(), 3, 3);
+                mAnimation.update(deltaTime, 3, 3);
             }
             break;
         case JUMP:
             jump();
             if (orientation == RIGHT) {
-                mAnimation.update(GetFrameTime(), 8, 1);
+                mAnimation.update(deltaTime, 8, 1);
             } 
             else if (orientation == LEFT) {
-                mAnimation.update(GetFrameTime(), 1, 1);
+                mAnimation.update(deltaTime, 1, 1);
             }
             break;
         case DUCK:
             if (orientation == LEFT) {
-                mAnimation.update(GetFrameTime(), 0, 1);
+                mAnimation.update(deltaTime, 0, 1);
             } 
             else if (orientation == RIGHT) {
-                mAnimation.update(GetFrameTime(), 7, 1);
+                mAnimation.update(deltaTime, 7, 1);
             }           
             break;
         case IDLE:
             accelerationX = 0.0f; // Reset acceleration when idle
             if (orientation == LEFT) {
-                mAnimation.update(GetFrameTime(), 6, 1);
+                mAnimation.update(deltaTime, 6, 1);
             } 
             else if (orientation == RIGHT) {
-                mAnimation.update(GetFrameTime(), 13, 1);
+                mAnimation.update(deltaTime, 13, 1);
             }
             break;
         case BRAKE:
             if (orientation == RIGHT) {
                 brakeRight();
-                mAnimation.update(GetFrameTime(), 9, 1);
+                mAnimation.update(deltaTime, 9, 1);
             } 
             else if (orientation == LEFT) {
                 brakeLeft();
-                mAnimation.update(GetFrameTime(), 2, 1);
+                mAnimation.update(deltaTime, 2, 1);
             }
             break;
         case THROW:
@@ -229,8 +231,13 @@ void Character::update() {
 }
 
 void Character::draw() {
-    if(!onAnimation) return;
-    mAnimation.draw({pos.x, pos.y - getRectangle().height});
+    if(!onAnimation && isInvicinbleBlinking) return;
+    mAnimation.draw({pos.x, pos.y - getRectangle().height * mAnimation.getScale()});
+    for (auto& fireball : fireballs) {
+        if(fireball && fireball->getOnScreen()) {
+            fireball->draw();
+        }
+    }
 }
 
 void Character::debug() {
@@ -273,6 +280,14 @@ bool Character::getShrinkDown() const {
     return shrinkDown;
 }
 
+void Character::createFireball() {
+    if(getCharacterState() == CharacterState::FIRE) {
+        isThrow = true;
+        Vector2 startPos = {pos.x + getRectangle().width, pos.y - getRectangle().height / 2};
+        fireballs.push_back(new CharacterFireball(startPos, orientation));
+    }
+}
+
 Behavior Character::getBehavior() const {
     return behavior;
 }
@@ -312,10 +327,10 @@ Rectangle Character::getRectangle() const {
         height = 15;
     }
     else {
-        width = 16;
+        width = 14;
         height = 31;
     }
-    return Rectangle{pos.x, pos.y - height * mAnimation.getScale(), /*frames[currentFrame].width * scale*/width * mAnimation.getScale(), height * mAnimation.getScale()};
+    return Rectangle{pos.x, pos.y - height, /*frames[currentFrame].width * scale*/width, height};
 }
 
 CharacterState Character::getCharacterState() const {
@@ -339,7 +354,7 @@ void Character::hitBlockRight(float vline) {
 }
 
 void Character::hitBlockTop(float hline) {
-    veclocityY = abs(veclocityY); // Reset vertical velocity when hitting a block from the top
+    veclocityY = 0; // Reset vertical velocity when hitting a block from the top
 }
 
 void Character::hitBlockBottom(float hline) {
@@ -405,7 +420,6 @@ void Character::handleEffect(float deltaTime) {
             effect->handleEffect(deltaTime);
         }
     }
-
 }
 
 Vector2 Character::getPos() const {
@@ -414,4 +428,33 @@ Vector2 Character::getPos() const {
 
 bool Character::getIsDead() const {
     return this->isDead;
+}
+
+void Character::handleFireballEffect(float deltaTime) {
+    for(auto& fireball : fireballs) {
+        if(!fireball) {
+            fireballs.erase(remove(fireballs.begin(), fireballs.end(), fireball), fireballs.end());
+        }
+        else if(fireball->getOnScreen() == false) {
+            delete fireball;
+            fireball = nullptr;
+            fireballs.erase(remove(fireballs.begin(), fireballs.end(), fireball), fireballs.end());
+        }
+    }
+}
+
+vector<CharacterFireball*>& Character::getFireballs() {
+    return fireballs;
+}
+
+void Character::takeDamage() {
+    if(isInvincible || isDead) return; // Ignore damage if invincible or dead
+    if(characterState == SMALL) {
+        die(); // If Mario is small, he dies
+        return;
+    }
+    shrinkDown = true; // Trigger shrink down effect
+    isInvincible = true; // Set invincibility
+    characterState = SMALL;
+    mAnimation.setFrames(CharacterSprite::Small::frames);
 }

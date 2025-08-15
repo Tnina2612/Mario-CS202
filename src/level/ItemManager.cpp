@@ -59,4 +59,29 @@ void ItemManager::update() {
 
 void ItemManager::addItem(shared_ptr<Item> item) {
     items.push_back(item);
+    std::cout << "Item added: " << item->getType() << " at position (" << item->getPos().x << ", " << item->getPos().y << ")" << endl;
+}
+
+void ItemManager::saveToFile(std::string filename) {
+    ofstream out(filename);
+    if(out.is_open() == false) {
+        throw runtime_error("ItemManager::saveToFile(filename) cannot open file " + filename + '\n');
+    }
+    out << items.size() << endl;
+    for(int i = 0; i < (int)items.size(); i++) {
+        int j;
+        for(j = i + 1; j < (int)items.size(); ) {
+            if(items[j]->getType() == items[i]->getType()) {
+                j++;
+            } else {
+                break;
+            }
+        }
+        out << j - i << ' ' << items[i]->getType() << endl;
+        for( ; i < j; i++) {
+            out << items[i]->getPos().x << ' ' << items[i]->getPos().y << endl;
+        }
+        i--;
+    }
+    out.close();
 }

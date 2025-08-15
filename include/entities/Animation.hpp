@@ -9,7 +9,8 @@ protected:
     vector<Rectangle> frames;
     int currentFrame;
     int scaleFrame = 0;
-    
+    float blinkingTime = 0.0f;
+
     float frameTime;
     const float defaultFrameTime = 0.1f; // Default frame time if not specified
     Texture2D sprite;
@@ -29,6 +30,7 @@ public:
     float getScale() const;
     void setSprite(const Texture2D& sprite);
     virtual ~Animation() = default;
+    void updateBlinking(float deltaTime, bool& onAnimation);
 };
 
 class AnimationVectorTexture {
