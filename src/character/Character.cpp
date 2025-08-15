@@ -341,23 +341,23 @@ Animation& Character::getAnimation() {
     return mAnimation;
 }
 
-void Character::hitBlockLeft(float vline) {
+void Character::hitBlockLeft() {
     //pos.x = vline;
     veclocityX = 0.0f; // Stop moving left
     collideLeft = true;
 }
 
-void Character::hitBlockRight(float vline) {
+void Character::hitBlockRight() {
     //pos.x = vline - getRectangle().width;
     veclocityX = 0.0f; // Stop moving right
     collideRight = true;
 }
 
-void Character::hitBlockTop(float hline) {
+void Character::hitBlockTop() {
     veclocityY = 0; // Reset vertical velocity when hitting a block from the top
 }
 
-void Character::hitBlockBottom(float hline) {
+void Character::hitBlockBottom() {
     // if(IsKeyDown(KEY_LEFT) == false && IsKeyDown(KEY_RIGHT) == false) {
     //     setBehavior(IDLE);
     // }

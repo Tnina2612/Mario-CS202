@@ -87,8 +87,14 @@ void TileMap::update(Character* player) {
             continue;
         }
         if(CheckCollisionRecs(nextFrame, tiles[i][j]->getDrawRec()) && nextFrame.y >= tiles[i][j]->getDrawRec().y) {
+            player->hitBlockTop();
             tiles[i][j]->onHit(*player);
+            std::shared_ptr<Item> item = tiles[i][j]->popAppearingItem();
+            if(item != nullptr) {
+                subLevel->itemManager.addItem(item);
+            }
         }
+        nextFrame.y = charRec.y;
     }
 
     for(std::pair<int, int> pii : nearbyCells) {
@@ -97,9 +103,9 @@ void TileMap::update(Character* player) {
         const Rectangle& blockRec = tiles[i][j]->getDrawRec();
         if(CheckCollisionRecs(nextFrame, blockRec)) {
             if(nextFrame.y <= blockRec.y) {
-                player->hitBlockBottom(blockRec.y);
+                player->hitBlockBottom();
             } else {
-                player->hitBlockTop(blockRec.y + blockRec.height);
+                player->hitBlockTop();
                 tiles[i][j]->onHit(*player);
                 std::shared_ptr<Item> item = tiles[i][j]->popAppearingItem();
                 if(item != nullptr) {
@@ -117,9 +123,9 @@ void TileMap::update(Character* player) {
         const Rectangle& blockRec = tiles[i][j]->getDrawRec();
         if(CheckCollisionRecs(nextFrame, blockRec)) {
             if(nextFrame.x <= blockRec.x) {
-                player->hitBlockRight(blockRec.x);
+                player->hitBlockRight();
             } else {
-                player->hitBlockLeft(blockRec.x + blockRec.width);
+                player->hitBlockLeft();
             }
             nextFrame.x = charRec.x;
         }
@@ -418,11 +424,11 @@ void TileMap::update(std::shared_ptr<MovingPlatform> platform, Character* player
     if(CheckCollisionRecs(charRec, platformRec)) {
         if(charRec.y <= platformRec.y) {
             player->setPosition(charRec.x, platformRec.y);
-            player->hitBlockBottom(platformRec.y);
+            player->hitBlockBottom();
         }
         else if(charRec.y > platformRec.y)  {
             player->setPosition(charRec.x, platformRec.y + charRec.height + platformRec.height);
-            player->hitBlockTop(platformRec.y + platformRec.height);
+            player->hitBlockTop();
         }
     }
 }

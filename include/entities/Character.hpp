@@ -107,10 +107,10 @@ public:
     CharacterState getCharacterState() const;
     Animation& getAnimation();
 
-    void hitBlockLeft(float vline = 0.0);
-    void hitBlockRight(float vline = 0.0);
-    void hitBlockTop(float hline = 0.0);
-    void hitBlockBottom(float hline = 0.0);
+    void hitBlockLeft();
+    void hitBlockRight();
+    void hitBlockTop();
+    void hitBlockBottom();
     void createFireball();
     bool getOnGround() const;
     void setOnGround(bool onGround);
