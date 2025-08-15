@@ -4,37 +4,28 @@
 #include"../../include/entities/Enemy/CharacterFireball.hpp"
 #include"../../include/entities/Enemy/EnemyFactory.hpp"
 
-CharacterFireball::CharacterFireball() {
-    allFrames = EnemySprite::Fireball::Frames;
+CharacterFireball::CharacterFireball() : bombEffect() {
+    allFrames = CharacterSprite::Fire::FireballSprite::Frames;
     m_animation.setSprite(EnemyFactory::getEnemyTypes()->sprite);
-    
+    m_animation.setFrames(allFrames["Normal"]);
 }
 
-CharacterFireball::CharacterFireball(Vector2 startPos, Vector2 targetPos) : CharacterFireball() {
-    _width = 25.f;
+CharacterFireball::CharacterFireball(Vector2 startPos, Orientation orientation) : CharacterFireball() {
+    _width = 10.f;
     _height = 10.f;
     _pos = startPos;
-    _spawing = true;
-    _dir = targetPos.x - startPos.x > 0 ? 1 : -1;
-
-    Vector2 temp = Vector2{targetPos.x - startPos.x, targetPos.y - startPos.y};
-    float d = sqrt(temp.x*temp.x + temp.y*temp.y);
-
-    if (d != 0.0f) {
-        
-        temp = Vector2{temp.x / d, temp.y / d};
-        _velocity = Vector2{100.f * temp.x * _dir, 100.f * temp.y};
-        
-        if (_dir == 1)
-            m_animation.setFrames(allFrames["Right"]);
-        else
-            m_animation.setFrames(allFrames["Left"]);
-    } 
-    else {
-        _velocity = Vector2{0.f, 0.f};
-        _dir =0.f;
-        m_animation.setFrames(allFrames["Left"]);
+    _active = true;
+    _onScreen = true;
+    this->orientation = orientation;
+    bombEffect.addEffect(0.1f, &_onScreen);
+    float velocityX = 300.0f;
+    if(orientation == LEFT) {
+        _velocity.x = -velocityX;
     }
+    else {
+        _velocity.x = velocityX;
+    }
+    _velocity.y = 100.0f;
 }
 
 Rectangle CharacterFireball::getHitBox() {
@@ -42,13 +33,50 @@ Rectangle CharacterFireball::getHitBox() {
 }
 
 void CharacterFireball::update(float dt) {
-    _pos.x += _velocity.x * dt;
-    _pos.y += _velocity.y * dt;
-
+    _velocity.y += gravity * dt; // Apply 
+    if(!_active) {
+        bombEffect.handleEffect(dt);
+    }
+    if(_velocity.y > 2 * _velocity_y) {
+        _velocity.y = 2 * _velocity_y; // Limit the maximum downward velocity
+    }
+    else if(_velocity.y < -_velocity_y) {
+        _velocity.y = -_velocity_y; // Limit the maximum upward velocity
+    }
     m_animation.update(dt);
-    
+
 }
 
 void CharacterFireball::draw() {
     m_animation.draw(_pos);
+}
+bool CharacterFireball::getOnScreen() const {
+    return _onScreen;
+}
+
+bool CharacterFireball::getActive()const {
+    return _active;
+}
+
+Vector2 CharacterFireball::getVelocity() const {
+    return _velocity;
+}
+
+void CharacterFireball::setPosition(Vector2 pos) {
+    _pos = pos;
+}
+
+void CharacterFireball::hitBlockHorizontal() {
+    _active = false;
+    _velocity = {0.0f, 0.0f};
+}
+
+void CharacterFireball::hitBlockVertical(bool isMoveDown) {
+    this->isMoveDown = isMoveDown;
+    if(isMoveDown) {
+        _velocity.y = _velocity_y;
+    }
+    else {
+        _velocity.y = -_velocity_y;
+    }
 }

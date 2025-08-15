@@ -112,6 +112,9 @@ Character::~Character() {
     for (auto& effect : effects) {
         if(effect) delete effect;
     }
+    for (auto& fireball : fireballs) {
+        if(fireball) delete fireball;
+    }
     effects.clear();
 }
 
@@ -121,19 +124,11 @@ void Character::resetAttributes() {
     collideRight = false;
 }
 
-void Character::climb(float timeEffect) {
-    if(this->timeEffect > timeEffect) {
-        this->timeEffect = 0;
-        behavior = IDLE;
-        return;
-    }
-    this->timeEffect += GetFrameTime();
-    veclocityX = 0.0f;
-}
-
 void Character::update() {
+    float deltaTime = GetFrameTime();
     debug();
     handleEffect();
+    handleFireballEffect();
     if(growthUp) {
         bool doneAnimation;
         if(orientation == LEFT) doneAnimation = mAnimation.update({0.5, 0.75, 1, 0.75, 1}, 6, 0.1);
@@ -148,51 +143,56 @@ void Character::update() {
         if(doneAnimation) shrinkDown = false;
         return;
     }
+    if(isThrow) {
+        if(orientation == LEFT) mAnimation.update(deltaTime, 18, 1);
+        else mAnimation.update(deltaTime, 19, 1);
+        return;
+    }
     switch (behavior) {
         case MOVE:
             if (orientation == RIGHT) {
                 moveRight();
-                mAnimation.update(GetFrameTime(), 10, 3);
+                mAnimation.update(deltaTime, 10, 3);
             } 
             else if (orientation == LEFT) {
                 moveLeft();
-                mAnimation.update(GetFrameTime(), 3, 3);
+                mAnimation.update(deltaTime, 3, 3);
             }
             break;
         case JUMP:
             jump();
             if (orientation == RIGHT) {
-                mAnimation.update(GetFrameTime(), 8, 1);
+                mAnimation.update(deltaTime, 8, 1);
             } 
             else if (orientation == LEFT) {
-                mAnimation.update(GetFrameTime(), 1, 1);
+                mAnimation.update(deltaTime, 1, 1);
             }
             break;
         case DUCK:
             if (orientation == LEFT) {
-                mAnimation.update(GetFrameTime(), 0, 1);
+                mAnimation.update(deltaTime, 0, 1);
             } 
             else if (orientation == RIGHT) {
-                mAnimation.update(GetFrameTime(), 7, 1);
+                mAnimation.update(deltaTime, 7, 1);
             }           
             break;
         case IDLE:
             accelerationX = 0.0f; // Reset acceleration when idle
             if (orientation == LEFT) {
-                mAnimation.update(GetFrameTime(), 6, 1);
+                mAnimation.update(deltaTime, 6, 1);
             } 
             else if (orientation == RIGHT) {
-                mAnimation.update(GetFrameTime(), 13, 1);
+                mAnimation.update(deltaTime, 13, 1);
             }
             break;
         case BRAKE:
             if (orientation == RIGHT) {
                 brakeRight();
-                mAnimation.update(GetFrameTime(), 9, 1);
+                mAnimation.update(deltaTime, 9, 1);
             } 
             else if (orientation == LEFT) {
                 brakeLeft();
-                mAnimation.update(GetFrameTime(), 2, 1);
+                mAnimation.update(deltaTime, 2, 1);
             }
             break;
         case THROW:
@@ -231,6 +231,11 @@ void Character::update() {
 void Character::draw() {
     if(!onAnimation) return;
     mAnimation.draw({pos.x, pos.y - getRectangle().height * mAnimation.getScale()});
+    for (auto& fireball : fireballs) {
+        if(fireball && fireball->getOnScreen()) {
+            fireball->draw();
+        }
+    }
 }
 
 void Character::debug() {
@@ -262,6 +267,14 @@ void Character::powerUp() {
     } else if(getCharacterState() == CharacterState::SUPER) {
         characterState = CharacterState::FIRE;
         mAnimation.setFrames(CharacterSprite::Fire::frames);
+    }
+}
+
+void Character::createFireball() {
+    if(getCharacterState() == CharacterState::FIRE) {
+        isThrow = true;
+        Vector2 startPos = {pos.x + getRectangle().width, pos.y - getRectangle().height / 2};
+        fireballs.push_back(new CharacterFireball(startPos, orientation));
     }
 }
 
@@ -304,7 +317,7 @@ Rectangle Character::getRectangle() const {
         height = 15;
     }
     else {
-        width = 16;
+        width = 14;
         height = 31;
     }
     return Rectangle{pos.x, pos.y - height, /*frames[currentFrame].width * scale*/width, height};
@@ -331,7 +344,7 @@ void Character::hitBlockRight(float vline) {
 }
 
 void Character::hitBlockTop(float hline) {
-    veclocityY = abs(veclocityY); // Reset vertical velocity when hitting a block from the top
+    veclocityY = 0; // Reset vertical velocity when hitting a block from the top
 }
 
 void Character::hitBlockBottom(float hline) {
@@ -397,5 +410,21 @@ void Character::handleEffect(float deltaTime) {
             effect->handleEffect(deltaTime);
         }
     }
+}
 
+void Character::handleFireballEffect(float deltaTime) {
+    for(auto& fireball : fireballs) {
+        if(!fireball) {
+            fireballs.erase(remove(fireballs.begin(), fireballs.end(), fireball), fireballs.end());
+        }
+        else if(fireball->getOnScreen() == false) {
+            delete fireball;
+            fireball = nullptr;
+            fireballs.erase(remove(fireballs.begin(), fireballs.end(), fireball), fireballs.end());
+        }
+    }
+}
+
+vector<CharacterFireball*>& Character::getFireballs() {
+    return fireballs;
 }

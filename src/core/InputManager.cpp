@@ -155,3 +155,10 @@ void rightListener::onkey(KeyboardKey key, bool pressed, bool down, Character* c
         }
     }
 }
+
+void LeftShiftListener::onkey(KeyboardKey key, bool pressed, bool down, Character* character) {
+    if(character == nullptr || key != KEY_LEFT_SHIFT) return;
+    if(pressed) {
+        character->createFireball(); // Create a fireball when left shift is pressed
+    }
+}

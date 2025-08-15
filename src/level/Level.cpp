@@ -60,11 +60,13 @@ Level::Level(std::string folderName) :
     inputManager.addKey(KEY_RIGHT);
     inputManager.addKey(KEY_UP);
     inputManager.addKey(KEY_DOWN);
+    inputManager.addKey(KEY_LEFT_SHIFT);
 
     inputManager.addListener(new upListener());
     inputManager.addListener(new downListener());
     inputManager.addListener(new leftListener());
     inputManager.addListener(new rightListener());
+    inputManager.addListener(new LeftShiftListener());
 
     // Level configurations
     LevelVar::ThemeID = LevelVar::Overworld;
