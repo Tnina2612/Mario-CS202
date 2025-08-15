@@ -152,6 +152,7 @@ void Level::saveGame(std::string folderName) {
     subLevel->blocks->saveToFile(saveFolder + "/blocks.txt");
     subLevel->enemies->saveToFile(saveFolder + "/enemies.txt");
     subLevel->changeSubLevelManager->saveToFile(saveFolder + "/changingPoints.txt");
+    subLevel->itemManager.saveToFile(saveFolder + "/items.txt");
     // Initialize instructor file
     ofstream outFile(saveFolder + "/InitializeInstructor.txt");
     if(outFile.is_open()) {
