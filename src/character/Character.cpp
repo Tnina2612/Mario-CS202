@@ -230,7 +230,7 @@ void Character::update() {
 
 void Character::draw() {
     if(!onAnimation) return;
-    mAnimation.draw({pos.x, pos.y - getRectangle().height});
+    mAnimation.draw({pos.x, pos.y - getRectangle().height * mAnimation.getScale()});
 }
 
 void Character::debug() {
@@ -296,7 +296,7 @@ Rectangle Character::getRectangle() const {
         width = 16;
         height = 31;
     }
-    return Rectangle{pos.x, pos.y - height * mAnimation.getScale(), /*frames[currentFrame].width * scale*/width * mAnimation.getScale(), height * mAnimation.getScale()};
+    return Rectangle{pos.x, pos.y - height, /*frames[currentFrame].width * scale*/width, height};
 }
 
 CharacterState Character::getCharacterState() const {
