@@ -7,6 +7,7 @@
 #include "../include/Block/SolidBlock.h"
 #include "../include/entities/Character.hpp"
 #include "../assets/images/Coordinate.h"
+#include <block/InvisibleBlock.h>
 #include <diy_functions/strsplit.h>
 
 Block::Block(Vector2 pos, const std::string &blockData)
@@ -100,7 +101,9 @@ std::shared_ptr<BlockState> Block::getBlockState(const std::string& blockData) {
         return std::make_shared<QuestionBlock>(*this);
     } else if(name.find("brick") != std::string::npos) {
         return std::make_shared<NormalBlock>(*this);
-    } 
+    } else if(name.find("invisible") != std::string::npos) {
+        return std::make_shared<InvisibleBlock>(*this);
+    }
     return std::make_shared<SolidBlock>(*this);
 }
 

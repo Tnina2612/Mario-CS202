@@ -37,4 +37,5 @@ class TileMap {
 
         float getWidth();
         float getHeight();
+        bool isCollidableTile(int i, int j);
 };

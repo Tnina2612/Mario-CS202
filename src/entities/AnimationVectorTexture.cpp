@@ -7,6 +7,10 @@ AnimationVectorTextureFlyweight::AnimationVectorTextureFlyweight() : textures(0)
 
 AnimationVectorTextureFlyweight::AnimationVectorTextureFlyweight(std::vector<std::string> filenames) {
     for(std::string& s : filenames) {
+        if(s.find("invisible") != std::string::npos) {
+            textures.push_back(Texture2D{0, 1, 1, 1, 0});
+            continue;
+        }
         textures.push_back(Texture(LoadTexture(s.c_str())));
         if(textures.back().id == 0) {
             __throw_runtime_error(("Cannot load texture: " + s).c_str());
@@ -16,7 +20,9 @@ AnimationVectorTextureFlyweight::AnimationVectorTextureFlyweight(std::vector<std
 
 void AnimationVectorTextureFlyweight::draw(float posX, float posY, float rotation, int id) {
     if(id < 0 || id >= textures.size()) __throw_runtime_error("ID is out of bound.");
-    DrawTextureEx(textures[id], Vector2{posX, posY}, rotation, 1.f, WHITE);
+    if(textures[id].id != 0) { 
+        DrawTextureEx(textures[id], Vector2{posX, posY}, rotation, 1.f, WHITE);
+    }
 }
 
 int AnimationVectorTextureFlyweight::getNumFrames() const {

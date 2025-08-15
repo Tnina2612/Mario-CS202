@@ -11,6 +11,9 @@ class Block
     friend class BlockState;
     friend class NormalBlock;
     friend class QuestionBlock;
+    friend class BreakBlock;
+    friend class SolidBlock;
+    friend class InvisibleBlock;
 private:
     std::shared_ptr<BlockState> currentState_;
     std::shared_ptr<BlockState> nextState_;

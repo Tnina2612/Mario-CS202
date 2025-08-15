@@ -60,7 +60,7 @@ void TileMap::updateBlocks() {
 }
 
 void TileMap::update(Character* player) {
-    if(player->getPos().y >= Global::ORIGINAL_HEIGHT + 64.0f) player->die();
+    // if(player->getPos().y >= Global::ORIGINAL_HEIGHT + 64.0f) player->die();
     
     const Rectangle& charRec = player->getRectangle();
     player->resetAttributes();
@@ -83,8 +83,17 @@ void TileMap::update(Character* player) {
 
     for(std::pair<int, int> pii : nearbyCells) {
         int i = pii.first, j = pii.second;
-        if(i < 0 || i >= height || j < 0 || j >= width ||
-            tiles[i][j] == nullptr) continue;
+        if(i < 0 || i >= height || j < 0 || j >= width || tiles[i][j] == nullptr || tiles[i][j]->getStateName() != "Invisible") {
+            continue;
+        }
+        if(CheckCollisionRecs(nextFrame, tiles[i][j]->getDrawRec()) && nextFrame.y >= tiles[i][j]->getDrawRec().y) {
+            tiles[i][j]->onHit(*player);
+        }
+    }
+
+    for(std::pair<int, int> pii : nearbyCells) {
+        int i = pii.first, j = pii.second;
+        if(isCollidableTile(i, j) == false) continue;
         const Rectangle& blockRec = tiles[i][j]->getDrawRec();
         if(CheckCollisionRecs(nextFrame, blockRec)) {
             if(nextFrame.y <= blockRec.y) {
@@ -104,8 +113,7 @@ void TileMap::update(Character* player) {
     nearbyCells = cellsToCheck(nextFrame);
     for(std::pair<int, int> pii : nearbyCells) {
         int i = pii.first, j = pii.second;
-        if(i < 0 || i >= height || j < 0 || j >= width ||
-            tiles[i][j] == nullptr || tiles[i][j]->getStateName() == "Break") continue;
+        if(isCollidableTile(i, j) == false) continue;
         const Rectangle& blockRec = tiles[i][j]->getDrawRec();
         if(CheckCollisionRecs(nextFrame, blockRec)) {
             if(nextFrame.x <= blockRec.x) {
@@ -165,8 +173,7 @@ void TileMap::update(std::shared_ptr<Enemy> enemy) {
     // checking collision on Oy 
     for(std::pair<int, int> pii : nearbyCells) {
         int i = pii.first, j = pii.second;
-        if(i < 0 || i >= height || j < 0 || j >= width ||
-            tiles[i][j] == nullptr) continue;
+        if(isCollidableTile(i, j) == false) continue;
         const Rectangle& blockRec = tiles[i][j]->getDrawRec();
 
         if(CheckCollisionRecs(nextFrame, blockRec)) 
@@ -197,8 +204,7 @@ void TileMap::update(std::shared_ptr<Enemy> enemy) {
 
     for(std::pair<int, int> pii : nearbyCells) {
         int i = pii.first, j = pii.second;
-        if(i < 0 || i >= height || j < 0 || j >= width ||
-            tiles[i][j] == nullptr) continue;
+        if(isCollidableTile(i, j) == false) continue;
 
         const Rectangle& blockRec = tiles[i][j]->getDrawRec();
 
@@ -230,8 +236,7 @@ void TileMap::update(std::shared_ptr<Item> item) {
     std::vector<std::pair<int, int>> nearbyCells = cellsToCheck(nextFrame);
     for(std::pair<int, int> pii : nearbyCells) {
         int i = pii.first, j = pii.second;
-        if(i < 0 || i >= height || j < 0 || j >= width ||
-            tiles[i][j] == nullptr) continue;
+        if(isCollidableTile(i, j) == false) continue;
         if(CheckCollisionRecs(nextFrame, tiles[i][j]->getDrawRec())) {
             if(nextFrame.y <= tiles[i][j]->getDrawRec().y) {
                 item->checkOnGround();
@@ -246,8 +251,7 @@ void TileMap::update(std::shared_ptr<Item> item) {
     bool changeDirection = false;
     for(std::pair<int, int> pii : nearbyCells) {
         int i = pii.first, j = pii.second;
-        if(i < 0 || i >= height || j < 0 || j >= width ||
-            tiles[i][j] == nullptr) continue;
+        if(isCollidableTile(i, j) == false) continue;
         if(CheckCollisionRecs(nextFrame, tiles[i][j]->getDrawRec())) {
             if(nextFrame.x <= tiles[i][j]->getDrawRec().x) {
                 if(movement.x > 0) {
@@ -333,6 +337,14 @@ float TileMap::getWidth() {
 
 float TileMap::getHeight() {
     return height;
+}
+
+bool TileMap::isCollidableTile(int i, int j) {
+    if(i < 0 || i >= height || j < 0 || j >= width || tiles[i][j] == nullptr) {
+        return false;
+    }
+    std::string stateName = tiles[i][j]->getStateName();
+    return stateName != "Invisible" && stateName != "Break";
 }
 
 bool TileMap::preventFalling(std::shared_ptr<Enemy> enemy, Vector2& movement) {

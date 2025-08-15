@@ -3,9 +3,9 @@ import imagehash
 import os
 
 tile_size = 16
-tiles_x = 164
+tiles_x = 206
 tiles_y = 15
-shift_x = 0
+shift_x = 112
 diff_threshold = 10  
 
 map_image = Image.open("MAP.png")
