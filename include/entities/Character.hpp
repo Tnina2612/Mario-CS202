@@ -62,6 +62,7 @@ protected:
     const float restVeclocity = 50.0f;
     float timeEffect;
     bool onAnimation;
+    bool isInvicinbleBlinking = false;
     
     bool isDebug = false;
     bool growthUp;
@@ -118,6 +119,7 @@ public:
     void handleEffect(float deltaTime = GetFrameTime());
     void handleFireballEffect(float deltaTime = GetFrameTime());
     vector<CharacterFireball*>& getFireballs();
+    void takeDamage();
     // bool getCollideUp()const;
     // bool getCollideDown()const;
     

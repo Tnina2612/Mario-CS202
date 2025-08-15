@@ -14,29 +14,18 @@ Character::Character() : mAnimation(CharacterSprite::Small::frames), state(nullp
         shrinkDown = false;
         isStarMan = false;
         isThrow = false;
-        effects.push_back(new ChangeStateEffect(0.5f, &growthUp));
-        effects.push_back(new ChangeStateEffect(0.5f, &shrinkDown));
-        effects.push_back(new ThrowEffect(0.1f, &isThrow));
-        effects.push_back(new StarManEffect(10.0f, &isStarMan));
+        effects.push_back(new Effect(0.5f, &growthUp));
+        effects.push_back(new Effect(0.5f, &shrinkDown));
+        effects.push_back(new Effect(0.1f, &isThrow));
+        effects.push_back(new Effect(10.0f, &isStarMan));
+        effects.push_back(new Effect(2.0f, &isInvicinbleBlinking));
     }
 
 Character::Character(const vector<Rectangle>& frames, const Texture2D& sprite)
-    : mAnimation(frames, sprite), state(nullptr), pos(CharacterVar::position), 
-    invincibilityTime(0.0f), score(0), veclocityX(0.0f), veclocityY(50.0f), orientation(RIGHT), characterState(SMALL),
-    isInvincible(false), isDead(false),behavior(IDLE), onGround(true), playerLevelAnimationManager(this) {
-        accelerationX = 0.0f;
-        accelerationY = 0.0f;
-        timeEffect = 0.0f;
-        onAnimation = true;
-        growthUp = false;
-        shrinkDown = false;
-        isStarMan = false;
-        isThrow = false;
-        effects.push_back(new ChangeStateEffect(1.0f, &growthUp));
-        effects.push_back(new ChangeStateEffect(1.0f, &shrinkDown));
-        effects.push_back(new ThrowEffect(0.1f, &isThrow));
-        effects.push_back(new StarManEffect(10.0f, &isStarMan));
-    }
+    : Character() {
+    mAnimation.setFrames(frames);
+    mAnimation.setSprite(sprite);
+}
 
 void Character::setState(IState* newState) {
     if(state) {
@@ -140,13 +129,26 @@ void Character::update() {
         bool doneAnimation;
         if(orientation == LEFT) doneAnimation = mAnimation.update({2, 1.5, 1, 1.5, 1}, 6, 0.1);
         else doneAnimation = mAnimation.update({2, 1.5, 1, 1.5, 1}, 13, 0.1);
-        if(doneAnimation) shrinkDown = false;
+        if(doneAnimation) {
+            isInvicinbleBlinking = true;
+            shrinkDown = false;
+            invincibilityTime = 2.0f; // Set invincibility time
+        }
         return;
     }
     if(isThrow) {
         if(orientation == LEFT) mAnimation.update(deltaTime, 18, 1);
         else mAnimation.update(deltaTime, 19, 1);
         return;
+    }
+    if(isInvicinbleBlinking) {
+        mAnimation.updateBlinking(deltaTime, onAnimation);
+    }
+    if(invincibilityTime > 0.0f) {
+        invincibilityTime -= deltaTime;
+        if(invincibilityTime <= 0.0f) {
+            isInvincible = false;
+        }
     }
     switch (behavior) {
         case MOVE:
@@ -229,7 +231,7 @@ void Character::update() {
 }
 
 void Character::draw() {
-    if(!onAnimation) return;
+    if(!onAnimation && isInvicinbleBlinking) return;
     mAnimation.draw({pos.x, pos.y - getRectangle().height * mAnimation.getScale()});
     for (auto& fireball : fireballs) {
         if(fireball && fireball->getOnScreen()) {
@@ -427,4 +429,16 @@ void Character::handleFireballEffect(float deltaTime) {
 
 vector<CharacterFireball*>& Character::getFireballs() {
     return fireballs;
+}
+
+void Character::takeDamage() {
+    if(isInvincible || isDead) return; // Ignore damage if invincible or dead
+    if(characterState == SMALL) {
+        die(); // If Mario is small, he dies
+        return;
+    }
+    shrinkDown = true; // Trigger shrink down effect
+    isInvincible = true; // Set invincibility
+    characterState = SMALL;
+    mAnimation.setFrames(CharacterSprite::Small::frames);
 }

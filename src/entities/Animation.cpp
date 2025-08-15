@@ -17,7 +17,6 @@ Animation::Animation(const vector<Rectangle>& frames, const Texture2D& sprite, f
 
 void Animation::setFrames(const vector<Rectangle>& newFrames) {
     frames = newFrames;
-    currentFrame = 0; // Reset to the first frame
 }
 
 void Animation::update(float deltaTime, int startFrame, int size) {
@@ -76,4 +75,10 @@ float Animation::getScale() const {
 
 void Animation::setSprite(const Texture2D& sprite) {
     this->sprite = sprite;
+}
+
+void Animation::updateBlinking(float deltaTime, bool& onAnimation) {
+    if(frameTime == defaultFrameTime) {
+        onAnimation = !onAnimation; // Toggle animation state
+    }
 }

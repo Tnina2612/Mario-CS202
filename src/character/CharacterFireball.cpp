@@ -17,7 +17,7 @@ CharacterFireball::CharacterFireball(Vector2 startPos, Orientation orientation) 
     _active = true;
     _onScreen = true;
     this->orientation = orientation;
-    bombEffect.addEffect(0.1f, &_onScreen);
+    bombEffect.addEffect(0.3f, &_onScreen);
     float velocityX = 300.0f;
     if(orientation == LEFT) {
         _velocity.x = -velocityX;
@@ -69,6 +69,7 @@ void CharacterFireball::setPosition(Vector2 pos) {
 void CharacterFireball::hitBlockHorizontal() {
     _active = false;
     _velocity = {0.0f, 0.0f};
+    m_animation.setFrames(EnemySprite::Fireball::CharacterFireballFrames);
 }
 
 void CharacterFireball::hitBlockVertical(bool isMoveDown) {
