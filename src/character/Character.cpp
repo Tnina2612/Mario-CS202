@@ -118,24 +118,22 @@ void Character::update() {
     debug();
     handleEffect();
     handleFireballEffect();
-    if(growthUp) {
-        bool doneAnimation;
-        if(orientation == LEFT) doneAnimation = mAnimation.update({0.5, 0.75, 1, 0.75, 1}, 6, 0.1);
-        else doneAnimation = mAnimation.update({0.5, 0.75, 1, 0.75, 1}, 13, 0.1);
-        if(doneAnimation) growthUp = false;
-        return;
-    }
-    if(shrinkDown) {
-        bool doneAnimation;
-        if(orientation == LEFT) doneAnimation = mAnimation.update({2, 1.5, 1, 1.5, 1}, 6, 0.1);
-        else doneAnimation = mAnimation.update({2, 1.5, 1, 1.5, 1}, 13, 0.1);
-        if(doneAnimation) {
-            isInvicinbleBlinking = true;
-            shrinkDown = false;
-            invincibilityTime = 2.0f; // Set invincibility time
-        }
-        return;
-    }
+    // if(growthUp) {
+    //     bool doneAnimation;
+    //     if(orientation == LEFT) doneAnimation = mAnimation.update({0.5, 0.75, 1, 0.75, 1}, 6, 0.1);
+    //     else doneAnimation = mAnimation.update({0.5, 0.75, 1, 0.75, 1}, 13, 0.1);
+    //     if(doneAnimation) growthUp = false;
+    //     return;
+    // }
+    // if(shrinkDown) {
+    //     bool doneAnimation;
+    //     if(orientation == LEFT) doneAnimation = mAnimation.update({2, 1.5, 1, 1.5, 1}, 6, 0.1);
+    //     else doneAnimation = mAnimation.update({2, 1.5, 1, 1.5, 1}, 13, 0.1);
+    //     if(doneAnimation) {
+    //         shrinkDown = false;
+    //     }
+    //     return;
+    // }
     if(isThrow) {
         if(orientation == LEFT) mAnimation.update(deltaTime, 18, 1);
         else mAnimation.update(deltaTime, 19, 1);
@@ -149,6 +147,7 @@ void Character::update() {
         if(invincibilityTime <= 0.0f) {
             isInvincible = false;
         }
+        cout << "Invincibility time left: " << invincibilityTime << endl;
     }
     switch (behavior) {
         case MOVE:

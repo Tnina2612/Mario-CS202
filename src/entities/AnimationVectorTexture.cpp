@@ -1,5 +1,6 @@
 #include<entities/Animation.hpp>
 #include<iostream>
+#include <stdexcept>
 
 AnimationVectorTextureFlyweight::AnimationVectorTextureFlyweight() : textures(0)
 {
@@ -13,13 +14,13 @@ AnimationVectorTextureFlyweight::AnimationVectorTextureFlyweight(std::vector<std
         }
         textures.push_back(Texture(LoadTexture(s.c_str())));
         if(textures.back().id == 0) {
-            __throw_runtime_error(("Cannot load texture: " + s).c_str());
+            throw runtime_error(("Cannot load texture: " + s).c_str());
         } 
     }
 }
 
 void AnimationVectorTextureFlyweight::draw(float posX, float posY, float rotation, int id) {
-    if(id < 0 || id >= textures.size()) __throw_runtime_error("ID is out of bound.");
+    if(id < 0 || id >= textures.size()) throw runtime_error("ID is out of bound.");
     if(textures[id].id != 0) { 
         DrawTextureEx(textures[id], Vector2{posX, posY}, rotation, 1.f, WHITE);
     }
