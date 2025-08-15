@@ -10,7 +10,7 @@
 #include <string>
 
 void MapSelectScene::init() {
-    background = new TileMap("world-maps/titleScene/titleScene.txt");
+    background = new TileMap("world-maps/titleScene/titleScene.txt", nullptr);
 
     renderTexture = LoadRenderTexture(Global::ORIGINAL_WIDTH, Global::ORIGINAL_HEIGHT);
     coin = LoadTexture("assets/images/title-scene/coin.png");
@@ -39,7 +39,7 @@ void MapSelectScene::handleInput() {
         curModeCol = ((curModeCol - 1) % 4 >= 0) ? (curModeCol - 1) % 4 : 3;
     }
 
-    Setting::getInstance().handleInput();
+    Setting::getInstance().handleInput(nullptr);
     BackButton::getInstance().handleInput();
 }
 

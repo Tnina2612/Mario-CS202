@@ -95,11 +95,12 @@ void ChangeSubLevelManager::saveToFile(std::string filename) const {
     out << list.size() << endl;
     for(const ChangeSubLevelPoint& point : list) {
         out << point.detectRec.x << " " << point.detectRec.y << " " 
-            << point.detectRec.width << " " << point.detectRec.height << endl;
-        out << point.key << endl;
+            << point.detectRec.width << " " << point.detectRec.height << " "
+            << point.key << endl;
         out << point.animations.size() << endl;
         for(auto animation : point.animations) {
             animation->saveToFile(out);
+            out << endl;
         }
         if(point.nextScene) {
             out << point.nextScene->filename << endl;

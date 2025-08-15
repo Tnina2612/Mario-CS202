@@ -254,6 +254,17 @@ void Character::setBehavior(Behavior newBehavior) {
     behavior = newBehavior;
 }
 
+void Character::powerUp() {
+    if(getCharacterState() == CharacterState::SMALL) {
+        characterState = CharacterState::SUPER;
+        mAnimation.setFrames(CharacterSprite::Super::frames);
+        growthUp = true;
+    } else if(getCharacterState() == CharacterState::SUPER) {
+        characterState = CharacterState::FIRE;
+        mAnimation.setFrames(CharacterSprite::Fire::frames);
+    }
+}
+
 Behavior Character::getBehavior() const {
     return behavior;
 }
@@ -343,7 +354,9 @@ void Character::die() {
     veclocityX = 0.0f;
     veclocityY = -jumpVeclocity; // Mario sẽ bật lên một chút khi chết (tùy chọn)
     onGround = false;
+
     Program::getInstance().getHUD().onNotify(EventType::MARIO_DIED);
+    MusicManager::getInstance().stopMusic();
     SoundManager::getInstance().playSound(SoundType::MARIO_DIE);
 }
 

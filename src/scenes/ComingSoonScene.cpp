@@ -7,7 +7,7 @@
 #include <scenes/MapSelectScene.hpp>
 
 void ComingSoonScene::init() {
-    background = new TileMap("world-maps/titleScene/titleScene.txt");
+    background = new TileMap("world-maps/titleScene/titleScene.txt", nullptr);
     renderTexture = LoadRenderTexture(Global::ORIGINAL_WIDTH, Global::ORIGINAL_HEIGHT);
 
     BeginTextureMode(renderTexture);
@@ -21,7 +21,7 @@ void ComingSoonScene::handleInput() {
         Program::getInstance().pushScene(new MapSelectScene());
     }
 
-    Setting::getInstance().handleInput();
+    Setting::getInstance().handleInput(nullptr);
     BackButton::getInstance().handleInput();
 }
 

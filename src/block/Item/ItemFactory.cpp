@@ -26,21 +26,21 @@ void SpawnItem::MushroomSpawner(std::vector<Item *> &items, Vector2 pos, StateMu
     items.push_back(new Mushroom(pos, state));
 }
 
-// void SpawnItem::ItemSpawn(const std::string &type_item, std::vector<Item *> &items, Vector2 pos, Character &character)
-// {
-//     if (type_item == "flower" || type_item == "super_mushroom")
-//     {
-//         if (player.get_form() == PlayerForm::Small)
-//             MushroomSpawner(items, pos, StateMushRoom::super_);
-//         else
-//             FlowerSpawner(items, pos);
-//     }
-//     if (type_item == "hidden_coin")
-//         HiddenCoinSpawner(items, pos, character);
-//     if (type_item == "one_up_mushroom")
-//         MushroomSpawner(items, pos, StateMushRoom::one_up);
-//     if (type_item == "posion_mushroom")
-//         MushroomSpawner(items, pos, StateMushRoom::posion_);
-//     if (type_item == "star")
-//         StarSpawner(items, pos);
-// }
+void SpawnItem::ItemSpawn(const std::string &type_item, std::vector<Item *> &items, Vector2 pos, Character &character)
+{
+    if (type_item == "flower" || type_item == "super_mushroom")
+    {
+        if (character.getCharacterState() == CharacterState::SMALL)
+            MushroomSpawner(items, pos, StateMushroom::super_);
+        else
+            FlowerSpawner(items, pos);
+    }
+    if (type_item == "hidden_coin")
+        HiddenCoinSpawner(items, pos, character);
+    if (type_item == "one_up_mushroom")
+        MushroomSpawner(items, pos, StateMushroom::one_up);
+    if (type_item == "posion_mushroom")
+        MushroomSpawner(items, pos, StateMushroom::posion_);
+    if (type_item == "star")
+        StarSpawner(items, pos);
+}

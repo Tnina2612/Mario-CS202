@@ -43,15 +43,15 @@ void QuestionBlock::update_()
     changeState();
 }
 
-void QuestionBlock::onHit(const std::vector<Item *> &item, Character &character)
+void QuestionBlock::onHit(Character &character)
 {
     if (m_block.getItemCount() > 0)
     {
-        m_block.decreaseItem();
-        // SpawnItem::ItemSpawn(m_block.getTypeItem(), item, m_block.getPos(), character);
+        m_block.appearItem(character);
         jiggle_ = true;
         velocity_y = -pushHeight; // Đẩy lên
-    } else {
+    } 
+    if(m_block.getItemCount() == 0) {
         changeState_ = true;
     }
 }

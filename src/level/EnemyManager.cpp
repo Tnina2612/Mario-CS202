@@ -25,7 +25,7 @@ EnemyManager::EnemyManager(std::string filename, SubLevel* subLevel) :
             for(int j = 0; j < numEnemies; j++) {
                 float x, y; 
                 inp >> x >> y;
-                list.push_back(EnemyFactory::createEnemy(enemyType, Vector2{x, y}));
+                list.push_back(EnemyFactory::createEnemy(enemyType, Vector2{x, y}, this));
                 list.back()->setActive(true);
             }
         } else {
@@ -35,39 +35,58 @@ EnemyManager::EnemyManager(std::string filename, SubLevel* subLevel) :
     inp.close();
 }
 
+void EnemyManager::addEnemy(std::shared_ptr<Enemy> enemy) {
+    spawnQueue.push(enemy);
+}
+
+Vector2 EnemyManager::getPlayerPos() const {
+    return subLevel->player->getPos();
+}
+
 void EnemyManager::update() {
-    for(auto& enemy : list){
+    // if(IsKeyPressed(KEY_SPACE)) {
+    //     oke = !oke;
+    // }
+    // if(!oke) {
+    //     return;
+    // }
+    for(auto& enemy : list) {
         // Check if the enemy is off-screen
         if(enemy->getPos().x < 0 || enemy->getPos().y - enemy->getHitBox().height > Global::ORIGINAL_HEIGHT) {
             continue;
         }
-
+        
         // Check if the enemy is alive and within the camera view
         if(enemy->getPos().x < subLevel->camera->target.x + Global::ORIGINAL_WIDTH / 2) {
-            enemy->update();
             subLevel->blocks->update(enemy);
+            enemy->update();
             for(auto& enemy2 : list) {
                 if(enemy != enemy2 && enemy->isAlive() && enemy2->isAlive() && CheckCollisionRecs(enemy->getHitBox(), enemy2->getHitBox())) {
-                    if(enemy->getPos().x < enemy2->getPos().x) {
-                        enemy->hitBlockRight();
-                        enemy2->hitBlockLeft();
-                    } else {
-                        enemy->hitBlockLeft();
-                        enemy2->hitBlockRight();
-                    }
+                    // if(enemy->getPos().x < enemy2->getPos().x) {
+                    //     enemy->hitBlockRight();
+                    //     enemy2->hitBlockLeft();
+                    // } else {
+                    //     enemy->hitBlockLeft();
+                    //     enemy2->hitBlockRight();
+                    // }
+                    enemy->onEnemyCollision(*enemy2);
+                    enemy2->onEnemyCollision(*enemy);
                 }
             }
         }
+        
 
         // Check for collisions with the player
         Rectangle pastPlayerRec = subLevel->playerManager.gameplayManager.pastPlayerRec;
         if(CheckCollisionRecs(enemy->getHitBox(), subLevel->player->getRectangle()) && enemy->isAlive()) {
             if(pastPlayerRec.y + pastPlayerRec.height < enemy->getHitBox().y && 
                 enemy->getTypeName().find("Plant") == std::string::npos) {
-                enemy->onStomp();
+                enemy->hitUp();
                 subLevel->player->setVeclocityY(-100);
                 Program::getInstance().getHUD().onNotify(EventType::ADDSCORE);
             } else {
+                int dir = enemy->getPos().x < subLevel->player->getPos().x ? 1 : -1;
+                enemy->hitVertical(dir);
                 subLevel->player->die();
                 // if(subLevel->player->getNumLives() > 0) {
                 //     Program::getInstance().pushScene(new DeathScene());
@@ -75,16 +94,14 @@ void EnemyManager::update() {
                 //     cout << "Game Over! You have no lives left." << endl;
                 //     Program::getInstance().pushScene(new GameOverScene());
                 // }
-                Program::getInstance().pushScene(new DeathScene());
-                if (Program::getInstance().getSession().LIVES == 0) {
-                    Program::getInstance().pushScene(new GameOverScene());
-                    Program::getInstance().getHUD().onNotify(EventType::RESET_TIMER);
-                    Program::getInstance().getHUD().onNotify(EventType::RESET_LIVES);
-                    Program::getInstance().getHUD().onNotify(EventType::RESET_SCORES);
-                }
-                Program::getInstance().getHUD().onNotify(EventType::RESET_TIMER);
             }
         }
+    }
+
+    while(!spawnQueue.empty()) {
+        auto enemy = spawnQueue.front();
+        spawnQueue.pop();
+        list.push_back(enemy);
     }
 }
 

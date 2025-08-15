@@ -1,6 +1,7 @@
 #include "core/Variables.hpp"
 #include "core/Program.hpp"
 #include "core/Setting.hpp"
+#include "core/InputField.hpp"
 #include "scenes/SettingScene.hpp"
 #include "scenes/TitleScene.hpp"
 #include "scenes/PlayScene.hpp"
@@ -9,6 +10,10 @@
 #include "raylib.h"
 #include "raymath.h"
 
+SettingScene::SettingScene(Level* level) : level(level) {
+
+}
+
 void SettingScene::init() {
     sliderX_Sound = 512.0f;
     sliderY_Sound = 575.0f;
@@ -16,10 +21,12 @@ void SettingScene::init() {
     sliderX_Music = 512.0f;
     sliderY_Music = 725.0f;
     sliderValue_Music = 0.5f;
+    isReleaseSound = true;
+    isReleaseMusic = true;
 }
 
 void SettingScene::handleInput() {
-    Setting::getInstance().handleInput();
+    Setting::getInstance().handleInput(level);
 
     Vector2 mouse = GetMousePosition();
     Vector2 textSize1 = MeasureTextEx(Program::getInstance().getFont(), "SAVE GAME", 34.0f, 1.0f);
@@ -32,11 +39,44 @@ void SettingScene::handleInput() {
     if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
         if (CheckCollisionPointRec(mouse, {x1, 250, textSize1.x, textSize1.y})) {
             // Handle SAVE GAME click
+            if (level != nullptr && !InputField::currentSessionName.empty()) {
+                level->saveGame(InputField::currentSessionName);
+            }
         } else if (CheckCollisionPointRec(mouse, {x2, 330, textSize2.x, textSize2.y})) {
             // Handle RESTART click
         } else if (CheckCollisionPointRec(mouse, {x3, 410, textSize3.x, textSize3.y})) {
             Program::getInstance().pushScene(new TitleScene());
         }
+    }
+
+    if (!IsMouseButtonDown(MOUSE_LEFT_BUTTON)) {
+        isReleaseSound = isReleaseMusic = true;
+    }
+
+    if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) 
+        && CheckCollisionPointCircle(mouse, {sliderX_Sound, sliderY_Sound}, 13)) {
+        isReleaseSound = false;
+    }
+
+    if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) 
+        && CheckCollisionPointCircle(mouse, {sliderX_Music, sliderY_Music}, 13)) {
+        isReleaseMusic = false;
+    }
+
+    sliderX_Sound = 362.0f + sliderValue_Sound * 300;
+    if (IsMouseButtonDown(MOUSE_LEFT_BUTTON) && !isReleaseSound) {
+        float mouseX = Clamp(mouse.x, 362, 362 + 300);
+        sliderValue_Sound = (mouseX - 362) / 300;
+        
+        SoundManager::getInstance().setMasterVolume(sliderValue_Sound);
+    }
+
+    sliderX_Music = 362.0f + sliderValue_Music * 300;
+    if (IsMouseButtonDown(MOUSE_LEFT_BUTTON) && !isReleaseMusic) {
+        float mouseX = Clamp(mouse.x, 362, 362 + 300);
+        sliderValue_Music = (mouseX - 362) / 300;
+        
+        MusicManager::getInstance().setMusicVolume(sliderValue_Music);
     }
 }
 
@@ -61,9 +101,13 @@ void SettingScene::render() {
     float x4 = (Global::WINDOW_WIDTH - textSize4.x) / 2.0f;
     float x5 = (Global::WINDOW_WIDTH - textSize5.x) / 2.0f;
 
-    DrawTextEx(font, "SAVE GAME", {x1, 250}, 34.0f, 1.0f, WHITE);
-    DrawTextEx(font, "RESTART", {x2, 330}, 34.0f, 1.0f, WHITE);
-    DrawTextEx(font, "MAIN MENU", {x3, 410}, 34.0f, 1.0f, WHITE);
+    Color color1 = CheckCollisionPointRec(mouse, {x1, 250, textSize1.x, textSize1.y}) ? Color{151, 77, 4, 255} : WHITE;
+    Color color2 = CheckCollisionPointRec(mouse, {x2, 330, textSize2.x, textSize2.y}) ? Color{151, 77, 4, 255} : WHITE;
+    Color color3 = CheckCollisionPointRec(mouse, {x3, 410, textSize3.x, textSize3.y}) ? Color{151, 77, 4, 255} : WHITE;
+
+    DrawTextEx(font, "SAVE GAME", {x1, 250}, 34.0f, 1.0f, color1);
+    DrawTextEx(font, "RESTART", {x2, 330}, 34.0f, 1.0f, color2);
+    DrawTextEx(font, "MAIN MENU", {x3, 410}, 34.0f, 1.0f, color3);
 
     DrawTextEx(font, "SOUND VOLUME", {x4, 490}, 34.0f, 1.0f, WHITE);
     DrawRectangleRounded({362, 570, 300, 10}, 1.0f, 10, WHITE);
@@ -75,15 +119,6 @@ void SettingScene::render() {
     DrawCircleLines(sliderX_Sound, sliderY_Sound, 18, BLACK);
     DrawCircleLines(sliderX_Sound, sliderY_Sound, 19, BLACK);
 
-    sliderX_Sound = 362.0f + sliderValue_Sound * 300;
-    if (IsMouseButtonDown(MOUSE_LEFT_BUTTON) 
-        && CheckCollisionPointCircle(mouse, {sliderX_Sound, sliderY_Sound}, 13)) {
-        float mouseX = Clamp(mouse.x, 362, 362 + 300);
-        sliderValue_Sound = (mouseX - 362) / 300;
-        
-        SoundManager::getInstance().setMasterVolume(sliderValue_Sound);
-    }
-
     DrawTextEx(font, "MUSIC VOLUME", {x5, 640}, 34.0f, 1.0f, WHITE);
     DrawRectangleRounded({362, 720, 300, 10}, 1.0f, 10, WHITE);
     DrawCircle(sliderX_Music, sliderY_Music, 13, WHITE);
@@ -93,15 +128,6 @@ void SettingScene::render() {
     DrawCircleLines(sliderX_Music, sliderY_Music, 17, BLACK);
     DrawCircleLines(sliderX_Music, sliderY_Music, 18, BLACK);
     DrawCircleLines(sliderX_Music, sliderY_Music, 19, BLACK);
-
-    sliderX_Music = 362.0f + sliderValue_Music * 300;
-    if (IsMouseButtonDown(MOUSE_LEFT_BUTTON) 
-        && CheckCollisionPointCircle(mouse, {sliderX_Music, sliderY_Music}, 13)) {
-        float mouseX = Clamp(mouse.x, 362, 362 + 300);
-        sliderValue_Music = (mouseX - 362) / 300;
-        
-        MusicManager::getInstance().setMusicVolume(sliderValue_Music);
-    }
 
     Setting::getInstance().draw();
 }

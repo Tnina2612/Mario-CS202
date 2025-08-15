@@ -16,9 +16,14 @@ class SubLevel;
 
 class EnemyManager {
     std::vector<std::shared_ptr<Enemy>> list;
+    std::queue<std::shared_ptr<Enemy>> spawnQueue;
     SubLevel* subLevel;
+
+    void processSpawnQueue();
 public:
     EnemyManager(std::string filename, SubLevel* subLevel);
+    void addEnemy(std::shared_ptr<Enemy> enemy);
+    Vector2 getPlayerPos() const;
     void update();
     void draw() const;
     void saveToFile(std::string filename);
@@ -86,12 +91,26 @@ class LevelPlayerManager {
         void addAnimation(unique_ptr<LevelPlayerAnimationManager> nextSceneManager);
 };
 
+class ItemManager {
+    private:
+        SubLevel* subLevel;
+        std::vector<std::shared_ptr<Item>> items;
+    public:
+        ItemManager(std::string filename, SubLevel* subLevel);
+        void draw(void);
+        void update();
+        void addItem(std::shared_ptr<Item> item);
+        void saveToFile(std::string filename);
+};
+
 class SubLevel {
         friend class Level;
         friend class EnemyManager;
         friend class ChangeSubLevelManager;
         friend class LevelGameplayManager;
         friend class LevelPlayerAnimationManager;
+        friend class TileMap;
+        friend class ItemManager;
         Level* level;
         Character* player;
         std::shared_ptr<TileMap> background;
@@ -99,6 +118,7 @@ class SubLevel {
         std::shared_ptr<EnemyManager> enemies;
         std::shared_ptr<ChangeSubLevelManager> changeSubLevelManager;
         LevelPlayerManager playerManager;
+        ItemManager itemManager;
         Camera2D* camera;
         std::string folderName;
         Vector2 initPlayerPosition;
@@ -130,4 +150,5 @@ class Level {
         void saveGame(std::string folderName);
         static vector<std::pair<std::string, std::string>> getSavedLevels();
         ~Level();
+        std::shared_ptr<Character> getPlayer();
 };

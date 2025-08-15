@@ -11,6 +11,7 @@ public:
     Podoboo(const std::string& name);
     Podoboo(const std::string& name, Vector2 pos);
 
+    bool physics() override;
     void onEnemyCollision(Enemy& enemy) override;
     void update(float dt) override;
 };

@@ -11,7 +11,7 @@ private:
     TileMap* background;
     Texture2D coin;
     Texture2D cursor;
-    float initialPos = 170;
+    float initialPos = 200.0f;
     int curRow = 0;
 
     std::vector<std::pair<std::string, std::string>> playerList;

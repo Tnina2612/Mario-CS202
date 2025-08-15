@@ -6,13 +6,14 @@
 
 SubLevel::SubLevel(Level* level, std::string folderName, Character* player, Vector2 initPlayerPosition, InputManager& inputManager, Camera2D* camera) : // Initializer
     level(level),
-    background(make_shared<TileMap>(folderName + "/background.txt")), 
-    blocks(make_shared<TileMap>(folderName + "/blocks.txt")),
+    background(make_shared<TileMap>(folderName + "/background.txt", this)), 
+    blocks(make_shared<TileMap>(folderName + "/blocks.txt", this)),
     enemies(make_shared<EnemyManager>(folderName + "/enemies.txt", this)),
     changeSubLevelManager(make_shared<ChangeSubLevelManager>(folderName + "/changingPoints.txt", this)),
     player(player), 
     initPlayerPosition(initPlayerPosition),
     playerManager(this, inputManager),
+    itemManager(folderName + "/items.txt", this),
     camera(camera),
     folderName(folderName)
 {
@@ -23,6 +24,7 @@ void SubLevel::draw() {
     ClearBackground(LevelVar::BackGroundColor);
     background->draw();
     enemies->draw();
+    itemManager.draw();
     player->draw();
     blocks->draw();
 
@@ -34,9 +36,10 @@ void SubLevel::draw() {
 
 void SubLevel::update() {
     background->updateBlocks();
-    blocks->updateBlocks();
-    playerManager.update();
     enemies->update();
+    itemManager.update();
+    playerManager.update();
+    blocks->updateBlocks();
 
     // Debug
     if(IsKeyPressed(KEY_Q)) {
@@ -143,12 +146,13 @@ void Level::saveGame(std::string folderName) {
     // Create save folder
     std::string saveFolder = "./savedMaps/" + folderName;
     if(!std::filesystem::exists(saveFolder)) {
-        std::filesystem::create_directory(saveFolder);
+        std::filesystem::create_directories(saveFolder);
     }
     subLevel->background->saveToFile(saveFolder + "/background.txt");
     subLevel->blocks->saveToFile(saveFolder + "/blocks.txt");
     subLevel->enemies->saveToFile(saveFolder + "/enemies.txt");
     subLevel->changeSubLevelManager->saveToFile(saveFolder + "/changingPoints.txt");
+    subLevel->itemManager.saveToFile(saveFolder + "/items.txt");
     // Initialize instructor file
     ofstream outFile(saveFolder + "/InitializeInstructor.txt");
     if(outFile.is_open()) {
@@ -174,4 +178,8 @@ vector<std::pair<std::string, std::string>> Level::getSavedLevels() {
 
 Level::~Level() {
     UnloadRenderTexture(renderTexture);
+}
+
+std::shared_ptr<Character> Level::getPlayer() {
+    return player;
 }

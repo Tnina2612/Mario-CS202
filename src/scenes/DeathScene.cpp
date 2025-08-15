@@ -16,12 +16,12 @@ void DeathScene::init() {
     coin = LoadTexture("assets/images/title-scene/coin.png");
 
     waitTimer = 0.0f;
-    waitDuration = 4.0f;
+    waitDuration = 3.0f;
 }
 
 void DeathScene::handleInput() {
     if (IsKeyPressed(KEY_ENTER)) {
-        Program::getInstance().pushScene(new PlayScene("1-1"));
+        Program::getInstance().pushScene(new PlayScene("./world-maps/1-1"));
     }
 }
 
@@ -30,7 +30,7 @@ void DeathScene::update() {
     
     // Automatically transition after 3 seconds
     if (waitTimer >= waitDuration) {
-        Program::getInstance().pushScene(new PlayScene("1-1"));
+        Program::getInstance().pushScene(new PlayScene("./world-maps/1-1"));
     }
 }
 

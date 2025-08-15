@@ -120,3 +120,11 @@ bool Star::canMove() const
 {
     return true;
 }
+
+std::string Star::getType() const {
+    return "star";
+}
+
+Vector2 Star::getVelocity() const {
+    return velocity_;
+}

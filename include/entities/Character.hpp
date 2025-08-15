@@ -48,7 +48,7 @@ protected:
     Orientation orientation;
     CharacterState characterState;
     const float gravity = 1000; //3900.0f;
-    const float maxVeclocityX = 100; //300.f;
+    const float maxVeclocityX = 90; //300.f;
     Behavior behavior;
     bool isInvincible;
     bool isDead;
@@ -90,6 +90,7 @@ public:
     void draw();
     void debug();
     void setBehavior(Behavior newBehavior);
+    void powerUp();
     Behavior getBehavior()const;
     void setOrientation(Orientation newOrientation);
     Orientation getOrientation() const;
@@ -127,4 +128,5 @@ public:
 
 
     Vector2 getPos() const;
+    bool getIsDead() const;
 };
