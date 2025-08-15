@@ -97,6 +97,14 @@ void Koopa::changeDirection() {
     // }
 }
 
+bool Koopa::beHitByFireball() {
+    if(!Enemy::beHitByFireball()) {
+        return false;
+    }
+    setState(std::make_unique<ShellKoopa>());
+    m_data._hp--;
+    return true;
+}
 
 bool Koopa::setInShell(bool inShell) {
     _inShell = inShell;
@@ -138,7 +146,6 @@ void NormalKoopa::changeFrames(Koopa& koopa) {
 }
 
 void NormalKoopa::onEnemyCollision(Koopa& koopa, Enemy& other) {
-    std::cerr << "NORMAL " << std::endl;
     int oldDir = koopa.getDirection();
 
     koopa.changeDirection();
@@ -153,7 +160,6 @@ void NormalKoopa::onEnemyCollision(Koopa& koopa, Enemy& other) {
 }
 
 void NormalKoopa::enter(Koopa& koopa) {
-    std::cerr << "ENTER: NORMAL" << std::endl;
     auto f = koopa.getFrames("RWalk")[0];
     koopa.setEnemyData(EnemyData (  f.width, f.height, 1000.f, 
                                     false, true, true, false, 1, 
@@ -257,7 +263,6 @@ void WingedKoopa::handleStomp(Koopa& koopa) {
 }
 
 void WingedKoopa::onEnemyCollision(Koopa& koopa, Enemy& other) {
-    std::cerr << "WINGED " << std::endl;
     int oldDir = koopa.getDirection();
 
     koopa.changeDirection();

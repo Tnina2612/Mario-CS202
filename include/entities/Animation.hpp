@@ -22,6 +22,7 @@ public:
         return currentFrame;
     }
     void setFrames(const vector<Rectangle>& newFrames);
+    void resetCurrentFrame();
     void update(float deltaTime, int startFrame = 0, int size = -1);
     bool update(const vector<float>& scales, int currentFrame, float scaleTime = 0.2, float deltaTime = GetFrameTime());
     void draw(Vector2 position) const;

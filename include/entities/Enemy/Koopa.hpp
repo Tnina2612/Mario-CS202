@@ -43,7 +43,7 @@ public:
     void changeDirection() override;
     bool onStomp() override;
     bool setInShell(bool inShell);
-    //bool beHitByFireball() override;
+    bool beHitByFireball() override;
     bool physics() override;
 
     void onEnemyCollision(Enemy& enemy) override;

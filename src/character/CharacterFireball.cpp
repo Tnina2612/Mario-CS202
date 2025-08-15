@@ -70,6 +70,7 @@ void CharacterFireball::hitBlockHorizontal() {
     _active = false;
     _velocity = {0.0f, 0.0f};
     m_animation.setFrames(EnemySprite::Fireball::CharacterFireballFrames);
+    m_animation.resetCurrentFrame();
 }
 
 void CharacterFireball::hitBlockVertical(bool isMoveDown) {
