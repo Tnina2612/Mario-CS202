@@ -8,7 +8,7 @@
 #include"EnemyType.hpp"
 #include"EnemyData.hpp"
 #include"IEnemyStrategy.hpp"
-#include"../../include/entities/Animation.hpp"
+#include<entities/Animation.hpp>
 
 class Enemy {
 protected:

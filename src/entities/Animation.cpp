@@ -20,6 +20,20 @@ void Animation::resetCurrentFrame() {
 }
 
 void Animation::setFrames(const vector<Rectangle>& newFrames) {
+    // check if newFrames is different from current frames
+    bool different = false;
+    if(frames.size() != newFrames.size()) different = true;
+    else {
+        for (int i = 0; i < frames.size(); ++i) {
+            if (frames[i].x != newFrames[i].x || frames[i].y != newFrames[i].y ||
+                frames[i].width != newFrames[i].width || frames[i].height != newFrames[i].height) {
+                different = true;
+                break;
+            }
+        }
+    }
+    if(!different) return; // No change, do nothing
+    currentFrame = 0; // Reset current frame
     frames = newFrames;
 }
 

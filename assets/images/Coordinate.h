@@ -49,6 +49,19 @@ namespace CharacterSprite {
             Right::Climb1,
             Right::Climb2
         };
+        const unordered_map<string, vector<Rectangle>> allFrames = {
+            {"LIdle", {Left::Idle}},
+            {"LJump", {Left::Jump}},
+            {"LBrake", {Left::Brake}},
+            {"LRun", {Left::Run1, Left::Run2, Left::Run3}},
+            {"RIdle", {Right::Idle}},
+            {"RJump", {Right::Jump}},
+            {"RBrake", {Right::Brake}},
+            {"RRun", {Right::Run1, Right::Run2, Right::Run3}},
+            {"LClimb", {Left::Climb1, Left::Climb2}},
+            {"RClimb", {Right::Climb1, Right::Climb2}},
+            {"Duck", {Duck}},
+        };
     };
     namespace Super {
         namespace Left {
@@ -92,6 +105,21 @@ namespace CharacterSprite {
             Left::Climb2,
             Right::Climb1,
             Right::Climb2
+        };
+        const unordered_map<string, vector<Rectangle>> allFrames = {
+            {"LIdle", {Left::Idle}},
+            {"LJump", {Left::Jump}},
+            {"LBrake", {Left::Brake}},
+            {"LRun", {Left::Run1, Left::Run2, Left::Run3}},
+            {"RIdle", {Right::Idle}},
+            {"RJump", {Right::Jump}},
+            {"RBrake", {Right::Brake}},
+            {"RRun", {Right::Run1, Right::Run2, Right::Run3}},
+            {"LClimb", {Left::Climb1, Left::Climb2}},
+            {"RClimb", {Right::Climb1, Right::Climb2}},
+            {"Duck", {Left::Duck, Right::Duck}},
+            {"LDuck", {Left::Duck}},
+            {"RDuck", {Right::Duck}}
         };
     };
     namespace Fire {
@@ -140,6 +168,22 @@ namespace CharacterSprite {
             Right::Climb2, //17
             Left::Throw, //18
             Right::Throw //19
+        };
+        const unordered_map<string, vector<Rectangle>> allFrames = {
+            {"LIdle", {Left::Idle}},
+            {"LJump", {Left::Jump}},
+            {"LBrake", {Left::Brake}},
+            {"LRun", {Left::Run1, Left::Run2, Left::Run3}},
+            {"RIdle", {Right::Idle}},
+            {"RJump", {Right::Jump}},
+            {"RBrake", {Right::Brake}},
+            {"RRun", {Right::Run1, Right::Run2, Right::Run3}},
+            {"LClimb", {Left::Climb1, Left::Climb2}},
+            {"RClimb", {Right::Climb1, Right::Climb2}},
+            {"LDuck", {Left::Duck}},
+            {"RDuck", {Right::Duck}},
+            {"LThrow", {Left::Throw}},
+            {"RThrow", {Right::Throw}}
         };
         namespace FireballSprite {
         const std::unordered_map<std::string, std::vector<Rectangle>> Frames = {

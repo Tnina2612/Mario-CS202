@@ -78,7 +78,7 @@ protected:
 
 public:
     PlayerLevelAnimationManager playerLevelAnimationManager;
-
+    unordered_map<std::string, std::vector<Rectangle>> allFrames;
     Character();
     Character(const vector<Rectangle>& frames, const Texture2D& sprite);
     void setState(IState* state);
@@ -91,7 +91,6 @@ public:
     void setVelocityX(float velocity);
     void setVeclocityY(float velocity);
     float getJumpVelocity() const;
-
     void resetAttributes();
     void update();
     void draw();

@@ -14,6 +14,7 @@ Character::Character() : mAnimation(CharacterSprite::Small::frames), state(nullp
         shrinkDown = false;
         isStarMan = false;
         isThrow = false;
+        allFrames = CharacterSprite::Small::allFrames;
         effects.push_back(new Effect(0.5f, &growthUp));
         effects.push_back(new Effect(0.5f, &shrinkDown));
         effects.push_back(new Effect(0.1f, &isThrow));
@@ -135,8 +136,13 @@ void Character::update() {
     //     return;
     // }
     if(isThrow) {
-        if(orientation == LEFT) mAnimation.update(deltaTime, 18, 1);
-        else mAnimation.update(deltaTime, 19, 1);
+        if(orientation == LEFT) {
+            mAnimation.setFrames(allFrames["LThrow"]);
+        }
+        else {
+            mAnimation.setFrames(allFrames["RThrow"]);
+        }
+        mAnimation.update(deltaTime);
         return;
     }
     if(isInvicinbleBlinking) {
@@ -153,47 +159,47 @@ void Character::update() {
         case MOVE:
             if (orientation == RIGHT) {
                 moveRight();
-                mAnimation.update(deltaTime, 10, 3);
+                mAnimation.setFrames(allFrames["RRun"]);
             } 
             else if (orientation == LEFT) {
                 moveLeft();
-                mAnimation.update(deltaTime, 3, 3);
+                mAnimation.setFrames(allFrames["LRun"]);
             }
             break;
         case JUMP:
             jump();
             if (orientation == RIGHT) {
-                mAnimation.update(deltaTime, 8, 1);
+                mAnimation.setFrames(allFrames["RJump"]);
             } 
             else if (orientation == LEFT) {
-                mAnimation.update(deltaTime, 1, 1);
+                mAnimation.setFrames(allFrames["LJump"]);
             }
             break;
         case DUCK:
             if (orientation == LEFT) {
-                mAnimation.update(deltaTime, 0, 1);
+                mAnimation.setFrames(allFrames["LDuck"]);
             } 
             else if (orientation == RIGHT) {
-                mAnimation.update(deltaTime, 7, 1);
+                mAnimation.setFrames(allFrames["RDuck"]);
             }           
             break;
         case IDLE:
             accelerationX = 0.0f; // Reset acceleration when idle
             if (orientation == LEFT) {
-                mAnimation.update(deltaTime, 6, 1);
+                mAnimation.setFrames(allFrames["LIdle"]);
             } 
             else if (orientation == RIGHT) {
-                mAnimation.update(deltaTime, 13, 1);
+                mAnimation.setFrames(allFrames["RIdle"]);
             }
             break;
         case BRAKE:
             if (orientation == RIGHT) {
                 brakeRight();
-                mAnimation.update(deltaTime, 9, 1);
+                mAnimation.setFrames(allFrames["RBrake"]);
             } 
             else if (orientation == LEFT) {
                 brakeLeft();
-                mAnimation.update(deltaTime, 2, 1);
+                mAnimation.setFrames(allFrames["LBrake"]);
             }
             break;
         case THROW:
@@ -203,30 +209,21 @@ void Character::update() {
             veclocityX = 0.0f;
             // Nếu muốn Mario rơi xuống khi chết:
             characterState = SMALL;
-            mAnimation.update(GetFrameTime(), 0, 1);
+            mAnimation.setFrames(allFrames["Duck"]);
             // Có thể thêm điều kiện để reset game hoặc respawn ở đây
             break;
         case CLIMB:
             if(orientation == LEFT) {
-                mAnimation.update(GetFrameTime(), 14, 2);
+                mAnimation.setFrames(allFrames["LClimb"]);
             }
             else {
-                mAnimation.update(GetFrameTime(), 16, 2);
+                mAnimation.setFrames(allFrames["RClimb"]);
             }
             break;
         default:
             break;
     }
-    // veclocityX += accelerationX * GetFrameTime(); // Update horizontal velocity with acceleration
-    // if(!onGround) veclocityY += gravity * GetFrameTime(); // Apply gravity if not on ground
-    // cout << "Before addition: " << pos.x << ", " << pos.y << '\n';
-    // cout << "Velocity, acceleration: " << veclocityX << ' ' << accelerationX << '\n';
-    // pos.x = pos.x + veclocityX * GetFrameTime();
-    // pos.y = pos.y + veclocityY * GetFrameTime();
-    // cout << "After addition: " << pos.x << ", " << pos.y << '\n';
-    // cout << "on ground" << onGround << endl;
-    // cout << "veclocity X: " << veclocityX <<  endl;
-    // cout << "is Brake: " << (behavior == BRAKE) << endl;
+    mAnimation.update(deltaTime);
 }
 
 void Character::draw() {
@@ -243,14 +240,14 @@ void Character::debug() {
     if(IsKeyPressed(KEY_W)) {
         if(getCharacterState() == CharacterState::SMALL) {
             characterState = CharacterState::SUPER;
-            mAnimation.setFrames(CharacterSprite::Super::frames);
+            allFrames = CharacterSprite::Super::allFrames;
             growthUp = true;
         } else if(getCharacterState() == CharacterState::SUPER) {
             characterState = CharacterState::FIRE;
-            mAnimation.setFrames(CharacterSprite::Fire::frames);
+            allFrames = CharacterSprite::Fire::allFrames;
         } else if(getCharacterState() == CharacterState::FIRE) {
             characterState = CharacterState::SMALL;
-            mAnimation.setFrames(CharacterSprite::Small::frames);
+            allFrames = CharacterSprite::Small::allFrames;
             shrinkDown = true;
         }
     }
@@ -263,11 +260,11 @@ void Character::setBehavior(Behavior newBehavior) {
 void Character::powerUp() {
     if(getCharacterState() == CharacterState::SMALL) {
         characterState = CharacterState::SUPER;
-        mAnimation.setFrames(CharacterSprite::Super::frames);
+        allFrames = CharacterSprite::Super::allFrames;
         growthUp = true;
     } else if(getCharacterState() == CharacterState::SUPER) {
         characterState = CharacterState::FIRE;
-        mAnimation.setFrames(CharacterSprite::Fire::frames);
+        allFrames = CharacterSprite::Fire::allFrames;
     }
 }
 
@@ -318,6 +315,7 @@ void Character::setVeclocityY(float velocity) {
 float Character::getJumpVelocity() const {
     return jumpVeclocity;
 }
+
 
 Rectangle Character::getRectangle() const {
     float width, height;
@@ -455,5 +453,5 @@ void Character::takeDamage() {
     shrinkDown = true; // Trigger shrink down effect
     isInvincible = true; // Set invincibility
     characterState = SMALL;
-    mAnimation.setFrames(CharacterSprite::Small::frames);
+    allFrames = CharacterSprite::Small::allFrames; // Reset to small frames
 }
