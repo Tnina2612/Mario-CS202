@@ -3,6 +3,7 @@
 #include "scenes/GameOverScene.hpp"
 #include "scenes/TimeUpScene.hpp"
 #include <filesystem>
+#include <diy_functions/read.h>
 
 SubLevel::SubLevel(Level* level, std::string folderName, Character* player, Vector2 initPlayerPosition, InputManager& inputManager, Camera2D* camera) : // Initializer
     level(level),
@@ -71,15 +72,21 @@ Level::Level(std::string folderName) :
     inputManager.addListener(new LeftShiftListener());
 
     // Level configurations
-    LevelVar::ThemeID = LevelVar::Overworld;
-    ifstream inp(folderName + "/InitializeInstructor.txt");
+    folderName += "/InitializeInstructor.txt";
+    ifstream inp(folderName);
     if(inp.is_open() == false) {
-        throw runtime_error("Cannot open " + folderName + "/InitializeInstructor.txt");
+        throw runtime_error("Cannot open " + folderName);
     }
         std::string initialWorld;
-        getline(inp, initialWorld);
+        readFromFile(inp, folderName, initialWorld);
+
+        std::string theme;
+        readFromFile(inp, folderName, theme);
+        switchTheme(theme);
+
         float x, y;
-        inp >> x >> y;
+        readFromFile(inp, folderName, x, y);
+
         player->setPosition(x, y);
         subLevel = make_shared<SubLevel>(this, initialWorld, player.get(), Vector2{x, y}, inputManager, &camera);
         nextSubLevel.reset();
@@ -136,13 +143,7 @@ void Level::update(void) {
 }
 
 void Level::changeSubLevel(NextSubLevelScene nextScene) {
-    if(nextScene.worldType == "overworld") {
-        LevelVar::ThemeID = LevelVar::Overworld;
-        LevelVar::BackGroundColor = LevelVar::SkyColor;
-    } else if(nextScene.worldType == "underground") {
-        LevelVar::ThemeID = LevelVar::Underground;
-        LevelVar::BackGroundColor = LevelVar::UndergroundColor;
-    }
+    switchTheme(nextScene.worldType);
     nextSubLevel = make_shared<SubLevel>(this, nextScene.filename, player.get(), nextScene.newPlayerPosition, inputManager, &camera);
 }
 
@@ -158,9 +159,10 @@ void Level::saveGame(std::string folderName) {
     subLevel->changeSubLevelManager->saveToFile(saveFolder + "/changingPoints.txt");
     subLevel->itemManager.saveToFile(saveFolder + "/items.txt");
     // Initialize instructor file
-    ofstream outFile(saveFolder + "/InitializeInstructor.txt");
+    std::string saveFile = saveFolder + "/InitializeInstructor.txt"; 
+    ofstream outFile(saveFile);
     if(outFile.is_open()) {
-        outFile << saveFolder << endl;
+        outFile << getCurrentTheme() << endl;
         outFile << player->getPos().x << " " << player->getPos().y << endl;
         outFile.close();
     } else {
@@ -178,6 +180,29 @@ vector<std::pair<std::string, std::string>> Level::getSavedLevels() {
         }
     }
     return savedLevels;
+}
+
+void Level::switchTheme(std::string theme) {
+    if(theme == "overworld") {
+        LevelVar::ThemeID = LevelVar::Overworld;
+        LevelVar::BackGroundColor = LevelVar::SkyColor;
+    } else if(theme == "underground") {
+        LevelVar::ThemeID = LevelVar::Underground;
+        LevelVar::BackGroundColor = BLACK;
+    } else if(theme == "castle") {
+        LevelVar::ThemeID = LevelVar::Castle;
+        LevelVar::BackGroundColor = BLACK;
+    }
+}
+
+std::string Level::getCurrentTheme() {
+    switch(LevelVar::ThemeID) {
+        case LevelVar::Overworld: return "overworld";
+        case LevelVar::Underground: return "underground";
+        case LevelVar::Castle: return "castle";
+        default: 
+            throw runtime_error("Unknown theme ID: " + std::to_string(LevelVar::ThemeID));
+    }
 }
 
 Level::~Level() {

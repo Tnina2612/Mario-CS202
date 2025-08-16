@@ -155,6 +155,8 @@ class Level {
         void update(void);
         void saveGame(std::string folderName);
         static vector<std::pair<std::string, std::string>> getSavedLevels();
+        static void switchTheme(std::string theme);
+        static std::string getCurrentTheme();
         ~Level();
         std::shared_ptr<Character> getPlayer();
 };

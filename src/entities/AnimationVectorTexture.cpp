@@ -44,6 +44,8 @@ AnimationVectorTextureFlyweight* AnimationVectorTextureFlyweightFactory::getFlyw
         folderName += "/overworld/";
     } else if(LevelVar::ThemeID == LevelVar::Underground) {
         folderName += "/underground/";
+    } else if(LevelVar::ThemeID == LevelVar::Castle) {
+        folderName += "/castle/";
     }
 
     string storedName = name + to_string(LevelVar::ThemeID);

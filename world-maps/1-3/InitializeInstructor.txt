@@ -1,2 +1,3 @@
-./world-maps/1-2/overworld1
-32 208
+./world-maps/1-3
+castle
+24 112
