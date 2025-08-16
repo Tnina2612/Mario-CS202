@@ -55,6 +55,7 @@ void EnemyManager::update() {
     // if(!oke) {
     //     return;
     // }
+    std::vector<CharacterFireball*> fires = subLevel->player->getFireballs();
     for(auto& enemy : list) {
         // Check if the enemy is off-screen
         if(enemy->getPos().x < 0 || enemy->getPos().y - enemy->getHitBox().height > Global::ORIGINAL_HEIGHT) {
@@ -86,10 +87,12 @@ void EnemyManager::update() {
         if(CheckCollisionRecs(enemy->getHitBox(), subLevel->player->getRectangle()) && enemy->isAlive()) {
             if(pastPlayerRec.y + pastPlayerRec.height < enemy->getHitBox().y && 
                 enemy->getTypeName().find("Plant") == std::string::npos) {
+                    std::cerr << "Enemy" << std::endl;
                 enemy->hitUp();
                 subLevel->player->setVeclocityY(-100);
                 Program::getInstance().getHUD().onNotify(EventType::ADDSCORE);
             } else {
+                std::cerr << "PLAYER" << std::endl;
                 int dir = enemy->getPos().x < subLevel->player->getPos().x ? 1 : -1;
                 enemy->hitVertical(dir);
                 subLevel->player->takeDamage();
@@ -100,6 +103,10 @@ void EnemyManager::update() {
                 //     Program::getInstance().pushScene(new GameOverScene());
                 // }
             }
+        }
+
+        for(auto& f : fires) {
+            subLevel->blocks->update(enemy, f);
         }
     }
 
@@ -118,7 +125,6 @@ void EnemyManager::draw() const {
     for(const auto& enemy : list) {
         enemy->draw();
     }
-
     for(const auto& bowser : listBowsers) {
         bowser->draw();
     }

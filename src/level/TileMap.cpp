@@ -416,3 +416,10 @@ bool TileMap::preventFalling(std::shared_ptr<Enemy> enemy, Vector2& movement) {
 
     return false;
 }
+
+void TileMap::update(std::shared_ptr<Enemy> enemy, CharacterFireball* playerFireball) {
+    if (CheckCollisionRecs(playerFireball->getHitBox(), enemy->getHitBox())) {
+        enemy->beHitByFireball();
+        playerFireball->hitBlockHorizontal();
+    }
+}

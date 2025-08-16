@@ -32,6 +32,7 @@ void Enemy::setAllFrames(std::unordered_map<std::string, std::vector<Rectangle>>
 }
 void Enemy::setAniFrames(const std::vector<Rectangle>& frames) {
     m_animation.setFrames(frames);
+    m_animation.resetCurrentFrame();
 }
 
 void Enemy::setType(std::shared_ptr<EnemyType> type) {
@@ -164,10 +165,9 @@ bool Enemy::beHitByFireball() {
         return false;
     }
 
-    if(!m_data._isImuneFire) {
+    if(m_data._isImuneFire) {
         return false;
     }
-
     onHit();
     return true;
 }
@@ -191,7 +191,6 @@ void Enemy::draw() {
     if(!m_data._isActive) {
         return;
     }
-
     DrawRectangleRec(getHitBox(), BLUE);
     m_animation.draw({m_data._pos.x, m_data._pos.y - m_data._hitBoxHeight});
 }

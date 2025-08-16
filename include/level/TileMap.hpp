@@ -9,6 +9,7 @@
 #include<iostream>
 #include<entities/Character.hpp>
 #include<block/Item/MovingPlatform.h>
+#include"entities/Enemy/CharacterFireball.hpp"
 
 class SubLevel;
 
@@ -32,6 +33,7 @@ class TileMap {
         void update(std::shared_ptr<Enemy> enemy);
         void update(std::shared_ptr<Item> item);
         // void update(std::shared_ptr<MovingPlatform> platform, Character* player); /// Moved to ItemManager::update()
+        void update(std::shared_ptr<Enemy> enemy, CharacterFireball* playerFireball);
         static std::vector<std::pair<int, int>> cellsToCheck(const Rectangle& rec);
         void saveToFile(const std::string& filename) const;
 

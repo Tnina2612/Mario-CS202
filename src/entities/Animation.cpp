@@ -15,6 +15,10 @@ Animation::Animation(const vector<Rectangle>& frames, const Texture2D& sprite, f
     }
 }
 
+void Animation::resetCurrentFrame() {
+    currentFrame = 0;
+}
+
 void Animation::setFrames(const vector<Rectangle>& newFrames) {
     frames = newFrames;
 }
