@@ -1,6 +1,7 @@
 #include<level/LevelPlayerAnimation.hpp>
 
-PlayerLevelAnimationManager::PlayerLevelAnimationManager(Character* character) : character(character) {}
+PlayerLevelAnimationManager::PlayerLevelAnimationManager(Character* character) : character(character) {
+}
 
 void PlayerLevelAnimationManager::goDownward() {
     float x = character->getPos().x;

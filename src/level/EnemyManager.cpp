@@ -9,35 +9,44 @@
 #include<scenes/GameOverScene.hpp>
 #include<scenes/TitleScene.hpp>
 #include<scenes/TimeUpScene.hpp>
+#include<diy_functions/read.h>
 
 EnemyManager::EnemyManager(std::string filename, SubLevel* subLevel) :
     subLevel(subLevel) {
+    cout << "Begin EnemyManager::EnemyManager(filename, subLevel)" << endl;
     EnemyFactory::loadAllFrames();
     ifstream inp(filename);
+
     int numTypes;
-    inp >> numTypes;
+    readFromFile(inp, filename, numTypes);
+
     for(int i = 0; i < numTypes; i++) {
         int numEnemies;
-        inp >> numEnemies;
+        readFromFile(inp, filename, numEnemies);
+
         string enemyType;
-        inp >> enemyType;
+        readFromFile(inp, filename, enemyType);
+
         if(enemyType != "Bowser") {
             for(int j = 0; j < numEnemies; j++) {
                 float x, y; 
-                inp >> x >> y;
+                readFromFile(inp, filename, x, y);
+
                 list.push_back(EnemyFactory::createEnemy(enemyType, Vector2{x, y}, this));
                 list.back()->setActive(true);
             }
         } else {
             for(int j = 0; j < numEnemies; j++) {
                 float x, y;
-                inp >> x >> y;
+                readFromFile(inp, filename, x, y);
+
                 listBowsers.push_back(make_shared<Bowser>("Bowser", Vector2{x, y}, subLevel->player));
                 listBowsers.back()->setActive(true);
             }
         }
     }
     inp.close();
+    cout << "End EnemyManager::EnemyManager(filename, subLevel)" << endl;
 }
 
 void EnemyManager::addEnemy(std::shared_ptr<Enemy> enemy) {

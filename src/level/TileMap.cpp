@@ -60,7 +60,7 @@ void TileMap::updateBlocks() {
 }
 
 void TileMap::update(Character* player) {
-    // if(player->getPos().y >= Global::ORIGINAL_HEIGHT + 64.0f) player->die();
+    if(player->getPos().y >= Global::ORIGINAL_HEIGHT + 64.0f) player->die();
     
     const Rectangle& charRec = player->getRectangle();
     player->resetAttributes();
@@ -390,7 +390,8 @@ bool TileMap::isCollidableTile(int i, int j) {
         return false;
     }
     std::string stateName = tiles[i][j]->getStateName();
-    return stateName != "Invisible" && stateName != "Break";
+    std::string blockName = tiles[i][j]->getBlockName();
+    return stateName != "Invisible" && stateName != "Break" && blockName.find("coin") != 0;
 }
 
 bool TileMap::preventFalling(std::shared_ptr<Enemy> enemy, Vector2& movement) {

@@ -2,6 +2,7 @@
 #include<limits>
 
 ChangeSubLevelManager::ChangeSubLevelManager(std::string filename, SubLevel* subLevel) : subLevel(subLevel) {
+    cout << "Begin ChangeSubLevelManager::ChangeSubLevelManager(filename, subLevel)" << endl;
     ifstream inp(filename);
     int numPoints;
     inp >> numPoints;
@@ -23,6 +24,7 @@ ChangeSubLevelManager::ChangeSubLevelManager(std::string filename, SubLevel* sub
         }
     }
     inp.close();
+    cout << "End ChangeSubLevelManager::ChangeSubLevelManager(filename, subLevel)" << endl;
 }
 
 void ChangeSubLevelManager::update() {

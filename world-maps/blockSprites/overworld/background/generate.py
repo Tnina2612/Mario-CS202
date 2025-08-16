@@ -3,13 +3,13 @@ import imagehash
 import os
 
 tile_size = 16
-tiles_x = 206
-tiles_y = 15
-shift_x = 112
+shift_x = 0
 diff_threshold = 10  
 
 map_image = Image.open("MAP.png")
 map_width, map_height = map_image.size
+tiles_x = int(map_width / 16)
+tiles_y = int(map_height / 16)
 
 tile_images = {}
 tile_hashes = {}
@@ -42,4 +42,4 @@ with open("background.txt", "w") as output:
                     matched = name
 
             line.append(os.path.splitext(matched)[0])
-        output.write("\t".join(line) + "\n")
+        output.write("".join(f"{elem:<20}" for elem in line) + "\n")

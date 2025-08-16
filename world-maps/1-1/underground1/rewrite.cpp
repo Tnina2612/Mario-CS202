@@ -8,7 +8,7 @@ using namespace std;
 int width, height;
 vector<vector<string>> d;
 
-const char* filename = "blocks.txt";
+const char* filename = "background.txt";
 
 int main() {
     std::ifstream infile(filename);

@@ -25,7 +25,7 @@ void MapSelectScene::init() {
 void MapSelectScene::handleInput() {
     if (IsKeyPressed(KEY_ENTER)) {
         if (curModeRow <= 0 && curModeCol < 3) {
-            Program::getInstance().pushScene(new PlayScene(to_string(curModeRow + 1) + "-" + to_string(curModeCol + 1)));
+            Program::getInstance().pushScene(new PlayScene("./world-maps/" + to_string(curModeRow + 1) + "-" + to_string(curModeCol + 1)));
         } else {
             Program::getInstance().pushScene(new ComingSoonScene());
         }

@@ -1,6 +1,6 @@
 1
 
-32 176 16 32 Disappear
+16 176 32 64 Touch
 1
-ExitDoor
+Up 176
 None
