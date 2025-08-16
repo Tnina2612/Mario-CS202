@@ -7,6 +7,14 @@ LevelPlayerManager::LevelPlayerManager(SubLevel* subLevel, InputManager& inputMa
 }
 
 void LevelPlayerManager::update() {
+    if(subLevel->player->getGrowthUp()) {
+        addAnimation(make_unique<LevelPlayerAnimationManager> (subLevel, 
+        vector<shared_ptr<SubLevelAnimation>>{make_shared<PlayerGrowAnimation>()}, nullptr));
+    }
+    if(subLevel->player->getShrinkDown()) {
+        addAnimation(make_unique<LevelPlayerAnimationManager> (subLevel, 
+        vector<shared_ptr<SubLevelAnimation>>{make_shared<PlayerShrinkAnimation>()}, nullptr));
+    }
     if(animationManager != nullptr) {
         animationManager->update();
         if(animationManager->done()) {

@@ -3,7 +3,7 @@
 927 140 2 4 Down
 1
 Down
-./world-maps/1-1/underground
+./world-maps/1-1/underground1
 underground
 24 32
 

@@ -11,6 +11,7 @@
 #include<core/Global.hpp>
 #include<queue>
 #include<entities/Enemy/Bowser.hpp>
+#include<block/Item/MovingPlatform.h>
 
 class Level;
 class SubLevel;
@@ -98,6 +99,7 @@ class ItemManager {
     private:
         SubLevel* subLevel;
         std::vector<std::shared_ptr<Item>> items;
+        std::vector<std::shared_ptr<MovingPlatform>> movingPlatforms;
     public:
         ItemManager(std::string filename, SubLevel* subLevel);
         void draw(void);
@@ -112,6 +114,7 @@ class SubLevel {
         friend class ChangeSubLevelManager;
         friend class LevelGameplayManager;
         friend class LevelPlayerAnimationManager;
+        friend class LevelPlayerManager;
         friend class TileMap;
         friend class ItemManager;
         Level* level;

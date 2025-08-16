@@ -57,6 +57,22 @@ Rectangle MovingPlatform::getRect() const {
     return Rectangle{ _pos.x, _pos.y, allFrames[0].width, allFrames[0].height };
 }
 
+void MovingPlatform::setSizeMovementType(int sizeMovementType) {
+    this->sizeMovementType = sizeMovementType;
+}
+
+int MovingPlatform::getSizeMovementType() const {
+    return sizeMovementType;
+}
+
+Vector2 MovingPlatform::getStartPos() const {
+    return _startPos;
+}
+
+Vector2 MovingPlatform::getEndPos() const {
+    return _endPos;
+}
+
 void MovingPlatform::move(float dt) {
     if (!_isActive) return;
 

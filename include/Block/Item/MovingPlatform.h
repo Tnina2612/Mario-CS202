@@ -27,6 +27,7 @@ private:
     Animation m_animation;
     std::vector<Rectangle> allFrames;
     std::shared_ptr<MovingPlatformType> _type;
+    int sizeMovementType;
 
     Vector2 _pos;
     Vector2 _velocity;
@@ -47,6 +48,10 @@ public:
     void update(float dt = GetFrameTime());
     void draw();
     Rectangle getRect() const; // Lấy hình chữ nhật va chạm
+    void setSizeMovementType(int sizeMovementType);
+    int getSizeMovementType() const;
+    Vector2 getStartPos() const;
+    Vector2 getEndPos() const;
 };
 
 class MovingPlatformFactory {
