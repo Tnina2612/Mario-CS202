@@ -432,3 +432,10 @@ void TileMap::update(std::shared_ptr<MovingPlatform> platform, Character* player
         }
     }
 }
+
+void TileMap::update(std::shared_ptr<Enemy> enemy, CharacterFireball* playerFireball) {
+    if (CheckCollisionRecs(playerFireball->getHitBox(), enemy->getHitBox())) {
+        enemy->beHitByFireball();
+        playerFireball->hitBlockHorizontal();
+    }
+}
