@@ -87,10 +87,6 @@ void Star::update()
     fall(dt);
     beDelete();
 
-    // if (pos_.y + rec_.height * scale_screen >= Global::ORIGINAL_HEIGHT) {
-    //     pos_.y = Global::ORIGINAL_HEIGHT - rec_.height* scale_screen;
-    //     checkOnGround();
-    // }
     if (pos_.y + rec_.height * scale_screen / 2.0f >= Global::ORIGINAL_HEIGHT) {
     pos_.y = Global::ORIGINAL_HEIGHT - rec_.height * scale_screen / 2.0f;
     checkOnGround();
