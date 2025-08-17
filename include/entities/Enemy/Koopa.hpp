@@ -5,6 +5,7 @@
 #include"Enemy.hpp"
 
 class Koopa;
+class EnemyManager;
 
 class IKoopaState {
 public:
@@ -18,24 +19,28 @@ public:
 
 
 class Koopa : public Enemy {
+friend class ShellKoopa;
+friend class NormalKoopa;
+friend class WingedKoopa;
+
 private:
     std::unique_ptr<IKoopaState> m_state;
     float _recoveryTime;
     int _deadAni = 0;   //0: normal, 1: dead, -1: offscreen
     bool _inShell = false;
-
+    EnemyManager* _enemyManager;
     // void deadState();
 public:
     const float TIME = 7.f; //for recover in shell state
     Koopa();
     Koopa(const std::string& name);
-    Koopa(const std::string& name, Vector2 pos);
+    Koopa(const std::string& name, Vector2 pos, EnemyManager* enemyManager);
 
     void setRecoveryTime(float t);
     void setState(std::unique_ptr<IKoopaState> state);
     float getRecoveryTime();
 
-    //bool onHit() override;
+    bool onHit() override;
     void hitBlockLeft() override;
     void hitBlockRight() override;
 

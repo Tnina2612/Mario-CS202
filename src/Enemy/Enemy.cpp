@@ -191,7 +191,6 @@ void Enemy::draw() {
     if(!m_data._isActive) {
         return;
     }
-    DrawRectangleRec(getHitBox(), BLUE);
     m_animation.draw({m_data._pos.x, m_data._pos.y - m_data._hitBoxHeight});
 }
 

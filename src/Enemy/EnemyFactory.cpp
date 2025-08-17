@@ -65,7 +65,7 @@ std::shared_ptr<Enemy> EnemyFactory::createEnemy(const std::string& name, Vector
         return it;
     }
     else if(name.find("Koopa") == 0) {
-        auto it = std::make_shared<Koopa>(name, pos);
+        auto it = std::make_shared<Koopa>(name, pos, enemyManager);
         it->setType(type);
         it->setAllFrames(s_enemyFrames[name]);
 
