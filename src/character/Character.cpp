@@ -114,11 +114,45 @@ void Character::resetAttributes() {
     collideRight = false;
 }
 
+void Character::handleSpriteandAllFrames() {
+    if(isStarMan) {
+        mAnimation.setSprite(invincibleSprite);
+        if(characterState == SMALL) {
+            if(getType() == MARIO) {
+                allFrames = MarioInvincible::Small::allFrames;
+            } else {
+                allFrames = LuigiInvicinble::Small::allFrames;
+            }
+        }
+        else {
+            if(getType() == MARIO) {
+                allFrames = MarioInvincible::Super::allFrames;
+            } else {
+                allFrames = LuigiInvicinble::Super::allFrames;
+            }
+        }
+    }
+    else {
+        mAnimation.setSprite(normalSprite);
+        if(characterState == SMALL) {
+            allFrames = CharacterSprite::Small::allFrames;
+        }
+        else if(characterState == SUPER) {
+            allFrames = CharacterSprite::Super::allFrames;
+        }
+        else if(characterState == FIRE) {
+            allFrames = CharacterSprite::Fire::allFrames;
+        }
+    }
+}
+
 void Character::update() {
     float deltaTime = GetFrameTime();
     debug();
     handleEffect();
     handleFireballEffect();
+    handleSpriteandAllFrames();
+    handleInvincinbleTime(deltaTime);
     // if(growthUp) {
     //     bool doneAnimation;
     //     if(orientation == LEFT) doneAnimation = mAnimation.update({0.5, 0.75, 1, 0.75, 1}, 6, 0.1);
@@ -145,16 +179,19 @@ void Character::update() {
         mAnimation.update(deltaTime);
         return;
     }
-    if(isInvicinbleBlinking) {
-        mAnimation.updateBlinking(deltaTime, onAnimation);
-    }
-    if(invincibilityTime > 0.0f) {
-        invincibilityTime -= deltaTime;
-        if(invincibilityTime <= 0.0f) {
-            isInvincible = false;
-        }
-        cout << "Invincibility time left: " << invincibilityTime << endl;
-    }
+    // if(isInvicinbleBlinking) {
+    //     mAnimation.updateBlinking(deltaTime, onAnimation);
+    // }
+    // if(invincibilityTime > 0.0f && !isStarMan) {
+    //     invincibilityTime -= deltaTime;
+    //     if(invincibilityTime <= 0.0f) {
+    //         isInvincible = false;
+    //     }
+    //     cout << "Invincibility time left: " << invincibilityTime << endl;
+    // }
+    // else {
+    //     isInvincible = false;
+    // }
     switch (behavior) {
         case MOVE:
             if (orientation == RIGHT) {
@@ -250,6 +287,10 @@ void Character::debug() {
             allFrames = CharacterSprite::Small::allFrames;
             shrinkDown = true;
         }
+    }
+    if(IsKeyPressed(KEY_S)) {
+        isStarMan = true;
+        isInvincible = true;
     }
 }
 
@@ -438,6 +479,25 @@ void Character::handleFireballEffect(float deltaTime) {
             fireball = nullptr;
             fireballs.erase(remove(fireballs.begin(), fireballs.end(), fireball), fireballs.end());
         }
+    }
+}
+
+void Character::handleInvincinbleTime(float deltaTime) {
+    if(isInvicinbleBlinking) {
+        mAnimation.updateBlinking(deltaTime, onAnimation);
+    }
+    if(invincibilityTime > 0.0f) {
+        invincibilityTime -= deltaTime;
+        if(invincibilityTime <= 0.0f) {
+            isInvincible = false;
+        }
+        cout << "Invincibility time left: " << invincibilityTime << endl;
+    }
+    else {
+        isInvincible = false;
+    }
+    if(isStarMan) {
+        isInvincible = true; 
     }
 }
 

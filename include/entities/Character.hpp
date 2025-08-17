@@ -41,6 +41,8 @@ public:
 class Character {
     friend class PlayerLevelAnimationManager;
 protected:
+    Texture2D normalSprite;
+    Texture2D invincibleSprite;
     Vector2 pos;
     IState* state;
     float invincibilityTime; // Time in seconds
@@ -106,6 +108,7 @@ public:
     CharacterState getCharacterState() const;
     Animation& getAnimation();
 
+    void handleSpriteandAllFrames();
     void hitBlockLeft();
     void hitBlockRight();
     void hitBlockTop();
@@ -122,6 +125,8 @@ public:
     float getRestVeclocity()const;
     void handleEffect(float deltaTime = GetFrameTime());
     void handleFireballEffect(float deltaTime = GetFrameTime());
+    void handleInvincinbleTime(float deltaTime = GetFrameTime());
+    
     vector<CharacterFireball*>& getFireballs();
     void takeDamage();
     // bool getCollideUp()const;

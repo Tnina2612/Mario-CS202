@@ -92,6 +92,9 @@ float Animation::getScale() const {
 }
 
 void Animation::setSprite(const Texture2D& sprite) {
+    if(this->sprite.id == sprite.id) {
+        return;
+    }
     this->sprite = sprite;
 }
 

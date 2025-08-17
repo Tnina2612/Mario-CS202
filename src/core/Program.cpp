@@ -7,6 +7,8 @@
 
 Texture2D Sprite::LuigiSprite;
 Texture2D Sprite::MarioSprite;
+Texture2D Sprite::MarioInvincibleSprite;
+Texture2D Sprite::LuigiInvincibleSprite;
 
 Program::Program() : running(true), nextScene(nullptr) {
     // Khởi tạo Raylib
