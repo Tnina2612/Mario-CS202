@@ -228,7 +228,7 @@ void Character::update() {
 
 void Character::draw() {
     if(!onAnimation && isInvicinbleBlinking) return;
-    mAnimation.draw({pos.x, pos.y - getRectangle().height * mAnimation.getScale()});
+    mAnimation.draw({pos.x, pos.y - mAnimation.getCurrentRectangle().height * mAnimation.getScale()});
     for (auto& fireball : fireballs) {
         if(fireball && fireball->getOnScreen()) {
             fireball->draw();
@@ -325,7 +325,8 @@ Rectangle Character::getRectangle() const {
     }
     else {
         width = 14;
-        height = 31;
+        if(behavior != DUCK) height = 31;
+        else height = 15; // If ducking, height is smaller
     }
     return Rectangle{pos.x, pos.y - height, /*frames[currentFrame].width * scale*/width, height};
 }
