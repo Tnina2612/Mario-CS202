@@ -64,3 +64,7 @@ void Lakitu::update(float dt) {
         m_data._targetPos = pos;
     }
 }
+
+bool Lakitu::beHitVertical() {
+    return false;
+}

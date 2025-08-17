@@ -59,3 +59,7 @@ void Podoboo::update(float dt) {
 void Podoboo::onEnemyCollision(Enemy& enemy) {
     return; // Podoboo does not interact with other enemies
 }
+
+bool Podoboo::beHitVertical() {
+    return false;
+}

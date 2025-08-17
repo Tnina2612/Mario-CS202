@@ -27,5 +27,6 @@ public:
     bool physics() override;
     bool onHit() override;
     void onEnemyCollision(Enemy& enemy) override;
+    bool beHitVertical() override;
     void update(float dt) override;
 };

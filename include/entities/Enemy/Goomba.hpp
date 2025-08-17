@@ -15,5 +15,6 @@ public:
     bool physics() override;
     void changeDirection() override;
     bool onHit() override;
+    bool beHitVertical() override;
     void onEnemyCollision(Enemy& enemy) override;
 };
