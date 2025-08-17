@@ -6,6 +6,7 @@
 #include"../../include/entities/Enemy/EnemyData.hpp"
 #include"../../include/entities/Enemy/Koopa.hpp"
 #include"../../include/entities/Enemy/EnemyMove.hpp"
+#include"../../include/level/Level.hpp"
 #include<core/Variables.hpp>
 
 #include<iostream>
@@ -23,14 +24,16 @@ Koopa::Koopa(const std::string& name) : Enemy(name) {
     m_data._velocity = LevelVar::KoopaSpeed;
 }
 
-Koopa::Koopa(const std::string& name, Vector2 pos)
+Koopa::Koopa(const std::string& name, Vector2 pos, EnemyManager* enemyManager)
     : Koopa(name) {
         m_data._pos = pos;
+        _enemyManager = enemyManager;
 }
 
 void Koopa::setState(std::unique_ptr<IKoopaState> state) {
     m_state = std::move(state);
     m_state->enter(*this);
+    //_enemyManager = _enemyManager;
 }
 
 void Koopa::setRecoveryTime(float t) {
@@ -97,6 +100,16 @@ void Koopa::changeDirection() {
     // }
 }
 
+bool Koopa::onHit() {
+    if(!Enemy::onHit()) {
+        return false;
+    }
+    if(!isAlive()) {
+        setActive(false);
+    }
+    return true;
+}
+
 bool Koopa::beHitByFireball() {
     if(!Enemy::beHitByFireball()) {
         return false;
@@ -120,20 +133,11 @@ void Koopa::onEnemyCollision(Enemy& enemy) {
     m_state->onEnemyCollision(*this, enemy);
 }
 
-// bool Koopa::beHitByFireball() {
-
-// }
-// void Koopa::draw() {
-//     if(!m_data._isActive || !isAlive()) {
-//         return;
-//     }
-//     Enemy::draw();
-// }
 void Koopa::hitVertical(int dir) {
-    if(dynamic_cast<ShellKoopa*>(m_state.get())) {
+    // if(dynamic_cast<ShellKoopa*>(m_state.get())) {
         
-        setDirection(dir);
-    }
+    //     setDirection(dir);
+    // }
 }
 
 void NormalKoopa::changeFrames(Koopa& koopa) {
@@ -184,10 +188,15 @@ void NormalKoopa::handleStomp(Koopa& koopa) {
 }
 
 void ShellKoopa::changeFrames(Koopa& koopa) {
-    koopa.setAniFrames(koopa.getFrames("Shell1"));
+    koopa.setAniFrames(koopa.getFrames("Shell2"));
 }
 
 void ShellKoopa::enter(Koopa& koopa) {
+    if(koopa._enemyManager) {
+        int dir = koopa._enemyManager->getPlayerPos().x < koopa.getPos().x ? 1 : -1;
+        koopa.setDirection(dir);
+    }
+        
     auto f = koopa.getFrames("Shell1")[0];
     koopa.setEnemyData(EnemyData ( f.width, f.height, 1000.f, false, false, true, false, 1, 
                         koopa.getPos(), Vector2{0,0}, koopa.getDirection()));
@@ -212,7 +221,7 @@ void ShellKoopa::update(Koopa& koopa, float dt) {
 
 void ShellKoopa::handleStomp(Koopa& koopa) {
     if(abs(koopa.getVelocity().x) <= pow(10,-5)) {
-        Vector2 temp = {150.f*koopa.getDirection(), 0.f};
+        Vector2 temp = {150.f, 0.f};
         koopa.setVelocity(temp);
         koopa.setAniFrames(koopa.getFrames("Shell2"));
         koopa.setRecoveryTime(0);
