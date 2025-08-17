@@ -24,7 +24,7 @@ Bowser::Bowser(const std::string& name) {
     m_data._velocity = Vector2{0.f, 0.f};
 
     m_animation.setSprite(EnemyFactory::getEnemyTypes()->sprite);
-    allFrames = EnemySprite::Bowser::Frames;
+    allFrames = EnemySprite::BowserSprite::Frames;
     m_animation.setFrames(allFrames["LIdle"]);
 
 }

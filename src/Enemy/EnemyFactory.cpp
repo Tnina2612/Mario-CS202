@@ -21,21 +21,21 @@ std::unordered_map<std::string, std::unordered_map<std::string, std::vector<Rect
 std::shared_ptr<EnemyType> EnemyFactory::s_enemyTypes = nullptr;
 
 void EnemyFactory::loadAllFrames() {
-    s_enemyFrames["Goomba1"] = EnemySprite::Goomba::Map1::Frames;
-    s_enemyFrames["Goomba2"] = EnemySprite::Goomba::Map2::Frames;
-    s_enemyFrames["Goomba3"] = EnemySprite::Goomba::Map3::Frames;
+    s_enemyFrames["Goomba1"] = EnemySprite::GoombaSprite::Map1::Frames;
+    s_enemyFrames["Goomba2"] = EnemySprite::GoombaSprite::Map2::Frames;
+    s_enemyFrames["Goomba3"] = EnemySprite::GoombaSprite::Map3::Frames;
 
 
-    s_enemyFrames["Plant1"] = EnemySprite::PiranhaPlant::Map2::Frames;
-    s_enemyFrames["Plant2"] = EnemySprite::PiranhaPlant::Map3::Frames;
+    s_enemyFrames["Plant1"] = EnemySprite::PiranhaPlantSprite::Map2::Frames;
+    s_enemyFrames["Plant2"] = EnemySprite::PiranhaPlantSprite::Map3::Frames;
 
-    s_enemyFrames["Koopa1"] = EnemySprite::Koopa::Map1::Frames;
-    s_enemyFrames["Koopa2"] = EnemySprite::Koopa::Map1::Frames;
-    s_enemyFrames["Koopa3"] = EnemySprite::Koopa::Map1::Frames;
+    s_enemyFrames["Koopa1"] = EnemySprite::KoopaSprite::Map1::Frames;
+    s_enemyFrames["Koopa2"] = EnemySprite::KoopaSprite::Map1::Frames;
+    s_enemyFrames["Koopa3"] = EnemySprite::KoopaSprite::Map1::Frames;
 
-    s_enemyFrames["Podoboo"] = EnemySprite::Podoboo::Frames;
-    s_enemyFrames["Spiny"] = EnemySprite::Spiny::Frames;
-    s_enemyFrames["Lakitu"] = EnemySprite::Lakitu::Frames;
+    s_enemyFrames["Podoboo"] = EnemySprite::PodobooSprite::Frames;
+    s_enemyFrames["Spiny"] = EnemySprite::SpinySprite::Frames;
+    s_enemyFrames["Lakitu"] = EnemySprite::LakituSprite::Frames;
     // s_enemyFrames["Firebar"] = EnemySprite::Firebar::Frames;
 }
 
