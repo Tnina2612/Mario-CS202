@@ -1,7 +1,10 @@
 #include"../../include/entities/Mario.hpp"
 
 Mario::Mario() : Character() {
-    mAnimation.setSprite(Sprite::MarioSprite);
+    normalSprite = Sprite::MarioSprite;
+    invincibleSprite = Sprite::MarioInvincibleSprite;
+    mAnimation.setSprite(normalSprite);
+    allFrames = CharacterSprite::Small::allFrames;
 }
 
 Mario::~Mario() {

@@ -10,7 +10,7 @@
 #include <fstream>
 #include <stdexcept>
 
-const float MushroomAndStarSpeed = 70.0f;
+const float MushroomAndStarSpeed = 80.0f;
 const float appearAnimation = 0.75f;
 const float tileSize = 16.0f;
 

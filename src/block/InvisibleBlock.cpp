@@ -35,6 +35,7 @@ void InvisibleBlock::changeState()
     if(changeState_) {
         m_block.setState(make_shared<SolidBlock>(m_block));
         m_block.animation = AnimationVectorTexture("G4");
+        changeState_ = false; 
     }
 }
 

@@ -86,6 +86,8 @@ namespace CharacterVar {
     const Vector2 position = {24.f, Global::ORIGINAL_HEIGHT - 32.f - 16.f - 10};
     const string MarioSpritePath = "./assets/images/sprite-sheets/mario.png";
     const string LuigiSpritePath = "./assets/images/sprite-sheets/luigi.png";
+    const string MarioInvincibleSpritePath = "./assets/images/sprite-sheets/Mario invicinble.png";
+    const string LuigiInvincibleSpritePath = "./assets/images/sprite-sheets/Luigi Invicinble.png";
 }
 
 enum CharacterType {
@@ -118,12 +120,18 @@ enum Behavior {
 struct Sprite {
     static Texture2D MarioSprite;
     static Texture2D LuigiSprite;
+    static Texture2D MarioInvincibleSprite;
+    static Texture2D LuigiInvincibleSprite;
     static void load() {
         MarioSprite = LoadTexture(CharacterVar::MarioSpritePath.c_str());
         LuigiSprite = LoadTexture(CharacterVar::LuigiSpritePath.c_str());
+        MarioInvincibleSprite = LoadTexture(CharacterVar::MarioInvincibleSpritePath.c_str());
+        LuigiInvincibleSprite = LoadTexture(CharacterVar::LuigiInvincibleSpritePath.c_str());
     }
     static void unload() {
         UnloadTexture(MarioSprite);
         UnloadTexture(LuigiSprite);
+        UnloadTexture(MarioInvincibleSprite);
+        UnloadTexture(LuigiInvincibleSprite);
     }
 };

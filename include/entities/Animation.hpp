@@ -21,6 +21,9 @@ public:
     int getCurrentFrame()const {
         return currentFrame;
     }
+    Rectangle getCurrentRectangle() const {
+        return frames[currentFrame];
+    }
     void setFrames(const vector<Rectangle>& newFrames);
     void resetCurrentFrame();
     void update(float deltaTime, int startFrame = 0, int size = -1);

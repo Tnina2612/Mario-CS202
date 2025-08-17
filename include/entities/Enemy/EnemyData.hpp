@@ -55,7 +55,8 @@ struct EnemyData {
         _isStompable(isStompable),
         _isOnGround(isOnGround),
         _hp(hp),
-        _dir(dir)
+        _dir(dir),
+        _isActive(true)
     {}
 
     EnemyData(): _isActive(false), _type() {}

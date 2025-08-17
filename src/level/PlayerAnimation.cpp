@@ -51,15 +51,25 @@ void PlayerLevelAnimationManager::appear() {
 
 void PlayerLevelAnimationManager::grow() {
     bool doneAnimation;
-    if(character->getOrientation() == LEFT) doneAnimation = character->getAnimation().update({0.5, 0.75, 1, 0.75, 1}, 6, 0.1);
-    else doneAnimation = character->getAnimation().update({0.5, 0.75, 1, 0.75, 1}, 13, 0.1);
+    if(character->getOrientation() == LEFT) {
+        character->getAnimation().setFrames(character->allFrames["LIdle"]);
+    }
+    else {
+        character->getAnimation().setFrames(character->allFrames["RIdle"]);
+    }
+    doneAnimation = character->getAnimation().update({0.5, 0.75, 1, 0.75, 1}, 0, 0.1);
     if(doneAnimation) character->growthUp = false;
 }
 
 void PlayerLevelAnimationManager::shrink() {
     bool doneAnimation;
-    if(character->getOrientation() == LEFT) doneAnimation = character->getAnimation().update({2, 1.5, 1, 1.5, 1}, 6, 0.1);
-    else doneAnimation = character->getAnimation().update({2, 1.5, 1, 1.5, 1}, 13, 0.1);
+    if(character->getOrientation() == LEFT) {
+        character->getAnimation().setFrames(character->allFrames["LIdle"]);
+    }
+    else {
+        character->getAnimation().setFrames(character->allFrames["RIdle"]);
+    }
+    doneAnimation = character->getAnimation().update({2, 1.5, 1, 1.5, 1}, 0, 0.1);
     if(doneAnimation) {
         character->shrinkDown = false;
         character->isInvicinbleBlinking = true;
@@ -178,6 +188,16 @@ void PlayerClimbDownFlagColumnAnimation::update() {
         player->playerLevelAnimationManager.climbDown(pivotX);
     }
 }
+// void PlayerClimbDownAnimation::update() {
+//     if(player->getOrientation() == LEFT) {
+//         player->getAnimation().setFrames(player->allFrames["LClimb"]);
+//     }
+//     else {
+//         player->getAnimation().setFrames(player->allFrames["RClimb"]);
+//     }
+//     player->getAnimation().update(GetFrameTime());
+//     player->playerLevelAnimationManager.climbDown(pivotX);
+// }
 
 string PlayerClimbDownFlagColumnAnimation::getType() const {
     return "ClimbDown";

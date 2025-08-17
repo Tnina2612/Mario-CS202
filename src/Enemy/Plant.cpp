@@ -25,6 +25,16 @@ Plant::Plant(const std::string& name, Vector2 pos)
         m_data._pos = pos;
 }
 
+bool Plant::onHit() {
+    if(!Enemy::onHit()) {
+        return false;
+    }
+    if(!isAlive()) {
+        setActive(false);
+    }
+    return true;
+}
+
 void Plant::update(float dt) {
     if(!m_data._isActive) {
         return;
@@ -37,5 +47,9 @@ void Plant::onEnemyCollision(Enemy& enemy) {
 }
 
 bool Plant::physics() {
+    return false;
+}
+
+bool Plant::beHitVertical() {
     return false;
 }

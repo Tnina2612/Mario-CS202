@@ -8,7 +8,7 @@ private:
     Vector2 beforePos;
     Vector2 previousFramePos;
     Vector2 velocity_; 
-    const float starIniVelo = 300.0f;
+    const float starIniVelo = 200.0f;
     const int scoreStar = 1000;
 
 public:

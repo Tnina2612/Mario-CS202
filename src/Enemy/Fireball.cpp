@@ -5,7 +5,7 @@
 #include"../../include/entities/Enemy/EnemyFactory.hpp"
 
 Fireball::Fireball() {
-    allFrames = EnemySprite::Fireball::Frames;
+    allFrames = EnemySprite::FireballSprite::Frames;
     m_animation.setSprite(EnemyFactory::getEnemyTypes()->sprite);
     
 }
