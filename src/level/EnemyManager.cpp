@@ -103,8 +103,12 @@ void EnemyManager::update() {
             } else {
                 std::cerr << "PLAYER" << std::endl;
                 int dir = enemy->getPos().x < subLevel->player->getPos().x ? 1 : -1;
-                enemy->hitVertical(dir);
-                subLevel->player->takeDamage();
+                
+                if(!enemy->beHitVertical()) {
+                    subLevel->player->takeDamage();
+                } else {
+                    enemy->hitVertical(dir);
+                }
                 // if(subLevel->player->getNumLives() > 0) {
                 //     Program::getInstance().pushScene(new DeathScene());
                 // } else {

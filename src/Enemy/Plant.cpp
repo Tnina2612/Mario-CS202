@@ -49,3 +49,7 @@ void Plant::onEnemyCollision(Enemy& enemy) {
 bool Plant::physics() {
     return false;
 }
+
+bool Plant::beHitVertical() {
+    return false;
+}

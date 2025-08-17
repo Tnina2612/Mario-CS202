@@ -77,3 +77,7 @@ void Goomba::changeDirection() {
 bool Goomba::physics() {
     return true;
 }
+
+bool Goomba::beHitVertical() {
+    return false;
+}

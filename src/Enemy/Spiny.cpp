@@ -115,3 +115,7 @@ void Spiny::update(float dt) {
         }
     }
 }
+
+bool Spiny::beHitVertical() {
+    return false;
+}

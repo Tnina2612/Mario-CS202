@@ -1,5 +1,6 @@
 #include<vector>
 #include<cmath>
+#include<memory>
 #include<unordered_map>
 
 #include"../../include/entities/Enemy/EnemyType.hpp"
@@ -33,7 +34,6 @@ Koopa::Koopa(const std::string& name, Vector2 pos, EnemyManager* enemyManager)
 void Koopa::setState(std::unique_ptr<IKoopaState> state) {
     m_state = std::move(state);
     m_state->enter(*this);
-    //_enemyManager = _enemyManager;
 }
 
 void Koopa::setRecoveryTime(float t) {
@@ -134,10 +134,13 @@ void Koopa::onEnemyCollision(Enemy& enemy) {
 }
 
 void Koopa::hitVertical(int dir) {
-    // if(dynamic_cast<ShellKoopa*>(m_state.get())) {
-        
-    //     setDirection(dir);
-    // }
+    if(_inShell) {
+        onStomp();
+    }
+}
+
+bool Koopa::beHitVertical() {
+    return _inShell && abs(getVelocity().x) <= pow(10,-5);
 }
 
 void NormalKoopa::changeFrames(Koopa& koopa) {
@@ -184,7 +187,9 @@ void NormalKoopa::update(Koopa& koopa, float dt) {
 }
 
 void NormalKoopa::handleStomp(Koopa& koopa) {
+    std::cerr << koopa.m_data._isActive << std::endl;
     koopa.setState(std::make_unique<ShellKoopa>());
+    std::cerr << koopa.m_data._isActive << std::endl;
 }
 
 void ShellKoopa::changeFrames(Koopa& koopa) {
@@ -196,7 +201,6 @@ void ShellKoopa::enter(Koopa& koopa) {
         int dir = koopa._enemyManager->getPlayerPos().x < koopa.getPos().x ? 1 : -1;
         koopa.setDirection(dir);
     }
-        
     auto f = koopa.getFrames("Shell1")[0];
     koopa.setEnemyData(EnemyData ( f.width, f.height, 1000.f, false, false, true, false, 1, 
                         koopa.getPos(), Vector2{0,0}, koopa.getDirection()));
@@ -225,6 +229,11 @@ void ShellKoopa::handleStomp(Koopa& koopa) {
         koopa.setVelocity(temp);
         koopa.setAniFrames(koopa.getFrames("Shell2"));
         koopa.setRecoveryTime(0);
+
+        if(koopa._enemyManager) {
+            int dir = koopa._enemyManager->getPlayerPos().x < koopa.getPos().x ? 1 : -1;
+            koopa.setDirection(dir);
+        }
     }
     else {
         koopa.setVelocity(Vector2{0.f,0.f});
