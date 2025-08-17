@@ -10,14 +10,12 @@ void PlayerLevelAnimationManager::goDownward() {
 }
 
 void PlayerLevelAnimationManager::goLeftward() {
-    character->getAnimation().update(GetFrameTime(), 3, 3);
     float x = character->getPos().x - GetFrameTime() * LevelVar::animationSpeed;
     float y = character->getPos().y;
     character->setPosition(x, y);
 }
 
 void PlayerLevelAnimationManager::goRightward() {
-    character->getAnimation().update(GetFrameTime(), 10, 3);
     float x = character->getPos().x + GetFrameTime() * LevelVar::animationSpeed;
     float y = character->getPos().y;
     character->setPosition(x, y);
@@ -34,9 +32,9 @@ void PlayerLevelAnimationManager::climbDown(float pivotX) {
     float x = pivotX;
     float y = character->getPos().y + GetFrameTime() * LevelVar::animationSpeed;
     if(character->getOrientation() == LEFT) {
-        character->getAnimation().update(GetFrameTime(), 14, 2);
+        character->getAnimation().setFrames(character->allFrames["LClimb"]);
     } else {
-        character->getAnimation().update(GetFrameTime(), 16, 2);
+        character->getAnimation().setFrames(character->allFrames["RClimb"]);
     }
     character->setPosition(x, y);
 }
@@ -181,23 +179,15 @@ void PlayerClimbDownFlagColumnAnimation::update() {
     if(player->getPos().y >= targetY) {
         player->setPosition(player->getPos().x, targetY);
         player->setOrientation(directionAfterClimbIsRight ? RIGHT : LEFT);
-        player->getAnimation().update(GetFrameTime(), directionAfterClimbIsRight ? 17 : 15, 1);
+        player->getAnimation().setFrames({player->allFrames[directionAfterClimbIsRight ? "RClimb" : "LClimb"]
+            [player->getCharacterState() == CharacterState::SMALL ? 1 : 0]});
 
         elapsedTime += GetFrameTime();
     } else {
         player->playerLevelAnimationManager.climbDown(pivotX);
     }
+    player->getAnimation().update(GetFrameTime());
 }
-// void PlayerClimbDownAnimation::update() {
-//     if(player->getOrientation() == LEFT) {
-//         player->getAnimation().setFrames(player->allFrames["LClimb"]);
-//     }
-//     else {
-//         player->getAnimation().setFrames(player->allFrames["RClimb"]);
-//     }
-//     player->getAnimation().update(GetFrameTime());
-//     player->playerLevelAnimationManager.climbDown(pivotX);
-// }
 
 string PlayerClimbDownFlagColumnAnimation::getType() const {
     return "ClimbDown";
@@ -222,10 +212,13 @@ void PlayerWalkToXAnimation::update() {
     if(player->getPos().x < targetX) {
         blocks->update(player);
         player->playerLevelAnimationManager.goRightward();
+        player->getAnimation().setFrames(player->allFrames["RRun"]);
     } else if(player->getPos().x > targetX) {
         blocks->update(player);
         player->playerLevelAnimationManager.goLeftward();
+        player->getAnimation().setFrames(player->allFrames["LRun"]);
     }
+    player->getAnimation().update(GetFrameTime());
 }
 
 string PlayerWalkToXAnimation::getType() const {
@@ -320,5 +313,48 @@ string PlayerShrinkAnimation::getType() const {
 }
 
 void PlayerShrinkAnimation::saveToFile(std::ofstream& out) const {
+    out << getType();
+}
+
+PlayerWaitAnimation::PlayerWaitAnimation(float waitTime) : waitTime(waitTime) {}
+
+void PlayerWaitAnimation::initialize(Character* player) {
+    this->player = player;
+    this->elapsedTime = 0.f;
+}
+
+bool PlayerWaitAnimation::isDone() {
+    return elapsedTime >= waitTime;
+}
+
+void PlayerWaitAnimation::update() {
+    elapsedTime += GetFrameTime();
+}
+
+string PlayerWaitAnimation::getType() const {
+    return "Wait";
+}
+
+void PlayerWaitAnimation::saveToFile(std::ofstream& out) const {
+    out << getType() << " " << waitTime;
+}
+
+void PlayerWinAnimation::initialize(Character* player) {
+    this->player = player;
+}
+
+bool PlayerWinAnimation::isDone() {
+    return true;
+}
+
+void PlayerWinAnimation::update() {
+    
+}
+
+string PlayerWinAnimation::getType() const {
+    return "Win";
+}
+
+void PlayerWinAnimation::saveToFile(std::ofstream& out) const {
     out << getType();
 }

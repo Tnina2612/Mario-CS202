@@ -1,1 +1,13 @@
-0
+2
+
+16 80 32 64 Disappear
+1
+ExitDoor
+None
+
+4816 128 16 16 Touch
+3
+Wait 0.5
+WalkToX 4980
+Win
+None

@@ -37,7 +37,10 @@ class TileMap {
         static std::vector<std::pair<int, int>> cellsToCheck(const Rectangle& rec);
         void saveToFile(const std::string& filename) const;
 
-        float getWidth();
-        float getHeight();
+        int getWidth() const;
+        int getHeight() const;
+        std::string getTileNameAt(int i, int j) const;
+        void erase(std::pair<int, int> pos);
+
         bool isCollidableTile(int i, int j);
 };

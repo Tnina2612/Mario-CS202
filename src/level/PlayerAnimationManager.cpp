@@ -106,6 +106,13 @@ void PlayerAnimationManager::addAnimation(int id, ifstream& inp) {
             list[id].animations.push_back(make_shared<PlayerEnterDoorAnimation>());
         } else if(type == "ExitDoor") {
             list[id].animations.push_back(make_shared<PlayerExitDoorAnimation>()); 
+        } else if(type == "Wait") {
+            float waitTime;
+            readFromFile(inp, filename, waitTime);
+
+            list[id].animations.push_back(make_shared<PlayerWaitAnimation>(waitTime));
+        } else if(type == "Win") {
+            list[id].animations.push_back(make_shared<PlayerWinAnimation>());
         }
         else {
             throw runtime_error("Unknown animation type: " + type);

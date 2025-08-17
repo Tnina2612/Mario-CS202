@@ -139,3 +139,28 @@ class PlayerShrinkAnimation : public PlayerAnimation {
         string getType() const override;
         void saveToFile(std::ofstream& out) const override;
 };
+
+class PlayerWaitAnimation : public PlayerAnimation {
+    private:
+        const float waitTime;
+        float elapsedTime = 0.f;
+        Character * player;
+    public:
+        PlayerWaitAnimation(float waitTime = 0.5f);
+        void initialize(Character* player) override;
+        bool isDone() override;
+        void update() override;
+        string getType() const override;
+        void saveToFile(std::ofstream& out) const override;
+};
+
+class PlayerWinAnimation : public PlayerAnimation {
+    private:
+        Character * player;
+    public:
+        void initialize(Character* player) override;
+        bool isDone() override;
+        void update() override;
+        string getType() const override;
+        void saveToFile(std::ofstream& out) const override;
+};

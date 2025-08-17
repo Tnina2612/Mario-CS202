@@ -385,12 +385,21 @@ void TileMap::saveToFile(const std::string& filename) const {
     out.close();
 }
 
-float TileMap::getWidth() {
+int TileMap::getWidth() const {
     return width;
 }
 
-float TileMap::getHeight() {
+int TileMap::getHeight() const {
     return height;
+}
+
+std::string TileMap::getTileNameAt(int i, int j) const {
+    if(tiles[i][j] == nullptr) return "A";
+    return tiles[i][j]->getBlockName();
+}
+
+void TileMap::erase(std::pair<int, int> pos) {
+    tiles[pos.first][pos.second].reset();
 }
 
 bool TileMap::isCollidableTile(int i, int j) {

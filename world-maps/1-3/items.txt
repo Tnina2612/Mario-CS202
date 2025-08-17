@@ -1,4 +1,13 @@
-1
+3
 2 movingplatform
 1 1120 208 1088 208
 0 4360 160 4336 160
+1 axe
+4816 128
+hasanimation
+4816 128 16 16 Touch
+1
+DestroyBridge
+1 peach
+5009 176
+noanimation

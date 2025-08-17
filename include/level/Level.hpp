@@ -34,6 +34,7 @@ public:
     void updatePlayer();
     void draw() const;
     void saveToFile(std::string filename);
+    Bowser * getBowser(void);
     ~EnemyManager(void) = default;
 };
 
@@ -91,10 +92,13 @@ class PlayerManager {
 
 struct ItemAnimationPoint {
     AnimationItem* item;
+    TileMap * blocks, * background;
+    Bowser * bowser;
     Rectangle detectRec;
     std::string detectType;
     std::vector<std::shared_ptr<ItemAnimation>> animations;
-    ItemAnimationPoint(AnimationItem* item = nullptr);
+    ItemAnimationPoint(AnimationItem* item = nullptr, TileMap * blocks = nullptr, TileMap * background = nullptr,
+        Bowser * bowser = nullptr);
     void read(std::ifstream& inp, std::string filename);
     void saveToFile(std::ofstream& out);
 };
@@ -118,7 +122,7 @@ class ItemManager {
         ItemAnimationManager animationManager;
         std::vector<std::shared_ptr<Item>> items;
         std::vector<std::shared_ptr<MovingPlatform>> movingPlatforms;
-        std::vector<std::pair<std::shared_ptr<AnimationItem>, std::shared_ptr<ItemAnimationPoint>>> flags;
+        std::vector<std::pair<std::shared_ptr<AnimationItem>, std::shared_ptr<ItemAnimationPoint>>> animationObjects;
     public:
         ItemManager(std::string filename, SubLevel* subLevel);
         void draw(void);

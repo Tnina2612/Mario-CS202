@@ -184,3 +184,8 @@ void EnemyManager::saveToFile(std::string filename) {
     }
     out.close();
 }
+
+Bowser * EnemyManager::getBowser(void) {
+    if(listBowsers.empty()) return nullptr;
+    return listBowsers[0].get();
+}

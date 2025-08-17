@@ -56,6 +56,8 @@ AnimationVectorTextureFlyweight* AnimationVectorTextureFlyweightFactory::getFlyw
             filenames = {"question1", "question2", "question3", "question1"};
         } else if(name.find("coin") == 0) {
             filenames = {"coin1", "coin2", "coin3", "coin1"};
+        } else if(name.find("axe") == 0) {
+            filenames = {"axe1", "axe2", "axe3"};
         } else {
             filenames = {name};
         }

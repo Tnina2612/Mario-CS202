@@ -9,6 +9,7 @@ class AnimationItem {
         Vector2 pos;
         AnimationVectorTexture animation;
         std::string name;
+        bool vanish_ = false;
     public:
         AnimationItem(std::string name, Vector2 pos);
         void update();
@@ -16,4 +17,6 @@ class AnimationItem {
         void setPosition(Vector2 newPos);
         Vector2 getPosition(void) const;
         void saveToFile(std::ofstream& out) const;
+        void vanish(void);
+        bool isVanishing(void) const;
 };

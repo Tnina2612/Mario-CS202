@@ -2,7 +2,8 @@
 #include<cassert>
 #include<diy_functions/read.h>
 
-ItemAnimationPoint::ItemAnimationPoint(AnimationItem* item) : item(item) {
+ItemAnimationPoint::ItemAnimationPoint(AnimationItem* item, TileMap* blocks, TileMap * background, Bowser * bowser) : 
+    item(item), blocks(blocks), background(background), bowser(bowser) {
     // Constructor
 }
 
@@ -22,7 +23,9 @@ void ItemAnimationPoint::read(std::ifstream& inp, std::string filename) {
             readFromFile(inp, filename, targetY);
 
             animations.push_back(make_shared<ItemDownAnimation>(item, targetY));
-        } 
+        } else if(type == "DestroyBridge") {
+            animations.push_back(make_shared<ItemDestroyBridgeAnimation>(item, blocks, background, bowser));
+        }
         else {
             throw std::runtime_error("ItemAnimationPoint::read(inp, filename): Unknown item animation type " + type + "\n");
         }
@@ -45,7 +48,7 @@ ItemAnimationManager::ItemAnimationManager(ItemManager* itemManager) :
 }
 
 void ItemAnimationManager::draw(void) const {
-    for(const std::pair<std::shared_ptr<AnimationItem>, std::shared_ptr<ItemAnimationPoint>>& flag : itemManager->flags) {
+    for(const std::pair<std::shared_ptr<AnimationItem>, std::shared_ptr<ItemAnimationPoint>>& flag : itemManager->animationObjects) {
         flag.first->draw();
     }
 }
@@ -58,7 +61,7 @@ void ItemAnimationManager::update(void) {
             todoAnimation.pop();
         }
     } else {
-        for(const std::pair<std::shared_ptr<AnimationItem>, std::shared_ptr<ItemAnimationPoint>>& flag : itemManager->flags) {
+        for(const std::pair<std::shared_ptr<AnimationItem>, std::shared_ptr<ItemAnimationPoint>>& flag : itemManager->animationObjects) {
             flag.first->update();
 
             if(isActivate(flag.second) == true) {
@@ -84,6 +87,7 @@ bool ItemAnimationManager::isActivate(std::shared_ptr<ItemAnimationPoint> point)
 ItemManager::ItemManager(std::string filename, SubLevel* subLevel) : 
     subLevel(subLevel),
     animationManager(this) {
+
     ifstream inp(filename);
     if(inp.is_open() == false) {
         throw std::runtime_error("ItemManager::ItemManager(filename) cannot open file: " + filename);
@@ -108,7 +112,7 @@ ItemManager::ItemManager(std::string filename, SubLevel* subLevel) :
                 movingPlatforms.push_back(MovingPlatformFactory::createPlatform(type, startPos, endPos));
                 movingPlatforms.back()->setActive(true);
             }
-        } else if(itemData.find("flag") == 0) {
+        } else if(itemData.find("flag") == 0 || itemData.find("axe") == 0 || itemData.find("peach") == 0) {
             for(int j = 0; j < numItems; j++) {
                 Vector2 pos;
                 readFromFile(inp, filename, pos.x, pos.y);
@@ -120,11 +124,11 @@ ItemManager::ItemManager(std::string filename, SubLevel* subLevel) :
 
                 std::shared_ptr<ItemAnimationPoint> animationPoint(nullptr);
                 if(hasanimation == "hasanimation") {
-                    animationPoint = make_shared<ItemAnimationPoint>(item.get());
+                    animationPoint = make_shared<ItemAnimationPoint>(item.get(), subLevel->blocks.get(), subLevel->background.get(), subLevel->enemies->getBowser());
                     animationPoint->read(inp, filename);
                 }
 
-                flags.push_back({item, animationPoint});
+                animationObjects.push_back({item, animationPoint});
             }
         } else {
             for(int j = 0; j < numItems; j++) {
@@ -136,6 +140,7 @@ ItemManager::ItemManager(std::string filename, SubLevel* subLevel) :
         }
     }
     inp.close();
+    std::cout << "End ItemManager::ItemManager(filename, subLevel)" << std::endl;
 }
 
 void ItemManager::draw() {
@@ -213,12 +218,12 @@ void ItemManager::saveToFile(std::string filename) {
     for(int i = 0; i < (int)movingPlatforms.size(); i++) {
         movingPlatforms[i]->saveToFile(out);
     }
-    for(int i = 0; i < (int)flags.size(); i++) {
-        flags[i].first->saveToFile(out);
-        if(flags[i].second == nullptr) {
+    for(int i = 0; i < (int)animationObjects.size(); i++) {
+        animationObjects[i].first->saveToFile(out);
+        if(animationObjects[i].second == nullptr) {
             out << "noanimation" << endl;
         } else {
-            flags[i].second->saveToFile(out);
+            animationObjects[i].second->saveToFile(out);
         }
     }
     out.close();

@@ -11,6 +11,8 @@ void AnimationItem::update() {
 }
 
 void AnimationItem::draw() const {
+    if(vanish_) return;
+    
     animation.draw(pos.x, pos.y);
 }
 
@@ -25,4 +27,12 @@ Vector2 AnimationItem::getPosition(void) const {
 void AnimationItem::saveToFile(std::ofstream& out) const {
     out << "1  " << name << endl
         << pos.x << ' ' << pos.y << endl;
+}
+
+void AnimationItem::vanish(void) {
+    vanish_ = true;
+}
+
+bool AnimationItem::isVanishing(void) const {
+    return vanish_;
 }
