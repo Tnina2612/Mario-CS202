@@ -6,7 +6,7 @@
 #include <vector>
 #include <memory>
 
-const float MushroomAndStarSpeed = 40.0f;
+const float MushroomAndStarSpeed = 80.0f;
 const float appearAnimation = 0.75f;
 const float tileSize = 16.0f;
 

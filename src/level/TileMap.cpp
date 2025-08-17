@@ -93,8 +93,9 @@ void TileMap::update(Character* player) {
             if(item != nullptr) {
                 subLevel->itemManager.addItem(item);
             }
+               nextFrame.y = charRec.y;
         }
-        nextFrame.y = charRec.y;
+     
     }
 
     for(std::pair<int, int> pii : nearbyCells) {
@@ -295,6 +296,7 @@ void TileMap::update(std::shared_ptr<Item> item) {
     nearbyCells = cellsToCheck(nextFrame);
     nextFrame.x += movement.x * GetFrameTime();
     bool changeDirection = false;
+
     for(std::pair<int, int> pii : nearbyCells) {
         int i = pii.first, j = pii.second;
         if(isCollidableTile(i, j) == false) continue;
@@ -327,6 +329,7 @@ void TileMap::update(std::shared_ptr<Item> item) {
         1.f * pos.first * BLOCKSIDE, BLOCKSIDE, BLOCKSIDE});
     }
 }
+
 
 std::vector<std::pair<int, int>> TileMap::cellsToCheck(const Rectangle& rec) {
     Vector2 topLeft = {rec.x, rec.y};
