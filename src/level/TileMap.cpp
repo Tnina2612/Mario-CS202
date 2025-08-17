@@ -229,6 +229,10 @@ void TileMap::update(std::shared_ptr<Enemy> enemy) {
                 enemy->setOnGround(true);
                 enemy->setVelocityY(enemy->getRestVelocity());
                 nextFrame.y = blockRec.y - enemyRec.height;
+
+                if(tiles[i][j]->getJiggle() == true) {
+                    enemy->hitUp();
+                }
             } else {
                 enemy->setVelocityY(enemy->getVelocity().y * -1.0f);
                 nextFrame.y = blockRec.y + blockRec.height;

@@ -16,8 +16,8 @@ namespace CharacterSprite {
             const Rectangle Run2 = {121, 0, 12, 16};
             const Rectangle Run3 = {150, 0, 14, 15};
             const Rectangle Idle = {181, 0, 13, 16};
-            const Rectangle Climb1 = {331, 30, 13, 15};
-            const Rectangle Climb2 = {361, 30, 14, 16};
+            const Rectangle Climb1 = {30, 30, 14, 16};
+            const Rectangle Climb2 = {61, 30, 13, 15};
         };
         namespace Right {
             const Rectangle Jump = {359, 0, 17, 16};
@@ -26,8 +26,8 @@ namespace CharacterSprite {
             const Rectangle Run2 = {272, 0, 12, 16};
             const Rectangle Run3 = {241, 0, 14, 15};
             const Rectangle Idle = {211, 0, 13, 16};
-            const Rectangle Climb1 = {61, 30, 13, 15};
-            const Rectangle Climb2 = {30, 30, 14, 16};
+            const Rectangle Climb1 = {361, 30, 14, 16};
+            const Rectangle Climb2 = {331, 30, 13, 15};
         };
         const vector<Rectangle> frames = {
             Duck, 
@@ -59,8 +59,8 @@ namespace CharacterSprite {
             const Rectangle Run2 = {121, 52, 14, 31};
             const Rectangle Run3 = {150, 52, 16, 32};
             const Rectangle Idle = {180, 52, 16, 32};
-            const Rectangle Climb1 = {0, 158, 15, 30};
-            const Rectangle Climb2 = {28, 159, 14, 27};
+            const Rectangle Climb1 = {0, 88, 15, 30};
+            const Rectangle Climb2 = {28, 89, 14, 27};
         };
         namespace Right {
             const Rectangle Duck = {389, 57, 16, 22 };
@@ -70,8 +70,8 @@ namespace CharacterSprite {
             const Rectangle Run2 = {270, 52, 14, 31};
             const Rectangle Run3 = {239, 52, 16, 32};
             const Rectangle Idle = {209, 52, 16, 32};
-            const Rectangle Climb1 = {390, 158, 15, 30};
-            const Rectangle Climb2 = {363, 159, 14, 27};
+            const Rectangle Climb1 = {390, 88, 15, 30};
+            const Rectangle Climb2 = {363, 89, 14, 27};
         };
         const vector<Rectangle> frames = {
             Left::Duck, 
@@ -88,10 +88,10 @@ namespace CharacterSprite {
             Right::Run2, 
             Right::Run3, 
             Right::Idle,
-            Left::Climb1,
             Left::Climb2,
-            Right::Climb1,
-            Right::Climb2
+            Left::Climb1,
+            Right::Climb2,
+            Right::Climb1
         };
     };
     namespace Fire {
@@ -104,8 +104,8 @@ namespace CharacterSprite {
             const Rectangle Run2 = {128, 122, 14, 31};
             const Rectangle Run3 = {152, 122, 16, 32};
             const Rectangle Idle = {180, 122, 16, 32};
-            const Rectangle Climb1 = {0, 88, 15, 30};
-            const Rectangle Climb2 = {28, 89, 14, 27};
+            const Rectangle Climb1 = {0, 158, 15, 30};
+            const Rectangle Climb2 = {28, 159, 14, 27};
         };
         namespace Right {
             const Rectangle Duck = {389, 127, 16, 22};
@@ -116,8 +116,8 @@ namespace CharacterSprite {
             const Rectangle Run2 = {263, 122, 14, 31};
             const Rectangle Run3 = {237, 122, 16, 32};
             const Rectangle Idle = {209, 122, 16, 32};
-            const Rectangle Climb1 = {390, 88, 15, 30};
-            const Rectangle Climb2 = {363, 89, 14, 27};
+            const Rectangle Climb1 = {390, 158, 15, 30};
+            const Rectangle Climb2 = {363, 159, 14, 27};
         };
         const vector<Rectangle> frames = {
             Left::Duck, //0
@@ -134,10 +134,10 @@ namespace CharacterSprite {
             Right::Run2, //11
             Right::Run3, //12
             Right::Idle,//13
-            Left::Climb1, //14
-            Left::Climb2,// 15
-            Right::Climb1, //16
-            Right::Climb2, //17
+            Left::Climb2, //14
+            Left::Climb1,// 15
+            Right::Climb2, //16
+            Right::Climb1, //17
             Left::Throw, //18
             Right::Throw //19
         };

@@ -2,17 +2,17 @@
 #include<entities/Character.hpp>
 #include<level/TileMap.hpp>
 
-class SubLevelAnimation {
+class PlayerAnimation {
     public:
         virtual void initialize(Character* player) = 0;
         virtual bool isDone() = 0;
         virtual void update() = 0;
         virtual string getType() const = 0;
         virtual void saveToFile(std::ofstream& out) const = 0;
-        virtual ~SubLevelAnimation() = default;
+        virtual ~PlayerAnimation() = default;
 };
 
-class PlayerDownPipeAnimation : public SubLevelAnimation {
+class PlayerDownPipeAnimation : public PlayerAnimation {
     private:
         float targetY;
         Character* player;
@@ -24,7 +24,7 @@ class PlayerDownPipeAnimation : public SubLevelAnimation {
         void saveToFile(std::ofstream& out) const override;
 };
 
-class PlayerIntoLeftPipeAnimation : public SubLevelAnimation {
+class PlayerIntoLeftPipeAnimation : public PlayerAnimation {
     private:
         float targetX;
         Character* player;
@@ -36,7 +36,7 @@ class PlayerIntoLeftPipeAnimation : public SubLevelAnimation {
         void saveToFile(std::ofstream& out) const override;
 };
 
-class PlayerIntoRightPipeAnimation : public SubLevelAnimation {
+class PlayerIntoRightPipeAnimation : public PlayerAnimation {
     private:
         float targetX;
         Character* player;
@@ -48,7 +48,7 @@ class PlayerIntoRightPipeAnimation : public SubLevelAnimation {
         void saveToFile(std::ofstream& out) const override;
 };
 
-class PlayerUpPipeAnimation : public SubLevelAnimation {
+class PlayerUpPipeAnimation : public PlayerAnimation {
     private:
         float targetY;
         Character* player;
@@ -61,13 +61,16 @@ class PlayerUpPipeAnimation : public SubLevelAnimation {
         void saveToFile(std::ofstream& out) const override;
 };
 
-class PlayerClimbDownAnimation : public SubLevelAnimation {
+class PlayerClimbDownFlagColumnAnimation : public PlayerAnimation {
     private:
-        float pivotX;
-        float targetY;
+        const float pivotX;
+        const float targetY;
+        const bool directionAfterClimbIsRight;
+        const float waitTime = 0.5f;
         Character* player;
+        float elapsedTime;
     public:
-        PlayerClimbDownAnimation(float pivotX, float targetY);
+        PlayerClimbDownFlagColumnAnimation(float pivotX, float targetY, bool directionAfterClimbIsRight);
         void initialize(Character* player) override;
         bool isDone() override;
         void update() override;
@@ -75,7 +78,7 @@ class PlayerClimbDownAnimation : public SubLevelAnimation {
         void saveToFile(std::ofstream& out) const override;
 };
 
-class PlayerWalkToXAnimation : public SubLevelAnimation {
+class PlayerWalkToXAnimation : public PlayerAnimation {
     private:
         float targetX;
         Character* player;
@@ -89,7 +92,7 @@ class PlayerWalkToXAnimation : public SubLevelAnimation {
         void saveToFile(std::ofstream& out) const override;
 };
 
-class PlayerEnterDoorAnimation : public SubLevelAnimation {
+class PlayerEnterDoorAnimation : public PlayerAnimation {
     private:
         float targetTime;
         float elapsedTime;
@@ -102,7 +105,7 @@ class PlayerEnterDoorAnimation : public SubLevelAnimation {
         void saveToFile(std::ofstream& out) const override;
 };
 
-class PlayerExitDoorAnimation : public SubLevelAnimation {
+class PlayerExitDoorAnimation : public PlayerAnimation {
     private:
         float targetTime;
         float elapsedTime;
@@ -115,7 +118,7 @@ class PlayerExitDoorAnimation : public SubLevelAnimation {
         void saveToFile(std::ofstream& out) const override;
 };
 
-class PlayerGrowAnimation : public SubLevelAnimation {
+class PlayerGrowAnimation : public PlayerAnimation {
     private:
         Character* player;
     public:
@@ -126,7 +129,7 @@ class PlayerGrowAnimation : public SubLevelAnimation {
         void saveToFile(std::ofstream& out) const override;
 };
 
-class PlayerShrinkAnimation : public SubLevelAnimation {
+class PlayerShrinkAnimation : public PlayerAnimation {
     private:
         Character* player;
     public:

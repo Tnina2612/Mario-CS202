@@ -73,6 +73,12 @@ Vector2 MovingPlatform::getEndPos() const {
     return _endPos;
 }
 
+void MovingPlatform::saveToFile(std::ofstream& out) const {
+    out << "1 " << sizeMovementType << endl
+        << _startPos.x << ' ' << _startPos.y << ' '
+        << _endPos.x << ' ' << _endPos.y << endl;
+}
+
 void MovingPlatform::move(float dt) {
     if (!_isActive) return;
 

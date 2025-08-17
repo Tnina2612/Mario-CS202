@@ -1,4 +1,4 @@
-#include<level/LevelPlayerAnimation.hpp>
+#include<entities/PlayerAnimation.hpp>
 
 PlayerLevelAnimationManager::PlayerLevelAnimationManager(Character* character) : character(character) {
 }
@@ -33,6 +33,11 @@ void PlayerLevelAnimationManager::climbDown(float pivotX) {
     // Set frame
     float x = pivotX;
     float y = character->getPos().y + GetFrameTime() * LevelVar::animationSpeed;
+    if(character->getOrientation() == LEFT) {
+        character->getAnimation().update(GetFrameTime(), 14, 2);
+    } else {
+        character->getAnimation().update(GetFrameTime(), 16, 2);
+    }
     character->setPosition(x, y);
 }
 
@@ -147,32 +152,39 @@ void PlayerUpPipeAnimation::saveToFile(std::ofstream& out) const {
     out << getType() << ' ' << targetY;
 }
 
-PlayerClimbDownAnimation::PlayerClimbDownAnimation(float pivotX, float targetY) : pivotX(pivotX), targetY(targetY) {}
+PlayerClimbDownFlagColumnAnimation::PlayerClimbDownFlagColumnAnimation(float pivotX, float targetY, bool directionAfterClimbIsRight) : 
+    pivotX(pivotX), targetY(targetY), directionAfterClimbIsRight(directionAfterClimbIsRight) 
+{
+    // Constructor
+}
 
-void PlayerClimbDownAnimation::initialize(Character* player) {
+void PlayerClimbDownFlagColumnAnimation::initialize(Character* player) {
     this->player = player;
+    elapsedTime = 0.f;
 }
 
-bool PlayerClimbDownAnimation::isDone() {
-    return player->getPos().y + player->getRectangle().width >= targetY;
+bool PlayerClimbDownFlagColumnAnimation::isDone() {
+    return (player->getPos().y >= targetY && player->getOrientation() == directionAfterClimbIsRight && elapsedTime >= waitTime);
 }
 
-void PlayerClimbDownAnimation::update() {
-    if(player->getOrientation() == LEFT) {
-        player->getAnimation().update(GetFrameTime(), 14, 2);
+void PlayerClimbDownFlagColumnAnimation::update() {
+    if(player->getPos().y >= targetY) {
+        player->setPosition(player->getPos().x, targetY);
+        player->setOrientation(directionAfterClimbIsRight ? RIGHT : LEFT);
+        player->getAnimation().update(GetFrameTime(), directionAfterClimbIsRight ? 17 : 15, 1);
+
+        elapsedTime += GetFrameTime();
+    } else {
+        player->playerLevelAnimationManager.climbDown(pivotX);
     }
-    else {
-        player->getAnimation().update(GetFrameTime(), 16, 2);
-    }
-    player->playerLevelAnimationManager.climbDown(pivotX);
 }
 
-string PlayerClimbDownAnimation::getType() const {
+string PlayerClimbDownFlagColumnAnimation::getType() const {
     return "ClimbDown";
 }
 
-void PlayerClimbDownAnimation::saveToFile(std::ofstream& out) const {
-    out << getType() << ' ' << targetY;
+void PlayerClimbDownFlagColumnAnimation::saveToFile(std::ofstream& out) const {
+    out << getType() << ' ' << targetY << ' ' << directionAfterClimbIsRight;
 }
 
 PlayerWalkToXAnimation::PlayerWalkToXAnimation(float targetX, TileMap* blocks) : targetX(targetX), blocks(blocks) {}

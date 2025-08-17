@@ -5,6 +5,10 @@
 #include <raylib.h>
 #include <vector>
 #include <memory>
+#include<iostream>
+#include <string>
+#include <fstream>
+#include <stdexcept>
 
 const float MushroomAndStarSpeed = 70.0f;
 const float appearAnimation = 0.75f;
@@ -44,6 +48,7 @@ public:
     virtual void checkChangeDirect() {}
     virtual std::string getType() const = 0;
     virtual Vector2 getVelocity() const = 0;
+    virtual void saveToFile(std::ofstream& out) const;
 
     static std::shared_ptr<Item> stringToItem(std::string itemData, float x, float y);
     static std::vector<std::shared_ptr<Item>> stringToVectorItem(std::string itemData, float x, float y);

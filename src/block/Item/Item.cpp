@@ -34,6 +34,11 @@ void Item::draw()
     DrawTexturePro(itemTexture, rec_, dest_rec, {dest_rec.width / 2.0f, dest_rec.height}, 0.0f, WHITE);
 }
 
+void Item::saveToFile(std::ofstream& out) const {
+    out << "1 " << getType() << std::endl << 
+        pos_.x << ' ' << pos_.y << std::endl;
+}
+
 std::shared_ptr<Item> Item::stringToItem(std::string itemData, float x, float y) {
     vector<std::string> item = strsplit(itemData, ',');
     std::string name = item[0];

@@ -19,7 +19,7 @@ AnimationVectorTextureFlyweight::AnimationVectorTextureFlyweight(std::vector<std
     }
 }
 
-void AnimationVectorTextureFlyweight::draw(float posX, float posY, float rotation, int id) {
+void AnimationVectorTextureFlyweight::draw(float posX, float posY, float rotation, int id) const {
     if(id < 0 || id >= textures.size()) throw runtime_error("ID is out of bound.");
     if(textures[id].id != 0) { 
         DrawTextureEx(textures[id], Vector2{posX, posY}, rotation, 1.f, WHITE);
@@ -76,7 +76,7 @@ AnimationVectorTexture::AnimationVectorTexture(std::string name) :
     setTextureRange(0, flyweight->getNumFrames() - 1);
 }
 
-void AnimationVectorTexture::draw(float posX, float posY, float rotation) {
+void AnimationVectorTexture::draw(float posX, float posY, float rotation) const {
     flyweight->draw(posX, posY, rotation, currentTexture);
 }
 

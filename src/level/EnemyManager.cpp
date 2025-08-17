@@ -13,7 +13,6 @@
 
 EnemyManager::EnemyManager(std::string filename, SubLevel* subLevel) :
     subLevel(subLevel) {
-    cout << "Begin EnemyManager::EnemyManager(filename, subLevel)" << endl;
     EnemyFactory::loadAllFrames();
     ifstream inp(filename);
 
@@ -46,7 +45,6 @@ EnemyManager::EnemyManager(std::string filename, SubLevel* subLevel) :
         }
     }
     inp.close();
-    cout << "End EnemyManager::EnemyManager(filename, subLevel)" << endl;
 }
 
 void EnemyManager::addEnemy(std::shared_ptr<Enemy> enemy) {
@@ -58,6 +56,10 @@ Vector2 EnemyManager::getPlayerPos() const {
 }
 
 void EnemyManager::update() {
+    if(subLevel->player->getGrowthUp() == true || subLevel->player->getShrinkDown() == true) {
+        return;
+    }
+
     // if(IsKeyPressed(KEY_SPACE)) {
     //     oke = !oke;
     // }
@@ -90,30 +92,6 @@ void EnemyManager::update() {
             }
         }
         
-
-        // Check for collisions with the player
-        Rectangle pastPlayerRec = subLevel->playerManager.gameplayManager.pastPlayerRec;
-        if(CheckCollisionRecs(enemy->getHitBox(), subLevel->player->getRectangle()) && enemy->isAlive()) {
-            if(pastPlayerRec.y + pastPlayerRec.height < enemy->getHitBox().y && 
-                enemy->getTypeName().find("Plant") == std::string::npos) {
-                    std::cerr << "Enemy" << std::endl;
-                enemy->hitUp();
-                subLevel->player->setVeclocityY(-100);
-                Program::getInstance().getHUD().onNotify(EventType::ADDSCORE);
-            } else {
-                std::cerr << "PLAYER" << std::endl;
-                int dir = enemy->getPos().x < subLevel->player->getPos().x ? 1 : -1;
-                enemy->hitVertical(dir);
-                subLevel->player->takeDamage();
-                // if(subLevel->player->getNumLives() > 0) {
-                //     Program::getInstance().pushScene(new DeathScene());
-                // } else {
-                //     cout << "Game Over! You have no lives left." << endl;
-                //     Program::getInstance().pushScene(new GameOverScene());
-                // }
-            }
-        }
-
         for(auto& f : fires) {
             subLevel->blocks->update(enemy, f);
         }
@@ -127,6 +105,24 @@ void EnemyManager::update() {
         auto enemy = spawnQueue.front();
         spawnQueue.pop();
         list.push_back(enemy);
+    }
+}
+
+void EnemyManager::updatePlayer() {
+    for(auto& enemy : list){
+        Rectangle pastPlayerRec = subLevel->playerManager.gameplayManager.pastPlayerRec;
+        if(CheckCollisionRecs(enemy->getHitBox(), subLevel->player->getRectangle()) && enemy->isAlive()) {
+            if(pastPlayerRec.y + pastPlayerRec.height < enemy->getHitBox().y && 
+                enemy->getTypeName().find("Plant") == std::string::npos) {
+                enemy->hitUp();
+                subLevel->player->setVeclocityY(-100);
+                Program::getInstance().getHUD().onNotify(EventType::ADDSCORE);
+            } else {
+                int dir = enemy->getPos().x < subLevel->player->getPos().x ? 1 : -1;
+                enemy->hitVertical(dir);
+                subLevel->player->takeDamage();
+            }
+        }
     }
 }
 

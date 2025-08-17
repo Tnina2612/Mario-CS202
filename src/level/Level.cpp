@@ -7,16 +7,15 @@
 
 SubLevel::SubLevel(Level* level, std::string folderName, Character* player, Vector2 initPlayerPosition, InputManager& inputManager, Camera2D* camera) : // Initializer
     level(level),
+    folderName(folderName),
     background(make_shared<TileMap>(folderName + "/background.txt", this)), 
     blocks(make_shared<TileMap>(folderName + "/blocks.txt", this)),
     player(player), 
     enemies(make_shared<EnemyManager>(folderName + "/enemies.txt", this)),
-    changeSubLevelManager(make_shared<ChangeSubLevelManager>(folderName + "/changingPoints.txt", this)),
     initPlayerPosition(initPlayerPosition),
-    playerManager(this, inputManager),
+    playerManager(this, inputManager, folderName),
     itemManager(folderName + "/items.txt", this),
-    camera(camera),
-    folderName(folderName)
+    camera(camera)
 {
     player->setPosition(initPlayerPosition.x, initPlayerPosition.y);
 }
@@ -28,18 +27,11 @@ void SubLevel::draw() {
     itemManager.draw();
     player->draw();
     blocks->draw();
-
-    // Debug
-    if(debug) {
-        changeSubLevelManager->draw();
-    }
 }
 
 void SubLevel::update() {
     background->updateBlocks();
-    if(player->getGrowthUp() == false && player->getShrinkDown() == false) {
-        enemies->update();
-    }
+    enemies->update();
     itemManager.update();
     playerManager.update();
     blocks->updateBlocks();
@@ -156,7 +148,6 @@ void Level::saveGame(std::string folderName) {
     subLevel->background->saveToFile(saveFolder + "/background.txt");
     subLevel->blocks->saveToFile(saveFolder + "/blocks.txt");
     subLevel->enemies->saveToFile(saveFolder + "/enemies.txt");
-    subLevel->changeSubLevelManager->saveToFile(saveFolder + "/changingPoints.txt");
     subLevel->itemManager.saveToFile(saveFolder + "/items.txt");
     // Initialize instructor file
     std::string saveFile = saveFolder + "/InitializeInstructor.txt"; 

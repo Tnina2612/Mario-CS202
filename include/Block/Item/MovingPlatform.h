@@ -3,6 +3,9 @@
 #include<vector>
 #include<unordered_map>
 #include<memory>
+#include<string>
+#include<fstream>
+#include<iostream>
 #include"raylib.h"
 
 #include"entities/Animation.hpp"
@@ -52,6 +55,7 @@ public:
     int getSizeMovementType() const;
     Vector2 getStartPos() const;
     Vector2 getEndPos() const;
+    void saveToFile(std::ofstream& out) const;
 };
 
 class MovingPlatformFactory {

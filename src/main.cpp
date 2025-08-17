@@ -12,6 +12,10 @@ int main() {
         cout << "Out of range: " << e.what() << endl;
     } catch(const std::runtime_error& e) {
         cout << "Runtime error: " << e.what() << endl;
+    } catch(const char* c) {
+        cout << c << endl;
+    } catch(const string& s) {
+        cout << s << endl;
     } catch(...) {
         cout << "Catched an error." << endl;
     }

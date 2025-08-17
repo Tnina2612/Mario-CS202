@@ -10,7 +10,7 @@ private:
 public:
     AnimationVectorTextureFlyweight();
     AnimationVectorTextureFlyweight(std::vector<std::string> filenames);
-    void draw(float posX, float posY, float rotation, int id);
+    void draw(float posX, float posY, float rotation, int id) const;
     int getNumFrames() const;
     ~AnimationVectorTextureFlyweight();
 };

@@ -1,0 +1,33 @@
+5
+
+927 140 2 4 Down
+1
+Down
+./world-maps/1-1/underground1
+underground
+24 32
+
+2608 176 32 48 Touch
+1
+Up 176
+None
+
+4447.5 143.5 1 0.5 Down
+1
+Down
+./world-maps/1-1/underground2
+underground
+24 32
+
+4624 176 32 48 Touch
+1
+Up 176
+None
+
+5984 32 16 160 Touch
+2
+ClimbDown 192 0
+WalkToX 6144
+./world-maps/1-2
+overworld
+24 204

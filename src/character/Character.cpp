@@ -147,7 +147,6 @@ void Character::update() {
         if(invincibilityTime <= 0.0f) {
             isInvincible = false;
         }
-        cout << "Invincibility time left: " << invincibilityTime << endl;
     }
     switch (behavior) {
         case MOVE:

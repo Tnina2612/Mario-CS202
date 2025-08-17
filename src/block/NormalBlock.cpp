@@ -49,6 +49,9 @@ void NormalBlock::onHit(Character& character)
 
 void NormalBlock::jiggle()
 {
+    if (!jiggle_)
+        return;
+
     float dt = GetFrameTime();
     velocity_y += 1000.0f * dt;
 

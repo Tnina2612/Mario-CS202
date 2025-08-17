@@ -72,5 +72,5 @@ Rectangle BreakBlock::getDrawRec() const
 }
 
 std::string BreakBlock::getStateName() const {
-    return "State";
+    return "Break";
 }

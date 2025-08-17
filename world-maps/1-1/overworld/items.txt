@@ -1,3 +1,9 @@
-1
+2
 1 movingplatform
 3 5792 196 5792 80
+1 flag1
+5976 32
+hasanimation 
+5984 32 16 160 Touch
+1
+Down 176

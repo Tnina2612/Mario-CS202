@@ -1,3 +1,7 @@
+1
+204 192 4 16 Right
+1
+Right
 ./world-maps/1-1/overworld
 overworld
-24 208
+2616 208
