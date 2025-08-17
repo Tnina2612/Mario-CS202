@@ -271,7 +271,7 @@ void TileMap::update(std::shared_ptr<Enemy> enemy) {
 }
 
 void TileMap::update(std::shared_ptr<Item> item) {
-    if(item->getType().find("mushroom") == std::string::npos) {
+    if(item->getType().find("mushroom") == std::string::npos && item->getType().find("star") == std::string::npos ) {
         return;
     }
 
@@ -311,6 +311,7 @@ void TileMap::update(std::shared_ptr<Item> item) {
             nextFrame.x = itemRec.x;
         }
     }
+    
 
     if(changeDirection) {
         item->checkChangeDirect();
