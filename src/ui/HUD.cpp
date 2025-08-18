@@ -39,6 +39,39 @@ void HUD::onNotify(EventType type) {
     }
 }
 
+void HUD::onNotify(EventType type, Vector2 pos) {
+    // pos.x *= Global::SCALE_FACTOR;
+    pos.x = 500;
+    pos.y *= Global::SCALE_FACTOR;
+    switch (type) {
+        case EventType::ADDSCORE:
+            session->SCORE += 100;
+            inGameNotification.push_back({"+100", pos, 0.5f});
+            break;
+        case EventType::COLLECT_COINS:
+            session->COINS++;
+            break;
+        case EventType::ADDLIVES:
+            session->LIVES++;
+            inGameNotification.push_back({"1UP", pos, 0.5f});
+            break;
+        case EventType::MARIO_DIED:
+            session->LIVES--;
+            break;
+        case EventType::RESET_TIMER:
+            session->TIMELEFT = 400;
+            break;
+        case EventType::RESET_LIVES:
+            session->LIVES = 3;
+            break;
+        case EventType::RESET_SCORES:
+            session->SCORE = 0;
+            break;
+        default:
+            break;
+    }
+}
+
 void HUD::update(float deltaTime) {
     timeAccumulator += deltaTime;
     
@@ -49,6 +82,19 @@ void HUD::update(float deltaTime) {
     }
     
     if (session->TIMELEFT < 0) session->TIMELEFT = 0;
+
+    for(int i = 0; i < (int)inGameNotification.size(); i++) {
+        std::string s;
+        Vector2 pos;
+        float waitTime;
+        std::tie (s, pos, waitTime) = inGameNotification[i];
+        waitTime -= GetFrameTime();
+        inGameNotification[i] = make_tuple(s, pos, waitTime);
+    }
+
+    while(inGameNotification.size() > 0 && get<2>(inGameNotification.back()) <= 0.f) {
+        inGameNotification.pop_back();
+    }
 }
 
 void HUD::draw() {
@@ -87,6 +133,16 @@ void HUD::draw() {
         float posY = shiftY + i * (size + spaceY);
         
         DrawTextEx(Program::getInstance().getFont(), line.c_str(), {posX, posY}, size, spaceX, WHITE);
+    }
+
+    for(int i = 0; i < (int)inGameNotification.size(); i++) {
+        int space = 25;
+        Vector2 pos = get<1>(inGameNotification[i]);
+        pos.y += space * i;
+        cout << "Draw text: " << get<0>(inGameNotification[i]) << " at " << pos.x << ", " << pos.y << std::endl;
+        DrawTextEx(Program::getInstance().getFont(),
+            get<0>(inGameNotification[i]).c_str(), 
+            pos, 24, 1, WHITE);
     }
 }
 

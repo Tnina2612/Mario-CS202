@@ -299,6 +299,7 @@ void Character::setBehavior(Behavior newBehavior) {
 }
 
 void Character::powerUp() {
+    Program::getInstance().getHUD().onNotify(EventType::ADDSCORE, pos);
     if(getCharacterState() == CharacterState::SMALL) {
         characterState = CharacterState::SUPER;
         allFrames = CharacterSprite::Super::allFrames;
@@ -520,6 +521,13 @@ void Character::takeDamage() {
 }
 
 void Character::addCoin() {
-    Program::getInstance().getSession().COINS++;
     SoundManager::getInstance().playSound(SoundType::COIN);
+    Program::getInstance().getHUD().onNotify(EventType::ADDSCORE, pos);
+    Program::getInstance().getHUD().onNotify(EventType::COLLECT_COINS, pos);
+}
+
+void Character::addLife() {
+    SoundManager::getInstance().playSound(SoundType::ONE_UP);
+    Program::getInstance().getHUD().onNotify(EventType::ADDSCORE, pos);
+    Program::getInstance().getHUD().onNotify(EventType::ADDLIVES, pos);
 }

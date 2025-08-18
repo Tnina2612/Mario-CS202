@@ -2,6 +2,7 @@
 #include<level/TileMap.hpp>
 #include<level/Level.hpp>
 #include<iomanip>
+#include<core/SoundManager.hpp>
 
 TileMap::TileMap(std::string filename, SubLevel* subLevel) : subLevel(subLevel) {
     std::ifstream inp(filename);
@@ -93,7 +94,7 @@ void TileMap::update(Character* player) {
             if(item != nullptr) {
                 subLevel->itemManager.addItem(item);
             }
-               nextFrame.y = charRec.y;
+            nextFrame.y = charRec.y;
         }
      
     }
@@ -399,6 +400,9 @@ std::string TileMap::getTileNameAt(int i, int j) const {
 }
 
 void TileMap::erase(std::pair<int, int> pos) {
+    if(tiles[pos.first][pos.second] == nullptr) return;
+
+    SoundManager::getInstance().playSound(SoundType::BREAKBLOCK);
     tiles[pos.first][pos.second].reset();
 }
 

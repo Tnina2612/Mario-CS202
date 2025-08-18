@@ -3,6 +3,8 @@
 #include<iostream>
 #include<unordered_map>
 #include"raylib.h"
+#include<core/Program.hpp>
+#include<core/SoundManager.hpp>
 
 #include"../../include/entities/Enemy/Enemy.hpp"
 #include"../../include/entities/Enemy/EnemyType.hpp"
@@ -211,6 +213,8 @@ void Enemy::changeDirection() {
 
 void Enemy::hitUp() {
     onStomp();
+    SoundManager::getInstance().playSound(SoundType::STOMP);
+    Program::getInstance().getHUD().onNotify(EventType::ADDSCORE, getPos());
 }
 
 void Enemy::hitBlockDown() {

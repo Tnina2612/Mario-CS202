@@ -69,6 +69,7 @@ class PlayerClimbDownFlagColumnAnimation : public PlayerAnimation {
         const float waitTime = 0.5f;
         Character* player;
         float elapsedTime;
+        bool music = false;
     public:
         PlayerClimbDownFlagColumnAnimation(float pivotX, float targetY, bool directionAfterClimbIsRight);
         void initialize(Character* player) override;

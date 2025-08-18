@@ -146,4 +146,5 @@ public:
     bool getIsDead() const;
 
     void addCoin();
+    void addLife();
 };

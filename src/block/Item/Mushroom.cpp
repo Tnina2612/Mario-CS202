@@ -113,11 +113,9 @@ void Mushroom::activate(Character& character)
 {
     if (state_ == StateMushroom::super_)
     {
-        // Score_Manager &score_manager = Score_Manager::GetInstance();
-        // score_manager.AddScore(player.getPosition(), Score_One_Up_Super);
         character.powerUp();
     } else {
-        // character.addLife();
+        character.addLife();
     }
 //     info.UpdateScore(Score_One_Up_Super);
 

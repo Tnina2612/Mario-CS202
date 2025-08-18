@@ -91,7 +91,7 @@ void Block::appearItem(Character& player)
     items.pop_back();
 
     if(appearingItem->getType() == "coin") {
-        // player.addCoin();
+        appearingItem->activate(player);
     }
 }
 

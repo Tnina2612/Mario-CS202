@@ -1,6 +1,7 @@
 #include "Block/NormalBlock.h"
 #include<block/BreakBlock.h>
 #include<block/SolidBlock.h> 
+#include<core/SoundManager.hpp>
 const float scale_screen= 3.0f;
 
 NormalBlock::NormalBlock(Block &block)
@@ -51,6 +52,8 @@ void NormalBlock::jiggle()
 {
     if (!jiggle_)
         return;
+
+    SoundManager::getInstance().playSound(SoundType::BUMP);
 
     float dt = GetFrameTime();
     velocity_y += 1000.0f * dt;

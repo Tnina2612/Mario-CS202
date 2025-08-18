@@ -1,6 +1,7 @@
 #include<entities/PlayerAnimation.hpp>
 #include<core/Program.hpp>
 #include<scenes/TitleScene.hpp>
+#include<core/SoundManager.hpp>
 
 PlayerLevelAnimationManager::PlayerLevelAnimationManager(Character* character) : character(character) {
 }
@@ -178,6 +179,11 @@ bool PlayerClimbDownFlagColumnAnimation::isDone() {
 }
 
 void PlayerClimbDownFlagColumnAnimation::update() {
+    if(music == false) {
+        music = true;
+        SoundManager::getInstance().playSound(SoundType::FLAGPOLE);
+    }
+
     if(player->getPos().y >= targetY) {
         player->setPosition(player->getPos().x, targetY);
         player->setOrientation(directionAfterClimbIsRight ? RIGHT : LEFT);
@@ -185,6 +191,8 @@ void PlayerClimbDownFlagColumnAnimation::update() {
             [player->getCharacterState() == CharacterState::SMALL ? 1 : 0]});
 
         elapsedTime += GetFrameTime();
+        SoundManager::getInstance().playSound(SoundType::STAGE_CLEAR);
+        music = false;
     } else {
         player->playerLevelAnimationManager.climbDown(pivotX);
     }

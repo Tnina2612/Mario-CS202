@@ -1,4 +1,6 @@
 #include <Block/BreakBlock.h>
+#include <core/SoundManager.hpp>
+
 const float scale_screen = 3.0f;
 BreakBlock::BreakBlock(Block &block/*, Animation* animation*/)
     : m_block(block), isDelete(false), rotation(0.0f), debris("debris")
@@ -8,6 +10,7 @@ BreakBlock::BreakBlock(Block &block/*, Animation* animation*/)
 
     up_velocity = {-move_, -breakHeight}; // bay lên
     down_velocity = {-move_, 0.0f};        // rơi xuống từ từ
+    SoundManager::getInstance().playSound(SoundType::BREAKBLOCK);
 }
 
 void BreakBlock::draw_()

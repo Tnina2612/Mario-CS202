@@ -1,4 +1,5 @@
 #include<block/Item/ItemAnimation.h>
+#include<core/SoundManager.hpp>
 
 ItemAnimation::ItemAnimation(AnimationItem* item) : item(item) {
     // Constructor
@@ -60,11 +61,13 @@ void ItemDestroyBridgeAnimation::update(void) {
     } else if(blocksToBeErased.size() > 0) {
         blocks->erase(blocksToBeErased.back());
         blocksToBeErased.pop_back();
+        SoundManager::getInstance().playSound(SoundType::BOWSER_FALLS);
     } else if(bowser->getPos().y < 240) {
         Vector2 newPos = bowser->getPos();
         fallVelocity += fallAcceleration * GetFrameTime();
         newPos.y += fallVelocity * GetFrameTime();
         bowser->setPosition(newPos);
+        SoundManager::getInstance().playSound(SoundType::WORLD_CLEAR);
     } else {
         bowser->setActive(false);
         item->vanish();

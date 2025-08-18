@@ -1,5 +1,7 @@
 #include "block/QuestionBlock.h"
 #include<block/SolidBlock.h>
+#include<core/SoundManager.hpp>
+
 const float scale_screen = 3.0f; 
 
 QuestionBlock::QuestionBlock(Block &block)
@@ -60,6 +62,8 @@ void QuestionBlock::jiggle()
 {
     if (!jiggle_)
         return;
+
+    SoundManager::getInstance().playSound(SoundType::BUMP);
 
     float dt = GetFrameTime();
     velocity_y += 1000.0f * dt;

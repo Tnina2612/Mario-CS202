@@ -1,4 +1,5 @@
 #include "../include/Block/Item/Coin.h"
+#include <core/Program.hpp>
 
 Coin::Coin(Vector2 pos)
     : Item(pos), m_rec(ItemSprite::COINSPIN), initY(pos.y),
@@ -23,6 +24,10 @@ void Coin::update()
 
 void Coin::appear() {
     appearAnimation = true;
+}
+
+void Coin::activate(Character& character) {
+    character.addCoin();
 }
 
 bool Coin::canMove() const { return false; }
