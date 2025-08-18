@@ -4,6 +4,7 @@
 #include "scenes/TimeUpScene.hpp"
 #include <filesystem>
 #include <diy_functions/read.h>
+#include <core/MusicManager.hpp>
 
 SubLevel::SubLevel(Level* level, std::string folderName, Character* player, Vector2 initPlayerPosition, InputManager& inputManager, Camera2D* camera) : // Initializer
     level(level),
@@ -177,12 +178,15 @@ void Level::switchTheme(std::string theme) {
     if(theme == "overworld") {
         LevelVar::ThemeID = LevelVar::Overworld;
         LevelVar::BackGroundColor = LevelVar::SkyColor;
+        MusicManager::getInstance().playMusic(MusicType::OVERWORLD);
     } else if(theme == "underground") {
         LevelVar::ThemeID = LevelVar::Underground;
         LevelVar::BackGroundColor = BLACK;
+        MusicManager::getInstance().playMusic(MusicType::UNDERGROUND);
     } else if(theme == "castle") {
         LevelVar::ThemeID = LevelVar::Castle;
         LevelVar::BackGroundColor = BLACK;
+        MusicManager::getInstance().playMusic(MusicType::CASTLE);
     }
 }
 

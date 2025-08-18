@@ -76,7 +76,7 @@ void TileMap::update(Character* player) {
         }   
         if(CheckCollisionRecs({charRec.x + player->getVeclocityX() * deltaTime, charRec.y + player->getVeclocityY() * deltaTime, charRec.width, charRec.height}, 
                             tiles[i][j]->getDrawRec())) {
-            // player->addCoin();
+            player->addCoin();
             tiles[i][j].reset();
         }
     }

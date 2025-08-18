@@ -74,4 +74,26 @@ void HUD::draw() {
     DrawTextEx(font, worldText.c_str(), { 460, 35 }, 24, 1, WHITE);
     DrawTextEx(font, timeText.c_str(),  { 655, 35 }, 24, 1, WHITE);
     DrawTextEx(font, livesText.c_str(), { 798, 35 }, 24, 1, WHITE);
+
+    for(int i = 0; i < (int)levelAnnouncement.size(); i++) {
+        std::string line = levelAnnouncement[i];
+
+        float size = 34.f;
+        float spaceX = 1.f;
+        float spaceY = 32.f;
+        float shiftY = (Global::WINDOW_HEIGHT - size * levelAnnouncement.size() - spaceY * (levelAnnouncement.size() - 1)) / 2.f;
+        
+        float posX = (Global::WINDOW_WIDTH - MeasureTextEx(Program::getInstance().getFont(), line.c_str(), size, spaceX).x) / 2.f;
+        float posY = shiftY + i * (size + spaceY);
+        
+        DrawTextEx(Program::getInstance().getFont(), line.c_str(), {posX, posY}, size, spaceX, WHITE);
+    }
+}
+
+void HUD::addLevelAnnouncement(std::string line) {
+    levelAnnouncement.push_back(line);
+}
+
+void HUD::clearLevelAnnouncement() {
+    levelAnnouncement.clear();
 }

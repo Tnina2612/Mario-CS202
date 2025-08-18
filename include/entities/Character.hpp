@@ -144,4 +144,6 @@ public:
 
     Vector2 getPos() const;
     bool getIsDead() const;
+
+    void addCoin();
 };

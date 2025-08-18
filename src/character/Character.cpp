@@ -303,6 +303,7 @@ void Character::powerUp() {
         characterState = CharacterState::SUPER;
         allFrames = CharacterSprite::Super::allFrames;
         growthUp = true;
+        SoundManager::getInstance().playSound(SoundType::POWERUP);
     } else if(getCharacterState() == CharacterState::SUPER) {
         characterState = CharacterState::FIRE;
         allFrames = CharacterSprite::Fire::allFrames;
@@ -515,4 +516,10 @@ void Character::takeDamage() {
     isInvincible = true; // Set invincibility
     characterState = SMALL;
     allFrames = CharacterSprite::Small::allFrames; // Reset to small frames
+    SoundManager::getInstance().playSound(SoundType::POWERDOWN);
+}
+
+void Character::addCoin() {
+    Program::getInstance().getSession().COINS++;
+    SoundManager::getInstance().playSound(SoundType::COIN);
 }

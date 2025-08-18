@@ -3,6 +3,8 @@
 #include "core/GameSession.hpp"
 #include "raylib.h"
 #include <utility>
+#include <vector>
+#include <string>
 
 class EventManager;
 
@@ -13,10 +15,13 @@ private:
     Texture2D coin;
     float timeAccumulator = 0.0f;
 
+    std::vector<std::string> levelAnnouncement;
 public:
     HUD(GameSession* s);
     ~HUD();
     void onNotify(EventType type) override;
     void update(float deltaTime);
     void draw();
+    void addLevelAnnouncement(std::string line);
+    void clearLevelAnnouncement();
 };

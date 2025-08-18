@@ -1,4 +1,6 @@
 #include<entities/PlayerAnimation.hpp>
+#include<core/Program.hpp>
+#include<scenes/TitleScene.hpp>
 
 PlayerLevelAnimationManager::PlayerLevelAnimationManager(Character* character) : character(character) {
 }
@@ -339,12 +341,37 @@ void PlayerWaitAnimation::saveToFile(std::ofstream& out) const {
     out << getType() << " " << waitTime;
 }
 
+PlayerWinAnimation::PlayerWinAnimation() : waitTime(1.f) {}
+
 void PlayerWinAnimation::initialize(Character* player) {
     this->player = player;
+    printText1 = printText2 = false;
 }
 
 bool PlayerWinAnimation::isDone() {
-    return true;
+    elapsedTime += GetFrameTime();
+
+    if(printText1 == false) {
+        if(elapsedTime >= waitTime) {
+            elapsedTime = 0;
+            Program::getInstance().getHUD().addLevelAnnouncement("YOU WIN!");
+            printText1 = true;
+        }
+    } else if(printText2 == false) {
+        if(elapsedTime >= waitTime) {
+            elapsedTime = 0;
+            Program::getInstance().getHUD().addLevelAnnouncement("PRESS [ENTER] TO CONTINUE");
+            printText2 = true;
+        }
+    } else {
+        if(IsKeyPressed(KEY_ENTER)) {
+            Program::getInstance().getHUD().clearLevelAnnouncement();
+            Program::getInstance().pushScene(new TitleScene());
+            return true;
+        }
+    }
+
+    return false;
 }
 
 void PlayerWinAnimation::update() {

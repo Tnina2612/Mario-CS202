@@ -157,7 +157,12 @@ class PlayerWaitAnimation : public PlayerAnimation {
 class PlayerWinAnimation : public PlayerAnimation {
     private:
         Character * player;
+        bool printText1 = false;
+        bool printText2 = false;
+        const float waitTime;
+        float elapsedTime = 0.f;
     public:
+        PlayerWinAnimation();
         void initialize(Character* player) override;
         bool isDone() override;
         void update() override;
