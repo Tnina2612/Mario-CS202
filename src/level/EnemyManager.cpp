@@ -210,8 +210,9 @@ void EnemyManager::checkCollisionsPlayerFireballBowser(Character* player, Bowser
 
 void EnemyManager::checkCollisionsFireballPlayerBowser(CharacterFireball* fire, Bowser* bowser) {
     if(CheckCollisionRecs(fire->getHitBox(), bowser->getHitBoxes()[0])) {
+        if(fire->getActive())
+            bowser->beHitByFireball();
         fire->hitBlockHorizontal();
-        bowser->beHitByFireball();
     }
 }
 
