@@ -35,15 +35,25 @@ Vector2 LakituMove::Execute(EnemyData& data, float dt) {
     }
 
     Vector2 playerPos = data._targetPos;
-    if (playerPos.x > data._pos.x) {
-        res.x = data._velocity.x * dt;
-    } 
-    else if (playerPos.x < data._pos.x) {
-        res.x = -data._velocity.x * dt;
-    } 
-    else {
-        res.x = 0.f;
+    float dist = sqrt(pow(playerPos.x - data._pos.x, 2) + pow(playerPos.y - data._pos.y, 2));
+    float speed = 0.f;
+    if(dist < 125.f) {
+        speed = data._velocity.x;
+    } else {
+        speed = 200.f;
     }
+
+    if (playerPos.x > data._pos.x) {
+            res.x = speed * dt;
+        } 
+        else if (playerPos.x < data._pos.x) {
+            res.x = -speed * dt;
+        } 
+        else {
+            res.x = 0.f;
+    }
+
+    
 
     // if (movingUp) {
     //     res.y = -floatSpeed * dt;

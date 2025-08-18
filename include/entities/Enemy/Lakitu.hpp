@@ -11,6 +11,7 @@ private:
     const float _cd = 6.f;
     float spawnTimer = 0.f;
     bool isSpawning = false;
+    bool dying = false;
     void spawnSpiny();
 public:
     Lakitu();
