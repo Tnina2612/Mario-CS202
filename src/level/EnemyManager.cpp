@@ -210,7 +210,6 @@ void EnemyManager::checkCollisionsPlayerFireballBowser(Character* player, Bowser
 
 void EnemyManager::checkCollisionsFireballPlayerBowser(CharacterFireball* fire, Bowser* bowser) {
     if(CheckCollisionRecs(fire->getHitBox(), bowser->getHitBoxes()[0])) {
-        std::cerr << "HTI" << std::endl;
         fire->hitBlockHorizontal();
         bowser->beHitByFireball();
     }
