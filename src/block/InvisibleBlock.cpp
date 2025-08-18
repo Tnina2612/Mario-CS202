@@ -41,7 +41,8 @@ void InvisibleBlock::changeState()
 
 Rectangle InvisibleBlock::getDrawRec() const
 {
-    return Rectangle{m_block.getPos().x, m_block.getPos().y, rec_.x, rec_.y};
+ return Rectangle{m_block.getPos().x, m_block.getPos().y, rec_.x, rec_.y};
+
 }
 
 std::string InvisibleBlock::getStateName() const

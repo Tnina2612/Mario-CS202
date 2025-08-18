@@ -86,7 +86,8 @@ void TileMap::update(Character* player) {
         if(i < 0 || i >= height || j < 0 || j >= width || tiles[i][j] == nullptr || tiles[i][j]->getStateName() != "Invisible") {
             continue;
         }
-        if(CheckCollisionRecs(nextFrame, tiles[i][j]->getDrawRec()) && nextFrame.y >= tiles[i][j]->getDrawRec().y) {
+        if(CheckCollisionRecs(nextFrame, tiles[i][j]->getDrawRec()) && nextFrame.y >= tiles[i][j]->getDrawRec().y&& 
+       player->getVeclocityY() < 0) {
             player->hitBlockTop();
             tiles[i][j]->onHit(*player);
             std::shared_ptr<Item> item = tiles[i][j]->popAppearingItem();
