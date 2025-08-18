@@ -1,5 +1,7 @@
 #include<cmath>
 #include<random>
+#include<algorithm>
+#include<iostream>
 
 #include"../../include/entities/Enemy/EnemyFactory.hpp"
 #include"../../include/entities/Enemy/Bowser.hpp"
@@ -18,7 +20,7 @@ Bowser::Bowser(const std::string& name) {
 
     float width = 35.f;
     float height = 35.f;
-    m_data = EnemyData (width, height, 10, false, true, true, false, 3, 
+    m_data = EnemyData (width, height, 10, false, true, true, false, 4, 
                         Vector2{10,0}, Vector2{0,0}, -1);
 
     m_data._velocity = Vector2{0.f, 0.f};
@@ -160,31 +162,35 @@ std::vector<std::shared_ptr<ICommand>> Bowser::generateSkill() {
 
     std::uniform_int_distribution<> dis(0, 99);
     int r = dis(gen);
-
-    if (r < 15) {
+    if(isMarioClose() && r % 3 != 1) {
+        if(m_target->getPos().y < m_data._pos.y) {
+            skills.push_back(std::make_shared<JumpCommand>());
+            skills.push_back(std::make_shared<BreathFire>());
+        }
+        else {
+            skills.push_back(std::make_shared<ChaseCommand>());
+            skills.push_back(std::make_shared<BreathFire>());
+        }
+    }
+    else if (r < 15) {
         skills.push_back(std::make_shared<JumpCommand>());
-        std::cerr << "Bowser Jump\n";
     } 
     else if (r < 60) {
         int t = dis(gen);
         if(isMarioClose() || t%4 != 1) {
             skills.push_back(std::make_shared<ChaseCommand>());
-            std::cerr << "Bowser Chase\n";
         }
         else {
             skills.push_back(std::make_shared<BreathFire>());
-            std::cerr << "Bowser Breath\n";
         }
     } 
     else if (r < 80) {
         skills.push_back(std::make_shared<JumpCommand>());
         skills.push_back(std::make_shared<BreathFire>());
-        std::cerr << "Bowser Jump + Breath\n";
     } 
     else {
         skills.push_back(std::make_shared<ChaseCommand>());
         skills.push_back(std::make_shared<BreathFire>());
-        std::cerr << "Bowser Chase + Breath\n";
     }
     return skills;
 }
@@ -209,6 +215,10 @@ bool Bowser::beHitByFireball() {
     return true;
 }
 
+bool Bowser::isAlive() {
+    return m_data._hp > 0;
+}
+
 std::vector<Rectangle> Bowser::getHitBoxes() {
     std::vector<Rectangle> res;
     
@@ -224,6 +234,7 @@ void Bowser::spawnFireball() {
     Vector2 pos = Vector2{m_data._pos.x + 10 * m_data._dir, m_target->getPos().y};
 
     std::shared_ptr<Fireball> fire = std::make_shared<Fireball>(startPos, pos);
+    fire->setActive(true);
     fireballs.push_back(fire);
 }
 
@@ -231,14 +242,37 @@ void Bowser::draw() {
     if(!m_data._isActive) {
         return;
     }
-    DrawRectangleRec(getHitBoxes()[0], RED);
-    m_animation.draw(m_data._pos);
+    if(!_dying) {
+        DrawRectangleRec(getHitBoxes()[0], RED);
+        m_animation.draw(m_data._pos);
+    }
+    else {
+        defeatDraw();
+    }
+
+    if(!isAlive()) {
+        return;
+    }
 
     for(const auto& f : fireballs) {
-        DrawRectangleRec(f->getHitBox(), RED);
+        if(!f->isActive()) continue;
         f->draw();
     }
 }
+
+void Bowser::clear() {
+    forceFinishedAll();
+    fireballs.clear();
+}
+
+void Bowser::enterEffect() {
+    m_defeatEffect.phase = 1;
+    m_defeatEffect.radius = 0.f;
+    m_defeatEffect.duration = 0.f;
+    m_defeatEffect.rotation = 0.f;
+    m_defeatEffect.scale = 1.f;
+}
+
 void Bowser::update(float dt) {
     if(!m_data._isActive) {
         return;
@@ -254,16 +288,78 @@ void Bowser::update(float dt) {
     //     // dead scene
     // }
     // else {
-
+    if(isAlive()) {
         generateCommand(dt);
         processCommand(dt);
         m_animation.update(dt);
         for(const auto& f : fireballs) {
+            if(!f->isActive()) continue;
             f->update(dt);
         }
 
-        //processCommand(dt);
-    //}
+        fireballs.erase(
+            std::remove_if(fireballs.begin(), fireballs.end(),
+                [](const std::shared_ptr<Fireball>& f) {
+                    return !f || !f->isActive();
+                }),
+            fireballs.end()
+        );
+    }
+    else if(!_dying) {
+        _dying = true;
+        clear();
+        enterEffect();
+    }
+
+    if(_dying) {
+        defeatUpdate(dt);
+    }
 }
 
+void Bowser::defeatDraw() {
+    if(m_defeatEffect.phase == 1) {
+        Vector2 center = { m_data._pos.x + m_data._hitBoxWidth / 2, m_data._pos.y + m_data._hitBoxHeight / 2 };
+        DrawCircleGradient(center.x, center.y, m_defeatEffect.radius, BLACK, DARKGRAY);
+        m_animation.draw(m_data._pos);
+    }
+    else if(m_defeatEffect.phase == 2) {
+        Vector2 center = { m_data._pos.x + m_data._hitBoxWidth / 2, m_data._pos.y + m_data._hitBoxHeight / 2 };
+        DrawCircleGradient(center.x, center.y, m_defeatEffect.radius, BLACK, DARKGRAY);
+        for (int i = 0; i < 4; i++) {
+            float r = std::max((float) (m_defeatEffect.radius - 30.f + i * 10 + sin(GetTime() * 4) * 2), 0.f);
+            Color c = Fade(BLACK, 0.2f - i*0.05f);
+            DrawCircleGradient(center.x, center.y, r, c, DARKGRAY);
+        }
+        m_animation.drawV2(center, m_defeatEffect.rotation, m_defeatEffect.scale);
+    }
+}
 
+void Bowser::defeatUpdate(float dt) {
+    if(m_defeatEffect.phase == 1) {
+        m_defeatEffect.radius = std::min(m_defeatEffect.radius + 40.f*dt, 50.f);
+        if(m_defeatEffect.radius == 50.f) {
+            m_defeatEffect.duration += dt;
+            if(m_defeatEffect.duration >= 1.2f) {
+                m_defeatEffect.phase = 2;
+                m_defeatEffect.scale = 1.f;
+                m_defeatEffect.rotation = 0.f;
+                m_defeatEffect.duration = 0.f;
+            }
+        }
+
+    }
+    else if(m_defeatEffect.phase == 2) {
+        m_defeatEffect.scale -= 0.5 * dt;
+        m_defeatEffect.rotation += 720.f * dt;
+        m_defeatEffect.radius = std::min(m_defeatEffect.radius - 25.f * dt, 50.f);
+
+        if(m_defeatEffect.scale <= 0.f) {
+            m_defeatEffect.phase = 0;
+        }
+        if(m_defeatEffect.radius <= 0.f) {
+            m_defeatEffect.radius = 0.f;
+            m_defeatEffect.phase = 3;
+        }
+    }
+
+}

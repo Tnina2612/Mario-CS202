@@ -7,6 +7,7 @@
 
 class Fireball {
 private:
+    bool _isActive = false;
     float _width;               //< for hitbox
     float _height;              //< for hitbox
     int _dir;
@@ -24,7 +25,8 @@ public:
     
     Rectangle getHitBox();
     bool isOffScreen();
-    
+    bool isActive();
+    void setActive(bool active);
     void update(float dt);
     void draw();
 };

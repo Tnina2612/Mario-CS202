@@ -29,6 +29,7 @@ public:
     void update(float deltaTime, int startFrame = 0, int size = -1);
     bool update(const vector<float>& scales, int currentFrame, float scaleTime = 0.2, float deltaTime = GetFrameTime());
     void draw(Vector2 position) const;
+    void drawV2(Vector2 position, float rotation, float scaleV) const;
     void reset();
     void setScale(float scale);
     float getScale() const;

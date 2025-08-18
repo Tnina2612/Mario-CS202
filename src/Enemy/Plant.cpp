@@ -8,7 +8,7 @@
 #include<iostream>
 
 Plant::Plant() : Enemy() {
-    m_data._velocity = Vector2{0,50.f};
+    m_data._velocity = Vector2{0, 32.f};
 }
 
 Plant::Plant(const std::string& name) : Enemy(name) {
@@ -16,7 +16,7 @@ Plant::Plant(const std::string& name) : Enemy(name) {
     float height = 24.f;
     m_data = EnemyData (width, height, 0.f, false, false, true, false, 1, 
                         Vector2{10,0}, Vector2{0,0}, -1);
-    m_data._velocity = Vector2{0, 50.f};
+    m_data._velocity = Vector2{0, 32.f};
 
 }
 
@@ -29,9 +29,7 @@ bool Plant::onHit() {
     if(!Enemy::onHit()) {
         return false;
     }
-    if(!isAlive()) {
-        setActive(false);
-    }
+
     return true;
 }
 
@@ -40,6 +38,10 @@ void Plant::update(float dt) {
         return;
     }
     Enemy::update(dt);
+    
+    if(!isAlive()) {
+        setActive(false);
+    }
 }
 
 void Plant::onEnemyCollision(Enemy& enemy) {

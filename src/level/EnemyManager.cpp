@@ -124,9 +124,14 @@ void EnemyManager::update() {
             subLevel->blocks->update(enemy, f);
         }
     }
-
+    
     for(auto& bowser : listBowsers) {
         bowser->update();
+        checkCollisionsPlayerBowser(subLevel->player, bowser.get());
+        checkCollisionsPlayerFireballBowser(subLevel->player, bowser.get());
+        for(auto& f : fires) {
+            checkCollisionsFireballPlayerBowser(f, bowser.get());
+        }
     }
 
     while(!spawnQueue.empty()) {
@@ -183,6 +188,32 @@ void EnemyManager::saveToFile(std::string filename) {
         }
     }
     out.close();
+}
+
+void EnemyManager::checkCollisionsPlayerBowser(Character* player, Bowser* bowser) {
+    if(CheckCollisionRecs(player->getRectangle(), bowser->getHitBoxes()[0])) {
+        if(!bowser->isAlive()) {
+            return;
+        }
+        player->takeDamage();
+    }
+}
+
+void EnemyManager::checkCollisionsPlayerFireballBowser(Character* player, Bowser* bowser) {
+    for(int i = 1; i < bowser->getHitBoxes().size(); i++) {
+        if(CheckCollisionRecs(player->getRectangle(), bowser->getHitBoxes()[i])) {
+            player->takeDamage();
+            bowser->fireballs[i - 1]->setActive(false);
+        }
+    }
+}
+
+void EnemyManager::checkCollisionsFireballPlayerBowser(CharacterFireball* fire, Bowser* bowser) {
+    if(CheckCollisionRecs(fire->getHitBox(), bowser->getHitBoxes()[0])) {
+        std::cerr << "HTI" << std::endl;
+        fire->hitBlockHorizontal();
+        bowser->beHitByFireball();
+    }
 }
 
 Bowser * EnemyManager::getBowser(void) {
