@@ -22,6 +22,9 @@ class EnemyManager {
     SubLevel* subLevel;
     std::vector<std::shared_ptr<Bowser>> listBowsers;
 
+    void checkCollisionsPlayerBowser(Character* player, Bowser* bowser);
+    void checkCollisionsPlayerFireballBowser(Character* player, Bowser* bowser);
+    void checkCollisionsFireballPlayerBowser(CharacterFireball* fire, Bowser* bowser);
     void processSpawnQueue();
 public:
     EnemyManager(std::string filename, SubLevel* subLevel);

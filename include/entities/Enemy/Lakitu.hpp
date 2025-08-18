@@ -10,7 +10,7 @@ private:
     EnemyManager* _enemyManager;
     const float _cd = 6.f;
     float spawnTimer = 0.f;
-
+    bool isSpawning = false;
     void spawnSpiny();
 public:
     Lakitu();

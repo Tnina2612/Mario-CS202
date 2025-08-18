@@ -68,7 +68,6 @@ void TileMap::update(Character* player) {
     Rectangle nextFrame = {charRec.x, charRec.y + player->getVeclocityY() * deltaTime, charRec.width, charRec.height};
     
     std::vector<std::pair<int, int>> nearbyCells = cellsToCheck(nextFrame);
-
     for(std::pair<int, int> pii : nearbyCells) {
         int i = pii.first, j = pii.second;
         if(i < 0 || i >= height || j < 0 || j >= width || tiles[i][j] == nullptr || tiles[i][j]->getBlockName().find("coin") != 0) {
@@ -80,7 +79,6 @@ void TileMap::update(Character* player) {
             tiles[i][j].reset();
         }
     }
-
     for(std::pair<int, int> pii : nearbyCells) {
         int i = pii.first, j = pii.second;
         if(i < 0 || i >= height || j < 0 || j >= width || tiles[i][j] == nullptr || tiles[i][j]->getStateName() != "Invisible") {
@@ -97,7 +95,6 @@ void TileMap::update(Character* player) {
         }
      
     }
-
     for(std::pair<int, int> pii : nearbyCells) {
         int i = pii.first, j = pii.second;
         if(isCollidableTile(i, j) == false) continue;
@@ -138,7 +135,6 @@ void TileMap::update(Character* player) {
     if(!player->getOnGround()) {
         player->setVeclocityY(player->getVeclocityY() + player->getGravity() * deltaTime);
     }
-
     // update fireballs of player
     vector<CharacterFireball*> fireballs = player->getFireballs();
     for(auto& fireball : fireballs) {
@@ -178,7 +174,6 @@ void TileMap::update(Character* player) {
         }
         fireball->setPosition({fireNextFrame.x, fireNextFrame.y});
     }
-
     // Debug
     debugPlayerBlocks.clear();
     for(std::pair<int, int> pos : nearbyCells) {

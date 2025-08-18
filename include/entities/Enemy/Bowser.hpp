@@ -2,6 +2,7 @@
 
 #include<memory>
 #include<queue>
+#include<deque>
 
 #include"EnemyData.hpp"
 #include"Fireball.hpp"
@@ -9,10 +10,21 @@
 #include<entities/Character.hpp>
 
 class ICommand;
+class EnemyManager;
+
+struct DefeatEffect {
+    int phase = 0;
+    float radius = 0.f;
+    float duration = 0.f;
+    float rotation = 0.f;
+    float scale = 1.f;
+};
 
 class Bowser //: public Enemy {
 {
+friend class EnemyManager;
 private:
+    DefeatEffect m_defeatEffect;
     Animation m_animation;
     EnemyData m_data;
     std::unordered_map<std::string, std::vector<Rectangle>> allFrames;
@@ -39,6 +51,11 @@ private:
     bool isMarioClose(float distance = 50.0f);
     // void fall();                         //< bridge destruction
     void check();                           //< check if bowser is defeated
+    bool isAlive();
+    void clear();
+    void enterEffect();
+    void defeatDraw();
+    void defeatUpdate(float dt);
 public:
     Bowser();
     Bowser(const std::string& name);

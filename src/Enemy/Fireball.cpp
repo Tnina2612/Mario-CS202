@@ -59,3 +59,11 @@ void Fireball::update(float dt) {
 void Fireball::draw() {
     m_animation.draw(_pos);
 }
+
+bool Fireball::isActive() {
+    return _isActive;
+}
+
+void Fireball::setActive(bool active) {
+    _isActive = active;
+}

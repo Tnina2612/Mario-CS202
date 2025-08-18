@@ -86,15 +86,21 @@ Vector2 PlantMove::Execute(EnemyData& data, float dt) {
     Vector2 pos = _manager->getPlayerPos();
     float dis = pos.y - data._pos.y;
 
-    bool nearHoriz = std::fabs(pos.x - data._pos.x) < 28.f;
+    bool nearHoriz = std::fabs(pos.x - data._pos.x) < 24.f;
     bool abovePipe = (pos.y + 24.f) <= _pos.y;
 
     bool shouldMove = !(nearHoriz && abovePipe);
+    bool fullyHidden = (_curHeight >= _maxHeight);
 
-    if (!shouldMove) {
+    if (!shouldMove && fullyHidden) {
         _curCD = 0.f;
         _inCD = true;
+        spawning = false;
         return {0.f, 0.f};
+    }
+    
+    if (fullyHidden && _curDir == -1 && shouldMove) {
+        spawning = true;
     }
 
     float dy = data._velocity.y * dt * _curDir;
@@ -103,7 +109,7 @@ Vector2 PlantMove::Execute(EnemyData& data, float dt) {
     if (_curHeight + _maxHeight <= 0.f) {
         _curHeight = -1*_maxHeight;
         _curDir = 1;
-        _cdTime = 0.1f;
+        _cdTime = 0.3f;
         _inCD = true;
     }
     else if (_curHeight >= _maxHeight) {
@@ -111,6 +117,7 @@ Vector2 PlantMove::Execute(EnemyData& data, float dt) {
         _curDir = -1;
         _cdTime = 2.f;
         _inCD = true;
+        spawning = false;
     }
 
     return {0.f, dy};

@@ -28,9 +28,10 @@ public:
 class PlantMove : public IEnemyStrategy {
 private:
     float _curCD = 0.f;            // Current cooldown
-    float _cdTime = 2.f;     // Cooldown time
-    bool _inCD = true;              // Is in cooldown
-    int _curDir = 0;             // -1 : up, 1 : down
+    float _cdTime = 2.f;           // Cooldown time
+    bool _inCD = true;             // Is in cooldown
+    int _curDir = 0;               // -1 : up, 1 : down
+    bool spawning = false;
     float _curHeight = 12.f;
     float _maxHeight = 12.f;
     Vector2 _pos = Vector2{0.f, 0.f};

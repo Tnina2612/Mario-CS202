@@ -7,18 +7,6 @@
 class EnemyManager;
 
 class Plant : public Enemy {
-private:
-    // float _curCD;             //
-    // float _cdTime = 1.f;            //
-    // bool _inCD;             //
-    // int _curDir;    // -1 : up, 1 : down
-    // float _curHeight;
-    // float _maxHeight;
-
-    // EnemyManager* _enemyManager;
-    // enum State {
-
-    // } _state;
 public:
     Plant();
     Plant(const std::string& name);

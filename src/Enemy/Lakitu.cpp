@@ -54,15 +54,30 @@ void Lakitu::spawnSpiny() {
 void Lakitu::update(float dt) {
     Enemy::update(dt);
     spawnTimer += dt;
+    
+    if(spawnTimer >= _cd - 1.f && !isSpawning) {
+        isSpawning = true;
+        setAniFrames(getFrames("Skill"));
+    }
+
+
     if (spawnTimer >= _cd) {
         spawnSpiny();
         spawnTimer = 0.f;
+        isSpawning = false;
     }
 
-    if(_enemyManager) {
+    if(_enemyManager && !isSpawning) {
         Vector2 pos = _enemyManager->getPlayerPos();
         m_data._targetPos = pos;
+
+        if (m_data._pos.x < pos.x) {
+            setAniFrames(getFrames("Right"));
+        } else {
+            setAniFrames(getFrames("Left"));
+        }
     }
+
 }
 
 bool Lakitu::beHitVertical() {

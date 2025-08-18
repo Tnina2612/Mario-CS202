@@ -150,7 +150,7 @@ void Character::update() {
     float deltaTime = GetFrameTime();
     debug();
     handleEffect();
-    handleFireballEffect();
+    handleFireballEffect();                         //< bug cause crash: FIXED
     handleSpriteandAllFrames();
     handleInvincinbleTime(deltaTime);
     // if(growthUp) {
@@ -470,16 +470,29 @@ bool Character::getIsDead() const {
 }
 
 void Character::handleFireballEffect(float deltaTime) {
-    for(auto& fireball : fireballs) {
-        if(!fireball) {
-            fireballs.erase(remove(fireballs.begin(), fireballs.end(), fireball), fireballs.end());
-        }
-        else if(fireball->getOnScreen() == false) {
+    // for(auto& fireball : fireballs) {
+    //     if(!fireball) {
+    //         fireballs.erase(remove(fireballs.begin(), fireballs.end(), fireball), fireballs.end());
+    //     }
+    //     else if(fireball->getOnScreen() == false) {
+    //         delete fireball;
+    //         fireball = nullptr;
+    //         fireballs.erase(remove(fireballs.begin(), fireballs.end(), fireball), fireballs.end());
+    //     }
+    // }
+
+    // Fix bug erasing inside a range-based for loop
+    for (auto& fireball : fireballs) {
+        if (fireball && !fireball->getOnScreen()) {
             delete fireball;
             fireball = nullptr;
-            fireballs.erase(remove(fireballs.begin(), fireballs.end(), fireball), fireballs.end());
         }
     }
+
+    fireballs.erase(
+        std::remove(fireballs.begin(), fireballs.end(), nullptr),
+        fireballs.end()
+    );
 }
 
 void Character::handleInvincinbleTime(float deltaTime) {

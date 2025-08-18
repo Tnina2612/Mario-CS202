@@ -104,3 +104,9 @@ void Animation::updateBlinking(float deltaTime, bool& onAnimation) {
         onAnimation = !onAnimation; // Toggle animation state
     }
 }
+
+void Animation::drawV2(Vector2 position, float rotation, float scaleV) const {
+    if(frames.empty()) return;
+    Rectangle sourceRect = frames[currentFrame];
+    DrawTexturePro(sprite, sourceRect, {position.x, position.y, sourceRect.width * scaleV, sourceRect.height * scaleV}, {0, 0}, rotation, WHITE);
+}
