@@ -102,6 +102,14 @@ void Enemy::setPos(Vector2 pos) {
     m_data._pos = pos;
 }
 
+void Enemy::setPastRect(Rectangle rect) {
+    pastRect = rect;
+}
+
+Rectangle Enemy::getPastRect() {
+    return pastRect;
+}
+
 Rectangle Enemy::getHitBox() {
     return Rectangle{   m_data._pos.x, 
                         m_data._pos.y - m_data._hitBoxHeight, 
@@ -201,6 +209,11 @@ void Enemy::update(float dt) {
         return;
     }
     m_animation.update(dt);
+
+    if(!isAlive() && live) {
+        live = false;
+        Program::getInstance().getHUD().onNotify(EventType::ADDSCORE, getPos());
+    }
 }
 
 std::string Enemy::getTypeName() const {
@@ -214,7 +227,6 @@ void Enemy::changeDirection() {
 void Enemy::hitUp() {
     onStomp();
     SoundManager::getInstance().playSound(SoundType::STOMP);
-    Program::getInstance().getHUD().onNotify(EventType::ADDSCORE, getPos());
 }
 
 void Enemy::hitBlockDown() {

@@ -196,14 +196,9 @@ void TileMap::update(std::shared_ptr<Enemy> enemy) {
     Rectangle enemyRec = enemy->getHitBox();
     Vector2 movement = enemy->getMovementStrategy()->Execute(enemy->getEnemyData(), deltaTime);
     Rectangle nextFrame = {enemyRec.x, enemyRec.y + movement.y, enemyRec.width, enemyRec.height};
+    Rectangle pastRect = enemyRec;
     
-    if(!enemy->isAlive() ) {
-        enemy->setPos({nextFrame.x, nextFrame.y + nextFrame.height});
-        enemy->update(deltaTime);
-        return;
-    }
-
-    if(!enemy->physics()) {
+    if(!enemy->isAlive() || !enemy->physics()) {
         enemy->setPos({nextFrame.x, nextFrame.y + nextFrame.height});
         enemy->update(deltaTime);
         return;
@@ -215,6 +210,7 @@ void TileMap::update(std::shared_ptr<Enemy> enemy) {
         }
     }
     // checking collision on Oy 
+    enemy->setOnGround(false);
     for(std::pair<int, int> pii : nearbyCells) {
         int i = pii.first, j = pii.second;
         if(isCollidableTile(i, j) == false) continue;
@@ -268,7 +264,7 @@ void TileMap::update(std::shared_ptr<Enemy> enemy) {
             break;
         } 
     }
-
+    enemy->setPastRect(pastRect);
     enemy->setPos({nextFrame.x, nextFrame.y + nextFrame.height});
 }
 
@@ -433,11 +429,4 @@ bool TileMap::preventFalling(std::shared_ptr<Enemy> enemy, Vector2& movement) {
     }
 
     return false;
-}
-
-void TileMap::update(std::shared_ptr<Enemy> enemy, CharacterFireball* playerFireball) {
-    if (CheckCollisionRecs(playerFireball->getHitBox(), enemy->getHitBox())) {
-        enemy->beHitByFireball();
-        playerFireball->hitBlockHorizontal();
-    }
 }
