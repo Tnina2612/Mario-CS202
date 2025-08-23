@@ -85,9 +85,9 @@ void InputManager::update() {
             keyStates[KEY_RIGHT].first = true; // Set KEY_RIGHT as down
         }
     }
-    if(!IsKeyDown(KEY_LEFT) && !IsKeyDown(KEY_RIGHT) && !IsKeyDown(KEY_DOWN) && character->getBehavior() != JUMP) {
+    if(!IsKeyDown(KEY_LEFT) && !IsKeyDown(KEY_RIGHT) && character->getOnGround()) {
         character->setBehavior(IDLE); // Set character behavior to IDLE if no keys are pressed
-        character->setVelocityX(0.0f); // Reset horizontal velocity
+        character->idle();
     }
     vector<KeyboardKey> keys = {KEY_LEFT, KEY_RIGHT, KEY_UP, KEY_DOWN};
 
@@ -115,7 +115,7 @@ void upListener::onkey(KeyboardKey key, bool pressed, bool down, Character* char
 }
 
 void downListener::onkey(KeyboardKey key, bool pressed, bool down, Character* character) {
-    if(character == nullptr || key != KEY_DOWN) return;
+    if(character == nullptr || key != KEY_DOWN || character->getCharacterState() == SMALL) return;
     if(down && character->getOnGround()) {
         character->setBehavior(DUCK);
         character->setVelocityX(0.0f); // Stop horizontal movement when ducking

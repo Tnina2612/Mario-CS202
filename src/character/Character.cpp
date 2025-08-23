@@ -70,10 +70,19 @@ void Character::moveRight() {
     }
 }
 
+void Character::idle() {
+    if(veclocityX > 0) {
+        veclocityX = max(0.0f, veclocityX - friction * GetFrameTime());
+    } 
+    else if(veclocityX < 0) {
+        veclocityX = min(0.0f, veclocityX + friction * GetFrameTime());
+    }
+}
+
 void Character::brakeLeft() {
     accelerationX = brakeAcceleration; // Apply left brake acceleration
-    veclocityX += accelerationX * GetFrameTime();
-    if(abs(veclocityX) <= 3) {
+    veclocityX = min(veclocityX + accelerationX * GetFrameTime(), 0.0f);
+    if(veclocityX == 0.0f) {
         behavior = IDLE;
         veclocityX = 0.0f; // Stop moving left
         accelerationX = 0.0f; // Reset acceleration
@@ -86,8 +95,8 @@ void Character::brakeLeft() {
 
 void Character::brakeRight() {
     accelerationX = -brakeAcceleration;
-    veclocityX += accelerationX * GetFrameTime();
-    if(abs(veclocityX) <= 3) {
+    veclocityX = max(veclocityX + accelerationX * GetFrameTime(), 0.0f);
+    if(veclocityX == 0.0f) {
         behavior = IDLE;
         veclocityX = 0.0f; // Stop moving right
         accelerationX = 0.0f; // Reset acceleration
