@@ -33,7 +33,7 @@ class TileMap {
         void update(std::shared_ptr<Enemy> enemy);
         void update(std::shared_ptr<Item> item);
         // void update(std::shared_ptr<MovingPlatform> platform, Character* player); /// Moved to ItemManager::update()
-        void update(std::shared_ptr<Enemy> enemy, CharacterFireball* playerFireball);
+        // void update(std::shared_ptr<Enemy> enemy, CharacterFireball* playerFireball); //< Moved to EnemyManager::checkCollisionsEnemyFireball
         static std::vector<std::pair<int, int>> cellsToCheck(const Rectangle& rec);
         void saveToFile(const std::string& filename) const;
 

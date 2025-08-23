@@ -53,23 +53,23 @@ void Koopa::update(float dt) {
         return;
     }
 
+    Enemy::update(dt);
     if(this->isAlive()) {
         m_state->update(*this, dt);
-        Enemy::update(dt);
     }
-    else {
-        if(_deadAni == 0) {
-            _deadAni = 1;
-        }
-        else if(_deadAni == 1) {
-            _deadAni = -1;
-        }
-        else if(_deadAni == -1) {
-            setActive(false);
-        }
+    // else {
+    //     if(_deadAni == 0) {
+    //         _deadAni = 1;
+    //     }
+    //     else if(_deadAni == 1) {
+    //         _deadAni = -1;
+    //     }
+    //     else if(_deadAni == -1) {
+    //         setActive(false);
+    //     }
 
 
-    }
+    // }
 
     // else {
 
@@ -105,7 +105,8 @@ bool Koopa::onHit() {
         return false;
     }
     if(!isAlive()) {
-        setActive(false);
+        setState(std::make_unique<ShellKoopa>());
+        m_data._hp = 0;
     }
     return true;
 }
@@ -125,6 +126,13 @@ bool Koopa::setInShell(bool inShell) {
 }
 
 bool Koopa::onStomp() {
+    if(!m_data._isActive) {
+        return false;
+    }
+    if(curStompCD > 0) {
+        return false;
+    }
+    curStompCD = stompCD;
     m_state->handleStomp(*this);
     return true;
 }
@@ -187,9 +195,7 @@ void NormalKoopa::update(Koopa& koopa, float dt) {
 }
 
 void NormalKoopa::handleStomp(Koopa& koopa) {
-    std::cerr << koopa.m_data._isActive << std::endl;
     koopa.setState(std::make_unique<ShellKoopa>());
-    std::cerr << koopa.m_data._isActive << std::endl;
 }
 
 void ShellKoopa::changeFrames(Koopa& koopa) {

@@ -16,6 +16,10 @@ protected:
     EnemyData m_data;
     std::unordered_map<std::string, std::vector<Rectangle>> allFrames;
     std::shared_ptr<IEnemyStrategy> _movementStrategy;
+    Rectangle pastRect;
+    bool live = true;
+    float curStompCD = 0.f;
+    float stompCD = 0.2f;
 public:
     Enemy();
     Enemy(const std::string& name);
@@ -23,6 +27,7 @@ public:
     //Enemy(std::shared_ptr<EnemyType> type, Vector2 pos);
 
     void setActive(bool isActive);
+    void setPastRect(Rectangle rect);
     void setAllFrames(std::unordered_map<std::string, std::vector<Rectangle>> frames);
     void setAniFrames(const std::vector<Rectangle>& frames);
     void setMovementStrategy(std::shared_ptr<IEnemyStrategy> strategy);
@@ -31,6 +36,8 @@ public:
     void setDirection(int dir);
     void setOnGround(bool onGround);
     void setPreventFalling(bool prevent);
+
+    Rectangle getPastRect();
 
     std::shared_ptr<IEnemyStrategy> getMovementStrategy();
     EnemyData& getEnemyData();

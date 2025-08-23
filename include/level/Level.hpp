@@ -26,6 +26,8 @@ class EnemyManager {
     SubLevel* subLevel;
     std::vector<std::shared_ptr<Bowser>> listBowsers;
 
+    // void rollBackFrames(Character* player, Enemy* enemy, Rectangle prevP);
+    void checkCollisionsEnemyFireball(std::shared_ptr<Enemy> enemy, CharacterFireball* playerFireball);
     void checkCollisionsPlayerBowser(Character* player, Bowser* bowser);
     void checkCollisionsPlayerFireballBowser(Character* player, Bowser* bowser);
     void checkCollisionsFireballPlayerBowser(CharacterFireball* fire, Bowser* bowser);
@@ -77,6 +79,7 @@ class PlayerGameplayManager {
         friend class EnemyManager;
         SubLevel* subLevel;
         Rectangle pastPlayerRec;
+        // Rectangle pastPastPlayerRec;
     public:
         PlayerGameplayManager(SubLevel* subLevel);
         void update();
