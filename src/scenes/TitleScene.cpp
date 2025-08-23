@@ -33,8 +33,12 @@ void TitleScene::handleInput() {
     if (IsKeyPressed(KEY_ENTER)) {
         switch (curMode) {
             case 0:
+                Program::getInstance().pushScene(new NameInputScene());
+                PlayScene::is2players = false;
+                break;
             case 1:
                 Program::getInstance().pushScene(new NameInputScene());
+                PlayScene::is2players = true;
                 break;
             case 2:
                 Program::getInstance().pushScene(new LoadGameScene());

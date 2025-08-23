@@ -30,8 +30,18 @@ void DeathScene::update() {
     
     // Automatically transition after 3 seconds
     if (waitTimer >= waitDuration) {
+        if (PlayScene::is2players) {
+            if (PlayScene::isMario) {
+                PlayScene::isMario = false;
+            } else {
+                PlayScene::isMario = true;
+            }
+        }
         Program::getInstance().pushScene(new PlayScene("./world-maps/1-1"));
     }
+
+    // Scene
+    // scene(luigi) -> mario -> scene(luigi)
 }
 
 void DeathScene::render() {

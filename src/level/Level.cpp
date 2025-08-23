@@ -2,6 +2,7 @@
 #include "core/Program.hpp"
 #include "scenes/GameOverScene.hpp"
 #include "scenes/TimeUpScene.hpp"
+#include "scenes/PlayScene.hpp"
 #include <filesystem>
 #include <diy_functions/read.h>
 #include <core/MusicManager.hpp>
@@ -44,11 +45,16 @@ void SubLevel::update() {
 }
 
 Level::Level(std::string folderName) :
-    player(make_shared<Luigi>()),
     renderTexture(LoadRenderTexture(Global::ORIGINAL_WIDTH, Global::ORIGINAL_HEIGHT)),
     camera(Camera2D{Vector2{Global::ORIGINAL_WIDTH / 2.f, Global::ORIGINAL_HEIGHT / 2.f}, Vector2{Global::ORIGINAL_WIDTH / 2.f, Global::ORIGINAL_HEIGHT / 2.f}, 0.f, 1.f}),
     inputManager(INPUT_MANAGER) 
 {
+    if (PlayScene::isMario ) {
+        player = make_shared<Mario>();
+    } else {
+        player = make_shared<Luigi>();
+    }
+
     // Input manager
     inputManager.addCharacter(player.get());
 

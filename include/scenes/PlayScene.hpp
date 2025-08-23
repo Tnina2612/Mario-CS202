@@ -13,8 +13,10 @@ private:
     float waitTimer;
     float waitDuration;
     string sessionName;
-
+    
 public:
+    static bool is2players;
+    static bool isMario;
     PlayScene(const std::string& levelName);
     PlayScene(std::string subLevelFolder, Vector2 playerPosition);
     ~PlayScene();

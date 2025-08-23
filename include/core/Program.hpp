@@ -14,6 +14,8 @@ private:
     Scene* nextScene;
     Font font;
     GameSession session;
+    // GameSession sessionMario;
+    // GameSession sessionLuigi;
     HUD* hud;
     Image icon;
     std::stack<Scene*> sceneStack;

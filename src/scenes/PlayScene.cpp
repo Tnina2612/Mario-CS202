@@ -10,6 +10,9 @@
 #include "core/Setting.hpp"
 #include "entities/Character.hpp"
 
+bool PlayScene::is2players= false;
+bool PlayScene::isMario = true;
+
 PlayScene::PlayScene(const std::string& levelPath) : 
     level(new Level(levelPath)) {
 }
