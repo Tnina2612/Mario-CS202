@@ -55,6 +55,7 @@ protected:
     CharacterState characterState;
     const float gravity = 1000; //3900.0f;
     const float maxVeclocityX = 90; //300.f;
+    const float maxRunVeclocityX = 150; //450.f;
     Behavior behavior;
     bool isInvincible;
     bool isDead;
@@ -101,6 +102,7 @@ public:
     void powerUp();
     bool getGrowthUp() const;
     bool getShrinkDown() const;
+    bool getIsStarMan()const;
     Behavior getBehavior()const;
     void setOrientation(Orientation newOrientation);
     Orientation getOrientation() const;
@@ -129,6 +131,7 @@ public:
     
     vector<CharacterFireball*>& getFireballs();
     void takeDamage();
+    void turnToStarMan();
     // bool getCollideUp()const;
     // bool getCollideDown()const;
     

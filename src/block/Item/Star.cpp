@@ -100,6 +100,7 @@ void Star::activate(Character &character)
 //     character.getStar();
 //     character.updateScore(Score_Star);
     isDelete_ = true;
+    character.turnToStarMan();
 }
 
 // Vector2 Star::getPreviousFramePos()

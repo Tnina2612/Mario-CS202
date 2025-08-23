@@ -44,7 +44,7 @@ void SubLevel::update() {
 }
 
 Level::Level(std::string folderName) :
-    player(make_shared<Mario>()),
+    player(make_shared<Luigi>()),
     renderTexture(LoadRenderTexture(Global::ORIGINAL_WIDTH, Global::ORIGINAL_HEIGHT)),
     camera(Camera2D{Vector2{Global::ORIGINAL_WIDTH / 2.f, Global::ORIGINAL_HEIGHT / 2.f}, Vector2{Global::ORIGINAL_WIDTH / 2.f, Global::ORIGINAL_HEIGHT / 2.f}, 0.f, 1.f}),
     inputManager(INPUT_MANAGER) 

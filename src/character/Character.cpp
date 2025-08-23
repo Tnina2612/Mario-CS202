@@ -39,18 +39,35 @@ void Character::moveLeft() {
     if((behavior == IDLE || behavior == MOVE) && behavior != BRAKE && behavior != DUCK &&
     collideLeft == false) {
         //if(onGround) orientation = LEFT; // Change orientation to LEFT when moving left
-        veclocityX = -maxVeclocityX; // Set velocity to move left
+        if (IsKeyDown(KEY_LEFT_SHIFT)) {
+            veclocityX = -maxRunVeclocityX; // Set velocity to move left
+        } else {
+            veclocityX = -maxVeclocityX; // Set velocity to move left
+        }
     }
-    if (!onGround && collideLeft == false) veclocityX = -maxVeclocityX; // Maintain left velocity when not on ground
+    if (!onGround && collideLeft == false) {
+        if(IsKeyDown(KEY_LEFT_SHIFT)) {
+            veclocityX = -maxRunVeclocityX;
+        } else {
+            veclocityX = -maxVeclocityX;
+        }
+    }
 }
 
 void Character::moveRight() {
     if((behavior == IDLE || behavior == MOVE) && behavior != BRAKE && behavior != DUCK &&
     collideRight == false) {
         //if(onGround) orientation = RIGHT; // Change orientation to RIGHT when moving right
-        veclocityX = maxVeclocityX; // Set velocity to move right
+        if(IsKeyDown(KEY_LEFT_SHIFT)) veclocityX = maxRunVeclocityX; // Set velocity to move right
+        else veclocityX = maxVeclocityX; // Set velocity to move right
     }
-    if (!onGround && collideRight == false) veclocityX = maxVeclocityX;
+    if (!onGround && collideRight == false) {
+        if(IsKeyDown(KEY_LEFT_SHIFT)) {
+            veclocityX = maxRunVeclocityX;
+        } else {
+            veclocityX = maxVeclocityX;
+        }
+    }
 }
 
 void Character::brakeLeft() {
@@ -319,6 +336,10 @@ bool Character::getShrinkDown() const {
     return shrinkDown;
 }
 
+bool Character::getIsStarMan()const {
+    return isStarMan;
+}
+
 void Character::createFireball() {
     if(getCharacterState() == CharacterState::FIRE) {
         isThrow = true;
@@ -531,6 +552,12 @@ void Character::takeDamage() {
     characterState = SMALL;
     allFrames = CharacterSprite::Small::allFrames; // Reset to small frames
     SoundManager::getInstance().playSound(SoundType::POWERDOWN);
+}
+
+void Character::turnToStarMan() {
+    isStarMan = true;
+    isInvincible = true;
+    SoundManager::getInstance().playSound(SoundType::POWERUP);
 }
 
 void Character::addCoin() {

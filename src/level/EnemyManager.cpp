@@ -153,6 +153,9 @@ void EnemyManager::updatePlayer() {
             } else {
                 int dir = enemy->getPos().x < subLevel->player->getPos().x ? 1 : -1;
                 enemy->hitVertical(dir);
+                if(subLevel->player->getIsStarMan()) {
+                    enemy->hitUp();
+                }
                 subLevel->player->takeDamage();
             }
         }
