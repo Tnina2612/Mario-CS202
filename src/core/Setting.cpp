@@ -47,3 +47,7 @@ void Setting::onClick(Level* level) {
         isOn = false;
     }
 }
+
+void Setting::toggle(bool state) {
+    isOn = state;
+}

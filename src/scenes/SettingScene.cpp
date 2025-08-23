@@ -46,6 +46,7 @@ void SettingScene::handleInput() {
             // Handle RESTART click
         } else if (CheckCollisionPointRec(mouse, {x3, 410, textSize3.x, textSize3.y})) {
             Program::getInstance().pushScene(new TitleScene());
+            Setting::getInstance().toggle(false);
         }
     }
 

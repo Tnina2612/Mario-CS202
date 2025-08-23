@@ -23,6 +23,10 @@ void TitleScene::init() {
     EndTextureMode();
 
     MusicManager::getInstance().playMusic(MusicType::OVERWORLD);
+
+    Program::getInstance().getHUD().onNotify(EventType::RESET_TIMER);
+    Program::getInstance().getHUD().onNotify(EventType::RESET_LIVES);
+    Program::getInstance().getHUD().onNotify(EventType::RESET_SCORES);
 }
 
 void TitleScene::handleInput() {

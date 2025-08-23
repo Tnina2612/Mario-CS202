@@ -28,4 +28,5 @@ public:
     bool isHovered();
     bool isClicked();
     void onClick(Level* level);
+    void toggle(bool state);
 };
