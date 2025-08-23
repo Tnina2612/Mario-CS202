@@ -112,6 +112,14 @@ void Level::draw(void) {
     BeginTextureMode(renderTexture);
         BeginMode2D(camera);
             subLevel->draw();
+
+            for(const std::tuple<std::string, Vector2, float>& noti : Program::getInstance().getHUD().getInGameNotification()) {
+                std::string content = get<0>(noti);
+                Vector2 pos = get<1>(noti);
+                const float size = 7.f;
+                const float space = 0.f;
+                DrawTextEx(Program::getInstance().getFont(), content.c_str(), pos, size, space, WHITE);
+            }
         EndMode2D();
     EndTextureMode();
 

@@ -28,4 +28,5 @@ public:
     void draw();
     void addLevelAnnouncement(std::string line);
     void clearLevelAnnouncement();
+    const std::vector<std::tuple<std::string, Vector2, float>>& getInGameNotification(void) const;
 };

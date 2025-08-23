@@ -40,20 +40,19 @@ void HUD::onNotify(EventType type) {
 }
 
 void HUD::onNotify(EventType type, Vector2 pos) {
-    // pos.x *= Global::SCALE_FACTOR;
-    pos.x = 500;
-    pos.y *= Global::SCALE_FACTOR;
+    const float existingTime = 0.5f;
+
     switch (type) {
         case EventType::ADDSCORE:
             session->SCORE += 100;
-            inGameNotification.push_back({"+100", pos, 0.5f});
+            inGameNotification.push_back({"+100", pos, existingTime});
             break;
         case EventType::COLLECT_COINS:
             session->COINS++;
             break;
         case EventType::ADDLIVES:
             session->LIVES++;
-            inGameNotification.push_back({"1UP", pos, 0.5f});
+            inGameNotification.push_back({"1UP", pos, existingTime});
             break;
         case EventType::MARIO_DIED:
             session->LIVES--;
@@ -88,7 +87,11 @@ void HUD::update(float deltaTime) {
         Vector2 pos;
         float waitTime;
         std::tie (s, pos, waitTime) = inGameNotification[i];
+
+        const float floatingVelocity = 96.f;
+
         waitTime -= GetFrameTime();
+        pos.y -= GetFrameTime() * floatingVelocity;
         inGameNotification[i] = make_tuple(s, pos, waitTime);
     }
 
@@ -134,16 +137,6 @@ void HUD::draw() {
         
         DrawTextEx(Program::getInstance().getFont(), line.c_str(), {posX, posY}, size, spaceX, WHITE);
     }
-
-    for(int i = 0; i < (int)inGameNotification.size(); i++) {
-        int space = 25;
-        Vector2 pos = get<1>(inGameNotification[i]);
-        pos.y += space * i;
-        cout << "Draw text: " << get<0>(inGameNotification[i]) << " at " << pos.x << ", " << pos.y << std::endl;
-        DrawTextEx(Program::getInstance().getFont(),
-            get<0>(inGameNotification[i]).c_str(), 
-            pos, 24, 1, WHITE);
-    }
 }
 
 void HUD::addLevelAnnouncement(std::string line) {
@@ -152,4 +145,8 @@ void HUD::addLevelAnnouncement(std::string line) {
 
 void HUD::clearLevelAnnouncement() {
     levelAnnouncement.clear();
+}
+
+const std::vector<std::tuple<std::string, Vector2, float>>& HUD::getInGameNotification(void) const {
+    return inGameNotification;
 }

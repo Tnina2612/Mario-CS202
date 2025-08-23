@@ -568,6 +568,5 @@ void Character::addCoin() {
 
 void Character::addLife() {
     SoundManager::getInstance().playSound(SoundType::ONE_UP);
-    Program::getInstance().getHUD().onNotify(EventType::ADDSCORE, pos);
     Program::getInstance().getHUD().onNotify(EventType::ADDLIVES, pos);
 }
