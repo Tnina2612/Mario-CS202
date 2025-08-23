@@ -18,6 +18,8 @@ protected:
     std::shared_ptr<IEnemyStrategy> _movementStrategy;
     Rectangle pastRect;
     bool live = true;
+    float curStompCD = 0.f;
+    float stompCD = 0.2f;
 public:
     Enemy();
     Enemy(const std::string& name);

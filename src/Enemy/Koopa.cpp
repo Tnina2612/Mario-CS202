@@ -126,6 +126,13 @@ bool Koopa::setInShell(bool inShell) {
 }
 
 bool Koopa::onStomp() {
+    if(!m_data._isActive) {
+        return false;
+    }
+    if(curStompCD > 0) {
+        return false;
+    }
+    curStompCD = stompCD;
     m_state->handleStomp(*this);
     return true;
 }

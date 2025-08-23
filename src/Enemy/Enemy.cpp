@@ -166,6 +166,12 @@ bool Enemy::onStomp() {
     if(!m_data._isStompable) {
         return false;
     }
+
+    if(curStompCD > 0) {
+        return false;
+    }
+
+    curStompCD = stompCD;
     onHit();
     return true;
 }
@@ -208,6 +214,11 @@ void Enemy::update(float dt) {
     if(!m_data._isActive) {
         return;
     }
+    curStompCD -= dt;
+    if(curStompCD <= 0) {
+        curStompCD = 0;
+    }
+
     m_animation.update(dt);
 
     if(!isAlive() && live) {
