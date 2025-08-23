@@ -79,46 +79,12 @@ void EnemyManager::update() {
             enemy->update();
             for(auto& enemy2 : list) {
                 if(enemy != enemy2 && enemy->isAlive() && enemy2->isAlive() && CheckCollisionRecs(enemy->getHitBox(), enemy2->getHitBox())) {
-                    // if(enemy->getPos().x < enemy2->getPos().x) {
-                    //     enemy->hitBlockRight();
-                    //     enemy2->hitBlockLeft();
-                    // } else {
-                    //     enemy->hitBlockLeft();
-                    //     enemy2->hitBlockRight();
-                    // }
                     enemy->onEnemyCollision(*enemy2);
                     enemy2->onEnemyCollision(*enemy);
                 }
             }
         }
         
-
-        // Check for collisions with the player
-        Rectangle pastPlayerRec = subLevel->playerManager.gameplayManager.pastPlayerRec;
-        if(CheckCollisionRecs(enemy->getHitBox(), subLevel->player->getRectangle()) && enemy->isAlive()) {
-            if(pastPlayerRec.y + pastPlayerRec.height < enemy->getHitBox().y && 
-                enemy->getTypeName().find("Plant") == std::string::npos) {
-                    std::cerr << "Enemy" << std::endl;
-                enemy->hitUp();
-                subLevel->player->setVeclocityY(-100);
-                Program::getInstance().getHUD().onNotify(EventType::ADDSCORE);
-            } else {
-                std::cerr << "PLAYER" << std::endl;
-                int dir = enemy->getPos().x < subLevel->player->getPos().x ? 1 : -1;
-                
-                if(!enemy->beHitVertical()) {
-                    subLevel->player->takeDamage();
-                } else {
-                    enemy->hitVertical(dir);
-                }
-                // if(subLevel->player->getNumLives() > 0) {
-                //     Program::getInstance().pushScene(new DeathScene());
-                // } else {
-                //     cout << "Game Over! You have no lives left." << endl;
-                //     Program::getInstance().pushScene(new GameOverScene());
-                // }
-            }
-        }
 
         for(auto& f : fires) {
             subLevel->blocks->update(enemy, f);
@@ -152,8 +118,14 @@ void EnemyManager::updatePlayer() {
                 Program::getInstance().getHUD().onNotify(EventType::ADDSCORE);
             } else {
                 int dir = enemy->getPos().x < subLevel->player->getPos().x ? 1 : -1;
-                enemy->hitVertical(dir);
-                subLevel->player->takeDamage();
+                // enemy->hitVertical(dir);
+                // subLevel->player->takeDamage();
+                if(!enemy->beHitVertical()) {
+                    std::cerr << "1" << std::endl;
+                    subLevel->player->takeDamage();
+                } else {
+                    enemy->hitVertical(dir);
+                }
             }
         }
     }
