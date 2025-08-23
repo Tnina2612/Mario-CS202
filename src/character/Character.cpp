@@ -14,6 +14,8 @@ Character::Character() : mAnimation(CharacterSprite::Small::frames), state(nullp
         shrinkDown = false;
         isStarMan = false;
         isThrow = false;
+        maxVeclocityX = 70; //300.f;
+        maxRunVeclocityX = 150; //450.f;
         allFrames = CharacterSprite::Small::allFrames;
         effects.push_back(new Effect(0.5f, &growthUp));
         effects.push_back(new Effect(0.5f, &shrinkDown));
