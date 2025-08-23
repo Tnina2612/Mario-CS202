@@ -1,5 +1,5 @@
 #pragma once
-#include"raylib.h"
+#include<raylib.h>
 #include<string>
 #include<unordered_map>
 #include<vector>
@@ -254,10 +254,7 @@ namespace MarioInvincible {
             const Rectangle rw10 = {196, 366, 12, 15};
             const Rectangle rw11 = {217, 366, 12, 15};
             const Rectangle rw12 = {237, 366, 15, 16};
-            const Rectangle rw13 = {259, 366, 12, 15};
-            const Rectangle rw14 = {280, 366, 12, 15};
-            const Rectangle rw15 = {300, 364, 15, 16};
-            const std::vector<Rectangle> reverse_walk_= {rw1, rw2, rw3, rw4, rw5, rw6, rw7, rw8, rw9, rw10, rw11, rw12, rw13, rw15};
+            const std::vector<Rectangle> reverse_walk_= {rw1, rw2, rw3, rw4, rw5, rw6, rw7, rw8, rw9, rw10, rw11, rw12};
         };
         namespace Climb
         {
@@ -426,10 +423,7 @@ namespace MarioInvincible {
             const Rectangle rw10 = {705, 374, 14, 30};
             const Rectangle rw11 = {704, 438, 16, 30};
             const Rectangle rw12 = {704, 406, 16, 29};
-            const Rectangle rw13 = {726, 374, 14, 30};
-            const Rectangle rw14 = {725, 438, 16, 30};
-            const Rectangle rw15 = {725, 406, 16, 29};
-            const std::vector<Rectangle> reverse_walk_ = {rw1, rw2, rw3, rw4, rw5, rw6, rw7, rw8, rw9, rw10, rw11, rw12, rw13, rw14, rw15};
+            const std::vector<Rectangle> reverse_walk_ = {rw1, rw2, rw3, rw4, rw5, rw6, rw7, rw8, rw9, rw10, rw11, rw12};
         };
         const unordered_map<string, vector<Rectangle>> allFrames = {
             {"RIdle", Stance::stance_},
@@ -508,10 +502,7 @@ namespace LuigiInvicinble {
             const Rectangle rw10 = {197, 374, 11, 15};
             const Rectangle rw11 = {217, 374, 11, 15};
             const Rectangle rw12 = {237, 374, 14, 16};
-            const Rectangle rw13 = {260, 374, 11, 15};
-            const Rectangle rw14 = {280, 374, 12, 15};
-            const Rectangle rw15 = {300, 373, 14, 16};
-            const std::vector<Rectangle> reverse_walk_ = {rw1, rw2, rw3, rw4, rw5, rw6, rw7, rw8, rw9, rw10, rw11, rw12, rw13, rw14, rw15};
+            const std::vector<Rectangle> reverse_walk_ = {rw1, rw2, rw3, rw4, rw5, rw6, rw7, rw8, rw9, rw10, rw11, rw12};
         };
         namespace Climb
         {
@@ -653,20 +644,17 @@ namespace LuigiInvicinble {
         {
             const Rectangle w1 = {539, 381, 14, 31};
             const Rectangle w2 = {538, 447, 16, 31};
-            const Rectangle w3 = {559, 414, 16, 30};
-            const Rectangle w4 = {581, 381, 14, 31};
+            const Rectangle w3 = {538, 414, 16, 30};
+            const Rectangle w4 = {560, 381, 14, 31};
             const Rectangle w5 = {559, 447, 16, 31};
-            const Rectangle w6 = {601, 414, 16, 30};
-            const Rectangle w7 = {621, 374, 14, 30};
-            const Rectangle w8 = {538, 447, 16, 31};
-            const Rectangle w9 = {538, 414, 16, 30};
-            const Rectangle w10 = {560, 381, 14, 31};
-            const Rectangle w11 = {538, 447, 16, 31};
-            const Rectangle w12 = {580, 414, 16, 30};
-            const Rectangle w13 = {581, 381, 14, 31};
-            const Rectangle w14 = {601, 447, 16, 31};
-            const Rectangle w15 = {601, 414, 16, 30};
-            const std::vector<Rectangle> walk_ = {w1, w2, w3, w4, w5, w6, w7, w7, w9, w10, w11, w12, w13, w14, w15};
+            const Rectangle w6 = {559, 414, 16, 30};
+            const Rectangle w7 = {581, 381, 14, 30};
+            const Rectangle w8 = {580, 447, 16, 31};
+            const Rectangle w9 = {580, 414, 16, 30};
+            const Rectangle w10 = {602, 381, 14, 31};
+            const Rectangle w11 = {601, 447, 16, 31};
+            const Rectangle w12 = {601, 414, 16, 30};
+            const std::vector<Rectangle> walk_ = {w1, w2, w3, w4, w5, w6, w7, w7, w9, w10, w11, w12};
             const Rectangle rw1 = {623, 381, 14, 31};
             const Rectangle rw2 = {622, 447, 16, 31};
             const Rectangle rw3 = {622, 414, 16, 30};
@@ -679,10 +667,7 @@ namespace LuigiInvicinble {
             const Rectangle rw10 = {686, 381, 14, 31};
             const Rectangle rw11 = {685, 447, 16, 31};
             const Rectangle rw12 = {685, 414, 16, 30};
-            const Rectangle rw13 = {707, 381, 14, 31};
-            const Rectangle rw14 = {706, 447, 16, 31};
-            const Rectangle rw15 = {706, 414, 16, 30};
-            const std::vector<Rectangle> reverse_walk_ = {rw1, rw2, rw3, rw4, rw5, rw6, rw7, rw8, rw9, rw10, rw11, rw12, rw13, rw14, rw15};
+            const std::vector<Rectangle> reverse_walk_ = {rw1, rw2, rw3, rw4, rw5, rw6, rw7, rw8, rw9, rw10, rw11, rw12};
         };
         const unordered_map<string, vector<Rectangle>> allFrames = {
             {"RIdle", Stance::stance_},

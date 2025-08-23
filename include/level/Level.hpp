@@ -8,6 +8,7 @@
 #include<iostream>
 #include<entities/Character.hpp>
 #include<entities/Mario.hpp>
+#include<entities/Luigi.hpp>
 #include<core/InputManager.hpp>
 #include<core/Global.hpp>
 #include<queue>
