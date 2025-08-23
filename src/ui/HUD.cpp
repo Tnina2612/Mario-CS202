@@ -26,7 +26,7 @@ void HUD::onNotify(EventType type) {
             session->LIVES--;
             break;
         case EventType::RESET_TIMER:
-            session->TIMELEFT = 400;
+            session->TIMELEFT = 800;
             break;
         case EventType::RESET_LIVES:
             session->LIVES = 3;
@@ -58,7 +58,7 @@ void HUD::onNotify(EventType type, Vector2 pos) {
             session->LIVES--;
             break;
         case EventType::RESET_TIMER:
-            session->TIMELEFT = 400;
+            session->TIMELEFT = 800;
             break;
         case EventType::RESET_LIVES:
             session->LIVES = 3;
