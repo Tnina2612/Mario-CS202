@@ -54,8 +54,8 @@ protected:
     Orientation orientation;
     CharacterState characterState;
     const float gravity = 1000; //3900.0f;
-    const float maxVeclocityX = 90; //300.f;
-    const float maxRunVeclocityX = 150; //450.f;
+    const float maxVeclocityX = 70; //300.f;
+    const float maxRunVeclocityX = 100; //450.f;
     Behavior behavior;
     bool isInvincible;
     bool isDead;

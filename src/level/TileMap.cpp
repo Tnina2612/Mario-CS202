@@ -80,6 +80,7 @@ void TileMap::update(Character* player) {
             tiles[i][j].reset();
         }
     }
+    Vector2 futurePos = {nextFrame.x, nextFrame.y};
     for(std::pair<int, int> pii : nearbyCells) {
         int i = pii.first, j = pii.second;
         if(i < 0 || i >= height || j < 0 || j >= width || tiles[i][j] == nullptr || tiles[i][j]->getStateName() != "Invisible") {
@@ -93,9 +94,7 @@ void TileMap::update(Character* player) {
             if(item != nullptr) {
                 subLevel->itemManager.addItem(item);
             }
-            nextFrame.y = charRec.y;
         }
-     
     }
     for(std::pair<int, int> pii : nearbyCells) {
         int i = pii.first, j = pii.second;
@@ -112,10 +111,12 @@ void TileMap::update(Character* player) {
                     subLevel->itemManager.addItem(item);
                 }
             }
-            nextFrame.y = charRec.y;
+            futurePos.y = charRec.y;
         }
     }
+    nextFrame.y = futurePos.y;
     nextFrame.x = charRec.x + player->getVeclocityX() * deltaTime;
+    futurePos.x = nextFrame.x;
     nearbyCells = cellsToCheck(nextFrame);
     for(std::pair<int, int> pii : nearbyCells) {
         int i = pii.first, j = pii.second;
@@ -127,9 +128,10 @@ void TileMap::update(Character* player) {
             } else {
                 player->hitBlockLeft();
             }
-            nextFrame.x = charRec.x;
+            futurePos.x = charRec.x;
         }
     }
+    nextFrame.x = futurePos.x;
     if(nextFrame.x <= 0) {
         nextFrame.x = charRec.x;
     }
