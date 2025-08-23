@@ -70,10 +70,23 @@ void Character::moveRight() {
     }
 }
 
+void Character::idle() {
+    behavior = MOVE;
+    if(veclocityX > 0) {
+        veclocityX = max(0.0f, veclocityX - friction * GetFrameTime());
+    } 
+    else if(veclocityX < 0) {
+        veclocityX = min(0.0f, veclocityX + friction * GetFrameTime());
+    }
+    else {
+        behavior = IDLE;
+    }
+}
+
 void Character::brakeLeft() {
     accelerationX = brakeAcceleration; // Apply left brake acceleration
-    veclocityX += accelerationX * GetFrameTime();
-    if(abs(veclocityX) <= 3) {
+    veclocityX = min(veclocityX + accelerationX * GetFrameTime(), 0.0f);
+    if(veclocityX == 0.0f) {
         behavior = IDLE;
         veclocityX = 0.0f; // Stop moving left
         accelerationX = 0.0f; // Reset acceleration
@@ -86,8 +99,8 @@ void Character::brakeLeft() {
 
 void Character::brakeRight() {
     accelerationX = -brakeAcceleration;
-    veclocityX += accelerationX * GetFrameTime();
-    if(abs(veclocityX) <= 3) {
+    veclocityX = max(veclocityX + accelerationX * GetFrameTime(), 0.0f);
+    if(veclocityX == 0.0f) {
         behavior = IDLE;
         veclocityX = 0.0f; // Stop moving right
         accelerationX = 0.0f; // Reset acceleration
@@ -212,11 +225,11 @@ void Character::update() {
     switch (behavior) {
         case MOVE:
             if (orientation == RIGHT) {
-                moveRight();
+                //moveRight();
                 mAnimation.setFrames(allFrames["RRun"]);
             } 
             else if (orientation == LEFT) {
-                moveLeft();
+                //moveLeft();
                 mAnimation.setFrames(allFrames["LRun"]);
             }
             break;
@@ -238,7 +251,6 @@ void Character::update() {
             }           
             break;
         case IDLE:
-            accelerationX = 0.0f; // Reset acceleration when idle
             if (orientation == LEFT) {
                 mAnimation.setFrames(allFrames["LIdle"]);
             } 
@@ -428,7 +440,7 @@ void Character::hitBlockBottom() {
     // }
     onGround = true;
     if(!IsKeyDown(KEY_LEFT) && !IsKeyDown(KEY_RIGHT) && !IsKeyDown(KEY_DOWN) && behavior != BRAKE) {
-        behavior = IDLE;
+        //behavior = IDLE;
     }
     veclocityY = restVeclocity; // Reset vertical velocity when hitting a block from the bottom
 }
@@ -439,6 +451,10 @@ void Character::die() {
     veclocityX = 0.0f;
     veclocityY = -jumpVeclocity; // Mario sẽ bật lên một chút khi chết (tùy chọn)
     onGround = false;
+    characterState = SMALL;
+    allFrames = CharacterSprite::Small::allFrames; // Reset to small frames
+    mAnimation.setSprite(normalSprite);
+    mAnimation.setFrames(allFrames["Duck"]);
 
     Program::getInstance().getHUD().onNotify(EventType::MARIO_DIED);
     MusicManager::getInstance().stopMusic();
@@ -532,7 +548,7 @@ void Character::handleInvincinbleTime(float deltaTime) {
     else {
         isInvincible = false;
     }
-    if(isStarMan) {
+    if(isStarMan || isDead) {
         isInvincible = true; 
     }
 }

@@ -66,6 +66,7 @@ protected:
     const float jumpVeclocity = 380; //1550.0f; // Initial jump velocity
     const float brakeAcceleration = 200; //600.0f; // Deceleration when braking
     const float restVeclocity = 50.0f;
+    const float friction = 250.0f;
     float timeEffect;
     bool onAnimation;
     bool isInvicinbleBlinking = false;
@@ -85,6 +86,7 @@ public:
     Character();
     Character(const vector<Rectangle>& frames, const Texture2D& sprite);
     void setState(IState* state);
+    void idle();
     void moveLeft();
     void moveRight();
     void brakeLeft();
