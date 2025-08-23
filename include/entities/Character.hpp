@@ -66,7 +66,7 @@ protected:
     const float jumpVeclocity = 380; //1550.0f; // Initial jump velocity
     const float brakeAcceleration = 200; //600.0f; // Deceleration when braking
     const float restVeclocity = 50.0f;
-    const float friction = 800.0f;
+    const float friction = 250.0f;
     float timeEffect;
     bool onAnimation;
     bool isInvicinbleBlinking = false;

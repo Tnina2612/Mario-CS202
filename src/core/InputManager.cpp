@@ -85,8 +85,7 @@ void InputManager::update() {
             keyStates[KEY_RIGHT].first = true; // Set KEY_RIGHT as down
         }
     }
-    if(!IsKeyDown(KEY_LEFT) && !IsKeyDown(KEY_RIGHT) && character->getOnGround()) {
-        character->setBehavior(IDLE); // Set character behavior to IDLE if no keys are pressed
+    if(!IsKeyDown(KEY_LEFT) && !IsKeyDown(KEY_RIGHT) && character->getOnGround() && character->getBehavior() != BRAKE && character->getBehavior() != DUCK) {
         character->idle();
     }
     vector<KeyboardKey> keys = {KEY_LEFT, KEY_RIGHT, KEY_UP, KEY_DOWN};
@@ -132,6 +131,7 @@ void leftListener::onkey(KeyboardKey key, bool pressed, bool down, Character* ch
         else if(character->getOnGround() && character->getBehavior() != BRAKE) {
             character->setBehavior(MOVE);
             character->setOrientation(LEFT); // Change orientation to LEFT when moving left
+            character->moveLeft();
         }
         else if(character->getOnGround() == false) {
             character->moveLeft();
@@ -149,6 +149,7 @@ void rightListener::onkey(KeyboardKey key, bool pressed, bool down, Character* c
         else if(character->getOnGround() && character->getBehavior() != BRAKE) {
             character->setBehavior(MOVE);
             character->setOrientation(RIGHT); // Change orientation to RIGHT when moving right
+            character->moveRight();
         }
         else if(character->getOnGround() == false) {
             character->moveRight();
