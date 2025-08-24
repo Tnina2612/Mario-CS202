@@ -126,8 +126,8 @@ public:
     void setOnGround(bool onGround);
     bool getCollideRight()const;
     bool getCollideLeft()const;
-    float getVeclocityX()const;
-    float getVeclocityY()const;
+    float getVelocityX()const;
+    float getVelocityY()const;
     void setPosition(float x, float y);
     float getGravity()const;
     float getRestVeclocity()const;

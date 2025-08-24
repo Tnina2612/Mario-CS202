@@ -145,6 +145,7 @@ void EnemyManager::updatePlayer() {
             
             if(subLevel->player->getIsStarMan()) {
                 enemy->onHit();
+                Program::getInstance().getHUD().onNotify(EventType::ADDSCORE, subLevel->player->getPos());
                 continue;
             }
 
@@ -153,8 +154,8 @@ void EnemyManager::updatePlayer() {
                 enemy->getTypeName().find("Plant") == std::string::npos) 
             {
                 enemy->hitUp();
-                subLevel->player->setVeclocityY(-100);
-                Program::getInstance().getHUD().onNotify(EventType::ADDSCORE);
+                subLevel->player->setVeclocityY(-200);
+                Program::getInstance().getHUD().onNotify(EventType::ADDSCORE, subLevel->player->getPos());
             } else {
                 int dir = enemy->getPos().x < subLevel->player->getPos().x ? 1 : -1;
                 
