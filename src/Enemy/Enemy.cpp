@@ -102,6 +102,14 @@ void Enemy::setPos(Vector2 pos) {
     m_data._pos = pos;
 }
 
+void Enemy::setPastRect(Rectangle rect) {
+    pastRect = rect;
+}
+
+Rectangle Enemy::getPastRect() {
+    return pastRect;
+}
+
 Rectangle Enemy::getHitBox() {
     return Rectangle{   m_data._pos.x, 
                         m_data._pos.y - m_data._hitBoxHeight, 
@@ -158,6 +166,12 @@ bool Enemy::onStomp() {
     if(!m_data._isStompable) {
         return false;
     }
+
+    if(curStompCD > 0) {
+        return false;
+    }
+
+    curStompCD = stompCD;
     onHit();
     return true;
 }
@@ -200,7 +214,17 @@ void Enemy::update(float dt) {
     if(!m_data._isActive) {
         return;
     }
+    curStompCD -= dt;
+    if(curStompCD <= 0) {
+        curStompCD = 0;
+    }
+
     m_animation.update(dt);
+
+    if(!isAlive() && live) {
+        live = false;
+        Program::getInstance().getHUD().onNotify(EventType::ADDSCORE, getPos());
+    }
 }
 
 std::string Enemy::getTypeName() const {
@@ -214,7 +238,6 @@ void Enemy::changeDirection() {
 void Enemy::hitUp() {
     onStomp();
     SoundManager::getInstance().playSound(SoundType::STOMP);
-    Program::getInstance().getHUD().onNotify(EventType::ADDSCORE, getPos());
 }
 
 void Enemy::hitBlockDown() {

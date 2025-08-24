@@ -3,6 +3,7 @@
 #include<unordered_map>
 #include<string>
 #include<filesystem>
+#include<cmath>
 #include<core/Program.hpp>
 #include<diy_functions/read.h>
 
@@ -91,12 +92,6 @@ void EnemyManager::update() {
         return;
     }
 
-    // if(IsKeyPressed(KEY_SPACE)) {
-    //     oke = !oke;
-    // }
-    // if(!oke) {
-    //     return;
-    // }
     std::vector<CharacterFireball*> fires = subLevel->player->getFireballs();
     for(auto& enemy : list) {
         // Check if the enemy is off-screen
@@ -118,7 +113,7 @@ void EnemyManager::update() {
         
 
         for(auto& f : fires) {
-            subLevel->blocks->update(enemy, f);
+            checkCollisionsEnemyFireball(enemy, f);
         }
     }
     
@@ -139,18 +134,30 @@ void EnemyManager::update() {
 }
 
 void EnemyManager::updatePlayer() {
-    for(auto& enemy : list){
+    for(auto& enemy : list) {
+        if (!enemy->isAlive()) continue;
+
         Rectangle pastPlayerRec = subLevel->playerManager->gameplayManager.pastPlayerRec;
+        Rectangle pastEnemyRec  = enemy->getPastRect();
+        
         if(CheckCollisionRecs(enemy->getHitBox(), subLevel->player->getRectangle()) && enemy->isAlive()) {
-            if(pastPlayerRec.y + pastPlayerRec.height < enemy->getHitBox().y && 
-                enemy->getTypeName().find("Plant") == std::string::npos) {
+            std::cerr << "Y: " << pastPlayerRec.y + pastPlayerRec.height - enemy->getHitBox().y << std::endl;
+            
+            if(subLevel->player->getIsStarMan()) {
+                enemy->onHit();
+                continue;
+            }
+
+            // rollBackFrames(subLevel->player, enemy.get(), pastPlayerRec);
+            if(pastPlayerRec.y + pastPlayerRec.height < enemy->getHitBox().y &&
+                enemy->getTypeName().find("Plant") == std::string::npos) 
+            {
                 enemy->hitUp();
                 subLevel->player->setVeclocityY(-100);
                 Program::getInstance().getHUD().onNotify(EventType::ADDSCORE);
             } else {
                 int dir = enemy->getPos().x < subLevel->player->getPos().x ? 1 : -1;
-                // enemy->hitVertical(dir);
-                // subLevel->player->takeDamage();
+                
                 if(!enemy->beHitVertical()) {
                     subLevel->player->takeDamage();
                 } else {
@@ -221,4 +228,11 @@ void EnemyManager::checkCollisionsFireballPlayerBowser(CharacterFireball* fire, 
 Bowser * EnemyManager::getBowser(void) {
     if(listBowsers.empty()) return nullptr;
     return listBowsers[0].get();
+}
+
+void EnemyManager::checkCollisionsEnemyFireball(std::shared_ptr<Enemy> enemy, CharacterFireball* playerFireball) {
+    if (CheckCollisionRecs(playerFireball->getHitBox(), enemy->getHitBox())) {
+        enemy->beHitByFireball();
+        playerFireball->hitBlockHorizontal();
+    }
 }
