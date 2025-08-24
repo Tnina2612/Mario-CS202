@@ -97,7 +97,7 @@ void TileMap::update(Character* player) {
         if(i < 0 || i >= height || j < 0 || j >= width || tiles[i][j] == nullptr || tiles[i][j]->getBlockName().find("coin") != 0) {
             continue;
         }
-        if(CheckCollisionRecs({charRec.x + player->getVeclocityX() * deltaTime, charRec.y + player->getVeclocityY() * deltaTime, charRec.width, charRec.height}, 
+        if(CheckCollisionRecs({charRec.x + player->getVelocityX() * deltaTime, charRec.y + player->getVelocityY() * deltaTime, charRec.width, charRec.height}, 
                             tiles[i][j]->getDrawRec())) {
             player->addCoin();
             tiles[i][j].reset();
@@ -165,7 +165,7 @@ void TileMap::update(Character* player) {
     if(detectInvisibleBlocks(player)) {
         player->setPosition(charRec.x, charRec.y + charRec.height);
     }
-
+    
     if(!player->getOnGround()) {
         player->setVeclocityY(player->getVelocityY() + player->getGravity() * deltaTime);
     }
@@ -480,16 +480,25 @@ bool TileMap::detectInvisibleBlocks(Character* character) {
         }
         std::cerr << "2" << std::endl;
         if(CheckCollisionRecs(charRec, tiles[i][j]->getDrawRec()) 
-                && charRec.y >= tiles[i][j]->getDrawRec().y && character->getVeclocityY() < 0) 
+                && charRec.y >= tiles[i][j]->getDrawRec().y && character->getVelocityY() <= 0) 
         {
+            std::cerr << "HIT: " << std::endl;
             character->hitBlockTop();
+            if(charRec.x <= tiles[i][j]->getDrawRec().x) {
+                character->hitBlockLeft();
+            } else if(charRec.x + charRec.width >= tiles[i][j]->getDrawRec().x + tiles[i][j]->getDrawRec().width) {
+                character->hitBlockRight();
+            }
             tiles[i][j]->onHit(*character);
             std::shared_ptr<Item> item = tiles[i][j]->popAppearingItem();
             if(item != nullptr) {
-                subLevel->itemManager.addItem(item);
+                subLevel->itemManager->addItem(item);
             }
             foundInvisible = true;
         }
+        std::cerr << "VelX: " << character->getVelocityX() << std::endl;
+        std::cerr << "VelY: " << character->getVelocityY() << std::endl;
+        std::cerr << "Pos: " << charRec.y - tiles[i][j]->getDrawRec().y << std::endl;
     }
     return foundInvisible;
 }

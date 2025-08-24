@@ -223,7 +223,7 @@ void Enemy::update(float dt) {
 
     if(!isAlive() && live) {
         live = false;
-        Program::getInstance().getHUD().onNotify(EventType::ADDSCORE, getPos());
+        // Program::getInstance().getHUD().onNotify(EventType::ADDSCORE, getPos());
     }
 }
 
