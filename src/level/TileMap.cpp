@@ -91,38 +91,36 @@ void TileMap::update(Character* player) {
     
     //check if current frame is colliding with any invisible block
 
-
-
-
     vector<pair<int, int>> nearbyCells = cellsToCheck(nextFrame);
     for(std::pair<int, int> pii : nearbyCells) {
         int i = pii.first, j = pii.second;
         if(i < 0 || i >= height || j < 0 || j >= width || tiles[i][j] == nullptr || tiles[i][j]->getBlockName().find("coin") != 0) {
             continue;
         }
-        if(CheckCollisionRecs({charRec.x + player->getVelocityX() * deltaTime, charRec.y + player->getVelocityY() * deltaTime, charRec.width, charRec.height}, 
+        if(CheckCollisionRecs({charRec.x + player->getVeclocityX() * deltaTime, charRec.y + player->getVeclocityY() * deltaTime, charRec.width, charRec.height}, 
                             tiles[i][j]->getDrawRec())) {
             player->addCoin();
             tiles[i][j].reset();
         }
     }
     Vector2 futurePos = {nextFrame.x, nextFrame.y};
-    for(std::pair<int, int> pii : nearbyCells) {
-        int i = pii.first, j = pii.second;
-        if(i < 0 || i >= height || j < 0 || j >= width || tiles[i][j] == nullptr || tiles[i][j]->getStateName() != "Invisible") {
-            continue;
-        }
-        if(CheckCollisionRecs(nextFrame, tiles[i][j]->getDrawRec()) && nextFrame.y >= tiles[i][j]->getDrawRec().y&& 
-       player->getVelocityY() < 0) {
-            player->hitBlockTop();
-            tiles[i][j]->onHit(*player);
-            std::shared_ptr<Item> item = tiles[i][j]->popAppearingItem();
-            if(item != nullptr) {
-                subLevel->itemManager->addItem(item);
-            }
-        }
-    }
-
+    // for(std::pair<int, int> pii : nearbyCells) {
+    //     int i = pii.first, j = pii.second;
+    //     if(i < 0 || i >= height || j < 0 || j >= width || tiles[i][j] == nullptr || tiles[i][j]->getStateName() != "Invisible") {
+    //         continue;
+    //     }
+    //     std::cerr << "2" << std::endl;
+    //     if(CheckCollisionRecs(nextFrame, tiles[i][j]->getDrawRec()) 
+    //             && nextFrame.y >= tiles[i][j]->getDrawRec().y && player->getVeclocityY() < 0) 
+    //     {
+    //         player->hitBlockTop();
+    //         tiles[i][j]->onHit(*player);
+    //         std::shared_ptr<Item> item = tiles[i][j]->popAppearingItem();
+    //         if(item != nullptr) {
+    //             subLevel->itemManager.addItem(item);
+    //         }
+    //     }
+    // }
     for(std::pair<int, int> pii : nearbyCells) {
         int i = pii.first, j = pii.second;
         if(isCollidableTile(i, j) == false) continue;
@@ -163,6 +161,11 @@ void TileMap::update(Character* player) {
         nextFrame.x = charRec.x;
     }
     player->setPosition(nextFrame.x, nextFrame.y + charRec.height);
+
+    if(detectInvisibleBlocks(player)) {
+        player->setPosition(charRec.x, charRec.y + charRec.height);
+    }
+
     if(!player->getOnGround()) {
         player->setVeclocityY(player->getVelocityY() + player->getGravity() * deltaTime);
     }
@@ -460,4 +463,33 @@ bool TileMap::preventFalling(std::shared_ptr<Enemy> enemy, Vector2& movement) {
     }
 
     return false;
+}
+
+bool TileMap::detectInvisibleBlocks(Character* character) {
+    Rectangle charRec = character->getRectangle();
+    std::vector<std::pair<int, int>> nearbyCells = cellsToCheck(charRec);
+
+    bool foundInvisible = false;
+
+    for(std::pair<int, int> pii : nearbyCells) {
+        int i = pii.first, j = pii.second;
+        if(i < 0 || i >= height || j < 0 || j >= width || tiles[i][j] == nullptr 
+            || tiles[i][j]->getStateName() != "Invisible") 
+        {
+            continue;
+        }
+        std::cerr << "2" << std::endl;
+        if(CheckCollisionRecs(charRec, tiles[i][j]->getDrawRec()) 
+                && charRec.y >= tiles[i][j]->getDrawRec().y && character->getVeclocityY() < 0) 
+        {
+            character->hitBlockTop();
+            tiles[i][j]->onHit(*character);
+            std::shared_ptr<Item> item = tiles[i][j]->popAppearingItem();
+            if(item != nullptr) {
+                subLevel->itemManager.addItem(item);
+            }
+            foundInvisible = true;
+        }
+    }
+    return foundInvisible;
 }
