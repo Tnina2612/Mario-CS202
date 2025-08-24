@@ -135,3 +135,8 @@ std::string Mushroom::getType() const {
 Vector2 Mushroom::getVelocity() const {
     return velocity_;
 }
+
+shared_ptr<Item> Mushroom::clone() const {
+    shared_ptr<Item> ret = make_shared<Mushroom>(pos_, state_);
+    return ret;
+}

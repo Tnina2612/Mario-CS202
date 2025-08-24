@@ -4,7 +4,7 @@
 #include "core/MusicManager.hpp"
 
 Character::Character() : mAnimation(CharacterSprite::Small::frames), state(nullptr), pos(CharacterVar::position), 
-    invincibilityTime(0.0f), score(0), veclocityX(0.0f), veclocityY(50.0f), orientation(RIGHT), characterState(SMALL),
+    invincibilityTime(0.0f), score(0), velocityX(0.0f), velocityY(50.0f), orientation(RIGHT), characterState(SMALL),
     isInvincible(false), isDead(false), behavior(IDLE), onGround(true), playerLevelAnimationManager(this) {
         accelerationX = 0.0f;
         accelerationY = 0.0f;
@@ -40,16 +40,16 @@ void Character::moveLeft() {
     collideLeft == false) {
         //if(onGround) orientation = LEFT; // Change orientation to LEFT when moving left
         if (IsKeyDown(KEY_LEFT_SHIFT)) {
-            veclocityX = -maxRunVeclocityX; // Set velocity to move left
+            velocityX = -maxRunVeclocityX; // Set velocity to move left
         } else {
-            veclocityX = -maxVeclocityX; // Set velocity to move left
+            velocityX = -maxVeclocityX; // Set velocity to move left
         }
     }
     if (!onGround && collideLeft == false) {
         if(IsKeyDown(KEY_LEFT_SHIFT)) {
-            veclocityX = -maxRunVeclocityX;
+            velocityX = -maxRunVeclocityX;
         } else {
-            veclocityX = -maxVeclocityX;
+            velocityX = -maxVeclocityX;
         }
     }
 }
@@ -58,24 +58,24 @@ void Character::moveRight() {
     if((behavior == IDLE || behavior == MOVE) && behavior != BRAKE && behavior != DUCK &&
     collideRight == false) {
         //if(onGround) orientation = RIGHT; // Change orientation to RIGHT when moving right
-        if(IsKeyDown(KEY_LEFT_SHIFT)) veclocityX = maxRunVeclocityX; // Set velocity to move right
-        else veclocityX = maxVeclocityX; // Set velocity to move right
+        if(IsKeyDown(KEY_LEFT_SHIFT)) velocityX = maxRunVeclocityX; // Set velocity to move right
+        else velocityX = maxVeclocityX; // Set velocity to move right
     }
     if (!onGround && collideRight == false) {
         if(IsKeyDown(KEY_LEFT_SHIFT)) {
-            veclocityX = maxRunVeclocityX;
+            velocityX = maxRunVeclocityX;
         } else {
-            veclocityX = maxVeclocityX;
+            velocityX = maxVeclocityX;
         }
     }
 }
 
 void Character::brakeLeft() {
     accelerationX = brakeAcceleration; // Apply left brake acceleration
-    veclocityX += accelerationX * GetFrameTime();
-    if(abs(veclocityX) <= 3) {
+    velocityX += accelerationX * GetFrameTime();
+    if(abs(velocityX) <= 3) {
         behavior = IDLE;
-        veclocityX = 0.0f; // Stop moving left
+        velocityX = 0.0f; // Stop moving left
         accelerationX = 0.0f; // Reset acceleration
         if(IsKeyDown(KEY_RIGHT)) {
             behavior = MOVE; // If right key is pressed, switch to MOVE
@@ -86,10 +86,10 @@ void Character::brakeLeft() {
 
 void Character::brakeRight() {
     accelerationX = -brakeAcceleration;
-    veclocityX += accelerationX * GetFrameTime();
-    if(abs(veclocityX) <= 3) {
+    velocityX += accelerationX * GetFrameTime();
+    if(abs(velocityX) <= 3) {
         behavior = IDLE;
-        veclocityX = 0.0f; // Stop moving right
+        velocityX = 0.0f; // Stop moving right
         accelerationX = 0.0f; // Reset acceleration
         if(IsKeyDown(KEY_LEFT)) {
             behavior = MOVE; // If left key is pressed, switch to MOVE
@@ -100,15 +100,15 @@ void Character::brakeRight() {
 
 void Character::jump() {
     if(IsKeyReleased(KEY_UP)) {
-        veclocityY = veclocityY * 0.5f;
+        velocityY = velocityY * 0.5f;
     }
-    if (onGround && veclocityY > restVeclocity) {
+    if (onGround && velocityY > restVeclocity) {
         behavior = IDLE; // Reset behavior to IDLE when landing
-        veclocityX = 0.0f;
-        veclocityY = restVeclocity; // Reset vertical velocity when landing
+        velocityX = 0.0f;
+        velocityY = restVeclocity; // Reset vertical velocity when landing
     }
     if(!IsKeyDown(KEY_LEFT) && !IsKeyDown(KEY_RIGHT)) {
-        veclocityX = 0.0f; // Reset horizontal velocity when jumping
+        velocityX = 0.0f; // Reset horizontal velocity when jumping
     }
 }
 
@@ -260,7 +260,7 @@ void Character::update() {
             // Handle THROW behavior here
             break;
         case DEAD:
-            veclocityX = 0.0f;
+            velocityX = 0.0f;
             // Nếu muốn Mario rơi xuống khi chết:
             characterState = SMALL;
             mAnimation.setFrames(allFrames["Duck"]);
@@ -369,11 +369,11 @@ void Character::setOnGround(bool onGround) {
 }
 
 void Character::setVelocityX(float velocity) {
-    veclocityX = velocity;
+    velocityX = velocity;
 }
 
 void Character::setVeclocityY(float velocity) {
-    veclocityY = velocity;
+    velocityY = velocity;
 }
 
 float Character::getJumpVelocity() const {
@@ -405,18 +405,18 @@ Animation& Character::getAnimation() {
 
 void Character::hitBlockLeft() {
     //pos.x = vline;
-    veclocityX = 0.0f; // Stop moving left
+    velocityX = 0.0f; // Stop moving left
     collideLeft = true;
 }
 
 void Character::hitBlockRight() {
     //pos.x = vline - getRectangle().width;
-    veclocityX = 0.0f; // Stop moving right
+    velocityX = 0.0f; // Stop moving right
     collideRight = true;
 }
 
 void Character::hitBlockTop() {
-    veclocityY = 0; // Reset vertical velocity when hitting a block from the top
+    velocityY = 0; // Reset vertical velocity when hitting a block from the top
 }
 
 void Character::hitBlockBottom() {
@@ -430,14 +430,14 @@ void Character::hitBlockBottom() {
     if(!IsKeyDown(KEY_LEFT) && !IsKeyDown(KEY_RIGHT) && !IsKeyDown(KEY_DOWN) && behavior != BRAKE) {
         behavior = IDLE;
     }
-    veclocityY = restVeclocity; // Reset vertical velocity when hitting a block from the bottom
+    velocityY = restVeclocity; // Reset vertical velocity when hitting a block from the bottom
 }
 
 void Character::die() {
     behavior = DEAD;
     isDead = true;
-    veclocityX = 0.0f;
-    veclocityY = -jumpVeclocity; // Mario sẽ bật lên một chút khi chết (tùy chọn)
+    velocityX = 0.0f;
+    velocityY = -jumpVeclocity; // Mario sẽ bật lên một chút khi chết (tùy chọn)
     onGround = false;
 
     Program::getInstance().getHUD().onNotify(EventType::MARIO_DIED);
@@ -459,10 +459,10 @@ bool Character::getCollideLeft()const {
 // }
 
 float Character::getVeclocityX()const {
-    return veclocityX;
+    return velocityX;
 }
 float Character::getVeclocityY()const {
-    return veclocityY;
+    return velocityY;
 }
 void Character::setPosition(float x, float y) {
     pos.x = x; pos.y = y;

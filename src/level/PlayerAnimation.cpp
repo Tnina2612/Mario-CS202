@@ -207,7 +207,8 @@ void PlayerClimbDownFlagColumnAnimation::saveToFile(std::ofstream& out) const {
     out << getType() << ' ' << targetY << ' ' << directionAfterClimbIsRight;
 }
 
-PlayerWalkToXAnimation::PlayerWalkToXAnimation(float targetX, TileMap* blocks) : targetX(targetX), blocks(blocks) {}
+PlayerWalkToXAnimation::PlayerWalkToXAnimation(float targetX, TileMap* blocks) : targetX(targetX), blocks(blocks) {
+}
 
 void PlayerWalkToXAnimation::initialize(Character* player) {
     this->player = player;

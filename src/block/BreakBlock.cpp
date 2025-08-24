@@ -77,3 +77,8 @@ Rectangle BreakBlock::getDrawRec() const
 std::string BreakBlock::getStateName() const {
     return "Break";
 }
+
+shared_ptr<BlockState> BreakBlock::clone(Block& m_block) const {
+    shared_ptr<BlockState> ret = make_shared<BreakBlock>(m_block);
+    return ret;
+}

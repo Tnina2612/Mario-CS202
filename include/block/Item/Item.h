@@ -49,6 +49,7 @@ public:
     virtual std::string getType() const = 0;
     virtual Vector2 getVelocity() const = 0;
     virtual void saveToFile(std::ofstream& out) const;
+    virtual shared_ptr<Item> clone() const = 0;
 
     static std::shared_ptr<Item> stringToItem(std::string itemData, float x, float y);
     static std::vector<std::shared_ptr<Item>> stringToVectorItem(std::string itemData, float x, float y);

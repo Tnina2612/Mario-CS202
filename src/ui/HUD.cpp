@@ -2,6 +2,7 @@
 #include "core/Program.hpp"
 #include <string>
 #include <cstdio>
+#include <scenes/PlayScene.hpp>
 
 HUD::HUD(GameSession* s) {
     session = s;
@@ -110,7 +111,7 @@ void HUD::draw() {
     std::string timeText  = std::to_string(session->TIMELEFT);
     std::string livesText = std::to_string(session->LIVES);
 
-    DrawTextEx(font, "MARIO", { 20, 14 }, 24, 1, WHITE);
+    DrawTextEx(font, PlayScene::isMario ? "MARIO" : "LUIGI", { 20, 14 }, 24, 1, WHITE);
     DrawTextEx(font, "COINS", { 240, 14 }, 24, 1, WHITE);
     DrawTextEx(font, "WORLD", { 438, 14 }, 24, 1, WHITE);
     DrawTextEx(font, "TIME",  { 632, 14 }, 24, 1, WHITE);

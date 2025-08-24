@@ -26,3 +26,8 @@ Rectangle SolidBlock::getDrawRec() const {
 std::string SolidBlock::getStateName() const {
     return "Solid";
 }
+
+shared_ptr<BlockState> SolidBlock::clone(Block& m_block) const {
+    shared_ptr<BlockState> ret = make_shared<SolidBlock>(m_block);
+    return ret;
+}

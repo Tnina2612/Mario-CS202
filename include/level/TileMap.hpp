@@ -27,6 +27,8 @@ class TileMap {
         bool preventFalling(std::shared_ptr<Enemy> enemy, Vector2& movement);
     public:
         TileMap(std::string filename, SubLevel* subLevel);
+        TileMap(const TileMap& o); // subLevel is nullptr
+        void connectToSubLevel(SubLevel* subLevel);
         void draw(void);
         void updateBlocks();
         void update(Character* character);

@@ -49,3 +49,8 @@ std::string InvisibleBlock::getStateName() const
 {
     return "Invisible";
 }
+
+shared_ptr<BlockState> InvisibleBlock::clone(Block& m_block) const {
+    shared_ptr<BlockState> ret = make_shared<InvisibleBlock>(m_block);
+    return ret;
+}

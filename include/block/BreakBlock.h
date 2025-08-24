@@ -27,5 +27,6 @@ public:
     bool getJiggle() override;
     bool getIsDelete() const override;
     Rectangle getDrawRec() const override;
+    shared_ptr<BlockState> clone(Block& m_block) const override;
     std::string getStateName() const override;
 };

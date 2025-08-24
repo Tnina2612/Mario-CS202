@@ -34,11 +34,11 @@ void TitleScene::handleInput() {
         switch (curMode) {
             case 0:
                 Program::getInstance().pushScene(new NameInputScene());
-                PlayScene::is2players = false;
+                PlayScene::isTwoPlayers = false;
                 break;
             case 1:
                 Program::getInstance().pushScene(new NameInputScene());
-                PlayScene::is2players = true;
+                PlayScene::isTwoPlayers = true;
                 break;
             case 2:
                 Program::getInstance().pushScene(new LoadGameScene());

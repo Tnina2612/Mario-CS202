@@ -107,3 +107,8 @@ Rectangle QuestionBlock::getDrawRec() const
 std::string QuestionBlock::getStateName() const {
     return "Question";
 }
+
+shared_ptr<BlockState> QuestionBlock::clone(Block& m_block) const {
+    shared_ptr<BlockState> ret = make_shared<QuestionBlock>(m_block);
+    return ret;
+}

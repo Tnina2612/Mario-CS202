@@ -61,6 +61,8 @@ public:
     Bowser(const std::string& name);
     Bowser(const std::string& name, Vector2 pos, Character* character);
 
+    void connectToPlayer(Character* character);
+
     // void respawn();
     bool beHitByFireball();
 

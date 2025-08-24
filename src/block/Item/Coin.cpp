@@ -39,3 +39,8 @@ std::string Coin::getType() const {
 Vector2 Coin::getVelocity() const {
     return {0.0f, velocityY};
 }
+
+shared_ptr<Item> Coin::clone() const {
+    shared_ptr<Item> ret = make_shared<Star>(pos_);
+    return ret;
+}

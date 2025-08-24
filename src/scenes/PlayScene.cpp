@@ -10,15 +10,20 @@
 #include "core/Setting.hpp"
 #include "entities/Character.hpp"
 
-bool PlayScene::is2players= false;
+bool PlayScene::isTwoPlayers = false;
 bool PlayScene::isMario = true;
+bool PlayScene::isInitMarioGame = false;
+bool PlayScene::isInitLuigiGame = false;
+
+PlayScene::PlayScene() :
+    level(new Level()) {
+    // Default constructor
+}
 
 PlayScene::PlayScene(const std::string& levelPath) : 
     level(new Level(levelPath)) {
-}
-
-PlayScene::PlayScene(std::string subLevelFolder, Vector2 playerPosition) :
-    level(new Level(subLevelFolder, playerPosition)) {
+    if(isMario == true && isInitMarioGame == false) isInitMarioGame = true;
+    if(isMario == false && isInitLuigiGame == false) isInitLuigiGame = true;
 }
 
 PlayScene::~PlayScene() {
@@ -69,14 +74,13 @@ void PlayScene::update() {
         waitTimer += GetFrameTime();
         
         if (waitTimer >= waitDuration) {
-            Program::getInstance().pushScene(new DeathScene());
             if (Program::getInstance().getSession().LIVES == 0) {
                 Program::getInstance().pushScene(new GameOverScene());
                 Program::getInstance().getHUD().onNotify(EventType::RESET_TIMER);
-                Program::getInstance().getHUD().onNotify(EventType::RESET_LIVES);
-                Program::getInstance().getHUD().onNotify(EventType::RESET_SCORES);
-            } 
-            Program::getInstance().getHUD().onNotify(EventType::RESET_TIMER);
+            } else {
+                Program::getInstance().pushScene(new DeathScene());
+                Program::getInstance().getHUD().onNotify(EventType::RESET_TIMER);
+            }
         }
     } else {
         float deltaTime = GetFrameTime();

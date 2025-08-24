@@ -23,6 +23,7 @@ Podoboo::Podoboo(const std::string& name) : Enemy(name) {
     m_data._velocity = Vector2{0.f, -100.f};
     _curCD = 0.f;
     _CD = 3.f;
+    m_data._name = name;
     
 }
 

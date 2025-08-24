@@ -5,6 +5,7 @@
 #include "raylib.h"
 #include <string>
 #include <cstdio>
+#include <scenes/PlayScene.hpp>
 
 GameOverScene::GameOverScene() {
     // Store current session state
@@ -23,7 +24,7 @@ void GameOverScene::init() {
 void GameOverScene::handleInput() {
     // Allow manual skip with ENTER key
     if (IsKeyPressed(KEY_ENTER)) {
-        Program::getInstance().pushScene(new TitleScene());
+        waitTimer = waitDuration;
     }
 }
 
@@ -32,7 +33,20 @@ void GameOverScene::update() {
     
     // Automatically transition after 3 seconds
     if (waitTimer >= waitDuration) {
-        Program::getInstance().pushScene(new TitleScene());
+        PlayScene::isMario ^= PlayScene::isTwoPlayers;
+        if(Program::getInstance().getSession().LIVES == 0) {
+            Program::getInstance().pushScene(new TitleScene());
+            PlayScene::isInitMarioGame = false;
+            PlayScene::isInitLuigiGame = false;
+            PlayScene::isMario ^= PlayScene::isTwoPlayers;
+            Program::getInstance().getHUD().onNotify(EventType::RESET_LIVES);
+            Program::getInstance().getHUD().onNotify(EventType::RESET_SCORES);
+            PlayScene::isMario ^= PlayScene::isTwoPlayers;
+            Program::getInstance().getHUD().onNotify(EventType::RESET_LIVES);
+            Program::getInstance().getHUD().onNotify(EventType::RESET_SCORES);
+        } else {
+            Program::getInstance().pushScene(new PlayScene());
+        }
     }
 }
 
@@ -68,6 +82,15 @@ void GameOverScene::render() {
     float y = (Global::WINDOW_HEIGHT - textSize.y) / 2.0f;
     
     DrawTextEx(Program::getInstance().getFont(), "GAME OVER", {x, y}, 40, 1, WHITE);
+
+    if(PlayScene::isTwoPlayers) {
+        std::string character = PlayScene::isMario ? "MARIO" : "LUIGI";
+        Vector2 size = MeasureTextEx(Program::getInstance().getFont(), character.c_str(), 40, 1);
+        float u = (Global::WINDOW_WIDTH - size.x) / 2.f;
+        float v = (y + 40);
+
+        DrawTextEx(Program::getInstance().getFont(), character.c_str(), {u, v}, 40, 1, WHITE);
+    }
 }
 
 GameOverScene::~GameOverScene() {

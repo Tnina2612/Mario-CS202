@@ -5,6 +5,8 @@
 #include <vector>
 #include "Item/Item.h"
 
+class Block;
+
 class BlockState
 {
 protected:
@@ -16,6 +18,7 @@ public:
     virtual void onHit(Character &character) = 0;
     virtual bool getJiggle() = 0;
     virtual bool getIsDelete() const;
+    virtual shared_ptr<BlockState> clone(Block& m_block) const = 0;
     virtual std::string getStateName() const = 0;
     virtual Rectangle getDrawRec() const = 0;
 };

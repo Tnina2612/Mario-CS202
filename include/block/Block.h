@@ -25,6 +25,7 @@ private:
     shared_ptr<Item> appearingItem;
 public:
     Block(Vector2 pos, const std::string &blockData);
+    Block(const Block& o);
     ~Block();
     std::vector<bool> surroundedBlock{0, 0, 0, 0}; 
     void update_();

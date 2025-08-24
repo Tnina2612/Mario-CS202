@@ -5,6 +5,7 @@
 class DeathScene : public Scene {
 private:
     Texture2D marioIcon;
+    Texture2D luigiIcon;
     Texture2D coin;
     GameSession finalSession;
     float waitTimer;

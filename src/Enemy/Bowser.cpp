@@ -38,6 +38,10 @@ Bowser::Bowser(const std::string& name, Vector2 pos, Character* character)
     m_target = character;
 }
 
+void Bowser::connectToPlayer(Character* player) {
+    m_target = player;
+}
+
 Vector2 Bowser::getVelocity() {
     return m_data._velocity;
 }

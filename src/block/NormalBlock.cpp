@@ -102,3 +102,8 @@ bool NormalBlock::getJiggle()
 std::string NormalBlock::getStateName() const {
     return "Normal";
 }
+
+shared_ptr<BlockState> NormalBlock::clone(Block& m_block) const {
+    shared_ptr<BlockState> ret = make_shared<NormalBlock>(m_block);
+    return ret;
+}

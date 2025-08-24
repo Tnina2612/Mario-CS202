@@ -12,6 +12,7 @@ public:
     void update_() override;
     void onHit(Character &character) override;
     bool getJiggle() override;
+    shared_ptr<BlockState> clone(Block& m_block) const override;
     std::string getStateName() const override;
     Rectangle getDrawRec() const override;
 };

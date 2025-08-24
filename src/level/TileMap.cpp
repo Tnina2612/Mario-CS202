@@ -3,13 +3,14 @@
 #include<level/Level.hpp>
 #include<iomanip>
 #include<core/SoundManager.hpp>
+#include<diy_functions/read.h>
 
 TileMap::TileMap(std::string filename, SubLevel* subLevel) : subLevel(subLevel) {
     std::ifstream inp(filename);
     if(inp.is_open() == false) {
         throw runtime_error("Cannot open file " + filename);
     }
-    inp >> height >> width;
+    readFromFile(inp, filename, height, width);
     tiles.resize(height);
     for(int i = 0; i < height; i++) {
         tiles[i].resize(width);
@@ -17,7 +18,7 @@ TileMap::TileMap(std::string filename, SubLevel* subLevel) : subLevel(subLevel) 
     for(int i = 0; i < height; i++) {
         for(int j = 0; j < width; j++) {
             string blockData;
-            inp >> blockData;
+            readFromFile(inp, filename, blockData);
             Vector2 pos = Vector2{j * BLOCKSIDE, i * BLOCKSIDE};
             if(blockData != "A") {
                 tiles[i][j] = make_shared<Block>(pos, blockData);
@@ -26,7 +27,27 @@ TileMap::TileMap(std::string filename, SubLevel* subLevel) : subLevel(subLevel) 
             }
         }
     }
-    inp.close();   
+    inp.close();  
+}
+
+TileMap::TileMap(const TileMap& o) :
+    height(o.height), width(o.width),
+    subLevel(NULL) {
+    tiles.resize(height);
+
+    for(int i = 0; i < height; i++) {
+        tiles[i].resize(width);
+        
+        for(int j = 0; j < width; j++) {
+            if(o.tiles[i][j] != NULL) {
+                tiles[i][j] = make_shared<Block>(*o.tiles[i][j]);
+            }
+        }
+    }
+}
+
+void TileMap::connectToSubLevel(SubLevel* subLevel) {
+    this->subLevel = subLevel;
 }
 
 void TileMap::draw(void) {
@@ -73,13 +94,14 @@ void TileMap::update(Character* player) {
         int i = pii.first, j = pii.second;
         if(i < 0 || i >= height || j < 0 || j >= width || tiles[i][j] == nullptr || tiles[i][j]->getBlockName().find("coin") != 0) {
             continue;
-        }   
+        }
         if(CheckCollisionRecs({charRec.x + player->getVeclocityX() * deltaTime, charRec.y + player->getVeclocityY() * deltaTime, charRec.width, charRec.height}, 
                             tiles[i][j]->getDrawRec())) {
             player->addCoin();
             tiles[i][j].reset();
         }
     }
+
     for(std::pair<int, int> pii : nearbyCells) {
         int i = pii.first, j = pii.second;
         if(i < 0 || i >= height || j < 0 || j >= width || tiles[i][j] == nullptr || tiles[i][j]->getStateName() != "Invisible") {
@@ -91,12 +113,13 @@ void TileMap::update(Character* player) {
             tiles[i][j]->onHit(*player);
             std::shared_ptr<Item> item = tiles[i][j]->popAppearingItem();
             if(item != nullptr) {
-                subLevel->itemManager.addItem(item);
+                subLevel->itemManager->addItem(item);
             }
             nextFrame.y = charRec.y;
         }
      
     }
+
     for(std::pair<int, int> pii : nearbyCells) {
         int i = pii.first, j = pii.second;
         if(isCollidableTile(i, j) == false) continue;
@@ -109,12 +132,13 @@ void TileMap::update(Character* player) {
                 tiles[i][j]->onHit(*player);
                 std::shared_ptr<Item> item = tiles[i][j]->popAppearingItem();
                 if(item != nullptr) {
-                    subLevel->itemManager.addItem(item);
+                    subLevel->itemManager->addItem(item);
                 }
             }
             nextFrame.y = charRec.y;
         }
     }
+
     nextFrame.x = charRec.x + player->getVeclocityX() * deltaTime;
     nearbyCells = cellsToCheck(nextFrame);
     for(std::pair<int, int> pii : nearbyCells) {
@@ -137,6 +161,7 @@ void TileMap::update(Character* player) {
     if(!player->getOnGround()) {
         player->setVeclocityY(player->getVeclocityY() + player->getGravity() * deltaTime);
     }
+
     // update fireballs of player
     vector<CharacterFireball*> fireballs = player->getFireballs();
     for(auto& fireball : fireballs) {
@@ -176,6 +201,7 @@ void TileMap::update(Character* player) {
         }
         fireball->setPosition({fireNextFrame.x, fireNextFrame.y});
     }
+
     // Debug
     debugPlayerBlocks.clear();
     for(std::pair<int, int> pos : nearbyCells) {

@@ -2,8 +2,8 @@
 #include<cassert>
 #include<diy_functions/read.h>
 
-ItemAnimationPoint::ItemAnimationPoint(AnimationItem* item, TileMap* blocks, TileMap * background, Bowser * bowser) : 
-    item(item), blocks(blocks), background(background), bowser(bowser) {
+ItemAnimationPoint::ItemAnimationPoint(AnimationItem* item, SubLevel* subLevel) : 
+    item(item), subLevel(subLevel) {
     // Constructor
 }
 
@@ -24,7 +24,7 @@ void ItemAnimationPoint::read(std::ifstream& inp, std::string filename) {
 
             animations.push_back(make_shared<ItemDownAnimation>(item, targetY));
         } else if(type == "DestroyBridge") {
-            animations.push_back(make_shared<ItemDestroyBridgeAnimation>(item, blocks, background, bowser));
+            animations.push_back(make_shared<ItemDestroyBridgeAnimation>(item, subLevel->blocks.get(), subLevel->background.get(), subLevel->enemies->getBowser()));
         }
         else {
             throw std::runtime_error("ItemAnimationPoint::read(inp, filename): Unknown item animation type " + type + "\n");
@@ -42,8 +42,9 @@ void ItemAnimationPoint::saveToFile(std::ofstream& out) {
     }
 }
 
-ItemAnimationManager::ItemAnimationManager(ItemManager* itemManager) :
-    itemManager(itemManager) {
+ItemAnimationManager::ItemAnimationManager(ItemManager* itemManager, SubLevel* subLevel) :
+    itemManager(itemManager),
+    subLevel(subLevel) {
 
 }
 
@@ -85,12 +86,12 @@ bool ItemAnimationManager::isActivate(std::shared_ptr<ItemAnimationPoint> point)
 }
 
 ItemManager::ItemManager(std::string filename, SubLevel* subLevel) : 
+    filename(filename),
     subLevel(subLevel),
-    animationManager(this) {
-
+    animationManager(this, subLevel) {
     ifstream inp(filename);
     if(inp.is_open() == false) {
-        throw std::runtime_error("ItemManager::ItemManager(filename) cannot open file: " + filename);
+        throw std::runtime_error("ItemManager::ItemManager(filename, subLevel) cannot open file: " + filename);
     }
 
     int numTypes;
@@ -124,7 +125,7 @@ ItemManager::ItemManager(std::string filename, SubLevel* subLevel) :
 
                 std::shared_ptr<ItemAnimationPoint> animationPoint(nullptr);
                 if(hasanimation == "hasanimation") {
-                    animationPoint = make_shared<ItemAnimationPoint>(item.get(), subLevel->blocks.get(), subLevel->background.get(), subLevel->enemies->getBowser());
+                    animationPoint = make_shared<ItemAnimationPoint>(item.get(), subLevel);
                     animationPoint->read(inp, filename);
                 }
 
@@ -140,7 +141,6 @@ ItemManager::ItemManager(std::string filename, SubLevel* subLevel) :
         }
     }
     inp.close();
-    std::cout << "End ItemManager::ItemManager(filename, subLevel)" << std::endl;
 }
 
 void ItemManager::draw() {

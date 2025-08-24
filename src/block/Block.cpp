@@ -19,6 +19,10 @@ Block::Block(Vector2 pos, const std::string &blockData)
     currentState_ = (getBlockState(blockData));
 }
 
+Block::Block(const Block& o) : Block(o.pos_, o.nameBlock) {
+    // Copy constructor
+}
+
 Block::~Block()
 {
     currentState_.reset();

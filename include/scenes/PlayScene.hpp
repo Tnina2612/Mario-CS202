@@ -15,10 +15,13 @@ private:
     string sessionName;
     
 public:
-    static bool is2players;
+    static bool isTwoPlayers;
     static bool isMario;
+    static bool isInitMarioGame;
+    static bool isInitLuigiGame;
+
+    PlayScene();
     PlayScene(const std::string& levelName);
-    PlayScene(std::string subLevelFolder, Vector2 playerPosition);
     ~PlayScene();
 
     void init() override;

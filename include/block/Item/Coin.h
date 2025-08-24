@@ -21,4 +21,5 @@ public:
     bool canMove() const override;
     std::string getType() const override;
     Vector2 getVelocity() const override;
+    shared_ptr<Item> clone() const;
 };

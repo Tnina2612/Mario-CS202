@@ -13,6 +13,7 @@ DeathScene::DeathScene() {
 
 void DeathScene::init() {
     marioIcon = LoadTexture("assets/images/sprite-sheets/mario.png");
+    luigiIcon = LoadTexture("assets/images/sprite-sheets/luigi.png");
     coin = LoadTexture("assets/images/title-scene/coin.png");
 
     waitTimer = 0.0f;
@@ -21,7 +22,8 @@ void DeathScene::init() {
 
 void DeathScene::handleInput() {
     if (IsKeyPressed(KEY_ENTER)) {
-        Program::getInstance().pushScene(new PlayScene("./world-maps/1-1"));
+        // Program::getInstance().pushScene(new PlayScene("./world-maps/1-1"));
+        waitTimer = waitDuration;
     }
 }
 
@@ -30,18 +32,14 @@ void DeathScene::update() {
     
     // Automatically transition after 3 seconds
     if (waitTimer >= waitDuration) {
-        if (PlayScene::is2players) {
-            if (PlayScene::isMario) {
-                PlayScene::isMario = false;
-            } else {
-                PlayScene::isMario = true;
-            }
+        PlayScene::isMario ^= PlayScene::isTwoPlayers;
+        if((PlayScene::isInitMarioGame == false && PlayScene::isMario == true) ||
+            (PlayScene::isInitLuigiGame == false && PlayScene::isMario == false)) {
+            Program::getInstance().pushScene(new PlayScene("./world-maps/1-1"));
+        } else {
+            Program::getInstance().pushScene(new PlayScene());
         }
-        Program::getInstance().pushScene(new PlayScene("./world-maps/1-1"));
     }
-
-    // Scene
-    // scene(luigi) -> mario -> scene(luigi)
 }
 
 void DeathScene::render() {
@@ -58,7 +56,7 @@ void DeathScene::render() {
     std::string timeText  = std::to_string(finalSession.TIMELEFT);
     std::string livesText = std::to_string(finalSession.LIVES);
 
-    DrawTextEx(font, "MARIO", { 60, 14 }, 24, 1, WHITE);
+    DrawTextEx(font, PlayScene::isMario ? "MARIO" : "LUIGI", { 60, 14 }, 24, 1, WHITE);
     DrawTextEx(font, "COINS", { 290, 14 }, 24, 1, WHITE);
     DrawTextEx(font, "WORLD", { 498, 14 }, 24, 1, WHITE);
     DrawTextEx(font, "TIME",  { 702, 14 }, 24, 1, WHITE);
@@ -78,7 +76,8 @@ void DeathScene::render() {
     float y = (Global::WINDOW_HEIGHT - textSize.y) / 2.0f - 15.0f;
     DrawTextEx(Program::getInstance().getFont(), worldText_.c_str(), {x, y - 50.0f}, 32, 1, WHITE);
 
-    DrawTexturePro(marioIcon, CharacterSprite::Small::Right::Idle, {400, 500, 55, 64}, {0, 0}, 0.0f, WHITE);
+
+    DrawTexturePro(PlayScene::isMario ? marioIcon : luigiIcon, CharacterSprite::Small::Right::Idle, {400, 500, 55, 64}, {0, 0}, 0.0f, WHITE);
 
     std::string livesText_ = "  x  " + std::to_string(session.LIVES);
     textSize = MeasureTextEx(Program::getInstance().getFont(), livesText_.c_str(), 32, 1);
@@ -88,5 +87,6 @@ void DeathScene::render() {
 
 DeathScene::~DeathScene() {
     UnloadTexture(marioIcon);
+    UnloadTexture(luigiIcon);
     UnloadTexture(coin);
 }

@@ -15,18 +15,41 @@ SubLevel::SubLevel(Level* level, std::string folderName, Character* player, Vect
     player(player), 
     enemies(make_shared<EnemyManager>(folderName + "/enemies.txt", this)),
     initPlayerPosition(initPlayerPosition),
-    playerManager(this, inputManager, folderName),
-    itemManager(folderName + "/items.txt", this),
+    itemManager(make_shared<ItemManager>(folderName + "/items.txt", this)),
     camera(camera)
 {
+    playerManager = (make_shared<PlayerManager>(this, inputManager, folderName)); // Need to be construct after blocks
     player->setPosition(initPlayerPosition.x, initPlayerPosition.y);
+}
+
+SubLevel::SubLevel(const SubLevel& o) :
+    level(NULL),
+    player(NULL),
+    camera(NULL),
+    playerManager(NULL),
+    background(make_shared<TileMap>(*o.background)),
+    blocks(make_shared<TileMap>(*o.blocks)),
+    enemies(make_shared<EnemyManager>(*o.enemies)),
+    folderName(o.folderName),
+    initPlayerPosition(o.initPlayerPosition) {
+}
+
+void SubLevel::connectToLevel(Level* level) {
+    this->level = level;
+    player = level->player.get();
+    camera = &level->camera;
+    playerManager = make_shared<PlayerManager>(this, level->inputManager, folderName);
+    background->connectToSubLevel(this);
+    blocks->connectToSubLevel(this);
+    enemies->connectToSubLevel(this); // Need pointer to the player
+    itemManager = make_shared<ItemManager>(folderName + "/items.txt", this);
 }
 
 void SubLevel::draw() {
     ClearBackground(LevelVar::BackGroundColor);
     background->draw();
     enemies->draw();
-    itemManager.draw();
+    itemManager->draw();
     player->draw();
     blocks->draw();
 }
@@ -34,22 +57,53 @@ void SubLevel::draw() {
 void SubLevel::update() {
     background->updateBlocks();
     enemies->update();
-    itemManager.update();
-    playerManager.update();
+    itemManager->update();
+    playerManager->update();
     blocks->updateBlocks();
-
     // Debug
     if(IsKeyPressed(KEY_Q)) {
         debug ^= 1;
     }
 }
 
+CheckPoint Level::MarioCheckPoint = {NULL, NULL, ""};
+CheckPoint Level::LuigiCheckPoint = {NULL, NULL, ""};
+
+Level::Level() :
+    renderTexture(LoadRenderTexture(Global::ORIGINAL_WIDTH, Global::ORIGINAL_HEIGHT)),
+    camera(Camera2D{Vector2{Global::ORIGINAL_WIDTH / 2.f, Global::ORIGINAL_HEIGHT / 2.f}, Vector2{Global::ORIGINAL_WIDTH / 2.f, Global::ORIGINAL_HEIGHT / 2.f}, 0.f, 1.f}),
+    inputManager(INPUT_MANAGER) {
+    if (PlayScene::isMario) {
+        player = make_shared<Mario>();
+    } else {
+        player = make_shared<Luigi>();
+    }
+
+    LoadCheckPoint();
+
+    // Input manager
+    inputManager.addCharacter(player.get());
+
+    inputManager.addKey(KEY_LEFT);
+    inputManager.addKey(KEY_RIGHT);
+    inputManager.addKey(KEY_UP);
+    inputManager.addKey(KEY_DOWN);
+    inputManager.addKey(KEY_LEFT_SHIFT);
+
+    inputManager.addListener(new upListener());
+    inputManager.addListener(new downListener());
+    inputManager.addListener(new leftListener());
+    inputManager.addListener(new rightListener());
+    inputManager.addListener(new LeftShiftListener());
+}
+
 Level::Level(std::string folderName) :
     renderTexture(LoadRenderTexture(Global::ORIGINAL_WIDTH, Global::ORIGINAL_HEIGHT)),
     camera(Camera2D{Vector2{Global::ORIGINAL_WIDTH / 2.f, Global::ORIGINAL_HEIGHT / 2.f}, Vector2{Global::ORIGINAL_WIDTH / 2.f, Global::ORIGINAL_HEIGHT / 2.f}, 0.f, 1.f}),
-    inputManager(INPUT_MANAGER) 
+    inputManager(INPUT_MANAGER),
+    folderName(folderName) 
 {
-    if (PlayScene::isMario ) {
+    if (PlayScene::isMario) {
         player = make_shared<Mario>();
     } else {
         player = make_shared<Luigi>();
@@ -90,28 +144,45 @@ Level::Level(std::string folderName) :
         subLevel = make_shared<SubLevel>(this, initialWorld, player.get(), Vector2{x, y}, inputManager, &camera);
         nextSubLevel.reset();
     inp.close();
+
+    // Init checkpoint
+    SaveCheckPoint();
 }
 
-Level::Level(std::string subLevelFolder, Vector2 playerPosition) :
-    player(make_shared<Mario>()),
-    renderTexture(LoadRenderTexture(Global::ORIGINAL_WIDTH, Global::ORIGINAL_HEIGHT)),
-    camera(Camera2D{Vector2{Global::ORIGINAL_WIDTH / 2.f, Global::ORIGINAL_HEIGHT / 2.f}, Vector2{Global::ORIGINAL_WIDTH / 2.f, Global::ORIGINAL_HEIGHT / 2.f}, 0.f, 1.f}),
-    inputManager(INPUT_MANAGER) 
-{
-    // Input manager
-    inputManager.addCharacter(player.get());
-    inputManager.addKey(KEY_LEFT);
-    inputManager.addKey(KEY_RIGHT);
-    inputManager.addKey(KEY_UP);
-    inputManager.addKey(KEY_DOWN);
-    inputManager.addListener(new upListener());
-    inputManager.addListener(new downListener());
-    inputManager.addListener(new leftListener());
-    inputManager.addListener(new rightListener());
+void Level::LoadCheckPoint()  {
+    if(PlayScene::isMario) {
+        player = player->clone();
 
-    // Level configurations
-    subLevel = make_shared<SubLevel>(this, subLevelFolder, player.get(), playerPosition, inputManager, &camera);
-    nextSubLevel.reset();
+        subLevel = make_shared<SubLevel>(*Level::MarioCheckPoint.subLevel);
+        subLevel->connectToLevel(this);
+
+        nextSubLevel = NULL;
+        folderName = Level::MarioCheckPoint.folderName;
+    } else {
+        player = player->clone();
+
+        subLevel = make_shared<SubLevel>(*Level::LuigiCheckPoint.subLevel);
+        subLevel->connectToLevel(this);
+
+        nextSubLevel = NULL;
+        folderName = Level::LuigiCheckPoint.folderName;
+    }
+}
+
+void Level::SaveCheckPoint() {
+    if(PlayScene::isMario) {
+        Level::MarioCheckPoint.player = player->clone();
+
+        Level::MarioCheckPoint.subLevel = make_shared<SubLevel>(*subLevel);
+
+        Level::MarioCheckPoint.folderName = folderName;
+    } else {
+        Level::LuigiCheckPoint.player = player->clone();
+
+        Level::LuigiCheckPoint.subLevel = make_shared<SubLevel>(*subLevel);
+
+        Level::LuigiCheckPoint.folderName = folderName;
+    }
 }
 
 void Level::draw(void) {
@@ -142,6 +213,7 @@ void Level::update(void) {
     // Player update
     if(player->getPos().x < camera.target.x - Global::ORIGINAL_WIDTH / 2.f) player->hitBlockLeft();
     if(player->getPos().x + player->getRectangle().width > camera.target.x + Global::ORIGINAL_WIDTH / 2.f) player->hitBlockRight();
+
     subLevel->update();
 
     // Camera update
@@ -163,7 +235,7 @@ void Level::saveGame(std::string folderName) {
     subLevel->background->saveToFile(saveFolder + "/background.txt");
     subLevel->blocks->saveToFile(saveFolder + "/blocks.txt");
     subLevel->enemies->saveToFile(saveFolder + "/enemies.txt");
-    subLevel->itemManager.saveToFile(saveFolder + "/items.txt");
+    subLevel->itemManager->saveToFile(saveFolder + "/items.txt");
     // Initialize instructor file
     std::string saveFile = saveFolder + "/InitializeInstructor.txt"; 
     ofstream outFile(saveFile);

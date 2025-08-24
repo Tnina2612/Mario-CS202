@@ -100,7 +100,6 @@ void PlayerAnimationManager::addAnimation(int id, ifstream& inp) {
         } else if(type == "WalkToX") {
             float targetX;
             readFromFile(inp, filename, targetX);
-
             list[id].animations.push_back(make_shared<PlayerWalkToXAnimation>(targetX, subLevel->blocks.get()));
         } else if(type == "EnterDoor") {
             list[id].animations.push_back(make_shared<PlayerEnterDoorAnimation>());

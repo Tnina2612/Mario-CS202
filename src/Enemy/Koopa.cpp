@@ -23,6 +23,7 @@ Koopa::Koopa(const std::string& name) : Enemy(name) {
                         Vector2{10,0}, Vector2{0,0}, -1);
     m_state = std::make_unique<NormalKoopa>();
     m_data._velocity = LevelVar::KoopaSpeed;
+    m_data._name = name;
 }
 
 Koopa::Koopa(const std::string& name, Vector2 pos, EnemyManager* enemyManager)
@@ -259,6 +260,7 @@ void WingedKoopa::changeFrames(Koopa& koopa) {
 void WingedKoopa::enter(Koopa& koopa) {
     auto f = koopa.getFrames("RWWalk")[0];
 
+    std::string oldName = koopa.m_data._name;
     koopa.setEnemyData(EnemyData (f.width, f.height, 1000.f, false, true, true, false, 1, 
                         koopa.getPos(), Vector2{0,0}, koopa.getDirection()));
     koopa.setVelocity(LevelVar::KoopaSpeed);
@@ -270,6 +272,7 @@ void WingedKoopa::enter(Koopa& koopa) {
     else if(koopa.getDirection() == -1) {
         koopa.setAniFrames(koopa.getFrames("LWWalk"));
     }
+    koopa.m_data._name = oldName;
 }
 
 void WingedKoopa::update(Koopa& koopa, float dt) {

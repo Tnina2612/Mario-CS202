@@ -125,3 +125,8 @@ std::string Star::getType() const {
 Vector2 Star::getVelocity() const {
     return velocity_;
 }
+
+shared_ptr<Item> Star::clone() const {
+    shared_ptr<Item> ret = make_shared<Star>(beforePos);
+    return ret;
+}

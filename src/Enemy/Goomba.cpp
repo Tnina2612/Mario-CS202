@@ -21,6 +21,7 @@ Goomba::Goomba(const std::string& name) : Enemy(name) {
     m_data = EnemyData (width, height, 1000.f, false, true, true, false, 1, 
                         Vector2{10,0}, Vector2{0,0}, -1);
     m_data._velocity = LevelVar::GoombaSpeed;
+    m_data._name = name;
     
 }
 

@@ -4,11 +4,6 @@
 #include<string>
 #include<filesystem>
 #include<core/Program.hpp>
-#include<scenes/PlayScene.hpp>
-#include<scenes/DeathScene.hpp>
-#include<scenes/GameOverScene.hpp>
-#include<scenes/TitleScene.hpp>
-#include<scenes/TimeUpScene.hpp>
 #include<diy_functions/read.h>
 
 EnemyManager::EnemyManager(std::string filename, SubLevel* subLevel) :
@@ -45,6 +40,42 @@ EnemyManager::EnemyManager(std::string filename, SubLevel* subLevel) :
         }
     }
     inp.close();
+}
+
+EnemyManager::EnemyManager(const EnemyManager& o) {
+    if(this == &o) return;
+
+    for(int i = 0; i < (int)o.list.size(); i++) {
+        shared_ptr<Enemy> enemy = o.list[i];
+        if(enemy == nullptr) {
+            throw runtime_error("EnemyManager copy constructor: o.list[i] is nullptr\n");
+        }
+
+        list.push_back(EnemyFactory::createEnemy(enemy->getTypeName(), enemy->getPos(), this));
+        list.back()->setActive(true);
+    }
+
+    std::queue<std::shared_ptr<Enemy>> _spawnQueue = o.spawnQueue;
+    while(_spawnQueue.size() > 0) {
+        shared_ptr<Enemy> enemy = _spawnQueue.front();
+        _spawnQueue.pop();
+
+        spawnQueue.push(EnemyFactory::createEnemy(enemy->getTypeName(), enemy->getPos(), this));
+    }
+
+    for(int i = 0; i < (int)o.listBowsers.size(); i++) {
+        shared_ptr<Bowser> bowser = o.listBowsers[i];
+        listBowsers.push_back(make_shared<Bowser>("Bowser", bowser->getPos(), nullptr));
+    }
+}
+
+void EnemyManager::connectToSubLevel(SubLevel* subLevel) {
+    this->subLevel = subLevel;
+    
+    for(shared_ptr<Bowser> bowser : listBowsers) {
+        bowser->connectToPlayer(subLevel->player);
+    }
+
 }
 
 void EnemyManager::addEnemy(std::shared_ptr<Enemy> enemy) {
@@ -109,7 +140,7 @@ void EnemyManager::update() {
 
 void EnemyManager::updatePlayer() {
     for(auto& enemy : list){
-        Rectangle pastPlayerRec = subLevel->playerManager.gameplayManager.pastPlayerRec;
+        Rectangle pastPlayerRec = subLevel->playerManager->gameplayManager.pastPlayerRec;
         if(CheckCollisionRecs(enemy->getHitBox(), subLevel->player->getRectangle()) && enemy->isAlive()) {
             if(pastPlayerRec.y + pastPlayerRec.height < enemy->getHitBox().y && 
                 enemy->getTypeName().find("Plant") == std::string::npos) {
@@ -121,7 +152,6 @@ void EnemyManager::updatePlayer() {
                 // enemy->hitVertical(dir);
                 // subLevel->player->takeDamage();
                 if(!enemy->beHitVertical()) {
-                    std::cerr << "1" << std::endl;
                     subLevel->player->takeDamage();
                 } else {
                     enemy->hitVertical(dir);

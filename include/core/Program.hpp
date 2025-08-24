@@ -13,10 +13,10 @@ private:
     bool running;
     Scene* nextScene;
     Font font;
-    GameSession session;
-    // GameSession sessionMario;
-    // GameSession sessionLuigi;
-    HUD* hud;
+    GameSession sessionMario;
+    GameSession sessionLuigi;
+    shared_ptr<HUD> luigiHUD;
+    shared_ptr<HUD> marioHUD;
     Image icon;
     std::stack<Scene*> sceneStack;
 

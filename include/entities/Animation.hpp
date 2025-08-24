@@ -48,6 +48,7 @@ private:
     int endID = 0;
 public:
     AnimationVectorTexture(std::string name);
+    AnimationVectorTexture(const AnimationVectorTexture& o) = default;
     void draw(float posX, float posY, float rotation = 0.f) const;
     void update();
     void setTextureRange(int start, int end);

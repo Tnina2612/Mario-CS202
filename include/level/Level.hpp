@@ -32,6 +32,8 @@ class EnemyManager {
     void processSpawnQueue();
 public:
     EnemyManager(std::string filename, SubLevel* subLevel);
+    EnemyManager(const EnemyManager& o); // subLevel = NULL, listBowsers has not connected to player
+    void connectToSubLevel(SubLevel* subLevel);
     void addEnemy(std::shared_ptr<Enemy> enemy);
     Vector2 getPlayerPos() const;
     void update();
@@ -95,24 +97,23 @@ class PlayerManager {
 };
 
 struct ItemAnimationPoint {
+    SubLevel* subLevel;
     AnimationItem* item;
-    TileMap * blocks, * background;
-    Bowser * bowser;
     Rectangle detectRec;
     std::string detectType;
     std::vector<std::shared_ptr<ItemAnimation>> animations;
-    ItemAnimationPoint(AnimationItem* item = nullptr, TileMap * blocks = nullptr, TileMap * background = nullptr,
-        Bowser * bowser = nullptr);
+    ItemAnimationPoint(AnimationItem* item, SubLevel* subLevel);
     void read(std::ifstream& inp, std::string filename);
     void saveToFile(std::ofstream& out);
 };
 
 class ItemAnimationManager {
     private:
+        SubLevel* subLevel;
         ItemManager* itemManager;
         std::queue<std::shared_ptr<ItemAnimation>> todoAnimation;
     public:
-        ItemAnimationManager(ItemManager* itemManager);
+        ItemAnimationManager(ItemManager* itemManager, SubLevel* subLevel);
         void draw(void) const;
         void update(void);
         bool inAnimation(void) const;
@@ -122,6 +123,7 @@ class ItemAnimationManager {
 class ItemManager {
         friend class ItemAnimationManager;
     private:
+        std::string filename;
         SubLevel* subLevel;
         ItemAnimationManager animationManager;
         std::vector<std::shared_ptr<Item>> items;
@@ -129,6 +131,7 @@ class ItemManager {
         std::vector<std::pair<std::shared_ptr<AnimationItem>, std::shared_ptr<ItemAnimationPoint>>> animationObjects;
     public:
         ItemManager(std::string filename, SubLevel* subLevel);
+
         void draw(void);
         void update();
         void addItem(std::shared_ptr<Item> item);
@@ -144,17 +147,20 @@ class SubLevel {
         friend class PlayerGameplayManager;
         friend class PlayerManager;
         
+        friend class ItemAnimationPoint;
         friend class ItemAnimationManager;
         friend class ItemManager;
 
-        Level* level;
-        Character* player;
+        Level* level; // Need pointer to Level
+        Character* player; // Need pointer to player
+        Camera2D* camera; // Need pointer to Camera2D
+        std::shared_ptr<PlayerManager> playerManager; // Need reference to inputManager
+        std::shared_ptr<ItemManager> itemManager; // Need enemies, blocks, background, sublevel
+
         std::shared_ptr<TileMap> background;
         std::shared_ptr<TileMap> blocks;
         std::shared_ptr<EnemyManager> enemies;
-        PlayerManager playerManager;
-        ItemManager itemManager;
-        Camera2D* camera;
+        
         std::string folderName;
         Vector2 initPlayerPosition;
 
@@ -162,23 +168,43 @@ class SubLevel {
         bool oke =false;
     public:
         SubLevel(Level* level, std::string folderName, Character* player, Vector2 initPlayerPosition, InputManager& inputManager, Camera2D* camera);
+        
+        SubLevel(const SubLevel& o); 
+            // Copy background, blocks, enemies (still need player pointer), folderName, initPlayerPosition
+            // level, player, camera, playerManager, itemManager are null pointers
+        
+        void connectToLevel(Level* level);
+        
         void draw();
         void update();
         ~SubLevel() = default;
 };
 
+struct CheckPoint {
+    std::shared_ptr<SubLevel> subLevel;
+    std::shared_ptr<Character> player;
+    std::string folderName;
+};
+
 class Level {
+        friend class SubLevel;
     private:
         std::shared_ptr<SubLevel> subLevel;
         std::shared_ptr<SubLevel> nextSubLevel;
         std::shared_ptr<Character> player;
+        std::string folderName;
+
         RenderTexture2D renderTexture;
         Camera2D camera;
         InputManager& inputManager;
-        std::string folderName;
+
+        static CheckPoint MarioCheckPoint;
+        static CheckPoint LuigiCheckPoint;
     public:
+        Level();
         Level(std::string folderName);
-        Level(std::string subLevelFolder, Vector2 playerPosition);
+        void LoadCheckPoint();
+        void SaveCheckPoint();
         void changeSubLevel(NextSubLevelScene nextScene);
         void draw(void);
         void update(void);

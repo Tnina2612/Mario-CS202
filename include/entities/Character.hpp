@@ -9,6 +9,7 @@
 #include<algorithm>
 #include<entities/Effect.hpp>
 #include<entities/Enemy/CharacterFireball.hpp>
+#include<memory>
 
 class GameObject;
 
@@ -47,8 +48,8 @@ protected:
     IState* state;
     float invincibilityTime; // Time in seconds
     int score;
-    float veclocityX;
-    float veclocityY;
+    float velocityX;
+    float velocityY;
     float accelerationX;
     float accelerationY;
     Orientation orientation;
@@ -84,6 +85,9 @@ public:
     unordered_map<std::string, std::vector<Rectangle>> allFrames;
     Character();
     Character(const vector<Rectangle>& frames, const Texture2D& sprite);
+
+    virtual shared_ptr<Character> clone() const = 0;
+
     void setState(IState* state);
     void moveLeft();
     void moveRight();

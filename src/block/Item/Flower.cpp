@@ -52,3 +52,8 @@ std::string Flower::getType() const {
 Vector2 Flower::getVelocity() const {
     return {0.0f, 0.0f};
 }
+
+shared_ptr<Item> Flower::clone() const {
+    shared_ptr<Item> ret = make_shared<Flower>(beforePos);
+    return ret;
+}

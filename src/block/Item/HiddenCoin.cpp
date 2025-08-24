@@ -64,3 +64,8 @@ std::string HiddenCoin::getType() const {
 Vector2 HiddenCoin::getVelocity() const {
     return velocity_;
 }
+
+shared_ptr<Item> HiddenCoin::clone() const {
+    shared_ptr<Item> ret = make_shared<HiddenCoin>(before_pos_);
+    return ret;
+}

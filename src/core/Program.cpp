@@ -20,7 +20,8 @@ Program::Program() : running(true), nextScene(nullptr) {
     SetTargetFPS(120);
 
     font = LoadFont("assets/fonts/super-mario-bros-nes.otf");
-    hud = new HUD(&session);
+    marioHUD = make_shared<HUD>(&sessionMario);
+    luigiHUD = make_shared<HUD>(&sessionLuigi);
     SoundManager::getInstance().loadSounds();
     MusicManager::getInstance().loadMusic();
 }
@@ -34,10 +35,6 @@ Program::~Program() {
     if (nextScene) {
         delete nextScene;
         nextScene = nullptr;
-    }
-    if (hud) {
-        delete hud;
-        hud = nullptr;
     }
     
     UnloadFont(font);
@@ -77,15 +74,15 @@ void Program::run() { // Game loop
 
         // Update the current scene
         if (currentScene != nullptr) {
-            currentScene->handleInput();
-            currentScene->update();
-
-            MusicManager::getInstance().updateMusic();
-            
             BeginDrawing();
                 ClearBackground(RAYWHITE);
                 currentScene->render();
             EndDrawing();
+            
+            currentScene->handleInput();
+            currentScene->update();
+
+            MusicManager::getInstance().updateMusic();
         }
     }
     Sprite::unload();
@@ -96,9 +93,11 @@ Font Program::getFont() {
 }
 
 GameSession& Program::getSession() {
-    return session;
+    if(PlayScene::isMario) return sessionMario;
+    return sessionLuigi;
 }
 
 HUD& Program::getHUD() {
-    return *hud;
+    if(PlayScene::isMario) return *marioHUD;
+    return *luigiHUD;
 }
