@@ -68,7 +68,12 @@ void TileMap::update(Character* player) {
     float deltaTime = GetFrameTime();
     Rectangle nextFrame = {charRec.x, charRec.y + player->getVeclocityY() * deltaTime, charRec.width, charRec.height};
     
-    std::vector<std::pair<int, int>> nearbyCells = cellsToCheck(nextFrame);
+    //check if current frame is colliding with any invisible block
+
+
+
+
+    vector<pair<int, int>> nearbyCells = cellsToCheck(nextFrame);
     for(std::pair<int, int> pii : nearbyCells) {
         int i = pii.first, j = pii.second;
         if(i < 0 || i >= height || j < 0 || j >= width || tiles[i][j] == nullptr || tiles[i][j]->getBlockName().find("coin") != 0) {
