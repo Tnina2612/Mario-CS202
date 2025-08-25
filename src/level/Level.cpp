@@ -16,7 +16,8 @@ SubLevel::SubLevel(Level* level, std::string folderName, Character* player, Vect
     enemies(make_shared<EnemyManager>(folderName + "/enemies.txt", this)),
     initPlayerPosition(initPlayerPosition),
     itemManager(make_shared<ItemManager>(folderName + "/items.txt", this)),
-    camera(camera)
+    camera(camera),
+    checkPointManager(folderName + "/checkpoints.txt", this)
 {
     playerManager = (make_shared<PlayerManager>(this, inputManager, folderName)); // Need to be construct after blocks
     player->setPosition(initPlayerPosition.x, initPlayerPosition.y);
@@ -31,12 +32,14 @@ SubLevel::SubLevel(const SubLevel& o) :
     blocks(make_shared<TileMap>(*o.blocks)),
     enemies(make_shared<EnemyManager>(*o.enemies)),
     folderName(o.folderName),
-    initPlayerPosition(o.initPlayerPosition) {
+    initPlayerPosition(o.initPlayerPosition),
+    checkPointManager(o.folderName + "/checkpoints.txt", this) {
 }
 
 void SubLevel::connectToLevel(Level* level) {
     this->level = level;
     player = level->player.get();
+    player->setPosition(initPlayerPosition.x, initPlayerPosition.y);
     camera = &level->camera;
     playerManager = make_shared<PlayerManager>(this, level->inputManager, folderName);
     background->connectToSubLevel(this);

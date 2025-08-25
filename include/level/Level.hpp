@@ -141,10 +141,21 @@ class ItemManager {
         void saveToFile(std::string filename);
 };
 
+class CheckPointManager {
+    private:
+        SubLevel* subLevel;
+        std::vector<Vector2> pivots;
+        int rightmostPivot = -1;
+    public:
+        CheckPointManager(std::string filename, SubLevel* subLevel);
+        void update();
+};
+
 class SubLevel {
         friend class Level;
         friend class TileMap;
         friend class EnemyManager;
+        friend class CheckPointManager;
 
         friend class PlayerAnimationManager;
         friend class PlayerGameplayManager;
@@ -158,11 +169,13 @@ class SubLevel {
         Character* player; // Need pointer to player
         Camera2D* camera; // Need pointer to Camera2D
         std::shared_ptr<PlayerManager> playerManager; // Need reference to inputManager
-        std::shared_ptr<ItemManager> itemManager; // Need enemies, blocks, background, sublevel
 
         std::shared_ptr<TileMap> background;
         std::shared_ptr<TileMap> blocks;
         std::shared_ptr<EnemyManager> enemies;
+        CheckPointManager checkPointManager;
+
+        std::shared_ptr<ItemManager> itemManager; // Need enemies, blocks, background, sublevel
         
         std::string folderName;
         Vector2 initPlayerPosition;
@@ -177,6 +190,7 @@ class SubLevel {
             // level, player, camera, playerManager, itemManager are null pointers
         
         void connectToLevel(Level* level);
+        void setCheckPoint(Vector2 point);
         
         void draw();
         void update();

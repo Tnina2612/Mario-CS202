@@ -103,6 +103,7 @@ ItemManager::ItemManager(std::string filename, SubLevel* subLevel) :
 
         std::string itemData;
         readFromFile(inp, filename, itemData);
+        cout << "Creating " << itemData << endl;
 
         if(itemData == "movingplatform") {
             for(int j = 0; j < numItems; j++) {
@@ -125,8 +126,11 @@ ItemManager::ItemManager(std::string filename, SubLevel* subLevel) :
 
                 std::shared_ptr<ItemAnimationPoint> animationPoint(nullptr);
                 if(hasanimation == "hasanimation") {
+                    cout << "Creating new animation" << endl;
                     animationPoint = make_shared<ItemAnimationPoint>(item.get(), subLevel);
+                    cout << "Created new animaiton point" << endl;
                     animationPoint->read(inp, filename);
+                    cout << "Done new animation" << endl;
                 }
 
                 animationObjects.push_back({item, animationPoint});
