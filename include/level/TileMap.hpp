@@ -25,6 +25,7 @@ class TileMap {
         std::vector<Rectangle> mergeBlock;
 
         bool preventFalling(std::shared_ptr<Enemy> enemy, Vector2& movement);
+        bool detectInvisibleBlocks(Character* character);
     public:
         TileMap(std::string filename, SubLevel* subLevel);
         TileMap(const TileMap& o); // subLevel is nullptr
